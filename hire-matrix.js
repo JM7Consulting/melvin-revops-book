@@ -584,9 +584,10 @@
         return !!(c.starred || s.index >= 66);
     }
 
-    function shortlistCandidates() {
+    /** Entrevistas: só quem você marcou com ★ na Matriz (entra/sai junto com a shortlist). */
+    function interviewShortlist() {
         return state.candidates
-            .filter((c) => isShortlisted(c))
+            .filter((c) => !!c.starred)
             .sort((a, b) => firstNameKey(a.name).localeCompare(firstNameKey(b.name), 'pt-BR') || a.name.localeCompare(b.name, 'pt-BR'));
     }
 
@@ -688,9 +689,9 @@
 
     function renderEntrevista() {
         const cfg = state.config;
-        const list = shortlistCandidates();
+        const list = interviewShortlist();
         if (!list.length) {
-            return `<p class="mx-help">Esta aba mostra só a <b>shortlist</b> (★ na Matriz ou índice ≥ 66). Marque a estrela no Ranking para o candidato aparecer aqui.</p>`;
+            return `<p class="mx-help">Esta aba mostra <b>somente</b> quem está com ★ na Matriz (Shortlist). Marque a estrela no Ranking ou na Planilha — se tirar a ★, o nome some daqui.</p>`;
         }
         const ranks = {};
         ranked().forEach((r, i) => { ranks[r.c.id] = i + 1; });
@@ -956,7 +957,7 @@
                 <div>
                     <p class="mx-kicker">R&S · Seleção BDR</p>
                     <h2>Entrevistas</h2>
-                    <p class="mx-sub">Processo seletivo da shortlist · fases 2 (áudio 30s), 3.1 (fit), 3.2 (role-play) e 4 (CSO)</p>
+                    <p class="mx-sub">Só quem está com ★ na Matriz · fases 2 (áudio 30s), 3.1 (fit), 3.2 (role-play) e 4 (CSO)</p>
                 </div>
             </header>
             <div class="mx-body">${renderEntrevista()}</div>
