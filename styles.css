@@ -10676,8 +10676,22 @@ body.light-mode .paper-sheet {
 }
 
 /* === Contratação BDR · Matriz de Candidatos === */
+#hireMatrixRoot {
+  color-scheme: dark;
+}
 .mx-app {
-  color: #e2e8f0;
+  color: var(--mx-ink, #e2e8f0);
+  --mx-ink: #e2e8f0;
+  --mx-ink-strong: #f8fafc;
+  --mx-muted: #94a3b8;
+  --mx-accent: #c4b5fd;
+  --mx-accent-ink: #ddd6fe;
+  --mx-surface: rgba(8, 12, 18, 0.55);
+  --mx-input: #0f172a;
+  --mx-border: rgba(148, 163, 184, 0.2);
+  --mx-th: #121826;
+  --mx-ok: #34d399;
+  --mx-warn: #fbbf24;
 }
 .mx-app h2 {
   margin: 0 0 6px;
@@ -10998,142 +11012,223 @@ body.light-mode .paper-sheet {
 .mx-decision h3 { margin: 0; font-size: 1rem; color: #f8fafc; }
 .mx-decision em { margin-left: auto; color: #34d399; font-style: normal; font-size: 0.8rem; }
 .mx-decision p { margin: 0 0 6px; color: #cbd5e1; font-size: 0.86rem; line-height: 1.5; }
-body.light-mode .mx-app { color: #1e293b; }
-body.light-mode .mx-app h2,
-body.light-mode .mx-card h3,
-body.light-mode .mx-iv-head h3,
-body.light-mode .mx-kpi strong,
-body.light-mode .mx-pipe b,
-body.light-mode .mx-meters b,
-body.light-mode .mx-decision h3 {
+/* Light mode: força tinta escura em TODO o widget (evita texto claro em fundo claro) */
+body.light-mode #hireMatrixRoot,
+#hireMatrixRoot[data-theme="light"] {
+  color-scheme: light;
+  background: #ffffff;
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  border-radius: 16px;
+  padding: 18px 18px 12px;
+  color: #0f172a;
+}
+body.light-mode #hireMatrixRoot,
+body.light-mode #hireMatrixRoot *,
+#hireMatrixRoot[data-theme="light"],
+#hireMatrixRoot[data-theme="light"] * {
   color: #0f172a !important;
 }
-body.light-mode .mx-kicker,
-body.light-mode .mx-h4,
-body.light-mode .mx-rank,
-body.light-mode .mx-decision header span {
-  color: #6d28d9 !important;
-}
-body.light-mode .mx-sub,
-body.light-mode .mx-help,
-body.light-mode .mx-mini,
-body.light-mode .mx-q p,
-body.light-mode .mx-iv-head p,
-body.light-mode .mx-kpi span,
-body.light-mode .mx-pipe,
-body.light-mode .mx-meters div,
-body.light-mode .mx-notes,
-body.light-mode .mx-hint,
-body.light-mode .mx-cmp {
-  color: #475569 !important;
-}
-body.light-mode .mx-head {
-  border-bottom-color: rgba(15, 23, 42, 0.1);
-}
-body.light-mode .mx-tab {
-  background: #fff;
-  color: #334155;
-  border-color: rgba(15, 23, 42, 0.16);
-}
-body.light-mode .mx-tab:hover {
-  color: #0f172a;
-  border-color: rgba(109, 40, 217, 0.45);
-  background: #f5f3ff;
-}
-body.light-mode .mx-tab.is-active {
-  background: #6d28d9;
-  color: #fff !important;
-  border-color: #6d28d9;
-}
-body.light-mode .mx-chip {
-  background: #fff;
-  color: #334155;
-  border-color: rgba(15, 23, 42, 0.16);
-}
-body.light-mode .mx-chip.is-on {
-  background: #ede9fe;
-  color: #5b21b6 !important;
-  border-color: rgba(109, 40, 217, 0.35);
-}
-body.light-mode .mx-card,
-body.light-mode .mx-kpi,
-body.light-mode .mx-pipe,
-body.light-mode .mx-q,
-body.light-mode .mx-decision,
-body.light-mode .mx-table-wrap,
-body.light-mode .mx-script {
-  background: #fff !important;
-  border-color: rgba(15, 23, 42, 0.12);
-  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.04);
-}
-body.light-mode .mx-card {
-  background:
-    radial-gradient(420px 140px at 0% 0%, rgba(109, 40, 217, 0.06), transparent 60%),
-    #fff !important;
-}
-body.light-mode .mx-card:hover { border-color: rgba(109, 40, 217, 0.35); }
-body.light-mode .mx-star { color: #94a3b8; }
-body.light-mode .mx-star.is-on { color: #d97706; }
-body.light-mode .mx-card-reco,
-body.light-mode .mx-heat {
-  color: color-mix(in srgb, var(--h, #6d28d9) 42%, #0f172a) !important;
-}
-body.light-mode .mx-meters i { background: #7c3aed; }
-body.light-mode .mx-ok { color: #047857 !important; }
-body.light-mode .mx-warn {
-  color: #92400e !important;
-  background: #fffbeb;
-  border-color: rgba(180, 83, 9, 0.28);
-}
-body.light-mode .mx-legal { color: #b45309; }
-body.light-mode .mx-card-actions button,
-body.light-mode .mx-btn,
-body.light-mode .mx-link,
-body.light-mode .mx-card-actions a {
-  background: #ede9fe;
-  border-color: rgba(109, 40, 217, 0.28);
-  color: #5b21b6 !important;
-}
-body.light-mode .mx-btn--ghost {
-  background: #fff;
-  border-color: rgba(15, 23, 42, 0.16);
+body.light-mode #hireMatrixRoot .mx-sub,
+body.light-mode #hireMatrixRoot .mx-help,
+body.light-mode #hireMatrixRoot .mx-mini,
+body.light-mode #hireMatrixRoot .mx-q p,
+body.light-mode #hireMatrixRoot .mx-iv-head p,
+body.light-mode #hireMatrixRoot .mx-kpi span,
+body.light-mode #hireMatrixRoot .mx-pipe,
+body.light-mode #hireMatrixRoot .mx-meters div,
+body.light-mode #hireMatrixRoot .mx-notes,
+body.light-mode #hireMatrixRoot .mx-hint,
+body.light-mode #hireMatrixRoot .mx-cmp,
+body.light-mode #hireMatrixRoot .mx-script ol,
+body.light-mode #hireMatrixRoot .mx-decision p,
+body.light-mode #hireMatrixRoot .mx-opt-edit,
+body.light-mode #hireMatrixRoot .mx-chip,
+body.light-mode #hireMatrixRoot .mx-tab,
+body.light-mode #hireMatrixRoot .mx-mini-nav,
+body.light-mode #hireMatrixRoot .mx-btn--ghost,
+#hireMatrixRoot[data-theme="light"] .mx-sub,
+#hireMatrixRoot[data-theme="light"] .mx-help,
+#hireMatrixRoot[data-theme="light"] .mx-mini,
+#hireMatrixRoot[data-theme="light"] .mx-q p,
+#hireMatrixRoot[data-theme="light"] .mx-iv-head p,
+#hireMatrixRoot[data-theme="light"] .mx-kpi span,
+#hireMatrixRoot[data-theme="light"] .mx-pipe,
+#hireMatrixRoot[data-theme="light"] .mx-meters div,
+#hireMatrixRoot[data-theme="light"] .mx-notes,
+#hireMatrixRoot[data-theme="light"] .mx-hint,
+#hireMatrixRoot[data-theme="light"] .mx-cmp,
+#hireMatrixRoot[data-theme="light"] .mx-script ol,
+#hireMatrixRoot[data-theme="light"] .mx-decision p,
+#hireMatrixRoot[data-theme="light"] .mx-opt-edit,
+#hireMatrixRoot[data-theme="light"] .mx-chip,
+#hireMatrixRoot[data-theme="light"] .mx-tab,
+#hireMatrixRoot[data-theme="light"] .mx-mini-nav,
+#hireMatrixRoot[data-theme="light"] .mx-btn--ghost {
   color: #334155 !important;
 }
-body.light-mode .mx-name-cell button { color: #5b21b6 !important; }
-body.light-mode .mx-table th {
-  background: #f1f5f9 !important;
+body.light-mode #hireMatrixRoot .mx-kicker,
+body.light-mode #hireMatrixRoot .mx-h4,
+body.light-mode #hireMatrixRoot .mx-rank,
+body.light-mode #hireMatrixRoot .mx-decision header span,
+body.light-mode #hireMatrixRoot .mx-name-cell button,
+body.light-mode #hireMatrixRoot .mx-card-actions a,
+body.light-mode #hireMatrixRoot .mx-link,
+body.light-mode #hireMatrixRoot .mx-kpi small,
+#hireMatrixRoot[data-theme="light"] .mx-kicker,
+#hireMatrixRoot[data-theme="light"] .mx-h4,
+#hireMatrixRoot[data-theme="light"] .mx-rank,
+#hireMatrixRoot[data-theme="light"] .mx-decision header span,
+#hireMatrixRoot[data-theme="light"] .mx-name-cell button,
+#hireMatrixRoot[data-theme="light"] .mx-card-actions a,
+#hireMatrixRoot[data-theme="light"] .mx-link,
+#hireMatrixRoot[data-theme="light"] .mx-kpi small {
   color: #5b21b6 !important;
 }
-body.light-mode .mx-table td { color: #1e293b !important; }
-body.light-mode .mx-app input,
-body.light-mode .mx-app select,
-body.light-mode .mx-app textarea {
-  background: #fff !important;
+body.light-mode #hireMatrixRoot .mx-app h2,
+body.light-mode #hireMatrixRoot h3,
+body.light-mode #hireMatrixRoot .mx-kpi strong,
+body.light-mode #hireMatrixRoot .mx-pipe b,
+body.light-mode #hireMatrixRoot .mx-meters b,
+body.light-mode #hireMatrixRoot .mx-q header strong,
+body.light-mode #hireMatrixRoot .mx-q label,
+#hireMatrixRoot[data-theme="light"] .mx-app h2,
+#hireMatrixRoot[data-theme="light"] h3,
+#hireMatrixRoot[data-theme="light"] .mx-kpi strong,
+#hireMatrixRoot[data-theme="light"] .mx-pipe b,
+#hireMatrixRoot[data-theme="light"] .mx-meters b,
+#hireMatrixRoot[data-theme="light"] .mx-q header strong,
+#hireMatrixRoot[data-theme="light"] .mx-q label {
   color: #0f172a !important;
+}
+body.light-mode #hireMatrixRoot .mx-card,
+body.light-mode #hireMatrixRoot .mx-kpi,
+body.light-mode #hireMatrixRoot .mx-pipe,
+body.light-mode #hireMatrixRoot .mx-q,
+body.light-mode #hireMatrixRoot .mx-decision,
+body.light-mode #hireMatrixRoot .mx-table-wrap,
+body.light-mode #hireMatrixRoot .mx-script,
+body.light-mode #hireMatrixRoot .mx-tab,
+body.light-mode #hireMatrixRoot .mx-chip,
+body.light-mode #hireMatrixRoot .mx-iv-nav,
+body.light-mode #hireMatrixRoot .mx-mini-nav,
+#hireMatrixRoot[data-theme="light"] .mx-card,
+#hireMatrixRoot[data-theme="light"] .mx-kpi,
+#hireMatrixRoot[data-theme="light"] .mx-pipe,
+#hireMatrixRoot[data-theme="light"] .mx-q,
+#hireMatrixRoot[data-theme="light"] .mx-decision,
+#hireMatrixRoot[data-theme="light"] .mx-table-wrap,
+#hireMatrixRoot[data-theme="light"] .mx-script,
+#hireMatrixRoot[data-theme="light"] .mx-tab,
+#hireMatrixRoot[data-theme="light"] .mx-chip,
+#hireMatrixRoot[data-theme="light"] .mx-mini-nav {
+  background: #ffffff !important;
+  background-image: none !important;
+  border-color: rgba(15, 23, 42, 0.16) !important;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05);
+}
+body.light-mode #hireMatrixRoot .mx-table th,
+body.light-mode #hireMatrixRoot .mx-table td,
+#hireMatrixRoot[data-theme="light"] .mx-table th,
+#hireMatrixRoot[data-theme="light"] .mx-table td {
+  background: #ffffff !important;
+  color: #0f172a !important;
+  border-color: rgba(15, 23, 42, 0.1) !important;
+}
+body.light-mode #hireMatrixRoot .mx-table th,
+#hireMatrixRoot[data-theme="light"] .mx-table th {
+  background: #eef2ff !important;
+  color: #5b21b6 !important;
+}
+body.light-mode #hireMatrixRoot input,
+body.light-mode #hireMatrixRoot select,
+body.light-mode #hireMatrixRoot textarea,
+#hireMatrixRoot[data-theme="light"] input,
+#hireMatrixRoot[data-theme="light"] select,
+#hireMatrixRoot[data-theme="light"] textarea {
+  background: #ffffff !important;
+  color: #0f172a !important;
+  border: 1px solid rgba(15, 23, 42, 0.22) !important;
+  color-scheme: light;
+}
+body.light-mode #hireMatrixRoot .mx-tab.is-active,
+body.light-mode #hireMatrixRoot .mx-chip.is-on,
+#hireMatrixRoot[data-theme="light"] .mx-tab.is-active,
+#hireMatrixRoot[data-theme="light"] .mx-chip.is-on {
+  background: #5b21b6 !important;
+  border-color: #5b21b6 !important;
+  color: #ffffff !important;
+}
+body.light-mode #hireMatrixRoot .mx-chip.is-on,
+#hireMatrixRoot[data-theme="light"] .mx-chip.is-on {
+  background: #ede9fe !important;
+  color: #5b21b6 !important;
+  border-color: rgba(91, 33, 182, 0.35) !important;
+}
+body.light-mode #hireMatrixRoot .mx-mini-nav.is-on,
+#hireMatrixRoot[data-theme="light"] .mx-mini-nav.is-on {
+  background: #ede9fe !important;
+  color: #5b21b6 !important;
+  border-color: rgba(91, 33, 182, 0.35) !important;
+}
+body.light-mode #hireMatrixRoot .mx-card-actions button,
+body.light-mode #hireMatrixRoot .mx-btn,
+body.light-mode #hireMatrixRoot .mx-link,
+body.light-mode #hireMatrixRoot .mx-card-actions a,
+#hireMatrixRoot[data-theme="light"] .mx-card-actions button,
+#hireMatrixRoot[data-theme="light"] .mx-btn,
+#hireMatrixRoot[data-theme="light"] .mx-link,
+#hireMatrixRoot[data-theme="light"] .mx-card-actions a {
+  background: #ede9fe !important;
+  border-color: rgba(91, 33, 182, 0.3) !important;
+  color: #5b21b6 !important;
+}
+body.light-mode #hireMatrixRoot .mx-btn--ghost,
+#hireMatrixRoot[data-theme="light"] .mx-btn--ghost {
+  background: #ffffff !important;
+  color: #334155 !important;
   border-color: rgba(15, 23, 42, 0.18) !important;
 }
-body.light-mode .mx-mini-nav { color: #334155; }
-body.light-mode .mx-mini-nav.is-on {
-  background: #ede9fe;
-  border-color: rgba(109, 40, 217, 0.35);
-  color: #5b21b6 !important;
-}
-body.light-mode .mx-script {
+body.light-mode #hireMatrixRoot .mx-script,
+#hireMatrixRoot[data-theme="light"] .mx-script {
   background: #f5f3ff !important;
-  border-color: rgba(109, 40, 217, 0.28);
 }
-body.light-mode .mx-script.is-done {
+body.light-mode #hireMatrixRoot .mx-script.is-done,
+#hireMatrixRoot[data-theme="light"] .mx-script.is-done {
   background: #ecfdf5 !important;
-  border-color: rgba(4, 120, 87, 0.28);
 }
-body.light-mode .mx-script h4 { color: #5b21b6 !important; }
-body.light-mode .mx-script.is-done h4 { color: #047857 !important; }
-body.light-mode .mx-script ol,
-body.light-mode .mx-decision p,
-body.light-mode .mx-opt-edit { color: #334155 !important; }
-body.light-mode .mx-q header strong,
-body.light-mode .mx-q label { color: #0f172a !important; }
-body.light-mode .mx-decision em { color: #047857 !important; }
+body.light-mode #hireMatrixRoot .mx-script h4,
+#hireMatrixRoot[data-theme="light"] .mx-script h4 { color: #5b21b6 !important; }
+body.light-mode #hireMatrixRoot .mx-script.is-done h4,
+#hireMatrixRoot[data-theme="light"] .mx-script.is-done h4 { color: #047857 !important; }
+body.light-mode #hireMatrixRoot .mx-ok,
+body.light-mode #hireMatrixRoot .mx-decision em,
+#hireMatrixRoot[data-theme="light"] .mx-ok,
+#hireMatrixRoot[data-theme="light"] .mx-decision em { color: #047857 !important; }
+body.light-mode #hireMatrixRoot .mx-warn,
+body.light-mode #hireMatrixRoot .mx-legal,
+#hireMatrixRoot[data-theme="light"] .mx-warn,
+#hireMatrixRoot[data-theme="light"] .mx-legal { color: #92400e !important; }
+body.light-mode #hireMatrixRoot .mx-warn,
+#hireMatrixRoot[data-theme="light"] .mx-warn {
+  background: #fffbeb !important;
+  border-color: rgba(180, 83, 9, 0.3) !important;
+}
+body.light-mode #hireMatrixRoot .mx-star,
+#hireMatrixRoot[data-theme="light"] .mx-star { color: #64748b !important; }
+body.light-mode #hireMatrixRoot .mx-star.is-on,
+#hireMatrixRoot[data-theme="light"] .mx-star.is-on { color: #d97706 !important; }
+body.light-mode #hireMatrixRoot .mx-meters i,
+#hireMatrixRoot[data-theme="light"] .mx-meters i { background: #7c3aed !important; }
+body.light-mode #hireMatrixRoot [data-heat="muito-quente"],
+#hireMatrixRoot[data-theme="light"] [data-heat="muito-quente"] { color: #047857 !important; }
+body.light-mode #hireMatrixRoot [data-heat="quente"],
+#hireMatrixRoot[data-theme="light"] [data-heat="quente"] { color: #b45309 !important; }
+body.light-mode #hireMatrixRoot [data-heat="morno"],
+#hireMatrixRoot[data-theme="light"] [data-heat="morno"] { color: #c2410c !important; }
+body.light-mode #hireMatrixRoot [data-heat="frio"],
+#hireMatrixRoot[data-theme="light"] [data-heat="frio"] { color: #0369a1 !important; }
+body.light-mode #hireMatrixRoot [data-heat="congelado"],
+#hireMatrixRoot[data-theme="light"] [data-heat="congelado"] { color: #475569 !important; }
 @media (max-width: 800px) {
   .mx-iv { grid-template-columns: 1fr; }
   .mx-iv-nav { flex-direction: row; flex-wrap: wrap; }

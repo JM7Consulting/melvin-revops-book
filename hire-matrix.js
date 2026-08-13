@@ -478,7 +478,7 @@
                     <label class="mx-cmp"><input type="checkbox" data-mx-cmp="${esc(r.c.id)}" ${checked}> comparar</label>
                 </div>
                 <h3>${esc(r.c.name)}</h3>
-                <p class="mx-card-reco" style="--h:${esc(r.s.heat.color)}">${esc(r.s.reco.label)}</p>
+                <p class="mx-card-reco" data-heat="${esc(r.s.heat.id)}" style="--h:${esc(r.s.heat.color)}">${esc(r.s.reco.label)}</p>
                 <div class="mx-meters">
                     <div><span>Índice R&S</span><b>${r.s.index}</b><i style="width:${r.s.index}%"></i></div>
                     <div><span>Pontos brutos</span><b>${r.s.raw}</b></div>
@@ -510,7 +510,7 @@
                 <td>${iv}</td>
                 <td><strong>${r.s.raw}</strong></td>
                 <td><strong>${r.s.index}</strong></td>
-                <td><span class="mx-heat" style="--h:${esc(r.s.heat.color)}">${esc(r.s.heat.label)}</span></td>
+                <td><span class="mx-heat" data-heat="${esc(r.s.heat.id)}" style="--h:${esc(r.s.heat.color)}">${esc(r.s.heat.label)}</span></td>
                 <td>${esc(r.s.reco.label)}</td>
                 <td><select data-mx-stage="${esc(r.c.id)}">${st}</select></td>
             </tr>`;
@@ -663,9 +663,16 @@
             <div class="mx-decisions">${lis || '<p>Ninguém ainda no corte. Marque ★ no ranking ou complete a triagem.</p>'}</div>`;
     }
 
+    function syncTheme() {
+        const root = document.getElementById('hireMatrixRoot');
+        if (!root) return;
+        root.setAttribute('data-theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
+    }
+
     function render() {
         const root = document.getElementById('hireMatrixRoot');
         if (!root) return;
+        syncTheme();
         const wrap = root.querySelector('.mx-table-wrap');
         const scrollX = wrap ? wrap.scrollLeft : 0;
         const scrollY = window.scrollY;
@@ -931,6 +938,8 @@
         const root = document.getElementById('hireMatrixRoot');
         if (!root) return;
         state = loadState();
+        syncTheme();
+        new MutationObserver(syncTheme).observe(document.body, { attributes: true, attributeFilter: ['class'] });
         render();
     }
 
