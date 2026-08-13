@@ -9128,7 +9128,7 @@ body.light-mode .cx-runway--in {
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
-.cv-block { margin-bottom: 18px; }
+.cv-block { margin-bottom: 18px; display: block; }
 .cv-block h3 {
   margin: 0 0 10px;
   font-size: 0.78rem;
@@ -9191,7 +9191,15 @@ body.light-mode .cv-nav-name,
 body.light-mode .cv-sheet h2,
 body.light-mode .cv-job-top strong { color: #0f172a; }
 body.light-mode .cv-block > p,
-body.light-mode .cv-contact { color: #334155; }
+body.light-mode .cv-contact,
+body.light-mode .cv-job ul,
+body.light-mode .cv-list { color: #334155; }
+body.light-mode .cv-headline,
+body.light-mode .cv-job-top span,
+body.light-mode .cv-nav-role { color: #64748b; }
+body.light-mode .cv-job-co { color: #6d28d9; }
+body.light-mode .cv-block h3,
+body.light-mode .cv-kicker { color: #7c3aed; }
 @media (max-width: 900px) {
   .cv-browser {
     grid-template-columns: 1fr;
