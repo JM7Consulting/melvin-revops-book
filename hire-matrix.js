@@ -11,6 +11,14 @@
         { value: '4', label: '4 · Forte' },
         { value: '5', label: '5 · Excelente' }
     ];
+    const GATE_LIKERT = [
+        { value: '', label: '— ainda não feito' },
+        { value: '1', label: '1 · Fraco' },
+        { value: '2', label: '2 · Regular' },
+        { value: '3', label: '3 · Bom' },
+        { value: '4', label: '4 · Forte' },
+        { value: '5', label: '5 · Excelente' }
+    ];
 
     function opt(value, label, points, knockout) {
         return { value, label, points, knockout: !!knockout };
@@ -20,7 +28,7 @@
         return {
             role: 'BDR Outbound · Melvin',
             offer: 'PJ · 160h/mês · R$ 3.500 + variável',
-            rev: 2,
+            rev: 3,
             screen: [
                 {
                     id: 'age',
@@ -158,59 +166,99 @@
                     ]
                 }
             ],
+            process: [
+                {
+                    id: 'case',
+                    step: '2',
+                    label: 'Case curto (ICP + 1º e-mail + plano de toques)',
+                    prompt: 'Nota 1–5. Entrega: uma conta ICP + primeiro e-mail + régua de toques. 1 = ICP genérico / e-mail de produto. 3 = estruturado, raso em dor industrial. 5 = ICP PCM/manutenção correto, gancho de dor, cadência crível.',
+                    weight: 6
+                },
+                {
+                    id: 'fit',
+                    step: '3.1',
+                    label: 'Entrevista de fit',
+                    prompt: 'Nota 1–5 da fase 3.1 (não confundir com o roteiro de apoio abaixo). 1 = não quer hunter / rejeita oferta. 3 = cabe, sem fome. 5 = fome de outbound + fit Melvin (PJ/160h) + coachability.',
+                    weight: 5
+                },
+                {
+                    id: 'roleplay',
+                    step: '3.2',
+                    label: 'Role-play de abertura Outbound',
+                    prompt: 'Nota 1–5. PCM de indústria que nunca ouviu a Melvin — 30 segundos. 1 = travou ou fez pitch de produto. 3 = educado, sem gancho. 5 = dor, pergunta, pedido de reunião.',
+                    weight: 6
+                },
+                {
+                    id: 'cso',
+                    step: '4',
+                    label: 'Conversa final com CSO',
+                    prompt: 'Nota 1–5 da conversa com o CSO. 1 = desalinhado. 3 = CSO em dúvida. 5 = CSO recomenda contratar.',
+                    weight: 3
+                }
+            ],
             interview: [
                 {
                     id: 'hunter',
+                    phase: '3.1',
                     label: 'Hunter / cadência',
                     prompt: 'Me conta uma cadência recente (e-mail, call, LinkedIn, WA) do primeiro toque até SQL. O que você media? O que mudou na régua?'
                 },
                 {
                     id: 'sdrVsBdr',
+                    phase: '3.1',
                     label: 'SDR vs BDR (prospecção ativa)',
                     prompt: 'Muita gente escreve SDR e na prática fez BDR. Me prova prospecção ativa: como montava a lista (ICP), canal de 1º toque (cold call / LinkedIn / e-mail), cadência até a reunião, e o que era SQL. Se a demanda já chegava pronta (inbound / tráfego pago), diz isso com clareza.'
                 },
                 {
                     id: 'crmhygiene',
+                    phase: '3.1',
                     label: 'Higiene de CRM',
                     prompt: 'Como o CRM fica no seu dia a dia? Me dá um exemplo de Lost com motivo e um follow-up que você não deixou morrer.'
                 },
                 {
                     id: 'coldcall',
-                    label: 'Cold call / abertura',
-                    prompt: 'Role-play: você liga para um PCM de indústria que nunca ouviu falar da Melvin. Primeiros 30 segundos — vai.'
+                    phase: '3.2',
+                    label: 'Apoio 3.2 · Cold call / abertura',
+                    prompt: 'Role-play de treino (a nota oficial da fase é 3.2 acima): você liga para um PCM de indústria que nunca ouviu falar da Melvin. Primeiros 30 segundos — vai.'
                 },
                 {
                     id: 'resilience',
+                    phase: '3.1',
                     label: 'Resiliência a rejeição',
                     prompt: 'Última semana pesada: quantos “não”? O que você fez no dia seguinte? Exemplo concreto, não discurso.'
                 },
                 {
                     id: 'icp',
+                    phase: '3.1',
                     label: 'Fit ICP industrial',
                     prompt: 'Por que manutenção industrial / PCM — e não mais um SaaS genérico? O que você já vendeu para operação/chão de fábrica?'
                 },
                 {
                     id: 'offer',
+                    phase: '3.1',
                     label: 'Fit da oferta',
                     prompt: 'PJ, 160h, home office, R$ 3.500 + variável. O que precisa ser verdade para você aceitar? Quando começa?'
                 },
                 {
                     id: 'coach',
+                    phase: '3.1',
                     label: 'Coachability',
                     prompt: 'Me conta um feedback duro que você recebeu em vendas. O que mudou na semana seguinte?'
                 },
                 {
                     id: 'comm',
+                    phase: '3.1',
                     label: 'Comunicação / clareza',
                     prompt: 'Explica a Melvin em 40 segundos para um líder de manutenção cético. Sem jargão de startup.'
                 },
                 {
                     id: 'start',
+                    phase: '3.1',
                     label: 'Disponibilidade / início',
                     prompt: 'Quando você começaria? Há aviso prévio, outro processo ou restrição de horário (160h / home office)?'
                 }
             ],
-            interviewWeight: 20,
+            interviewWeight: 0,
             bands: [
                 { id: 'muito-quente', label: 'Muito quente', minRaw: 30, minIndex: 82, color: '#34d399' },
                 { id: 'quente', label: 'Quente', minRaw: 25, minIndex: 70, color: '#fbbf24' },
@@ -239,13 +287,21 @@
         return o;
     }
 
+    function blankProcess() {
+        const o = {};
+        defaultConfig().process.forEach((g) => { o[g.id] = ''; });
+        return o;
+    }
+
     function seedCandidate(id, name, screen, notes) {
         return {
             id,
             name,
             screen: Object.assign(blankScreen(), screen),
             interview: blankInterview(),
+            process: blankProcess(),
             interviewNote: '',
+            processNote: '',
             notes: notes || '',
             starred: false,
             stage: 'triagem'
@@ -309,8 +365,9 @@
             }
             if (!raw) return base;
             const saved = JSON.parse(raw);
-            if (!saved.config || saved.config.rev !== 2) migrating = true;
+            if (!saved.config || Number(saved.config.rev || 0) < 2) migrating = true;
             const cfg = defaultConfig();
+            const fromV2 = saved.config && Number(saved.config.rev || 0) >= 2 && Number(saved.config.rev || 0) < 3;
             if (!migrating && saved.config) {
                 if (Array.isArray(saved.config.screen) && saved.config.screen.some((c) => c.id === 'outbound')) cfg.screen = saved.config.screen;
                 if (Array.isArray(saved.config.interview) && saved.config.interview.length) {
@@ -321,13 +378,14 @@
                         cfg.interview.splice(at < 0 ? 0 : at + 1, 0, extra);
                     }
                 }
-                if (typeof saved.config.interviewWeight === 'number') cfg.interviewWeight = saved.config.interviewWeight;
+                if (!fromV2 && Array.isArray(saved.config.process) && saved.config.process.length) cfg.process = saved.config.process;
+                if (!fromV2 && typeof saved.config.interviewWeight === 'number') cfg.interviewWeight = saved.config.interviewWeight;
                 if (saved.config.bands) cfg.bands = saved.config.bands;
                 if (saved.config.reco) cfg.reco = saved.config.reco;
                 if (saved.config.role) cfg.role = saved.config.role;
                 if (saved.config.offer) cfg.offer = saved.config.offer;
             }
-            cfg.rev = 2;
+            cfg.rev = 3;
             const byId = Object.fromEntries(base.candidates.map((c) => [c.id, c]));
             const cands = Array.isArray(saved.candidates) && saved.candidates.length
                 ? saved.candidates.map((c) => {
@@ -340,7 +398,9 @@
                             ? Object.assign(blankScreen(), prev, seed.screen)
                             : Object.assign(blankScreen(), seed.screen, prev),
                         notes: migrating ? seed.notes : (c.notes || seed.notes),
-                        interview: Object.assign(blankInterview(), c.interview || {})
+                        interview: Object.assign(blankInterview(), c.interview || {}),
+                        process: Object.assign(blankProcess(), c.process || {}),
+                        processNote: c.processNote || ''
                     });
                 })
                 : base.candidates;
@@ -368,6 +428,15 @@
                 filter: state.filter || 'all'
             }));
         } catch (e) {}
+    }
+
+    function gateLine(c) {
+        const p = c.process || {};
+        return (state.config.process || []).map((g) => g.step + ' ' + (p[g.id] ? p[g.id] + '/5' : '—')).join(' · ');
+    }
+
+    function gateSelect(cid, field, value) {
+        return GATE_LIKERT.map((o) => `<option value="${esc(o.value)}" ${String(value || '') === String(o.value) ? 'selected' : ''}>${esc(o.label)}</option>`).join('');
     }
 
     function outboundLabel(c) {
@@ -417,14 +486,30 @@
         let ivAvg = null;
         if (ivAns.length) {
             ivAvg = ivAns.reduce((a, b) => a + b, 0) / ivAns.length;
-            raw += ivAvg;
-            weighted += (ivAvg / 5) * (cfg.interviewWeight || 0);
-            weightUsed += cfg.interviewWeight || 0;
-            if (ivAvg >= 4) strengths.push('Entrevista estruturada');
-            if (ivAvg < 2.5) gaps.push('Entrevista estruturada');
-        } else {
-            unanswered.push('Entrevista estruturada');
+            if ((cfg.interviewWeight || 0) > 0) {
+                raw += ivAvg;
+                weighted += (ivAvg / 5) * cfg.interviewWeight;
+                weightUsed += cfg.interviewWeight;
+                if (ivAvg >= 4) strengths.push('Roteiro de entrevista');
+                if (ivAvg < 2.5) gaps.push('Roteiro de entrevista');
+            }
         }
+
+        const proc = c.process || {};
+        (cfg.process || []).forEach((g) => {
+            const val = proc[g.id];
+            if (val === '' || val == null) {
+                unanswered.push(g.step + ' · ' + g.label);
+                return;
+            }
+            const n = Number(val);
+            raw += n;
+            weighted += (n / 5) * (g.weight || 0);
+            weightUsed += g.weight || 0;
+            if (n >= 4) strengths.push(g.step + ' ' + g.label);
+            if (n < 3) gaps.push(g.step + ' ' + g.label);
+        });
+
         if (String(c.interview.offer) === '0') {
             knockouts.push('Rejeita a oferta (PJ / 160h / R$ 3.500)');
         }
@@ -433,19 +518,32 @@
         const bands = [...cfg.bands].sort((a, b) => b.minRaw - a.minRaw);
         const heat = bands.find((b) => raw >= b.minRaw) || bands[bands.length - 1];
         const ivCoverage = cfg.interview.length ? ivAns.length / cfg.interview.length : 0;
+        const reco = processReco(proc, knockouts, index);
+        const totalFields = cfg.screen.length + (cfg.process || []).length;
+        const coverage = totalFields ? Math.round(((totalFields - unanswered.length) / totalFields) * 100) : 0;
 
-        let reco = cfg.reco.slice().sort((a, b) => b.minIndex - a.minIndex).find((r) => index >= r.minIndex) || cfg.reco[cfg.reco.length - 1];
-        if (knockouts.length) {
-            reco = { id: 'knockout', label: 'Recusar · knockout', minIndex: 0 };
-        } else if (index >= 66 && ivCoverage < 0.4) {
-            reco = { id: 'entrevista', label: 'Triagem forte · falta entrevista', minIndex: index };
+        return { raw: Math.round(raw * 10) / 10, index, heat, reco, knockouts, unanswered, strengths, gaps, ivAvg, ivCoverage, coverage, process: proc };
+    }
+
+    function processReco(proc, knockouts, index) {
+        const n = (id) => (proc[id] === '' || proc[id] == null) ? null : Number(proc[id]);
+        if (knockouts.length) return { id: 'knockout', label: 'Recusar · knockout' };
+        const caseN = n('case');
+        const fitN = n('fit');
+        const rpN = n('roleplay');
+        const csoN = n('cso');
+        if (caseN == null) {
+            if (index >= 66) return { id: 'case', label: '1 · Triagem ok · próximo: Case (2)' };
+            if (index >= 52) return { id: 'banco', label: 'Banco / 2ª leva' };
+            return { id: 'nao', label: 'Não avançar na triagem' };
         }
-
-        const screenFields = cfg.screen.length + 1;
-        const filled = screenFields - unanswered.length;
-        const coverage = Math.round((filled / screenFields) * 100);
-
-        return { raw: Math.round(raw * 10) / 10, index, heat, reco, knockouts, unanswered, strengths, gaps, ivAvg, ivCoverage, coverage };
+        if (caseN < 3) return { id: 'nao', label: 'Não avançar · case < 3' };
+        if (fitN == null || rpN == null) return { id: 'entrevista', label: '2 · Case ok · próximo: Fit + role-play (3)' };
+        if (fitN < 3 || rpN < 3) return { id: 'nao', label: 'Não avançar · fit/role-play < 3' };
+        if (csoN == null) return { id: 'cso', label: '3 · Entrevista ok · próximo: Final CSO (4)' };
+        if (csoN >= 4) return { id: 'oferta', label: '4 · CSO ok · avançar oferta' };
+        if (csoN >= 3) return { id: 'banco', label: 'CSO em dúvida · banco' };
+        return { id: 'nao', label: 'Não avançar · CSO < 3' };
     }
 
     function esc(s) {
@@ -462,10 +560,10 @@
     }
 
     const STAGES = [
-        { id: 'triagem', label: 'Triagem' },
-        { id: 'entrevista', label: 'Entrevista 1' },
-        { id: 'case', label: 'Case' },
-        { id: 'final', label: 'Final' },
+        { id: 'triagem', label: '1 · Triagem' },
+        { id: 'case', label: '2 · Case' },
+        { id: 'entrevista', label: '3 · Fit + role-play' },
+        { id: 'final', label: '4 · Final CSO' },
         { id: 'oferta', label: 'Oferta' },
         { id: 'banco', label: 'Banco' },
         { id: 'recusado', label: 'Recusado' }
@@ -487,7 +585,7 @@
         const items = [
             ['ranking', 'Ranking'],
             ['planilha', 'Planilha'],
-            ['entrevista', 'Entrevista guiada'],
+            ['entrevista', 'Processo seletivo'],
             ['comparar', 'Comparar'],
             ['pesos', 'Pesos & regras'],
             ['decisao', 'Decisão']
@@ -521,7 +619,7 @@
                     `<button type="button" class="mx-chip${filter === id ? ' is-on' : ''}" data-mx-filter="${id}">${lab}</button>`
                 ).join('')}
             </div>
-            <p class="mx-help">Critério decisivo (peso 20): BDR/outbound e SDR que fez <b>prospecção ativa</b> (lista ICP, cold, cadência outbound) pontuam no topo. SDR inbound — lead que já chega — pontua menos. Título SDR sozinho não vale hunter. Campos em branco não pontuam nem penalizam.</p>`;
+            <p class="mx-help">Item 1 do processo (triagem de CVs) já está nesta aba e na Planilha. Notas 1–5 das fases 2 (case), 3.1 (fit), 3.2 (role-play) e 4 (CSO) entram no índice quando preenchidas — em branco não penalizam. Corte: nota &lt; 3 na fase = não avançar.</p>`;
         const cards = rows.length ? rows.map((r) => {
             const i = all.indexOf(r) + 1;
             const checked = state.compare.includes(r.c.id) ? 'checked' : '';
@@ -533,6 +631,7 @@
                 </div>
                 <h3>${esc(r.c.name)}</h3>
                 <p class="mx-out-tag" data-out="${esc(r.c.screen.outbound || '')}">${esc(outboundLabel(r.c))}</p>
+                <p class="mx-gates">${esc(gateLine(r.c))}</p>
                 <p class="mx-card-reco" data-heat="${esc(r.s.heat.id)}" style="--h:${esc(r.s.heat.color)}">${esc(r.s.reco.label)}</p>
                 <div class="mx-meters">
                     <div><span>Índice R&S</span><b>${r.s.index}</b><i style="width:${r.s.index}%"></i></div>
@@ -542,7 +641,7 @@
                 </div>
                 <p class="mx-mini">${r.s.knockouts.length ? '⛔ ' + esc(r.s.knockouts.join(' · ')) : (r.s.strengths.slice(0, 2).join(' · ') || 'Complete a triagem / entrevista')}</p>
                 <div class="mx-card-actions">
-                    <button type="button" data-mx-goto="entrevista" data-mx-focus="${esc(r.c.id)}">Abrir entrevista</button>
+                    <button type="button" data-mx-goto="entrevista" data-mx-focus="${esc(r.c.id)}">Abrir processo</button>
                     <a href="#job-bdr" data-mx-cv="${esc(r.c.id)}">Ver CV</a>
                 </div>
             </article>`;
@@ -552,15 +651,17 @@
 
     function renderPlanilha() {
         const cfg = state.config;
-        const head = ['★', 'Candidato', ...cfg.screen.map((c) => c.label), 'Nota ent.', 'Bruto', 'Índice', 'Calor', 'Recomendação', 'Fase']
+        const head = ['★', 'Candidato', ...cfg.process.map((g) => g.step), ...cfg.screen.map((c) => c.label), 'Roteiro', 'Bruto', 'Índice', 'Calor', 'Recomendação', 'Fase']
             .map((h) => `<th>${esc(h)}</th>`).join('');
         const body = ranked().map((r) => {
+            const procCells = cfg.process.map((g) => `<td><select data-mx-proc="${esc(r.c.id)}" data-field="${esc(g.id)}">${gateSelect(r.c.id, g.id, r.c.process && r.c.process[g.id])}</select></td>`).join('');
             const cells = cfg.screen.map((crit) => `<td><select data-mx-screen="${esc(r.c.id)}" data-field="${esc(crit.id)}">${selectOpts(crit, r.c.screen[crit.id])}</select></td>`).join('');
             const iv = r.s.ivAvg == null ? '—' : r.s.ivAvg.toFixed(1);
             const st = STAGES.map((s) => `<option value="${s.id}" ${r.c.stage === s.id ? 'selected' : ''}>${s.label}</option>`).join('');
             return `<tr>
                 <td><button type="button" class="mx-star${r.c.starred ? ' is-on' : ''}" data-mx-star="${esc(r.c.id)}">★</button></td>
                 <td class="mx-name-cell"><button type="button" data-mx-goto="entrevista" data-mx-focus="${esc(r.c.id)}">${esc(r.c.name)}</button></td>
+                ${procCells}
                 ${cells}
                 <td>${iv}</td>
                 <td><strong>${r.s.raw}</strong></td>
@@ -570,7 +671,7 @@
                 <td><select data-mx-stage="${esc(r.c.id)}">${st}</select></td>
             </tr>`;
         }).join('');
-        return `<p class="mx-help">Planilha viva no modelo da sua Excel (idade, formação, salário, CRM, atendimento, comercial 1 e 2) + vertical, índice ponderado e recomendação de fase. Dropdowns = opções originais. Campos vazios não pontuam nem penalizam.</p>
+        return `<p class="mx-help">Colunas 2 / 3.1 / 3.2 / 4 = notas oficiais do processo (1–5). O restante é a triagem de CV. Em branco = fase ainda não feita.</p>
             <div class="mx-table-wrap"><table class="mx-table"><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table></div>`;
     }
 
@@ -580,33 +681,69 @@
         const focus = list.find((c) => c.id === state.focusId) || list[0];
         if (!focus) return '';
         const s = scoreCandidate(focus, cfg);
-        const pending = cfg.interview.filter((q) => !focus.interview[q.id]);
+        const proc = focus.process || {};
         const nav = list.map((c) => `<button type="button" class="mx-mini-nav${c.id === focus.id ? ' is-on' : ''}" data-mx-focus="${esc(c.id)}">${esc(c.name.split(' ')[0])}</button>`).join('');
-        const qs = cfg.interview.map((q) => {
-            const val = focus.interview[q.id] || '';
-            const opts = LIKERT.map((o) => `<option value="${esc(o.value)}" ${String(val) === String(o.value) ? 'selected' : ''}>${esc(o.label)}</option>`).join('');
-            return `<article class="mx-q">
-                <header><strong>${esc(q.label)}</strong><select data-mx-iv="${esc(focus.id)}" data-q="${esc(q.id)}">${opts}</select></header>
-                <p>${esc(q.prompt)}</p>
+        const rail = `<div class="mx-step-rail">
+            <span class="mx-step is-done">1 · Triagem · ${s.index}</span>
+            ${(cfg.process || []).map((g) => {
+                const v = proc[g.id];
+                const cls = v ? (Number(v) >= 3 ? 'is-done' : 'is-fail') : 'is-now';
+                return `<span class="mx-step ${cls}">${esc(g.step)} · ${v ? v + '/5' : '—'}</span>`;
+            }).join('')}
+        </div>`;
+        const gates = (cfg.process || []).map((g) => {
+            const val = proc[g.id] || '';
+            return `<article class="mx-q mx-q--gate">
+                <header><strong>${esc(g.step)} · ${esc(g.label)}</strong><select data-mx-proc="${esc(focus.id)}" data-field="${esc(g.id)}">${gateSelect(focus.id, g.id, val)}</select></header>
+                <p>${esc(g.prompt)}</p>
             </article>`;
         }).join('');
-        const script = pending.length
-            ? `<div class="mx-script"><h4>Roteiro do bate-papo (ainda em branco)</h4><ol>${pending.map((q) => `<li><b>${esc(q.label)}.</b> ${esc(q.prompt)}</li>`).join('')}</ol></div>`
-            : `<div class="mx-script is-done"><h4>Roteiro completo</h4><p>Todas as perguntas desta ficha já têm nota. Use o campo de observação para evidências STAR.</p></div>`;
+        const qBlock = (phase, title) => {
+            const qs = cfg.interview.filter((q) => (q.phase || '3.1') === phase);
+            if (!qs.length) return '';
+            const pending = qs.filter((q) => !focus.interview[q.id]);
+            const cards = qs.map((q) => {
+                const val = focus.interview[q.id] || '';
+                const opts = LIKERT.map((o) => `<option value="${esc(o.value)}" ${String(val) === String(o.value) ? 'selected' : ''}>${esc(o.label)}</option>`).join('');
+                return `<article class="mx-q">
+                    <header><strong>${esc(q.label)}</strong><select data-mx-iv="${esc(focus.id)}" data-q="${esc(q.id)}">${opts}</select></header>
+                    <p>${esc(q.prompt)}</p>
+                </article>`;
+            }).join('');
+            const hint = pending.length
+                ? `<p class="mx-mini">${pending.length} pergunta(s) ainda em branco — não entram no índice; servem de evidência para a nota oficial da fase.</p>`
+                : `<p class="mx-mini">Roteiro preenchido. Lance a nota oficial da fase acima.</p>`;
+            return `<h4 class="mx-h4">${esc(title)}</h4>${hint}${cards}`;
+        };
         return `<div class="mx-iv">
             <div class="mx-iv-nav">${nav}</div>
             <div class="mx-iv-main">
                 <div class="mx-iv-head">
                     <div>
                         <h3>${esc(focus.name)}</h3>
-                        <p>${esc(s.reco.label)} · índice ${s.index} · bruto ${s.raw} · entrevista ${s.ivAvg == null ? 'pendente' : s.ivAvg.toFixed(1) + '/5'}</p>
+                        <p>${esc(s.reco.label)} · índice ${s.index} · ${esc(gateLine(focus))}</p>
                     </div>
                     <a class="mx-link" href="#job-bdr" data-mx-cv="${esc(focus.id)}">Abrir CV →</a>
                 </div>
-                ${script}
-                ${qs}
-                <label class="mx-notes">Evidências / STAR / combinados
-                    <textarea data-mx-ivnote="${esc(focus.id)}" rows="4" placeholder="Frases literais, números, disponibilidade, salário combinado…">${esc(focus.interviewNote)}</textarea>
+                ${rail}
+                <div class="mx-script">
+                    <h4>Como é o processo seletivo</h4>
+                    <ol>
+                        <li><b>Triagem de currículos</b> — já pontuada na Planilha / Ranking (item 1).</li>
+                        <li><b>Case curto</b> — conta ICP + 1º e-mail + plano de toques · nota 1–5.</li>
+                        <li><b>Entrevista de fit + role-play de abertura Outbound</b> — notas 3.1 e 3.2.</li>
+                        <li><b>Conversa final com CSO</b> — nota 1–5.</li>
+                    </ol>
+                </div>
+                <h4 class="mx-h4">Notas oficiais das fases (entram no índice)</h4>
+                ${gates}
+                <label class="mx-notes">Evidências do case / role-play / CSO
+                    <textarea data-mx-procnote="${esc(focus.id)}" rows="3" placeholder="O que entregou no case, como foi a abertura, o que o CSO combinou…">${esc(focus.processNote || '')}</textarea>
+                </label>
+                ${qBlock('3.1', 'Roteiro de apoio · 3.1 Entrevista de fit')}
+                ${qBlock('3.2', 'Roteiro de apoio · 3.2 Role-play')}
+                <label class="mx-notes">Evidências STAR da conversa
+                    <textarea data-mx-ivnote="${esc(focus.id)}" rows="3" placeholder="Frases literais, números, disponibilidade…">${esc(focus.interviewNote)}</textarea>
                 </label>
                 <label class="mx-notes">Notas de triagem (CV)
                     <textarea data-mx-notes="${esc(focus.id)}" rows="3">${esc(focus.notes)}</textarea>
@@ -633,6 +770,13 @@
             }).join('');
             return `<tr><th>${esc(crit.label)}</th>${tds}</tr>`;
         }).join('');
+        const procRows = (cfg.process || []).map((g) => {
+            const tds = rows.map((r) => {
+                const v = (r.c.process || {})[g.id];
+                return `<td>${v === '' || v == null ? '—' : v + '/5'}</td>`;
+            }).join('');
+            return `<tr><th>${esc(g.step)} · ${esc(g.label)}</th>${tds}</tr>`;
+        }).join('');
         const ivRows = cfg.interview.map((q) => {
             const tds = rows.map((r) => {
                 const v = r.c.interview[q.id];
@@ -641,14 +785,15 @@
             return `<tr><th>${esc(q.label)}</th>${tds}</tr>`;
         }).join('');
         const summary = `<tr><th>Índice / bruto / reco</th>${rows.map((r) => `<td><b>${r.s.index}</b> · ${r.s.raw}<br>${esc(r.s.reco.label)}</td>`).join('')}</tr>`;
-        return `<div class="mx-table-wrap"><table class="mx-table mx-table--cmp"><thead>${head}</thead><tbody>${summary}${screenRows}${ivRows}</tbody></table></div>
+        return `<div class="mx-table-wrap"><table class="mx-table mx-table--cmp"><thead>${head}</thead><tbody>${summary}${procRows}${screenRows}${ivRows}</tbody></table></div>
             <p class="mx-help">Dica R&S: não some “carisma”. Compare evidência no mesmo critério. Quem tem mais lacunas em hunter/CRM/cold call perde para o BDR Melvin — mesmo com CV bonito de closer.</p>`;
     }
 
     function renderPesos() {
         const cfg = state.config;
         const wScreen = cfg.screen.reduce((a, c) => a + Number(c.weight || 0), 0);
-        const total = wScreen + Number(cfg.interviewWeight || 0);
+        const wProc = (cfg.process || []).reduce((a, g) => a + Number(g.weight || 0), 0);
+        const total = wScreen + wProc + Number(cfg.interviewWeight || 0);
         const warn = Math.abs(total - 100) > 0.5 ? `<p class="mx-warn">Soma dos pesos = ${total}. Ideal: 100.</p>` : `<p class="mx-ok">Pesos somam ${total}.</p>`;
         const legalOn = cfg.screen.some((c) => c.legalRisk && Number(c.weight) > 0);
         const rows = cfg.screen.map((c) => `<tr>
@@ -675,7 +820,8 @@
             <h4 class="mx-h4">Pesos da triagem</h4>
             <div class="mx-table-wrap"><table class="mx-table"><thead><tr><th>Critério</th><th>Peso</th><th>Opções (nota)</th></tr></thead><tbody>
             ${rows}
-            <tr><td>Entrevista estruturada (média 0–5)</td><td><input type="number" min="0" max="50" value="${cfg.interviewWeight}" data-mx-ivw></td><td>${cfg.interview.length} perguntas · em branco = não pontua</td></tr>
+            ${(cfg.process || []).map((g) => `<tr><td>${esc(g.step)} · ${esc(g.label)}<div class="mx-hint">${esc(g.prompt)}</div></td><td><input type="number" min="0" max="40" step="1" value="${g.weight}" data-mx-procw="${esc(g.id)}"></td><td>Nota 1–5 · em branco = fase não feita</td></tr>`).join('')}
+            <tr><td>Roteiro de apoio (média 0–5, opcional)</td><td><input type="number" min="0" max="50" value="${cfg.interviewWeight}" data-mx-ivw></td><td>${cfg.interview.length} perguntas · padrão 0 (não entra no índice)</td></tr>
             </tbody></table></div>
             <h4 class="mx-h4">Faixas de calor (pontos brutos, como na Excel)</h4>
             <div class="mx-table-wrap"><table class="mx-table"><thead><tr><th>Faixa</th><th>Mín. bruto</th><th>Mín. índice</th></tr></thead><tbody>${bands}</tbody></table></div>
@@ -692,7 +838,7 @@
         if (r.s.knockouts.length) bits.push('Knockout: ' + r.s.knockouts.join('; ') + '.');
         if (r.s.strengths.length) bits.push('Pontos: ' + r.s.strengths.join(', ') + '.');
         if (r.s.gaps.length) bits.push('Lacunas: ' + r.s.gaps.join(', ') + '.');
-        if (r.s.ivCoverage < 0.4) bits.push('Entrevista ainda incompleta — não fechar ranking final.');
+        if (r.s.ivCoverage < 0.4 && !(r.c.process && r.c.process.fit)) bits.push('Fit (3.1) ainda em branco.');
         bits.push('Recomendação: ' + r.s.reco.label + '.');
         return bits.join(' ');
     }
@@ -707,7 +853,7 @@
         const lis = shortlist.map((r, i) => `<article class="mx-decision">
             <header><span>#${i + 1}</span><h3>${esc(r.c.name)}</h3><em>${esc(r.s.reco.label)}</em></header>
             <p>${esc(whyText(r))}</p>
-            <p class="mx-mini">Fase: ${esc((STAGES.find((s) => s.id === r.c.stage) || {}).label || r.c.stage)} · índice ${r.s.index} · bruto ${r.s.raw}</p>
+            <p class="mx-mini">Fase: ${esc((STAGES.find((s) => s.id === r.c.stage) || {}).label || r.c.stage)} · ${esc(gateLine(r.c))} · índice ${r.s.index}</p>
         </article>`).join('');
         return `<div class="mx-kpis">${pipeline}</div>
             <p class="mx-help">Decisão de comitê: shortlist = ★ ou índice ≥ 66. Use isto na reunião com Vinícius — não o CV isolado.</p>
@@ -745,7 +891,7 @@
                 <div>
                     <p class="mx-kicker">R&S · Seleção BDR</p>
                     <h2>Matriz de Candidatos</h2>
-                    <p class="mx-sub">${esc(state.config.role)} · ${esc(state.config.offer)} · BDR/outbound e SDR hunter pontuam acima de SDR inbound</p>
+                    <p class="mx-sub">${esc(state.config.role)} · processo: triagem → case → fit + role-play → CSO</p>
                 </div>
             </header>
             <div class="mx-tabs">${navHtml()}</div>
@@ -763,10 +909,11 @@
 
     function exportCsv() {
         const cfg = state.config;
-        const header = ['Nome', ...cfg.screen.map((c) => c.label), 'Entrevista média', 'Bruto', 'Índice', 'Calor', 'Recomendação', 'Fase', 'Notas'];
+        const header = ['Nome', ...cfg.process.map((g) => g.step + ' ' + g.label), ...cfg.screen.map((c) => c.label), 'Roteiro médio', 'Bruto', 'Índice', 'Calor', 'Recomendação', 'Fase', 'Notas'];
         const lines = [header];
         ranked().forEach((r) => {
             const row = [r.c.name];
+            cfg.process.forEach((g) => row.push((r.c.process && r.c.process[g.id]) || ''));
             cfg.screen.forEach((crit) => {
                 const opt = optionOf(crit, r.c.screen[crit.id]);
                 row.push(opt && opt.label ? opt.label : '');
@@ -868,6 +1015,30 @@
                 const c = candById(sel.getAttribute('data-mx-stage'));
                 if (!c) return;
                 c.stage = sel.value;
+                saveState(state);
+                render();
+            });
+        });
+        root.querySelectorAll('[data-mx-proc]').forEach((sel) => {
+            sel.addEventListener('change', () => {
+                const c = candById(sel.getAttribute('data-mx-proc'));
+                if (!c) return;
+                if (!c.process) c.process = blankProcess();
+                c.process[sel.getAttribute('data-field')] = sel.value;
+                saveState(state);
+                render();
+            });
+        });
+        root.querySelectorAll('[data-mx-procnote]').forEach((t) => {
+            t.addEventListener('change', () => {
+                const c = candById(t.getAttribute('data-mx-procnote'));
+                if (c) { c.processNote = t.value; saveState(state); }
+            });
+        });
+        root.querySelectorAll('[data-mx-procw]').forEach((inp) => {
+            inp.addEventListener('change', () => {
+                const g = (state.config.process || []).find((x) => x.id === inp.getAttribute('data-mx-procw'));
+                if (g) g.weight = Number(inp.value) || 0;
                 saveState(state);
                 render();
             });

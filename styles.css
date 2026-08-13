@@ -10854,7 +10854,40 @@ body.light-mode .paper-sheet {
 .mx-out-tag[data-out="misto"] { color: #fbbf24; }
 .mx-out-tag[data-out="sdr-in"],
 .mx-out-tag[data-out="farmer"] { color: #fb923c; }
-.mx-out-tag[data-out="nenhuma"] { color: #94a3b8; }
+.mx-gates {
+  margin: 0 0 8px;
+  font-size: 0.72rem;
+  color: #94a3b8;
+  letter-spacing: 0.02em;
+}
+.mx-step-rail {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 14px;
+}
+.mx-step {
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 999px;
+  padding: 5px 10px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #94a3b8;
+}
+.mx-step.is-done {
+  color: #34d399;
+  border-color: rgba(52, 211, 153, 0.35);
+  background: rgba(16, 185, 129, 0.08);
+}
+.mx-step.is-now {
+  color: #c4b5fd;
+  border-color: rgba(196, 181, 253, 0.4);
+  background: rgba(196, 181, 253, 0.08);
+}
+.mx-step.is-fail {
+  color: #fb923c;
+  border-color: rgba(251, 146, 60, 0.4);
+}
 .mx-card-reco {
   margin: 0 0 12px;
   font-size: 0.78rem;
@@ -11252,8 +11285,20 @@ body.light-mode #hireMatrixRoot .mx-out-tag[data-out="sdr-in"],
 body.light-mode #hireMatrixRoot .mx-out-tag[data-out="farmer"],
 #hireMatrixRoot[data-theme="light"] .mx-out-tag[data-out="sdr-in"],
 #hireMatrixRoot[data-theme="light"] .mx-out-tag[data-out="farmer"] { color: #c2410c !important; }
-body.light-mode #hireMatrixRoot .mx-out-tag[data-out="nenhuma"],
-#hireMatrixRoot[data-theme="light"] .mx-out-tag[data-out="nenhuma"] { color: #475569 !important; }
+body.light-mode #hireMatrixRoot .mx-gates,
+#hireMatrixRoot[data-theme="light"] .mx-gates { color: #475569 !important; }
+body.light-mode #hireMatrixRoot .mx-step,
+#hireMatrixRoot[data-theme="light"] .mx-step {
+  background: #fff !important;
+  color: #334155 !important;
+  border-color: rgba(15, 23, 42, 0.16) !important;
+}
+body.light-mode #hireMatrixRoot .mx-step.is-done,
+#hireMatrixRoot[data-theme="light"] .mx-step.is-done { color: #047857 !important; border-color: rgba(4, 120, 87, 0.3) !important; background: #ecfdf5 !important; }
+body.light-mode #hireMatrixRoot .mx-step.is-now,
+#hireMatrixRoot[data-theme="light"] .mx-step.is-now { color: #5b21b6 !important; border-color: rgba(91, 33, 182, 0.3) !important; background: #f5f3ff !important; }
+body.light-mode #hireMatrixRoot .mx-step.is-fail,
+#hireMatrixRoot[data-theme="light"] .mx-step.is-fail { color: #c2410c !important; }
 @media (max-width: 800px) {
   .mx-iv { grid-template-columns: 1fr; }
   .mx-iv-nav { flex-direction: row; flex-wrap: wrap; }
