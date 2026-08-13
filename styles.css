@@ -10978,21 +10978,51 @@ body.light-mode .paper-sheet {
   color: var(--h, #fbbf24);
   font-weight: 750;
 }
-.mx-iv { display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 14px; }
+.mx-iv { display: grid; grid-template-columns: 180px minmax(0, 1fr); gap: 14px; }
 .mx-iv-nav { display: flex; flex-direction: column; gap: 4px; }
+.mx-iv-nav-cap {
+  margin: 0 0 6px;
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #94a3b8;
+  font-weight: 700;
+}
+.mx-iv-pick {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  padding: 2px 6px 2px 8px;
+}
+.mx-iv-pick.is-on {
+  background: rgba(196, 181, 253, 0.14);
+  border-color: rgba(196, 181, 253, 0.4);
+}
+.mx-iv-pick.is-done .mx-mini-nav { color: #34d399; }
+.mx-iv-pick input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  flex-shrink: 0;
+  accent-color: #34d399;
+  cursor: pointer;
+}
 .mx-mini-nav {
   text-align: left;
   border: 1px solid transparent;
   background: transparent;
   color: #94a3b8;
   border-radius: 8px;
-  padding: 8px 10px;
+  padding: 8px 6px;
   cursor: pointer;
   font-size: 0.82rem;
+  flex: 1;
 }
 .mx-mini-nav.is-on {
-  background: rgba(196, 181, 253, 0.14);
-  border-color: rgba(196, 181, 253, 0.4);
+  background: transparent;
+  border-color: transparent;
   color: #ede9fe;
 }
 .mx-iv-head {
@@ -11002,6 +11032,22 @@ body.light-mode .paper-sheet {
   align-items: flex-start;
   margin-bottom: 12px;
 }
+.mx-iv-head-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
+.mx-done-check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.82rem;
+  color: #cbd5e1;
+  cursor: pointer;
+  font-weight: 650;
+}
+.mx-done-check input { accent-color: #34d399; cursor: pointer; }
 .mx-iv-head h3 { margin: 0 0 4px; color: #f8fafc; font-size: 1.2rem; }
 .mx-iv-head p { margin: 0; color: #94a3b8; font-size: 0.85rem; }
 .mx-script {
@@ -11211,10 +11257,27 @@ body.light-mode .mx-shell .mx-chip.is-on,
   border-color: rgba(91, 33, 182, 0.35) !important;
 }
 body.light-mode .mx-shell .mx-mini-nav.is-on,
-.mx-shell[data-theme="light"] .mx-mini-nav.is-on {
+body.light-mode .mx-shell .mx-iv-pick.is-on,
+.mx-shell[data-theme="light"] .mx-mini-nav.is-on,
+.mx-shell[data-theme="light"] .mx-iv-pick.is-on {
   background: #ede9fe !important;
   color: #5b21b6 !important;
   border-color: rgba(91, 33, 182, 0.35) !important;
+}
+body.light-mode .mx-shell .mx-iv-pick.is-done .mx-mini-nav,
+.mx-shell[data-theme="light"] .mx-iv-pick.is-done .mx-mini-nav { color: #047857 !important; }
+body.light-mode .mx-shell .mx-iv-nav-cap,
+body.light-mode .mx-shell .mx-done-check,
+.mx-shell[data-theme="light"] .mx-iv-nav-cap,
+.mx-shell[data-theme="light"] .mx-done-check { color: #334155 !important; }
+body.light-mode .mx-shell input[type="checkbox"],
+.mx-shell[data-theme="light"] input[type="checkbox"] {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  width: 16px !important;
+  height: 16px !important;
+  accent-color: #047857;
 }
 body.light-mode .mx-shell .mx-card-actions button,
 body.light-mode .mx-shell .mx-btn,

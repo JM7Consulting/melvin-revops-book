@@ -304,6 +304,7 @@
             processNote: '',
             notes: notes || '',
             starred: false,
+            phasesComplete: false,
             stage: 'triagem'
         };
     }
@@ -400,7 +401,8 @@
                         notes: migrating ? seed.notes : (c.notes || seed.notes),
                         interview: Object.assign(blankInterview(), c.interview || {}),
                         process: Object.assign(blankProcess(), c.process || {}),
-                        processNote: c.processNote || ''
+                        processNote: c.processNote || '',
+                        phasesComplete: !!c.phasesComplete
                     });
                 })
                 : base.candidates;
@@ -577,6 +579,17 @@
             .sort((a, b) => b.s.index - a.s.index || b.s.raw - a.s.raw || a.c.name.localeCompare(b.c.name, 'pt-BR'));
     }
 
+    function isShortlisted(c, score) {
+        const s = score || scoreCandidate(c, state.config);
+        return !!(c.starred || s.index >= 66);
+    }
+
+    function shortlistCandidates() {
+        return state.candidates
+            .filter((c) => isShortlisted(c))
+            .sort((a, b) => firstNameKey(a.name).localeCompare(firstNameKey(b.name), 'pt-BR') || a.name.localeCompare(b.name, 'pt-BR'));
+    }
+
     function selectOpts(crit, value) {
         return crit.options.map((o) => `<option value="${esc(o.value)}" ${o.value === value ? 'selected' : ''}>${esc(o.label)}${o.points == null ? '' : ' (' + o.points + ')'}</option>`).join('');
     }
@@ -675,12 +688,19 @@
 
     function renderEntrevista() {
         const cfg = state.config;
-        const list = [...state.candidates].sort((a, b) => firstNameKey(a.name).localeCompare(firstNameKey(b.name), 'pt-BR') || a.name.localeCompare(b.name, 'pt-BR'));
+        const list = shortlistCandidates();
+        if (!list.length) {
+            return `<p class="mx-help">Esta aba mostra só a <b>shortlist</b> (★ na Matriz ou índice ≥ 66). Marque a estrela no Ranking para o candidato aparecer aqui.</p>`;
+        }
         const focus = list.find((c) => c.id === state.focusId) || list[0];
         if (!focus) return '';
         const s = scoreCandidate(focus, cfg);
         const proc = focus.process || {};
-        const nav = list.map((c) => `<button type="button" class="mx-mini-nav${c.id === focus.id ? ' is-on' : ''}" data-mx-focus="${esc(c.id)}">${esc(c.name.split(' ')[0])}</button>`).join('');
+        const doneN = list.filter((c) => c.phasesComplete).length;
+        const nav = list.map((c) => `<div class="mx-iv-pick${c.id === focus.id ? ' is-on' : ''}${c.phasesComplete ? ' is-done' : ''}">
+                <input type="checkbox" data-mx-phases="${esc(c.id)}" ${c.phasesComplete ? 'checked' : ''} title="Passou por todas as fases" aria-label="Passou por todas as fases: ${esc(c.name)}">
+                <button type="button" class="mx-mini-nav${c.id === focus.id ? ' is-on' : ''}" data-mx-focus="${esc(c.id)}">${esc(c.name.split(' ')[0])}${c.phasesComplete ? ' ✓' : ''}</button>
+            </div>`).join('');
         const rail = `<div class="mx-step-rail">
             <span class="mx-step is-done">1 · Triagem · ${s.index}</span>
             ${(cfg.process || []).map((g) => {
@@ -714,14 +734,23 @@
             return `<h4 class="mx-h4">${esc(title)}</h4>${hint}${cards}`;
         };
         return `<div class="mx-iv">
-            <div class="mx-iv-nav">${nav}</div>
+            <div class="mx-iv-nav">
+                <p class="mx-iv-nav-cap">Shortlist · ${list.length} · ${doneN} concluído${doneN === 1 ? '' : 's'}</p>
+                ${nav}
+            </div>
             <div class="mx-iv-main">
                 <div class="mx-iv-head">
                     <div>
                         <h3>${esc(focus.name)}</h3>
                         <p>${esc(s.reco.label)} · índice ${s.index} · ${esc(gateLine(focus))}</p>
                     </div>
-                    <a class="mx-link" href="#job-bdr" data-mx-cv="${esc(focus.id)}">Abrir CV →</a>
+                    <div class="mx-iv-head-actions">
+                        <label class="mx-done-check">
+                            <input type="checkbox" data-mx-phases="${esc(focus.id)}" ${focus.phasesComplete ? 'checked' : ''}>
+                            <span>Passou por todas as fases</span>
+                        </label>
+                        <a class="mx-link" href="#job-bdr" data-mx-cv="${esc(focus.id)}">Abrir CV →</a>
+                    </div>
                 </div>
                 ${rail}
                 <div class="mx-script">
@@ -843,7 +872,7 @@
 
     function renderDecisao() {
         const rows = ranked();
-        const shortlist = rows.filter((r) => r.c.starred || r.s.index >= 66);
+        const shortlist = rows.filter((r) => isShortlisted(r.c, r.s));
         const pipeline = STAGES.map((st) => {
             const n = state.candidates.filter((c) => c.stage === st.id).length;
             return `<span class="mx-pipe"><b>${n}</b> ${esc(st.label)}</span>`;
@@ -876,7 +905,11 @@
     }
 
     function openEntrevistas(id) {
-        if (id) state.focusId = id;
+        if (id) {
+            state.focusId = id;
+            const c = candById(id);
+            if (c) c.starred = true;
+        }
         saveState(state);
         render();
         showEntrevistasTab();
@@ -921,7 +954,7 @@
                 <div>
                     <p class="mx-kicker">R&S · Seleção BDR</p>
                     <h2>Entrevistas</h2>
-                    <p class="mx-sub">Processo seletivo · fases 2 (áudio 30s), 3.1 (fit), 3.2 (role-play) e 4 (CSO) · os mesmos dados da Matriz</p>
+                    <p class="mx-sub">Processo seletivo da shortlist · fases 2 (áudio 30s), 3.1 (fit), 3.2 (role-play) e 4 (CSO)</p>
                 </div>
             </header>
             <div class="mx-body">${renderEntrevista()}</div>
@@ -1017,6 +1050,16 @@
                 const c = candById(btn.getAttribute('data-mx-star'));
                 if (!c) return;
                 c.starred = !c.starred;
+                saveState(state);
+                render();
+            });
+        });
+        root.querySelectorAll('[data-mx-phases]').forEach((box) => {
+            box.addEventListener('click', (e) => e.stopPropagation());
+            box.addEventListener('change', () => {
+                const c = candById(box.getAttribute('data-mx-phases'));
+                if (!c) return;
+                c.phasesComplete = box.checked;
                 saveState(state);
                 render();
             });
