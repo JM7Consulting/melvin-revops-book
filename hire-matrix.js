@@ -407,7 +407,7 @@
             return {
                 config: cfg,
                 candidates: cands,
-                view: saved.view === 'entrevista' ? 'ranking' : (saved.view || 'ranking'),
+                view: (saved.view === 'entrevista' || saved.view === 'decisao') ? 'ranking' : (saved.view || 'ranking'),
                 focusId: saved.focusId || cands[0]?.id,
                 compare: Array.isArray(saved.compare) ? saved.compare.slice(0, 3) : [],
                 filter: saved.filter || 'all'
@@ -586,8 +586,7 @@
             ['ranking', 'Ranking'],
             ['planilha', 'Planilha'],
             ['comparar', 'Comparar'],
-            ['pesos', 'Pesos & regras'],
-            ['decisao', 'Decisão']
+            ['pesos', 'Pesos & regras']
         ];
         return items.map(([id, label]) => `<button type="button" class="mx-tab${state.view === id ? ' is-active' : ''}" data-mx-view="${id}">${label}</button>`).join('');
     }
@@ -865,7 +864,7 @@
 
     function syncTheme() {
         const theme = document.body.classList.contains('light-mode') ? 'light' : 'dark';
-        ['hireMatrixRoot', 'hireProcessRoot'].forEach((id) => {
+        ['hireMatrixRoot', 'hireProcessRoot', 'hireDecisionRoot'].forEach((id) => {
             const el = document.getElementById(id);
             if (el) el.setAttribute('data-theme', theme);
         });
@@ -886,7 +885,7 @@
     function renderMatrix() {
         const root = document.getElementById('hireMatrixRoot');
         if (!root) return;
-        if (state.view === 'entrevista' || !['ranking', 'planilha', 'comparar', 'pesos', 'decisao'].includes(state.view)) {
+        if (state.view === 'entrevista' || state.view === 'decisao' || !['ranking', 'planilha', 'comparar', 'pesos'].includes(state.view)) {
             state.view = 'ranking';
         }
         const wrap = root.querySelector('.mx-table-wrap');
@@ -895,8 +894,7 @@
             ranking: renderRanking,
             planilha: renderPlanilha,
             comparar: renderComparar,
-            pesos: renderPesos,
-            decisao: renderDecisao
+            pesos: renderPesos
         };
         const body = (views[state.view] || renderRanking)();
         root.innerHTML = `<div class="mx-app">
@@ -931,11 +929,28 @@
         bind(root);
     }
 
+    function renderDecision() {
+        const root = document.getElementById('hireDecisionRoot');
+        if (!root) return;
+        root.innerHTML = `<div class="mx-app">
+            <header class="mx-head">
+                <div>
+                    <p class="mx-kicker">R&S · Seleção BDR</p>
+                    <h2>Decisão</h2>
+                    <p class="mx-sub">Shortlist e parecer de comitê · os mesmos dados da Matriz e das Entrevistas</p>
+                </div>
+            </header>
+            <div class="mx-body">${renderDecisao()}</div>
+        </div>`;
+        bind(root);
+    }
+
     function render() {
         syncTheme();
         const scrollY = window.scrollY;
         renderMatrix();
         renderProcess();
+        renderDecision();
         window.scrollTo(0, scrollY);
     }
 
@@ -1208,9 +1223,10 @@
     function init() {
         const matrixRoot = document.getElementById('hireMatrixRoot');
         const processRoot = document.getElementById('hireProcessRoot');
-        if (!matrixRoot && !processRoot) return;
+        const decisionRoot = document.getElementById('hireDecisionRoot');
+        if (!matrixRoot && !processRoot && !decisionRoot) return;
         state = loadState();
-        if (state.view === 'entrevista') state.view = 'ranking';
+        if (state.view === 'entrevista' || state.view === 'decisao') state.view = 'ranking';
         syncTheme();
         new MutationObserver(syncTheme).observe(document.body, { attributes: true, attributeFilter: ['class'] });
         render();
