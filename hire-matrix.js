@@ -872,9 +872,7 @@
     }
 
     function showEntrevistasTab() {
-        const hireBtn = document.querySelector('[data-hire-tab="selecao"]');
-        const tab = document.querySelector('[data-sel-tab="entrevistas"]');
-        if (hireBtn && hireBtn.getAttribute('aria-selected') !== 'true') hireBtn.click();
+        const tab = document.querySelector('[data-hire-tab="entrevistas"]');
         if (tab && tab.getAttribute('aria-selected') !== 'true') tab.click();
     }
 

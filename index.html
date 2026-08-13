@@ -6,7 +6,7 @@
     <title>REBUILD 7 | MELVIN</title>
     
 	<link rel="icon" type="image/png" href="logo_simples_removebcg.png">
-  <link rel="stylesheet" href="styles.css?v=matriz-7">
+  <link rel="stylesheet" href="styles.css?v=matriz-8">
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sora:wght@600;700;800&family=Carlito:ital,wght@0,400;0,700;1,400&family=Libre+Baskerville:wght@400;700&display=swap" rel="stylesheet">
@@ -608,6 +608,7 @@
             <div class="crono-tabs jd-tabs" role="tablist" aria-label="Contratação BDR">
                 <button type="button" class="crono-tab is-active" role="tab" aria-selected="true" data-hire-tab="jd">Job Description</button>
                 <button type="button" class="crono-tab" role="tab" aria-selected="false" data-hire-tab="selecao">Seleção candidatos</button>
+                <button type="button" class="crono-tab" role="tab" aria-selected="false" data-hire-tab="entrevistas">Entrevistas</button>
             </div>
 
             <!-- ABA PRINCIPAL: JOB DESCRIPTION -->
@@ -763,7 +764,6 @@
                 <div class="crono-tabs jd-subtabs" role="tablist" aria-label="Seleção de candidatos">
                     <button type="button" class="crono-tab is-active" role="tab" aria-selected="true" data-sel-tab="cvs">CVs</button>
                     <button type="button" class="crono-tab" role="tab" aria-selected="false" data-sel-tab="matriz">Matriz de Candidatos</button>
-                    <button type="button" class="crono-tab" role="tab" aria-selected="false" data-sel-tab="entrevistas">Entrevistas</button>
                 </div>
 
 <div class="crono-panel is-active sel-panel" data-sel-panel="cvs" role="tabpanel">
@@ -1495,10 +1495,11 @@
                 <div class="crono-panel sel-panel" data-sel-panel="matriz" role="tabpanel" hidden>
                     <div id="hireMatrixRoot" class="mx-shell"></div>
                 </div>
+            </div>
 
-                <div class="crono-panel sel-panel" data-sel-panel="entrevistas" role="tabpanel" hidden>
-                    <div id="hireProcessRoot" class="mx-shell"></div>
-                </div>
+            <!-- ABA PRINCIPAL: ENTREVISTAS -->
+            <div class="hire-panel" data-hire-panel="entrevistas" role="tabpanel" hidden>
+                <div id="hireProcessRoot" class="mx-shell"></div>
             </div>
 
             <p class="jd-hash-hint">Acesso: menu Ops · <code>#job-bdr</code></p>
@@ -13680,8 +13681,8 @@ Um abraço!"
         </section>
 
 	</main>
-  <script src="app.js?v=matriz-7"></script>
-  <script src="hire-matrix.js?v=matriz-7"></script>
+  <script src="app.js?v=matriz-8"></script>
+  <script src="hire-matrix.js?v=matriz-8"></script>
 	
 </body>
 </html>
