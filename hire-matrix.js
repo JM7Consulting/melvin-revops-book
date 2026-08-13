@@ -407,7 +407,7 @@
             return {
                 config: cfg,
                 candidates: cands,
-                view: saved.view || 'ranking',
+                view: saved.view === 'entrevista' ? 'ranking' : (saved.view || 'ranking'),
                 focusId: saved.focusId || cands[0]?.id,
                 compare: Array.isArray(saved.compare) ? saved.compare.slice(0, 3) : [],
                 filter: saved.filter || 'all'
@@ -585,7 +585,6 @@
         const items = [
             ['ranking', 'Ranking'],
             ['planilha', 'Planilha'],
-            ['entrevista', 'Processo seletivo'],
             ['comparar', 'Comparar'],
             ['pesos', 'Pesos & regras'],
             ['decisao', 'Decisão']
@@ -619,7 +618,7 @@
                     `<button type="button" class="mx-chip${filter === id ? ' is-on' : ''}" data-mx-filter="${id}">${lab}</button>`
                 ).join('')}
             </div>
-            <p class="mx-help">Item 1 do processo (triagem de CVs) já está nesta aba e na Planilha. Notas 1–5 das fases 2 (áudio 30s), 3.1 (fit), 3.2 (role-play) e 4 (CSO) entram no índice quando preenchidas — em branco não penalizam. Corte: nota &lt; 3 na fase = não avançar.</p>`;
+            <p class="mx-help">Item 1 do processo (triagem de CVs) já está nesta aba e na Planilha. Notas 1–5 das fases 2 (áudio 30s), 3.1 (fit), 3.2 (role-play) e 4 (CSO) ficam na aba Entrevistas — em branco não penalizam. Corte: nota &lt; 3 na fase = não avançar.</p>`;
         const cards = rows.length ? rows.map((r) => {
             const i = all.indexOf(r) + 1;
             const checked = state.compare.includes(r.c.id) ? 'checked' : '';
@@ -641,7 +640,7 @@
                 </div>
                 <p class="mx-mini">${r.s.knockouts.length ? '⛔ ' + esc(r.s.knockouts.join(' · ')) : (r.s.strengths.slice(0, 2).join(' · ') || 'Complete a triagem / entrevista')}</p>
                 <div class="mx-card-actions">
-                    <button type="button" data-mx-goto="entrevista" data-mx-focus="${esc(r.c.id)}">Abrir processo</button>
+                    <button type="button" data-mx-goto="entrevista" data-mx-focus="${esc(r.c.id)}">Abrir entrevistas</button>
                     <a href="#job-bdr" data-mx-cv="${esc(r.c.id)}">Ver CV</a>
                 </div>
             </article>`;
@@ -729,7 +728,7 @@
                 <div class="mx-script">
                     <h4>Como é o processo seletivo</h4>
                     <ol>
-                        <li><b>Triagem de currículos</b> — já pontuada na Planilha / Ranking (item 1).</li>
+                        <li><b>Triagem de currículos</b> — já pontuada na Matriz (Ranking / Planilha · item 1).</li>
                         <li><b>Case curto</b> — áudio de como 'venderia' o MELVIN (máx. 30s) · nota 1–5.</li>
                         <li><b>Entrevista de fit + role-play de abertura Outbound</b> — notas 3.1 e 3.2.</li>
                         <li><b>Conversa final com CSO</b> — nota 1–5.</li>
@@ -865,22 +864,38 @@
     }
 
     function syncTheme() {
-        const root = document.getElementById('hireMatrixRoot');
-        if (!root) return;
-        root.setAttribute('data-theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
+        const theme = document.body.classList.contains('light-mode') ? 'light' : 'dark';
+        ['hireMatrixRoot', 'hireProcessRoot'].forEach((id) => {
+            const el = document.getElementById(id);
+            if (el) el.setAttribute('data-theme', theme);
+        });
     }
 
-    function render() {
+    function showEntrevistasTab() {
+        const hireBtn = document.querySelector('[data-hire-tab="selecao"]');
+        const tab = document.querySelector('[data-sel-tab="entrevistas"]');
+        if (hireBtn && hireBtn.getAttribute('aria-selected') !== 'true') hireBtn.click();
+        if (tab && tab.getAttribute('aria-selected') !== 'true') tab.click();
+    }
+
+    function openEntrevistas(id) {
+        if (id) state.focusId = id;
+        saveState(state);
+        render();
+        showEntrevistasTab();
+    }
+
+    function renderMatrix() {
         const root = document.getElementById('hireMatrixRoot');
         if (!root) return;
-        syncTheme();
+        if (state.view === 'entrevista' || !['ranking', 'planilha', 'comparar', 'pesos', 'decisao'].includes(state.view)) {
+            state.view = 'ranking';
+        }
         const wrap = root.querySelector('.mx-table-wrap');
         const scrollX = wrap ? wrap.scrollLeft : 0;
-        const scrollY = window.scrollY;
         const views = {
             ranking: renderRanking,
             planilha: renderPlanilha,
-            entrevista: renderEntrevista,
             comparar: renderComparar,
             pesos: renderPesos,
             decisao: renderDecisao
@@ -891,7 +906,7 @@
                 <div>
                     <p class="mx-kicker">R&S · Seleção BDR</p>
                     <h2>Matriz de Candidatos</h2>
-                    <p class="mx-sub">${esc(state.config.role)} · processo: triagem → case → fit + role-play → CSO</p>
+                    <p class="mx-sub">${esc(state.config.role)} · triagem de CV (item 1) · fases 2–4 na aba Entrevistas</p>
                 </div>
             </header>
             <div class="mx-tabs">${navHtml()}</div>
@@ -900,6 +915,29 @@
         bind(root);
         const wrap2 = root.querySelector('.mx-table-wrap');
         if (wrap2) wrap2.scrollLeft = scrollX;
+    }
+
+    function renderProcess() {
+        const root = document.getElementById('hireProcessRoot');
+        if (!root) return;
+        root.innerHTML = `<div class="mx-app">
+            <header class="mx-head">
+                <div>
+                    <p class="mx-kicker">R&S · Seleção BDR</p>
+                    <h2>Entrevistas</h2>
+                    <p class="mx-sub">Processo seletivo · fases 2 (áudio 30s), 3.1 (fit), 3.2 (role-play) e 4 (CSO) · os mesmos dados da Matriz</p>
+                </div>
+            </header>
+            <div class="mx-body">${renderEntrevista()}</div>
+        </div>`;
+        bind(root);
+    }
+
+    function render() {
+        syncTheme();
+        const scrollY = window.scrollY;
+        renderMatrix();
+        renderProcess();
         window.scrollTo(0, scrollY);
     }
 
@@ -957,10 +995,7 @@
         root.querySelectorAll('[data-mx-open]').forEach((card) => {
             card.addEventListener('click', (e) => {
                 if (e.target.closest('button, a, label, input, select, textarea')) return;
-                state.focusId = card.getAttribute('data-mx-open');
-                state.view = 'entrevista';
-                saveState(state);
-                render();
+                openEntrevistas(card.getAttribute('data-mx-open'));
             });
         });
         root.querySelectorAll('[data-mx-star]').forEach((btn) => {
@@ -987,8 +1022,14 @@
         });
         root.querySelectorAll('[data-mx-focus]').forEach((btn) => {
             btn.addEventListener('click', () => {
-                state.focusId = btn.getAttribute('data-mx-focus');
-                if (btn.getAttribute('data-mx-goto')) state.view = btn.getAttribute('data-mx-goto');
+                const id = btn.getAttribute('data-mx-focus');
+                const goto = btn.getAttribute('data-mx-goto');
+                if (goto === 'entrevista') {
+                    openEntrevistas(id);
+                    return;
+                }
+                state.focusId = id;
+                if (goto) state.view = goto;
                 saveState(state);
                 render();
             });
@@ -996,7 +1037,12 @@
         root.querySelectorAll('[data-mx-goto]').forEach((btn) => {
             if (btn.hasAttribute('data-mx-focus')) return;
             btn.addEventListener('click', () => {
-                state.view = btn.getAttribute('data-mx-goto');
+                const goto = btn.getAttribute('data-mx-goto');
+                if (goto === 'entrevista') {
+                    openEntrevistas(state.focusId);
+                    return;
+                }
+                state.view = goto;
                 saveState(state);
                 render();
             });
@@ -1162,9 +1208,11 @@
     }
 
     function init() {
-        const root = document.getElementById('hireMatrixRoot');
-        if (!root) return;
+        const matrixRoot = document.getElementById('hireMatrixRoot');
+        const processRoot = document.getElementById('hireProcessRoot');
+        if (!matrixRoot && !processRoot) return;
         state = loadState();
+        if (state.view === 'entrevista') state.view = 'ranking';
         syncTheme();
         new MutationObserver(syncTheme).observe(document.body, { attributes: true, attributeFilter: ['class'] });
         render();
