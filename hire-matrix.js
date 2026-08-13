@@ -387,32 +387,50 @@
                 if (saved.config.offer) cfg.offer = saved.config.offer;
             }
             cfg.rev = 4;
-            const byId = Object.fromEntries(base.candidates.map((c) => [c.id, c]));
-            const cands = Array.isArray(saved.candidates) && saved.candidates.length
-                ? saved.candidates.map((c) => {
-                    const seed = byId[c.id] || seedCandidate(c.id, c.name || 'Candidato', {}, '');
-                    const prev = Object.assign({}, c.screen || {});
-                    if (prev.sales1 === 'pre-vendas') delete prev.sales1;
-                    if (prev.sales2 === 'pre-vendas') delete prev.sales2;
-                    return Object.assign(seed, c, {
-                        screen: migrating
-                            ? Object.assign(blankScreen(), prev, seed.screen)
-                            : Object.assign(blankScreen(), seed.screen, prev),
-                        notes: migrating ? seed.notes : (c.notes || seed.notes),
-                        interview: Object.assign(blankInterview(), c.interview || {}),
-                        process: Object.assign(blankProcess(), c.process || {}),
-                        processNote: c.processNote || '',
-                        phasesComplete: !!c.phasesComplete
-                    });
-                })
-                : base.candidates;
+            const seeds = base.candidates;
+            const savedById = {};
+            if (Array.isArray(saved.candidates)) {
+                saved.candidates.forEach((c) => {
+                    if (c && c.id) savedById[c.id] = c;
+                });
+            }
+            function mergeCand(seed, c) {
+                if (!c) return seed;
+                const prev = Object.assign({}, c.screen || {});
+                if (prev.sales1 === 'pre-vendas') delete prev.sales1;
+                if (prev.sales2 === 'pre-vendas') delete prev.sales2;
+                return Object.assign({}, seed, c, {
+                    id: seed.id,
+                    name: seed.name || c.name,
+                    screen: migrating
+                        ? Object.assign(blankScreen(), prev, seed.screen)
+                        : Object.assign(blankScreen(), seed.screen, prev),
+                    notes: migrating ? seed.notes : (c.notes != null ? c.notes : seed.notes),
+                    interview: Object.assign(blankInterview(), c.interview || {}),
+                    process: Object.assign(blankProcess(), c.process || {}),
+                    processNote: c.processNote || '',
+                    interviewNote: c.interviewNote || '',
+                    phasesComplete: !!c.phasesComplete,
+                    starred: !!c.starred,
+                    stage: c.stage || seed.stage || 'triagem'
+                });
+            }
+            // Sempre mantém os 12 candidatos padrão (dados não somem se o storage ficou incompleto)
+            const cands = seeds.map((seed) => mergeCand(seed, savedById[seed.id]));
+            const known = new Set(cands.map((c) => c.id));
+            Object.keys(savedById).forEach((id) => {
+                if (!known.has(id)) cands.push(mergeCand(seedCandidate(id, savedById[id].name || 'Candidato', {}, ''), savedById[id]));
+            });
+            const matrixViews = ['ranking', 'planilha', 'comparar', 'pesos'];
+            const view = matrixViews.includes(saved.view) ? saved.view : 'ranking';
+            const filter = ['all', 'hunter', 'go', 'star', 'pending', 'knock'].includes(saved.filter) ? saved.filter : 'all';
             return {
                 config: cfg,
                 candidates: cands,
-                view: (saved.view === 'entrevista' || saved.view === 'decisao') ? 'ranking' : (saved.view || 'ranking'),
+                view,
                 focusId: saved.focusId || cands[0]?.id,
-                compare: Array.isArray(saved.compare) ? saved.compare.slice(0, 3) : [],
-                filter: saved.filter || 'all'
+                compare: Array.isArray(saved.compare) ? saved.compare.filter((id) => known.has(id) || savedById[id]).slice(0, 3) : [],
+                filter
             };
         } catch (e) {
             return base;
@@ -463,9 +481,12 @@
         const unanswered = [];
         const strengths = [];
         const gaps = [];
+        const screen = (c && c.screen) || {};
+        const interview = (c && c.interview) || {};
+        const proc = (c && c.process) || {};
 
-        cfg.screen.forEach((crit) => {
-            const val = c.screen[crit.id];
+        (cfg.screen || []).forEach((crit) => {
+            const val = screen[crit.id];
             const opt = optionOf(crit, val);
             if (!val || !opt || opt.points == null) {
                 unanswered.push(crit.label);
@@ -481,8 +502,8 @@
             if (norm <= 0.35 && (crit.weight || 0) >= 8) gaps.push(crit.label);
         });
 
-        const ivAns = cfg.interview
-            .map((q) => c.interview[q.id])
+        const ivAns = (cfg.interview || [])
+            .map((q) => interview[q.id])
             .filter((v) => v !== '' && v != null)
             .map(Number);
         let ivAvg = null;
@@ -497,7 +518,6 @@
             }
         }
 
-        const proc = c.process || {};
         (cfg.process || []).forEach((g) => {
             const val = proc[g.id];
             if (val === '' || val == null) {
@@ -512,16 +532,16 @@
             if (n < 3) gaps.push(g.step + ' ' + g.label);
         });
 
-        if (String(c.interview.offer) === '0') {
+        if (String(interview.offer) === '0') {
             knockouts.push('Rejeita a oferta (PJ / 160h / R$ 3.500)');
         }
 
         const index = weightUsed > 0 ? Math.round((weighted / weightUsed) * 100) : 0;
-        const bands = [...cfg.bands].sort((a, b) => b.minRaw - a.minRaw);
-        const heat = bands.find((b) => raw >= b.minRaw) || bands[bands.length - 1];
-        const ivCoverage = cfg.interview.length ? ivAns.length / cfg.interview.length : 0;
+        const bands = [...(cfg.bands || [])].sort((a, b) => b.minRaw - a.minRaw);
+        const heat = bands.find((b) => raw >= b.minRaw) || bands[bands.length - 1] || { id: 'na', label: '—', color: '#94a3b8', minRaw: 0, minIndex: 0 };
+        const ivCoverage = (cfg.interview || []).length ? ivAns.length / cfg.interview.length : 0;
         const reco = processReco(proc, knockouts, index);
-        const totalFields = cfg.screen.length + (cfg.process || []).length;
+        const totalFields = (cfg.screen || []).length + (cfg.process || []).length;
         const coverage = totalFields ? Math.round(((totalFields - unanswered.length) / totalFields) * 100) : 0;
 
         return { raw: Math.round(raw * 10) / 10, index, heat, reco, knockouts, unanswered, strengths, gaps, ivAvg, ivCoverage, coverage, process: proc };
@@ -631,7 +651,7 @@
                     `<button type="button" class="mx-chip${filter === id ? ' is-on' : ''}" data-mx-filter="${id}">${lab}</button>`
                 ).join('')}
             </div>
-            <p class="mx-help">Item 1 do processo (triagem de CVs) já está nesta aba e na Planilha. Notas 1–5 das fases 2 (áudio 30s), 3.1 (fit), 3.2 (role-play) e 4 (CSO) ficam na aba Entrevistas — em branco não penalizam. Corte: nota &lt; 3 na fase = não avançar.</p>`;
+            <p class="mx-help">Item 1 do processo (triagem de CVs) já está nesta aba e na Planilha. ★ Shortlist = quem entra na aba Entrevistas. Notas 1–5 das fases 2–4 ficam em Entrevistas — em branco não penalizam. Corte: nota &lt; 3 na fase = não avançar.</p>`;
         const cards = rows.length ? rows.map((r) => {
             const i = all.indexOf(r) + 1;
             const checked = state.compare.includes(r.c.id) ? 'checked' : '';
@@ -657,7 +677,7 @@
                     <a href="#job-bdr" data-mx-cv="${esc(r.c.id)}">Ver CV</a>
                 </div>
             </article>`;
-        }).join('') : '<p class="mx-help">Nenhum candidato neste filtro.</p>';
+        }).join('') : `<p class="mx-help">Nenhum candidato neste filtro${filter === 'star' ? ' (Shortlist ★ vazia — marque a estrela nos cards)' : ''}. <button type="button" class="mx-link" data-mx-filter="all">Ver todos</button></p>`;
         return kpis + `<div class="mx-cards">${cards}</div>`;
     }
 
@@ -691,7 +711,8 @@
         const cfg = state.config;
         const list = interviewShortlist();
         if (!list.length) {
-            return `<p class="mx-help">Esta aba mostra <b>somente</b> quem está com ★ na Matriz (Shortlist). Marque a estrela no Ranking ou na Planilha — se tirar a ★, o nome some daqui.</p>`;
+            const starredN = state.candidates.filter((c) => c.starred).length;
+            return `<p class="mx-help">Entrevistas fica <b>integrada à ★ Shortlist</b> da Matriz. Agora: <b>${starredN}</b> marcado${starredN === 1 ? '' : 's'}. Vá em Seleção candidatos → Matriz → clique na estrela do card; o nome entra/sai aqui na hora.</p>`;
         }
         const ranks = {};
         ranked().forEach((r, i) => { ranks[r.c.id] = i + 1; });
@@ -921,9 +942,7 @@
     function renderMatrix() {
         const root = document.getElementById('hireMatrixRoot');
         if (!root) return;
-        if (state.view === 'entrevista' || state.view === 'decisao' || !['ranking', 'planilha', 'comparar', 'pesos'].includes(state.view)) {
-            state.view = 'ranking';
-        }
+        if (!['ranking', 'planilha', 'comparar', 'pesos'].includes(state.view)) state.view = 'ranking';
         const wrap = root.querySelector('.mx-table-wrap');
         const scrollX = wrap ? wrap.scrollLeft : 0;
         const views = {
@@ -932,13 +951,23 @@
             comparar: renderComparar,
             pesos: renderPesos
         };
-        const body = (views[state.view] || renderRanking)();
+        let body = '';
+        try {
+            body = (views[state.view] || renderRanking)();
+        } catch (err) {
+            console.error('[hire-matrix] ranking render', err);
+            state.view = 'ranking';
+            state.filter = 'all';
+            try { body = renderRanking(); } catch (err2) {
+                body = `<p class="mx-warn">Erro ao montar o ranking. Recarregue a página. (${esc(err2 && err2.message)})</p>`;
+            }
+        }
         root.innerHTML = `<div class="mx-app">
             <header class="mx-head">
                 <div>
                     <p class="mx-kicker">R&S · Seleção BDR</p>
                     <h2>Matriz de Candidatos</h2>
-                    <p class="mx-sub">${esc(state.config.role)} · triagem de CV (item 1) · fases 2–4 na aba Entrevistas</p>
+                    <p class="mx-sub">${esc(state.config.role)} · ${state.candidates.length} candidatos · ★ = shortlist / Entrevistas</p>
                 </div>
             </header>
             <div class="mx-tabs">${navHtml()}</div>
@@ -952,15 +981,22 @@
     function renderProcess() {
         const root = document.getElementById('hireProcessRoot');
         if (!root) return;
+        let body = '';
+        try {
+            body = renderEntrevista();
+        } catch (err) {
+            console.error('[hire-matrix] entrevistas render', err);
+            body = `<p class="mx-warn">Erro ao montar Entrevistas. (${esc(err && err.message)})</p>`;
+        }
         root.innerHTML = `<div class="mx-app">
             <header class="mx-head">
                 <div>
                     <p class="mx-kicker">R&S · Seleção BDR</p>
                     <h2>Entrevistas</h2>
-                    <p class="mx-sub">Só quem está com ★ na Matriz · fases 2 (áudio 30s), 3.1 (fit), 3.2 (role-play) e 4 (CSO)</p>
+                    <p class="mx-sub">Integrada à ★ Shortlist da Matriz · fases 2 (áudio 30s), 3.1 (fit), 3.2 (role-play) e 4 (CSO)</p>
                 </div>
             </header>
-            <div class="mx-body">${renderEntrevista()}</div>
+            <div class="mx-body">${body}</div>
         </div>`;
         bind(root);
     }
@@ -968,6 +1004,13 @@
     function renderDecision() {
         const root = document.getElementById('hireDecisionRoot');
         if (!root) return;
+        let body = '';
+        try {
+            body = renderDecisao();
+        } catch (err) {
+            console.error('[hire-matrix] decisao render', err);
+            body = `<p class="mx-warn">Erro ao montar Decisão. (${esc(err && err.message)})</p>`;
+        }
         root.innerHTML = `<div class="mx-app">
             <header class="mx-head">
                 <div>
@@ -976,7 +1019,7 @@
                     <p class="mx-sub">Shortlist e parecer de comitê · os mesmos dados da Matriz e das Entrevistas</p>
                 </div>
             </header>
-            <div class="mx-body">${renderDecisao()}</div>
+            <div class="mx-body">${body}</div>
         </div>`;
         bind(root);
     }
@@ -984,9 +1027,9 @@
     function render() {
         syncTheme();
         const scrollY = window.scrollY;
-        renderMatrix();
-        renderProcess();
-        renderDecision();
+        try { renderMatrix(); } catch (e) { console.error(e); }
+        try { renderProcess(); } catch (e) { console.error(e); }
+        try { renderDecision(); } catch (e) { console.error(e); }
         window.scrollTo(0, scrollY);
     }
 
@@ -1053,6 +1096,7 @@
                 const c = candById(btn.getAttribute('data-mx-star'));
                 if (!c) return;
                 c.starred = !c.starred;
+                if (c.starred) state.focusId = c.id;
                 saveState(state);
                 render();
             });
@@ -1272,10 +1316,20 @@
         const decisionRoot = document.getElementById('hireDecisionRoot');
         if (!matrixRoot && !processRoot && !decisionRoot) return;
         state = loadState();
-        if (state.view === 'entrevista' || state.view === 'decisao') state.view = 'ranking';
+        // Sempre reabre a Matriz no Ranking com todos os candidatos (evita “sumiu” por filtro/view antiga)
+        state.view = 'ranking';
+        state.filter = 'all';
+        saveState(state);
         syncTheme();
         new MutationObserver(syncTheme).observe(document.body, { attributes: true, attributeFilter: ['class'] });
         render();
+        document.querySelectorAll('[data-hire-tab="entrevistas"], [data-hire-tab="decisao"], [data-sel-tab="matriz"]').forEach((tab) => {
+            tab.addEventListener('click', () => { try { render(); } catch (e) { console.error(e); } });
+        });
+        window.melvinHireMatrix = {
+            refresh: render,
+            shortlist: () => interviewShortlist().map((c) => ({ id: c.id, name: c.name, starred: !!c.starred }))
+        };
     }
 
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
