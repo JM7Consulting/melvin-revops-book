@@ -8981,8 +8981,18 @@ body.light-mode .cx-runway--in {
   border-color: rgba(16, 185, 129, 0.22);
 }
 
-/* === Job Description BDR (hash-only page) === */
-.jd-page .jd-tabs { margin-bottom: 22px; }
+/* === Contratação BDR (JD + Seleção) === */
+.jd-page .jd-tabs { margin-bottom: 18px; }
+.jd-page .jd-subtabs {
+  margin-bottom: 22px;
+  opacity: 0.98;
+}
+.jd-page .jd-subtabs .crono-tab {
+  font-size: 0.82rem;
+  padding: 8px 14px;
+}
+.hire-panel[hidden] { display: none !important; }
+.hire-panel { min-height: 120px; }
 .jd-doc {
   max-width: 820px;
   padding: 28px 30px;

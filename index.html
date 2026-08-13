@@ -238,7 +238,7 @@
                         <div class="submenu-label">Ativo</div>
                         <a href="#ops"><span style="display:flex; gap:10px;"><span>🗂️</span> Hub Ops</span><span class="dot dot-active"></span></a>
                         <a href="#agenda-entregas"><span style="display:flex; gap:10px;"><span>🗺️</span> Roadmap RevOps</span><span class="dot dot-active"></span></a>
-                        <a href="#job-bdr"><span style="display:flex; gap:10px;"><span>👔</span> JD · BDR</span><span class="dot dot-active"></span></a>
+                        <a href="#job-bdr"><span style="display:flex; gap:10px;"><span>👔</span> Contratação BDR</span><span class="dot dot-active"></span></a>
                         <div class="submenu-label">Stand-by · rotinas</div>
                         <a href="#presales-inbound" class="ops-nav-standby"><span style="display:flex; gap:10px;"><span>📥</span> Presales SDR</span><span class="dot"></span></a>
                         <a href="#presales-outbound" class="ops-nav-standby"><span style="display:flex; gap:10px;"><span>🎯</span> Presales BDR</span><span class="dot"></span></a>
@@ -356,8 +356,8 @@
                     </a>
                     <a class="ops-card ops-card--live" href="#job-bdr">
                         <span class="ops-card-ico">👔</span>
-                        <strong>Job Description · BDR</strong>
-                        <small>Big Tech · Startup</small>
+                        <strong>Contratação BDR</strong>
+                        <small>JD · Seletivo · Entrevistas</small>
                     </a>
                 </div>
 
@@ -591,24 +591,31 @@
             </div>
         </section>
 
-        <!-- Job Description BDR: oculto do menu — abrir com #job-bdr -->
+        <!-- Contratação BDR: JD + Seleção (Ops) -->
         <section id="job-bdr" class="blueprint-page jd-page" style="padding: 40px; border-radius: 16px;" data-hidden-nav="true">
             <div class="fq-hero fq-hero--close">
                 <div class="fq-hero-copy">
-                    <div class="fq-kicker">People · Hiring</div>
-                    <div class="cadencia-title-line fq-hero-title">BDR Outbound · Job Description</div>
-                    <p class="cadencia-subtitle" style="padding-left:0;max-width:58ch;">Duas versões para publicação. Página interna (hash only) — sem item no menu.</p>
+                    <div class="fq-kicker">JM7 · Interno · Contratação</div>
+                    <div class="cadencia-title-line fq-hero-title">Contratação BDR</div>
+                    <p class="cadencia-subtitle" style="padding-left:0;max-width:58ch;">Job Description (versões de publicação) e processo seletivo — matriz de candidatos e entrevistas.</p>
                 </div>
                 <div class="fq-badge-stack" aria-hidden="true">
-                    <div class="fq-badge-orb fq-badge-orb--close"><span>JD</span><small>BDR</small></div>
-                    <p class="fq-badge-cap">Big Tech · Startup</p>
+                    <div class="fq-badge-orb fq-badge-orb--close"><span>BDR</span><small>HIRE</small></div>
+                    <p class="fq-badge-cap">JD · Seletivo</p>
                 </div>
             </div>
 
-            <div class="crono-tabs jd-tabs" role="tablist" aria-label="Versões do Job Description">
-                <button type="button" class="crono-tab is-active" role="tab" aria-selected="true" data-jd-tab="bigtech">Versão 1 · Big Tech</button>
-                <button type="button" class="crono-tab" role="tab" aria-selected="false" data-jd-tab="startup">Versão 2 · Startup</button>
+            <div class="crono-tabs jd-tabs" role="tablist" aria-label="Contratação BDR">
+                <button type="button" class="crono-tab is-active" role="tab" aria-selected="true" data-hire-tab="jd">Job Description</button>
+                <button type="button" class="crono-tab" role="tab" aria-selected="false" data-hire-tab="selecao">Seleção candidatos</button>
             </div>
+
+            <!-- ABA PRINCIPAL: JOB DESCRIPTION -->
+            <div class="hire-panel is-active" data-hire-panel="jd" role="tabpanel">
+                <div class="crono-tabs jd-subtabs" role="tablist" aria-label="Versões do Job Description">
+                    <button type="button" class="crono-tab is-active" role="tab" aria-selected="true" data-jd-tab="bigtech">Versão 1 · Big Tech</button>
+                    <button type="button" class="crono-tab" role="tab" aria-selected="false" data-jd-tab="startup">Versão 2 · Startup</button>
+                </div>
 
             <!-- TAB: BIG TECH -->
             <div class="crono-panel is-active jd-panel" data-jd-panel="bigtech" role="tabpanel">
@@ -749,8 +756,33 @@
                     <p class="jd-footnote">A Melvin valoriza diversidade e seleção por mérito. Todas as pessoas qualificadas são bem-vindas.</p>
                 </article>
             </div>
+            </div><!-- /hire-panel jd -->
 
-            <p class="jd-hash-hint">Acesso direto: <code>#job-bdr</code> · sem link no menu lateral</p>
+            <!-- ABA PRINCIPAL: SELEÇÃO CANDIDATOS -->
+            <div class="hire-panel" data-hire-panel="selecao" role="tabpanel" hidden>
+                <div class="crono-tabs jd-subtabs" role="tablist" aria-label="Seleção de candidatos">
+                    <button type="button" class="crono-tab is-active" role="tab" aria-selected="true" data-sel-tab="matriz">Matriz de Candidatos</button>
+                    <button type="button" class="crono-tab" role="tab" aria-selected="false" data-sel-tab="entrevistas">Entrevistas</button>
+                </div>
+
+                <div class="crono-panel is-active sel-panel" data-sel-panel="matriz" role="tabpanel">
+                    <div class="waiting-page">
+                        <div class="waiting-badge"><span class="pulse"></span> Em breve</div>
+                        <h2>Matriz de Candidatos</h2>
+                        <p>Esta página está aguardando o próximo conteúdo do seletivo BDR.</p>
+                    </div>
+                </div>
+
+                <div class="crono-panel sel-panel" data-sel-panel="entrevistas" role="tabpanel" hidden>
+                    <div class="waiting-page">
+                        <div class="waiting-badge"><span class="pulse"></span> Em breve</div>
+                        <h2>Entrevistas</h2>
+                        <p>Esta página está aguardando o próximo conteúdo do seletivo BDR.</p>
+                    </div>
+                </div>
+            </div>
+
+            <p class="jd-hash-hint">Acesso: menu Ops · <code>#job-bdr</code></p>
         </section>
 
 		<!-- PÁGINA INDEPENDENTE: CRONOGRAMA DE TRABALHO (HIGH-LEVEL DASHBOARD) -->

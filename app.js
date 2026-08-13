@@ -190,27 +190,35 @@
         });
     })();
 
-// Job Description BDR · tabs (hash-only page #job-bdr)
-    (function initJdTabs() {
+// Contratação BDR · abas principais + subabas (#job-bdr)
+    (function initHireTabs() {
         const root = document.getElementById('job-bdr');
         if (!root) return;
-        const tabs = root.querySelectorAll('[data-jd-tab]');
-        const panels = root.querySelectorAll('[data-jd-panel]');
-        tabs.forEach((tab) => {
-            tab.addEventListener('click', () => {
-                const id = tab.getAttribute('data-jd-tab');
-                tabs.forEach((t) => {
-                    t.classList.toggle('is-active', t === tab);
-                    t.setAttribute('aria-selected', t === tab ? 'true' : 'false');
-                });
-                panels.forEach((panel) => {
-                    const match = panel.getAttribute('data-jd-panel') === id;
-                    panel.classList.toggle('is-active', match);
-                    if (match) panel.removeAttribute('hidden');
-                    else panel.setAttribute('hidden', '');
+
+        function wireTabs(tabAttr, panelAttr) {
+            const tabs = root.querySelectorAll(`[${tabAttr}]`);
+            const panels = root.querySelectorAll(`[${panelAttr}]`);
+            if (!tabs.length) return;
+            tabs.forEach((tab) => {
+                tab.addEventListener('click', () => {
+                    const id = tab.getAttribute(tabAttr);
+                    tabs.forEach((t) => {
+                        t.classList.toggle('is-active', t === tab);
+                        t.setAttribute('aria-selected', t === tab ? 'true' : 'false');
+                    });
+                    panels.forEach((panel) => {
+                        const match = panel.getAttribute(panelAttr) === id;
+                        panel.classList.toggle('is-active', match);
+                        if (match) panel.removeAttribute('hidden');
+                        else panel.setAttribute('hidden', '');
+                    });
                 });
             });
-        });
+        }
+
+        wireTabs('data-hire-tab', 'data-hire-panel');
+        wireTabs('data-jd-tab', 'data-jd-panel');
+        wireTabs('data-sel-tab', 'data-sel-panel');
     })();
 
     // D1–D35 Outbound · Fluxo Sinais / Régua tabs
