@@ -224,10 +224,15 @@
         if (cvBrowser) {
             const navList = cvBrowser.querySelector('.cv-nav-list');
             if (navList) {
+                function firstNameKey(s) {
+                    const first = String(s || '').trim().split(/\s+/)[0] || '';
+                    return first.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+                }
                 const sorted = [...navList.querySelectorAll('[data-cv-nav]')].sort((a, b) => {
                     const na = a.querySelector('.cv-nav-name')?.textContent || '';
                     const nb = b.querySelector('.cv-nav-name')?.textContent || '';
-                    return na.localeCompare(nb, 'pt-BR', { sensitivity: 'base' });
+                    const byFirst = firstNameKey(na).localeCompare(firstNameKey(nb), 'pt-BR');
+                    return byFirst !== 0 ? byFirst : na.localeCompare(nb, 'pt-BR', { sensitivity: 'base' });
                 });
                 sorted.forEach((btn) => navList.appendChild(btn));
             }
