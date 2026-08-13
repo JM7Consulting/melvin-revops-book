@@ -28,7 +28,7 @@
         return {
             role: 'BDR Outbound · Melvin',
             offer: 'PJ · 160h/mês · R$ 3.500 + variável',
-            rev: 3,
+            rev: 4,
             screen: [
                 {
                     id: 'age',
@@ -170,8 +170,8 @@
                 {
                     id: 'case',
                     step: '2',
-                    label: 'Case curto (ICP + 1º e-mail + plano de toques)',
-                    prompt: 'Nota 1–5. Entrega: uma conta ICP + primeiro e-mail + régua de toques. 1 = ICP genérico / e-mail de produto. 3 = estruturado, raso em dor industrial. 5 = ICP PCM/manutenção correto, gancho de dor, cadência crível.',
+                    label: 'Case curto — áudio de como \'venderia\' o MELVIN (máx. 30s)',
+                    prompt: 'Nota 1–5 no áudio de até 30 segundos: como você venderia a Melvin para um decisor de manutenção. 1 = genérico, jargão de startup, pitch de produto ou estourou o tempo. 3 = claro, mas raso (fala do app sem dor de PCM). 5 = ≤30s, fala com operação industrial, dor (Excel / corretiva / disponibilidade), gancho e pedido de conversa.',
                     weight: 6
                 },
                 {
@@ -378,14 +378,14 @@
                         cfg.interview.splice(at < 0 ? 0 : at + 1, 0, extra);
                     }
                 }
-                if (!fromV2 && Array.isArray(saved.config.process) && saved.config.process.length) cfg.process = saved.config.process;
+                if (Number(saved.config.rev || 0) >= 4 && Array.isArray(saved.config.process) && saved.config.process.length) cfg.process = saved.config.process;
                 if (!fromV2 && typeof saved.config.interviewWeight === 'number') cfg.interviewWeight = saved.config.interviewWeight;
                 if (saved.config.bands) cfg.bands = saved.config.bands;
                 if (saved.config.reco) cfg.reco = saved.config.reco;
                 if (saved.config.role) cfg.role = saved.config.role;
                 if (saved.config.offer) cfg.offer = saved.config.offer;
             }
-            cfg.rev = 3;
+            cfg.rev = 4;
             const byId = Object.fromEntries(base.candidates.map((c) => [c.id, c]));
             const cands = Array.isArray(saved.candidates) && saved.candidates.length
                 ? saved.candidates.map((c) => {
@@ -533,12 +533,12 @@
         const rpN = n('roleplay');
         const csoN = n('cso');
         if (caseN == null) {
-            if (index >= 66) return { id: 'case', label: '1 · Triagem ok · próximo: Case (2)' };
+            if (index >= 66) return { id: 'case', label: '1 · Triagem ok · próximo: áudio 30s (2)' };
             if (index >= 52) return { id: 'banco', label: 'Banco / 2ª leva' };
             return { id: 'nao', label: 'Não avançar na triagem' };
         }
-        if (caseN < 3) return { id: 'nao', label: 'Não avançar · case < 3' };
-        if (fitN == null || rpN == null) return { id: 'entrevista', label: '2 · Case ok · próximo: Fit + role-play (3)' };
+        if (caseN < 3) return { id: 'nao', label: 'Não avançar · áudio 30s < 3' };
+        if (fitN == null || rpN == null) return { id: 'entrevista', label: '2 · Áudio ok · próximo: Fit + role-play (3)' };
         if (fitN < 3 || rpN < 3) return { id: 'nao', label: 'Não avançar · fit/role-play < 3' };
         if (csoN == null) return { id: 'cso', label: '3 · Entrevista ok · próximo: Final CSO (4)' };
         if (csoN >= 4) return { id: 'oferta', label: '4 · CSO ok · avançar oferta' };
@@ -561,7 +561,7 @@
 
     const STAGES = [
         { id: 'triagem', label: '1 · Triagem' },
-        { id: 'case', label: '2 · Case' },
+        { id: 'case', label: '2 · Áudio 30s' },
         { id: 'entrevista', label: '3 · Fit + role-play' },
         { id: 'final', label: '4 · Final CSO' },
         { id: 'oferta', label: 'Oferta' },
@@ -619,7 +619,7 @@
                     `<button type="button" class="mx-chip${filter === id ? ' is-on' : ''}" data-mx-filter="${id}">${lab}</button>`
                 ).join('')}
             </div>
-            <p class="mx-help">Item 1 do processo (triagem de CVs) já está nesta aba e na Planilha. Notas 1–5 das fases 2 (case), 3.1 (fit), 3.2 (role-play) e 4 (CSO) entram no índice quando preenchidas — em branco não penalizam. Corte: nota &lt; 3 na fase = não avançar.</p>`;
+            <p class="mx-help">Item 1 do processo (triagem de CVs) já está nesta aba e na Planilha. Notas 1–5 das fases 2 (áudio 30s), 3.1 (fit), 3.2 (role-play) e 4 (CSO) entram no índice quando preenchidas — em branco não penalizam. Corte: nota &lt; 3 na fase = não avançar.</p>`;
         const cards = rows.length ? rows.map((r) => {
             const i = all.indexOf(r) + 1;
             const checked = state.compare.includes(r.c.id) ? 'checked' : '';
@@ -730,7 +730,7 @@
                     <h4>Como é o processo seletivo</h4>
                     <ol>
                         <li><b>Triagem de currículos</b> — já pontuada na Planilha / Ranking (item 1).</li>
-                        <li><b>Case curto</b> — conta ICP + 1º e-mail + plano de toques · nota 1–5.</li>
+                        <li><b>Case curto</b> — áudio de como 'venderia' o MELVIN (máx. 30s) · nota 1–5.</li>
                         <li><b>Entrevista de fit + role-play de abertura Outbound</b> — notas 3.1 e 3.2.</li>
                         <li><b>Conversa final com CSO</b> — nota 1–5.</li>
                     </ol>
@@ -738,7 +738,7 @@
                 <h4 class="mx-h4">Notas oficiais das fases (entram no índice)</h4>
                 ${gates}
                 <label class="mx-notes">Evidências do case / role-play / CSO
-                    <textarea data-mx-procnote="${esc(focus.id)}" rows="3" placeholder="O que entregou no case, como foi a abertura, o que o CSO combinou…">${esc(focus.processNote || '')}</textarea>
+                    <textarea data-mx-procnote="${esc(focus.id)}" rows="3" placeholder="Link ou recado do áudio de 30s, como foi a abertura, o que o CSO combinou…">${esc(focus.processNote || '')}</textarea>
                 </label>
                 ${qBlock('3.1', 'Roteiro de apoio · 3.1 Entrevista de fit')}
                 ${qBlock('3.2', 'Roteiro de apoio · 3.2 Role-play')}
