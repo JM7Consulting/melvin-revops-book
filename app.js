@@ -224,17 +224,22 @@
         if (cvBrowser) {
             const navItems = cvBrowser.querySelectorAll('[data-cv-nav]');
             const sheets = cvBrowser.querySelectorAll('[data-cv-sheet]');
-            navItems.forEach((btn) => {
-                btn.addEventListener('click', () => {
-                    const id = btn.getAttribute('data-cv-nav');
-                    navItems.forEach((n) => n.classList.toggle('is-active', n === btn));
-                    sheets.forEach((sheet) => {
-                        const match = sheet.getAttribute('data-cv-sheet') === id;
-                        sheet.classList.toggle('is-active', match);
-                        if (match) sheet.removeAttribute('hidden');
-                        else sheet.setAttribute('hidden', '');
-                    });
+            function showCv(id) {
+                navItems.forEach((n) => n.classList.toggle('is-active', n.getAttribute('data-cv-nav') === id));
+                sheets.forEach((sheet) => {
+                    const match = sheet.getAttribute('data-cv-sheet') === id;
+                    sheet.classList.toggle('is-active', match);
+                    if (match) {
+                        sheet.removeAttribute('hidden');
+                        sheet.style.display = 'block';
+                    } else {
+                        sheet.setAttribute('hidden', '');
+                        sheet.style.display = 'none';
+                    }
                 });
+            }
+            navItems.forEach((btn) => {
+                btn.addEventListener('click', () => showCv(btn.getAttribute('data-cv-nav')));
             });
         }
     })();
