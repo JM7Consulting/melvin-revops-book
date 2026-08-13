@@ -1,6 +1,7 @@
 /* Contratação BDR · Matriz de Decisão (R&S) */
 (function () {
-    const KEY = 'melvinBdrMatrix.v1';
+    const KEY = 'melvinBdrMatrix.v2';
+    const LEGACY_KEY = 'melvinBdrMatrix.v1';
     const LIKERT = [
         { value: '', label: '— não perguntado' },
         { value: '0', label: '0 · Não demonstrou' },
@@ -19,6 +20,7 @@
         return {
             role: 'BDR Outbound · Melvin',
             offer: 'PJ · 160h/mês · R$ 3.500 + variável',
+            rev: 2,
             screen: [
                 {
                     id: 'age',
@@ -63,7 +65,7 @@
                     id: 'salary',
                     label: 'Expectativa salarial vs oferta',
                     hint: 'Oferta atual: R$ 3.500 + bônus/comissão, PJ 160h.',
-                    weight: 10,
+                    weight: 8,
                     options: [
                         opt('', '— não perguntado', null),
                         opt('abaixo', 'Abaixo', 4),
@@ -75,7 +77,7 @@
                 {
                     id: 'crm',
                     label: 'Experiência com ERP / CRM / afins',
-                    weight: 10,
+                    weight: 8,
                     options: [
                         opt('', '— não perguntado', null),
                         opt('sim', 'Sim', 5),
@@ -85,7 +87,7 @@
                 {
                     id: 'service',
                     label: 'Atendimento ao cliente',
-                    weight: 8,
+                    weight: 6,
                     options: [
                         opt('', '— não perguntado', null),
                         opt('online', 'Meios online apenas', 4),
@@ -98,12 +100,15 @@
                 {
                     id: 'sales1',
                     label: 'Experiência comercial 1 (principal)',
-                    weight: 16,
+                    hint: 'Não some SDR com BDR. SDR inbound ≠ hunter.',
+                    weight: 12,
                     options: [
                         opt('', '— não perguntado', null),
-                        opt('pre-vendas', 'Pré-vendas (SDR/BDR)', 5),
-                        opt('complexas', 'Vendas complexas / B2B', 4),
-                        opt('tele', 'Telemarketing', 3),
+                        opt('bdr-out', 'BDR / Outbound (cargo ou função)', 5),
+                        opt('sdr-hunter', 'SDR hunter · prospecção ativa', 5),
+                        opt('sdr-in', 'SDR inbound · lead que chega', 3),
+                        opt('complexas', 'Closer / AM / vendas complexas', 3),
+                        opt('tele', 'Telemarketing', 2),
                         opt('ti', 'Tecnologia da Informação', 2),
                         opt('outras', 'Outras na área comercial', 2)
                     ]
@@ -111,21 +116,38 @@
                 {
                     id: 'sales2',
                     label: 'Experiência comercial 2 (complementar)',
-                    weight: 10,
+                    weight: 8,
                     options: [
                         opt('', '— não perguntado', null),
-                        opt('pre-vendas', 'Pré-vendas (SDR/BDR)', 5),
-                        opt('complexas', 'Vendas complexas / B2B', 4),
-                        opt('tele', 'Telemarketing', 3),
+                        opt('bdr-out', 'BDR / Outbound (cargo ou função)', 5),
+                        opt('sdr-hunter', 'SDR hunter · prospecção ativa', 5),
+                        opt('sdr-in', 'SDR inbound · lead que chega', 3),
+                        opt('complexas', 'Closer / AM / vendas complexas', 3),
+                        opt('tele', 'Telemarketing', 2),
                         opt('ti', 'Tecnologia da Informação', 2),
                         opt('outras', 'Outras na área comercial', 2)
+                    ]
+                },
+                {
+                    id: 'outbound',
+                    label: 'Prospecção ativa (BDR / Outbound)',
+                    hint: 'Critério decisivo desta vaga. Título SDR não basta: vale quem abriu conta fria (lista ICP, cold call, LinkedIn, Apollo, cadência outbound). SDR inbound (tráfego pago / lead que chega) pontua menos.',
+                    weight: 20,
+                    options: [
+                        opt('', '— não perguntado', null),
+                        opt('bdr', 'Cargo BDR e/ou outbound como função', 5),
+                        opt('hunter', 'Título SDR/outro, mas prospecção ativa clara', 5),
+                        opt('misto', 'Inbound + outbound no mesmo ciclo', 4),
+                        opt('sdr-in', 'SDR inbound / qualifica demanda gerada', 2),
+                        opt('farmer', 'Closer / AM / carteira (pouca abertura fria)', 1),
+                        opt('nenhuma', 'Sem evidência de hunter', 0)
                     ]
                 },
                 {
                     id: 'vertical',
                     label: 'Fit de vertical (SaaS / industrial)',
                     hint: 'Melvin = SaaS industrial. Hunter de software > closer de infoproduto.',
-                    weight: 10,
+                    weight: 8,
                     options: [
                         opt('', '— não perguntado', null),
                         opt('saas-ind', 'SaaS e/ou industrial', 5),
@@ -141,6 +163,11 @@
                     id: 'hunter',
                     label: 'Hunter / cadência',
                     prompt: 'Me conta uma cadência recente (e-mail, call, LinkedIn, WA) do primeiro toque até SQL. O que você media? O que mudou na régua?'
+                },
+                {
+                    id: 'sdrVsBdr',
+                    label: 'SDR vs BDR (prospecção ativa)',
+                    prompt: 'Muita gente escreve SDR e na prática fez BDR. Me prova prospecção ativa: como montava a lista (ICP), canal de 1º toque (cold call / LinkedIn / e-mail), cadência até a reunião, e o que era SQL. Se a demanda já chegava pronta (inbound / tráfego pago), diz isso com clareza.'
                 },
                 {
                     id: 'crmhygiene',
@@ -183,7 +210,7 @@
                     prompt: 'Quando você começaria? Há aviso prévio, outro processo ou restrição de horário (160h / home office)?'
                 }
             ],
-            interviewWeight: 26,
+            interviewWeight: 20,
             bands: [
                 { id: 'muito-quente', label: 'Muito quente', minRaw: 30, minIndex: 82, color: '#34d399' },
                 { id: 'quente', label: 'Quente', minRaw: 25, minIndex: 70, color: '#fbbf24' },
@@ -228,42 +255,42 @@
     function defaultCandidates() {
         return [
             seedCandidate('antony-trindade', 'Antony Trindade', {
-                education: 'medio', crm: 'sim', service: 'telefone-online', sales1: 'outras', vertical: 'ops'
-            }, 'CV: qualidade/ops (Frigelar, NET). HubSpot citado. Pouco hunter BDR — validar na conversa se quer virar pré-venda.'),
+                education: 'medio', crm: 'sim', service: 'telefone-online', sales1: 'outras', outbound: 'nenhuma', vertical: 'ops'
+            }, 'CV: qualidade/ops (Frigelar, NET). HubSpot citado. Sem BDR/outbound — não há prospecção ativa.'),
             seedCandidate('carlos-carmo', 'Carlos Carmo', {
-                education: 'medio', crm: 'sim', service: 'telefone-online', sales1: 'pre-vendas', sales2: 'complexas', vertical: 'saas'
-            }, 'CV: 12 anos vendas/pré-vendas (CMU Energia, Diversa, Growth Machine). Ensino médio. SPIN/Exact. Confirmar salário e se ainda quer BDR (já foi exec. de contas).'),
+                education: 'medio', crm: 'sim', service: 'telefone-online', sales1: 'sdr-hunter', sales2: 'complexas', outbound: 'hunter', vertical: 'saas'
+            }, 'CV: título SDR, mas prospecção ativa (ligações para agendar, telefone/e-mail/WA, outbound na Diversa, Growth Machine). Conta como hunter, não como SDR inbound. Checar se ainda quer BDR (já foi exec. de contas).'),
             seedCandidate('eduardo-rufino', 'Eduardo Rufino', {
-                education: 'superior-andamento', crm: 'sim', service: 'telefone-online', sales1: 'pre-vendas', sales2: 'complexas', vertical: 'saas'
-            }, 'CV: SDR abc71 + AM Ikki/Inovage (SAP). Gestão Comercial em andamento. Checar se o DNA atual é hunter ou farmer de conta.'),
+                education: 'superior-andamento', crm: 'sim', service: 'telefone-online', sales1: 'sdr-hunter', sales2: 'complexas', outbound: 'hunter', vertical: 'saas'
+            }, 'CV: Analista de Prospecção | SDR (abc71) + SDR Inovage (novas contas). Skills inbound/outbound. Houve AM/farmer na Ikki — na conversa separar hunter vs expansão de carteira.'),
             seedCandidate('gabriel-cavalcante', 'Gabriel Cavalcante', {
-                education: 'superior-andamento', crm: 'sim', service: 'telefone-online', sales1: 'pre-vendas', sales2: 'complexas', vertical: 'saas'
-            }, 'CV: SDR/BDR/Closer SaaS (BrandMonitor, EnfConcursos). Inglês C1. Risco: perfil closer/GTM vs BDR executor. Combinar expectativa de papel.'),
+                education: 'superior-andamento', crm: 'sim', service: 'telefone-online', sales1: 'bdr-out', sales2: 'complexas', outbound: 'bdr', vertical: 'saas'
+            }, 'CV: cargo SDR/BDR/Closer + outbound (EnfConcursos, BrandMonitor, InDriver). Pontua BDR. Risco: papel atual é closer/GTM — combinar se aceita executor de abertura fria.'),
             seedCandidate('janete-pelucio', 'Janete de Souza Pelucio', {
-                education: 'pos', crm: 'sim', service: 'telefone-online', sales1: 'pre-vendas', sales2: 'complexas', vertical: 'b2c'
-            }, 'CV: Closer high ticket + supervisora de SDR. Forte em conversão. Risco de overqualification para BDR hunter industrial.'),
+                education: 'pos', crm: 'sim', service: 'telefone-online', sales1: 'sdr-in', sales2: 'complexas', outbound: 'sdr-in', vertical: 'b2c'
+            }, 'CV: SDR inbound (tráfego pago / Kommo) → closer high ticket. Supervisora de SDR. Não é hunter outbound. Overqualification para BDR industrial.'),
             seedCandidate('joao-erbolato', 'João Pedro M. B. Erbolato', {
-                education: 'pos', crm: 'sim', service: 'online', sales1: 'outras', vertical: 'ops'
-            }, 'CV: implementação/processos (Meu Chapa) + Direito. HubSpot inbound/outbound citado. Validar se já prospectou de verdade ou só operou CRM.'),
+                education: 'pos', crm: 'sim', service: 'online', sales1: 'outras', outbound: 'nenhuma', vertical: 'ops'
+            }, 'CV: implementação/processos (Meu Chapa). HubSpot inbound/outbound citado em ops — não há evidência de cadência hunter. Validar se já abriu conta fria.'),
             seedCandidate('joao-camarinha', 'João Pedro Minetti Camarinha', {
-                education: 'pos', crm: 'nao', service: 'online', sales1: 'outras', vertical: 'ops'
-            }, 'CV: gestão de projetos / Legal Ops (FGV). Relacionamento comercial em escritório — não é BDR clássico. Só avançar se a conversa mostrar fome de hunter.'),
+                education: 'pos', crm: 'nao', service: 'online', sales1: 'outras', outbound: 'nenhuma', vertical: 'ops'
+            }, 'CV: gestão de projetos / Legal Ops. Relacionamento comercial ≠ prospecção ativa. Sem BDR/outbound.'),
             seedCandidate('manuel-felipe', 'Manuel Felipe Quinderé Perestrelo', {
                 age: '30-40', education: 'superior-andamento', marital: 'casado', crm: 'sim',
-                service: 'telefone-online', sales1: 'pre-vendas', sales2: 'complexas', vertical: 'b2b'
-            }, 'CV: BDR/SDR explícito (Taxflow, Kollecta, Digitrix). HubSpot/Pipedrive/RD, BANT/SPIN, Apollo. 31 anos, casado. Um dos fits mais literais de JD.'),
+                service: 'telefone-online', sales1: 'bdr-out', sales2: 'sdr-hunter', outbound: 'bdr', vertical: 'b2b'
+            }, 'CV: cargo BDR (Kollecta) + SDR com cold call (Wayno) + Apollo/Snov/ICP. Outbound explícito. Um dos fits mais literais da JD.'),
             seedCandidate('michelle-nunes', 'Michelle Santos Nunes', {
-                education: 'superior-completo', crm: 'sim', service: 'telefone-online', sales1: 'pre-vendas', sales2: 'outras', vertical: 'saas'
-            }, 'CV: SDR atual (Az Tecnologia), SPIN/BANT, Exact BDR 2025, Reev. Bacharel Serviço Social + pós Gestão de Vendas. Bom volume de pré-venda.'),
+                education: 'superior-completo', crm: 'sim', service: 'telefone-online', sales1: 'sdr-hunter', sales2: 'sdr-hunter', outbound: 'hunter', vertical: 'saas'
+            }, 'CV: título SDR, mas prospecção ativa (LinkedIn, e-mail, telefone, WA) e “abordagem outbound” (FLUA). Curso Exact BDR 2025. Conta como hunter, não inbound.'),
             seedCandidate('nayara-athayde', 'Nayara Athayde', {
-                education: 'superior-completo', crm: 'sim', service: 'telefone-online', sales1: 'pre-vendas', sales2: 'complexas', vertical: 'saas'
-            }, 'CV: 10 anos comercial, SDR SaaS, Meetime/RD/Kommo, ciclo completo. Checar se ainda quer hunter (já foi executiva de contas / Miami).'),
+                education: 'superior-completo', crm: 'sim', service: 'telefone-online', sales1: 'sdr-hunter', sales2: 'complexas', outbound: 'misto', vertical: 'saas'
+            }, 'CV: SDR com outbound/inbound (Omni, Sysmiddle) + Meetime. Também foi exec. de contas (ciclo completo / Miami). Mix hunter + farmer — validar fome de abertura fria.'),
             seedCandidate('osvaldo-oliveira', 'Osvaldo Oliveira', {
-                education: 'medio', crm: 'sim', service: 'telefone-online', sales1: 'pre-vendas', sales2: 'complexas', vertical: 'saas'
-            }, 'CV: SDR sênior 5+ anos (ciber, ERP, Growth Machine). Lusha/Apollo/LSN. Formação formal fraca vs stack de prospecção forte. Validar estabilidade (muitos jobs curtos).'),
+                education: 'medio', crm: 'sim', service: 'telefone-online', sales1: 'sdr-hunter', sales2: 'complexas', outbound: 'hunter', vertical: 'saas'
+            }, 'CV: 5+ anos SDR sênior com prospecção de novos clientes, BANT/SPIN, Lusha/Apollo/LSN, “prospecção ativa”. Título SDR, DNA de BDR hunter. Validar estabilidade (jobs curtos).'),
             seedCandidate('poliana-sampaio', 'Poliana Estevão Sampaio', {
-                education: 'superior-andamento', crm: 'sim', service: 'telefone-online', sales1: 'complexas', sales2: 'pre-vendas', vertical: 'saas'
-            }, 'CV: TOTVS / Mercado Livre / Super Professor — AM, closer, hunter. Stack CRM top. Risco: perfil de carteira/closer vs BDR de abertura fria.')
+                education: 'superior-andamento', crm: 'sim', service: 'telefone-online', sales1: 'complexas', sales2: 'sdr-hunter', outbound: 'hunter', vertical: 'saas'
+            }, 'CV: Hunter/SDR na V4 (2018–2021) com prospecção ativa — isso pontua. Papel recente é AM/closer (TOTVS, Super Professor). Checar se volta para abertura fria.')
         ];
     }
 
@@ -274,25 +301,45 @@
     function loadState() {
         const base = { config: defaultConfig(), candidates: defaultCandidates(), view: 'ranking', focusId: 'manuel-felipe', compare: [], filter: 'all' };
         try {
-            const raw = localStorage.getItem(KEY);
+            let raw = localStorage.getItem(KEY);
+            let migrating = false;
+            if (!raw) {
+                raw = localStorage.getItem(LEGACY_KEY);
+                migrating = !!raw;
+            }
             if (!raw) return base;
             const saved = JSON.parse(raw);
+            if (!saved.config || saved.config.rev !== 2) migrating = true;
             const cfg = defaultConfig();
-            if (saved.config) {
-                if (Array.isArray(saved.config.screen) && saved.config.screen.length) cfg.screen = saved.config.screen;
-                if (Array.isArray(saved.config.interview) && saved.config.interview.length) cfg.interview = saved.config.interview;
+            if (!migrating && saved.config) {
+                if (Array.isArray(saved.config.screen) && saved.config.screen.some((c) => c.id === 'outbound')) cfg.screen = saved.config.screen;
+                if (Array.isArray(saved.config.interview) && saved.config.interview.length) {
+                    cfg.interview = saved.config.interview;
+                    if (!cfg.interview.some((q) => q.id === 'sdrVsBdr')) {
+                        const extra = defaultConfig().interview.find((q) => q.id === 'sdrVsBdr');
+                        const at = cfg.interview.findIndex((q) => q.id === 'hunter');
+                        cfg.interview.splice(at < 0 ? 0 : at + 1, 0, extra);
+                    }
+                }
                 if (typeof saved.config.interviewWeight === 'number') cfg.interviewWeight = saved.config.interviewWeight;
                 if (saved.config.bands) cfg.bands = saved.config.bands;
                 if (saved.config.reco) cfg.reco = saved.config.reco;
                 if (saved.config.role) cfg.role = saved.config.role;
                 if (saved.config.offer) cfg.offer = saved.config.offer;
             }
+            cfg.rev = 2;
             const byId = Object.fromEntries(base.candidates.map((c) => [c.id, c]));
             const cands = Array.isArray(saved.candidates) && saved.candidates.length
                 ? saved.candidates.map((c) => {
                     const seed = byId[c.id] || seedCandidate(c.id, c.name || 'Candidato', {}, '');
+                    const prev = Object.assign({}, c.screen || {});
+                    if (prev.sales1 === 'pre-vendas') delete prev.sales1;
+                    if (prev.sales2 === 'pre-vendas') delete prev.sales2;
                     return Object.assign(seed, c, {
-                        screen: Object.assign(blankScreen(), seed.screen, c.screen || {}),
+                        screen: migrating
+                            ? Object.assign(blankScreen(), prev, seed.screen)
+                            : Object.assign(blankScreen(), seed.screen, prev),
+                        notes: migrating ? seed.notes : (c.notes || seed.notes),
                         interview: Object.assign(blankInterview(), c.interview || {})
                     });
                 })
@@ -321,6 +368,12 @@
                 filter: state.filter || 'all'
             }));
         } catch (e) {}
+    }
+
+    function outboundLabel(c) {
+        const crit = state.config.screen.find((x) => x.id === 'outbound');
+        const opt = crit ? optionOf(crit, c.screen.outbound) : null;
+        return opt && opt.value ? opt.label : 'Outbound em branco';
     }
 
     function optionOf(crit, value) {
@@ -449,25 +502,26 @@
             if (filter === 'star') return r.c.starred;
             if (filter === 'pending') return r.s.ivCoverage < 0.4 && !r.s.knockouts.length;
             if (filter === 'knock') return r.s.knockouts.length > 0;
+            if (filter === 'hunter') return r.c.screen.outbound === 'bdr' || r.c.screen.outbound === 'hunter';
             if (filter === 'go') return r.s.index >= 66 && !r.s.knockouts.length;
             return true;
         });
         const top = all[0];
-        const ready = all.filter((r) => r.s.ivCoverage >= 0.4).length;
         const stars = all.filter((r) => r.c.starred).length;
+        const hunters = all.filter((r) => r.c.screen.outbound === 'bdr' || r.c.screen.outbound === 'hunter').length;
         const kpis = `
             <div class="mx-kpis">
                 <article class="mx-kpi"><span>Candidatos</span><strong>${all.length}</strong></article>
-                <article class="mx-kpi"><span>Com entrevista</span><strong>${ready}</strong></article>
+                <article class="mx-kpi"><span>Hunter / BDR / Out</span><strong>${hunters}</strong></article>
                 <article class="mx-kpi"><span>Shortlist ★</span><strong>${stars}</strong></article>
                 <article class="mx-kpi"><span>Líder agora</span><strong>${top ? esc(top.c.name.split(' ')[0]) : '—'}</strong><small>${top ? top.s.index + ' pts índice' : ''}</small></article>
             </div>
             <div class="mx-filters">
-                ${[['all', 'Todos'], ['go', 'Avançar (≥66)'], ['star', 'Shortlist ★'], ['pending', 'Falta entrevista'], ['knock', 'Knockout']].map(([id, lab]) =>
+                ${[['all', 'Todos'], ['hunter', 'BDR / prospecção ativa'], ['go', 'Avançar (≥66)'], ['star', 'Shortlist ★'], ['pending', 'Falta entrevista'], ['knock', 'Knockout']].map(([id, lab]) =>
                     `<button type="button" class="mx-chip${filter === id ? ' is-on' : ''}" data-mx-filter="${id}">${lab}</button>`
                 ).join('')}
             </div>
-            <p class="mx-help">Índice R&S = média ponderada (0–100) dos critérios preenchidos. Campos em branco não pontuam nem penalizam — preencha no bate-papo. Calor usa a soma bruta da Excel original. ★ = shortlist do comitê.</p>`;
+            <p class="mx-help">Critério decisivo (peso 20): BDR/outbound e SDR que fez <b>prospecção ativa</b> (lista ICP, cold, cadência outbound) pontuam no topo. SDR inbound — lead que já chega — pontua menos. Título SDR sozinho não vale hunter. Campos em branco não pontuam nem penalizam.</p>`;
         const cards = rows.length ? rows.map((r) => {
             const i = all.indexOf(r) + 1;
             const checked = state.compare.includes(r.c.id) ? 'checked' : '';
@@ -478,6 +532,7 @@
                     <label class="mx-cmp"><input type="checkbox" data-mx-cmp="${esc(r.c.id)}" ${checked}> comparar</label>
                 </div>
                 <h3>${esc(r.c.name)}</h3>
+                <p class="mx-out-tag" data-out="${esc(r.c.screen.outbound || '')}">${esc(outboundLabel(r.c))}</p>
                 <p class="mx-card-reco" data-heat="${esc(r.s.heat.id)}" style="--h:${esc(r.s.heat.color)}">${esc(r.s.reco.label)}</p>
                 <div class="mx-meters">
                     <div><span>Índice R&S</span><b>${r.s.index}</b><i style="width:${r.s.index}%"></i></div>
@@ -613,7 +668,7 @@
             <td><input type="number" data-mx-band="${esc(b.id)}" data-k="minRaw" value="${b.minRaw}"></td>
             <td><input type="number" data-mx-band="${esc(b.id)}" data-k="minIndex" value="${b.minIndex}"></td>
         </tr>`).join('');
-        return `<p class="mx-help">Modelo original da Excel (notas 0–5 / −5) + pesos configuráveis, knockout de salário muito acima, e entrevista estruturada (STAR) para o bate-papo. Estado civil veio da planilha e está com peso 0 — não use para decidir.</p>
+        return `<p class="mx-help">Modelo original da Excel + critério decisivo de <b>prospecção ativa</b> (peso 20): cargo BDR/outbound e SDR hunter valem 5; SDR inbound vale 2. Estado civil veio da planilha e está com peso 0 — não use para decidir.</p>
             ${warn}
             ${legalOn ? '<p class="mx-warn">Estado civil está com peso &gt; 0. Em R&S sério isso não entra em decisão (Lei 9.029/95). Volte o peso para 0.</p>' : ''}
             <label class="mx-notes">Oferta de referência <input type="text" data-mx-offer value="${esc(cfg.offer)}"></label>
@@ -690,7 +745,7 @@
                 <div>
                     <p class="mx-kicker">R&S · Seleção BDR</p>
                     <h2>Matriz de Candidatos</h2>
-                    <p class="mx-sub">${esc(state.config.role)} · ${esc(state.config.offer)} · 12 pré-selecionados · pesos e perguntas configuráveis</p>
+                    <p class="mx-sub">${esc(state.config.role)} · ${esc(state.config.offer)} · BDR/outbound e SDR hunter pontuam acima de SDR inbound</p>
                 </div>
             </header>
             <div class="mx-tabs">${navHtml()}</div>
@@ -909,6 +964,7 @@
         if (reset) reset.addEventListener('click', () => {
             if (!confirm('Restaurar pesos, perguntas e notas de triagem padrão? (notas de entrevista preenchidas por você também zeram)')) return;
             localStorage.removeItem(KEY);
+            localStorage.removeItem(LEGACY_KEY);
             state = loadState();
             render();
         });
