@@ -222,6 +222,25 @@
 
         const cvBrowser = root.querySelector('#cvBrowser');
         if (cvBrowser) {
+            const navList = cvBrowser.querySelector('.cv-nav-list');
+            function surnameOf(name) {
+                const parts = String(name || '').trim().split(/\s+/).filter(Boolean);
+                const skip = new Set(['de', 'da', 'do', 'das', 'dos', 'e']);
+                for (let i = parts.length - 1; i >= 0; i--) {
+                    const token = parts[i].replace(/\./g, '');
+                    if (!skip.has(token.toLowerCase()) && token.length > 1) return parts[i];
+                }
+                return name || '';
+            }
+            if (navList) {
+                const sorted = [...navList.querySelectorAll('[data-cv-nav]')].sort((a, b) => {
+                    const na = a.querySelector('.cv-nav-name')?.textContent || '';
+                    const nb = b.querySelector('.cv-nav-name')?.textContent || '';
+                    const byLast = surnameOf(na).localeCompare(surnameOf(nb), 'pt-BR', { sensitivity: 'base' });
+                    return byLast !== 0 ? byLast : na.localeCompare(nb, 'pt-BR', { sensitivity: 'base' });
+                });
+                sorted.forEach((btn) => navList.appendChild(btn));
+            }
             const navItems = cvBrowser.querySelectorAll('[data-cv-nav]');
             const sheets = cvBrowser.querySelectorAll('[data-cv-sheet]');
             function showCv(id) {
@@ -238,6 +257,8 @@
                     }
                 });
             }
+            const firstId = navItems[0]?.getAttribute('data-cv-nav');
+            if (firstId) showCv(firstId);
             navItems.forEach((btn) => {
                 btn.addEventListener('click', () => showCv(btn.getAttribute('data-cv-nav')));
             });
