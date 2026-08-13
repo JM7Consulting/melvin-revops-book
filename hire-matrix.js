@@ -692,6 +692,8 @@
         if (!list.length) {
             return `<p class="mx-help">Esta aba mostra só a <b>shortlist</b> (★ na Matriz ou índice ≥ 66). Marque a estrela no Ranking para o candidato aparecer aqui.</p>`;
         }
+        const ranks = {};
+        ranked().forEach((r, i) => { ranks[r.c.id] = i + 1; });
         const focus = list.find((c) => c.id === state.focusId) || list[0];
         if (!focus) return '';
         const s = scoreCandidate(focus, cfg);
@@ -699,7 +701,7 @@
         const doneN = list.filter((c) => c.phasesComplete).length;
         const nav = list.map((c) => `<div class="mx-iv-pick${c.id === focus.id ? ' is-on' : ''}${c.phasesComplete ? ' is-done' : ''}">
                 <input type="checkbox" data-mx-phases="${esc(c.id)}" ${c.phasesComplete ? 'checked' : ''} title="Passou por todas as fases" aria-label="Passou por todas as fases: ${esc(c.name)}">
-                <button type="button" class="mx-mini-nav${c.id === focus.id ? ' is-on' : ''}" data-mx-focus="${esc(c.id)}">${esc(c.name.split(' ')[0])}${c.phasesComplete ? ' ✓' : ''}</button>
+                <button type="button" class="mx-mini-nav${c.id === focus.id ? ' is-on' : ''}" data-mx-focus="${esc(c.id)}"><span class="mx-iv-rank">#${ranks[c.id]}</span> ${esc(c.name.split(' ')[0])}${c.phasesComplete ? ' ✓' : ''}</button>
             </div>`).join('');
         const rail = `<div class="mx-step-rail">
             <span class="mx-step is-done">1 · Triagem · ${s.index}</span>
@@ -741,7 +743,7 @@
             <div class="mx-iv-main">
                 <div class="mx-iv-head">
                     <div>
-                        <h3>${esc(focus.name)}</h3>
+                        <h3><span class="mx-iv-rank">#${ranks[focus.id]}</span> ${esc(focus.name)}</h3>
                         <p>${esc(s.reco.label)} · índice ${s.index} · ${esc(gateLine(focus))}</p>
                     </div>
                     <div class="mx-iv-head-actions">

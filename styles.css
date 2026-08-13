@@ -11025,6 +11025,14 @@ body.light-mode .paper-sheet {
   border-color: transparent;
   color: #ede9fe;
 }
+.mx-iv-rank {
+  display: inline-block;
+  min-width: 1.6em;
+  font-variant-numeric: tabular-nums;
+  font-weight: 800;
+  color: #c4b5fd;
+  letter-spacing: 0.02em;
+}
 .mx-iv-head {
   display: flex;
   justify-content: space-between;
@@ -11266,6 +11274,8 @@ body.light-mode .mx-shell .mx-iv-pick.is-on,
 }
 body.light-mode .mx-shell .mx-iv-pick.is-done .mx-mini-nav,
 .mx-shell[data-theme="light"] .mx-iv-pick.is-done .mx-mini-nav { color: #047857 !important; }
+body.light-mode .mx-shell .mx-iv-rank,
+.mx-shell[data-theme="light"] .mx-iv-rank { color: #5b21b6 !important; }
 body.light-mode .mx-shell .mx-iv-nav-cap,
 body.light-mode .mx-shell .mx-done-check,
 .mx-shell[data-theme="light"] .mx-iv-nav-cap,
