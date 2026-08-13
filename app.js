@@ -219,6 +219,24 @@
         wireTabs('data-hire-tab', 'data-hire-panel');
         wireTabs('data-jd-tab', 'data-jd-panel');
         wireTabs('data-sel-tab', 'data-sel-panel');
+
+        const cvBrowser = root.querySelector('#cvBrowser');
+        if (cvBrowser) {
+            const navItems = cvBrowser.querySelectorAll('[data-cv-nav]');
+            const sheets = cvBrowser.querySelectorAll('[data-cv-sheet]');
+            navItems.forEach((btn) => {
+                btn.addEventListener('click', () => {
+                    const id = btn.getAttribute('data-cv-nav');
+                    navItems.forEach((n) => n.classList.toggle('is-active', n === btn));
+                    sheets.forEach((sheet) => {
+                        const match = sheet.getAttribute('data-cv-sheet') === id;
+                        sheet.classList.toggle('is-active', match);
+                        if (match) sheet.removeAttribute('hidden');
+                        else sheet.setAttribute('hidden', '');
+                    });
+                });
+            });
+        }
     })();
 
     // D1–D35 Outbound · Fluxo Sinais / Régua tabs
