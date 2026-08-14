@@ -427,7 +427,9 @@
             });
             const matrixViews = ['ranking', 'planilha', 'comparar', 'pesos'];
             const view = matrixViews.includes(saved.view) ? saved.view : 'ranking';
-            const filter = ['all', 'hunter', 'go', 'star', 'pending', 'knock'].includes(saved.filter) ? saved.filter : 'all';
+            const filter = ['all', 'hunter', 'go', 'star', 'pending', 'elim'].includes(saved.filter)
+                ? saved.filter
+                : (saved.filter === 'knock' ? 'elim' : 'all');
             return {
                 config: cfg,
                 candidates: cands,
@@ -726,7 +728,6 @@
             if (r.c.eliminated) return filter === 'all';
             if (filter === 'star') return r.c.starred;
             if (filter === 'pending') return r.s.ivCoverage < 0.4 && !r.s.knockouts.length;
-            if (filter === 'knock') return r.s.knockouts.length > 0;
             if (filter === 'hunter') return r.c.screen.outbound === 'bdr' || r.c.screen.outbound === 'hunter';
             if (filter === 'go') return r.s.index >= 66 && !r.s.knockouts.length;
             return true;
@@ -745,7 +746,7 @@
                 <article class="mx-kpi"><span>Líder agora</span><strong>${top ? esc(top.c.name.split(' ')[0]) : '—'}</strong><small>${top ? top.s.index + ' pts índice' : ''}</small></article>
             </div>
             <div class="mx-filters">
-                ${[['all', 'Todos'], ['hunter', 'BDR / prospecção ativa'], ['go', 'Avançar (≥66)'], ['star', 'Participando do processo'], ['pending', 'Falta entrevista'], ['knock', 'Knockout'], ['elim', 'Eliminados']].map(([id, lab]) =>
+                ${[['all', 'Todos'], ['hunter', 'BDR / prospecção ativa'], ['go', 'Avançar (≥66)'], ['star', 'Participando do processo'], ['pending', 'Falta entrevista'], ['elim', 'Eliminados']].map(([id, lab]) =>
                     `<button type="button" class="mx-chip${filter === id ? ' is-on' : ''}" data-mx-filter="${id}">${lab}</button>`
                 ).join('')}
             </div>
@@ -1467,7 +1468,8 @@
         state = loadState();
         // Só corrige view inválida — não reseta Ranking a cada F5
         if (!['ranking', 'planilha', 'comparar', 'pesos'].includes(state.view)) state.view = 'ranking';
-        if (!['all', 'hunter', 'go', 'star', 'pending', 'knock', 'elim'].includes(state.filter)) state.filter = 'all';
+        if (state.filter === 'knock') state.filter = 'elim';
+        if (!['all', 'hunter', 'go', 'star', 'pending', 'elim'].includes(state.filter)) state.filter = 'all';
         saveState(state);
         syncTheme();
         new MutationObserver(syncTheme).observe(document.body, { attributes: true, attributeFilter: ['class'] });
