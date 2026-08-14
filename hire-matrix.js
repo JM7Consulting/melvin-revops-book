@@ -604,7 +604,22 @@
     function ranked() {
         return state.candidates
             .map((c) => ({ c, s: scoreCandidate(c, state.config) }))
-            .sort((a, b) => b.s.index - a.s.index || b.s.raw - a.s.raw || a.c.name.localeCompare(b.c.name, 'pt-BR'));
+            .sort((a, b) => {
+                // Eliminados saem da disputa do ranking (ficam no fim, sem posição)
+                if (!!a.c.eliminated !== !!b.c.eliminated) return a.c.eliminated ? 1 : -1;
+                return b.s.index - a.s.index || b.s.raw - a.s.raw || a.c.name.localeCompare(b.c.name, 'pt-BR');
+            });
+    }
+
+    /** Posições #1, #2… só entre quem ainda está no processo. Eliminado = sem ranking. */
+    function activeRankMap() {
+        const map = {};
+        let n = 0;
+        ranked().forEach((r) => {
+            if (r.c.eliminated) return;
+            map[r.c.id] = ++n;
+        });
+        return map;
     }
 
     function isShortlisted(c, score) {
@@ -615,11 +630,10 @@
 
     /** Entrevistas: só quem você marcou com ★ e ainda está no processo — ordem do ranking (#1, #2…). */
     function interviewShortlist() {
-        const order = {};
-        ranked().forEach((r, i) => { order[r.c.id] = i; });
+        const ranks = activeRankMap();
         return state.candidates
             .filter((c) => !!c.starred && !c.eliminated)
-            .sort((a, b) => (order[a.id] ?? 999) - (order[b.id] ?? 999) || a.name.localeCompare(b.name, 'pt-BR'));
+            .sort((a, b) => (ranks[a.id] ?? 999) - (ranks[b.id] ?? 999) || a.name.localeCompare(b.name, 'pt-BR'));
     }
 
     function eliminateCandidate(c, reason) {
@@ -705,6 +719,7 @@
 
     function renderRanking() {
         const all = ranked();
+        const ranks = activeRankMap();
         const filter = state.filter || 'all';
         const rows = all.filter((r) => {
             if (filter === 'elim') return !!r.c.eliminated;
@@ -716,7 +731,7 @@
             if (filter === 'go') return r.s.index >= 66 && !r.s.knockouts.length;
             return true;
         });
-        const top = all.find((r) => !r.c.eliminated) || all[0];
+        const top = all.find((r) => !r.c.eliminated) || null;
         const stars = all.filter((r) => r.c.starred && !r.c.eliminated).length;
         const elimN = all.filter((r) => r.c.eliminated).length;
         const hunters = all.filter((r) => !r.c.eliminated && (r.c.screen.outbound === 'bdr' || r.c.screen.outbound === 'hunter')).length;
@@ -727,21 +742,21 @@
                 <article class="mx-kpi"><span>Hunter / BDR / Out</span><strong>${hunters}</strong></article>
                 <article class="mx-kpi"><span>Shortlist ★</span><strong>${stars}</strong></article>
                 <article class="mx-kpi"><span>Eliminados</span><strong>${elimN}</strong></article>
-                <article class="mx-kpi"><span>Líder agora</span><strong>${top && !top.c.eliminated ? esc(top.c.name.split(' ')[0]) : '—'}</strong><small>${top && !top.c.eliminated ? top.s.index + ' pts índice' : ''}</small></article>
+                <article class="mx-kpi"><span>Líder agora</span><strong>${top ? esc(top.c.name.split(' ')[0]) : '—'}</strong><small>${top ? top.s.index + ' pts índice' : ''}</small></article>
             </div>
             <div class="mx-filters">
                 ${[['all', 'Todos'], ['hunter', 'BDR / prospecção ativa'], ['go', 'Avançar (≥66)'], ['star', 'Shortlist ★'], ['pending', 'Falta entrevista'], ['knock', 'Knockout'], ['elim', 'Eliminados']].map(([id, lab]) =>
                     `<button type="button" class="mx-chip${filter === id ? ' is-on' : ''}" data-mx-filter="${id}">${lab}</button>`
                 ).join('')}
             </div>
-            <p class="mx-help">★ Shortlist = Entrevistas. Use <b>Eliminar</b> a qualquer momento (ex.: não enviou o áudio no prazo) — o nome sai da shortlist e fica no filtro Eliminados. Dá para reativar depois.</p>`;
+            <p class="mx-help">★ Shortlist = Entrevistas. Use <b>Eliminar</b> a qualquer momento (ex.: não enviou o áudio no prazo) — sai da shortlist, perde o # do ranking e fica em Eliminados. Reativar devolve a posição.</p>`;
         const cards = rows.length ? rows.map((r) => {
-            const i = all.indexOf(r) + 1;
+            const rank = ranks[r.c.id];
             const checked = state.compare.includes(r.c.id) ? 'checked' : '';
             const elim = !!r.c.eliminated;
             return `<article class="mx-card${elim ? ' is-elim' : ''}" data-mx-open="${esc(r.c.id)}">
                 <div class="mx-card-top">
-                    <span class="mx-rank">#${i}</span>
+                    <span class="mx-rank">${elim || rank == null ? '—' : '#' + rank}</span>
                     ${elim ? '<span class="mx-elim-badge">Eliminado</span>' : ''}
                     <div class="mx-card-top-actions">
                         <button type="button" class="mx-star${r.c.starred ? ' is-on' : ''}" data-mx-star="${esc(r.c.id)}" title="Shortlist" ${elim ? 'disabled' : ''}>★</button>
@@ -810,8 +825,7 @@
             const starredN = state.candidates.filter((c) => c.starred).length;
             return `<p class="mx-help">Entrevistas fica <b>integrada à ★ Shortlist</b> da Matriz. Agora: <b>${starredN}</b> marcado${starredN === 1 ? '' : 's'}. Vá em Seleção candidatos → Matriz → clique na estrela do card; o nome entra/sai aqui na hora.</p>`;
         }
-        const ranks = {};
-        ranked().forEach((r, i) => { ranks[r.c.id] = i + 1; });
+        const ranks = activeRankMap();
         const focus = list.find((c) => c.id === state.focusId) || list[0];
         if (!focus) return '';
         const s = scoreCandidate(focus, cfg);
