@@ -613,11 +613,13 @@
         return !!(c.starred || s.index >= 66);
     }
 
-    /** Entrevistas: só quem você marcou com ★ e ainda está no processo. */
+    /** Entrevistas: só quem você marcou com ★ e ainda está no processo — ordem do ranking (#1, #2…). */
     function interviewShortlist() {
+        const order = {};
+        ranked().forEach((r, i) => { order[r.c.id] = i; });
         return state.candidates
             .filter((c) => !!c.starred && !c.eliminated)
-            .sort((a, b) => firstNameKey(a.name).localeCompare(firstNameKey(b.name), 'pt-BR') || a.name.localeCompare(b.name, 'pt-BR'));
+            .sort((a, b) => (order[a.id] ?? 999) - (order[b.id] ?? 999) || a.name.localeCompare(b.name, 'pt-BR'));
     }
 
     function eliminateCandidate(c, reason) {
