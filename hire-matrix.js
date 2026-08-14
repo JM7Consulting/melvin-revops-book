@@ -740,16 +740,16 @@
             <div class="mx-kpis">
                 <article class="mx-kpi"><span>No processo</span><strong>${activeN}</strong></article>
                 <article class="mx-kpi"><span>Hunter / BDR / Out</span><strong>${hunters}</strong></article>
-                <article class="mx-kpi"><span>Shortlist ★</span><strong>${stars}</strong></article>
+                <article class="mx-kpi"><span>Participando do processo</span><strong>${stars}</strong></article>
                 <article class="mx-kpi"><span>Eliminados</span><strong>${elimN}</strong></article>
                 <article class="mx-kpi"><span>Líder agora</span><strong>${top ? esc(top.c.name.split(' ')[0]) : '—'}</strong><small>${top ? top.s.index + ' pts índice' : ''}</small></article>
             </div>
             <div class="mx-filters">
-                ${[['all', 'Todos'], ['hunter', 'BDR / prospecção ativa'], ['go', 'Avançar (≥66)'], ['star', 'Shortlist ★'], ['pending', 'Falta entrevista'], ['knock', 'Knockout'], ['elim', 'Eliminados']].map(([id, lab]) =>
+                ${[['all', 'Todos'], ['hunter', 'BDR / prospecção ativa'], ['go', 'Avançar (≥66)'], ['star', 'Participando do processo'], ['pending', 'Falta entrevista'], ['knock', 'Knockout'], ['elim', 'Eliminados']].map(([id, lab]) =>
                     `<button type="button" class="mx-chip${filter === id ? ' is-on' : ''}" data-mx-filter="${id}">${lab}</button>`
                 ).join('')}
             </div>
-            <p class="mx-help">★ Shortlist = Entrevistas. Use <b>Eliminar</b> a qualquer momento (ex.: não enviou o áudio no prazo) — sai da shortlist, perde o # do ranking e fica em Eliminados. Reativar devolve a posição.</p>`;
+            <p class="mx-help">★ = Participando do processo (vai para Entrevistas). Use <b>Eliminar</b> a qualquer momento (ex.: não enviou o áudio no prazo) — sai daqui, perde o # do ranking e fica em Eliminados. Reativar devolve a posição.</p>`;
         const cards = rows.length ? rows.map((r) => {
             const rank = ranks[r.c.id];
             const checked = state.compare.includes(r.c.id) ? 'checked' : '';
