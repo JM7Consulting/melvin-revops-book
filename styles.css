@@ -10906,7 +10906,7 @@ body.light-mode .paper-sheet {
   max-width: 100%;
 }
 .mx-mini { margin: 0 0 10px; font-size: 0.75rem; color: #94a3b8; line-height: 1.4; }
-.mx-card-actions { display: flex; gap: 10px; align-items: center; }
+.mx-card-actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
 .mx-card-actions button, .mx-btn, .mx-link, .mx-card-actions a {
   border: 1px solid rgba(196, 181, 253, 0.35);
   background: rgba(196, 181, 253, 0.1);
@@ -10917,6 +10917,42 @@ body.light-mode .paper-sheet {
   cursor: pointer;
   text-decoration: none;
 }
+.mx-btn-elim {
+  border: 1px solid rgba(248, 113, 113, 0.45) !important;
+  background: rgba(127, 29, 29, 0.35) !important;
+  color: #fecaca !important;
+}
+.mx-btn-elim:hover { background: rgba(185, 28, 28, 0.55) !important; }
+.mx-btn-elim--row { padding: 4px 8px; font-size: 0.72rem; white-space: nowrap; }
+.mx-elim-badge {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  background: rgba(248, 113, 113, 0.18);
+  color: #fca5a5;
+  border: 1px solid rgba(248, 113, 113, 0.35);
+}
+.mx-card.is-elim {
+  opacity: 0.72;
+  border-color: rgba(248, 113, 113, 0.35);
+  background: rgba(127, 29, 29, 0.12);
+}
+.mx-card.is-elim .mx-card-reco { color: #fca5a5; }
+tr.is-elim-row td { opacity: 0.75; background: rgba(127, 29, 29, 0.08); }
+.mx-elim-cell { min-width: 140px; }
+.mx-elim-cell small {
+  display: block;
+  margin: 4px 0 6px;
+  color: #fca5a5;
+  font-size: 0.72rem;
+  line-height: 1.35;
+}
+.mx-pipe--elim b { color: #fca5a5; }
 .mx-btn--ghost {
   background: transparent;
   border-color: rgba(148, 163, 184, 0.25);
@@ -11423,8 +11459,25 @@ body.light-mode .mx-shell .mx-warn,
   background: #fffbeb !important;
   border-color: rgba(180, 83, 9, 0.3) !important;
 }
-body.light-mode .mx-shell .mx-star,
-.mx-shell[data-theme="light"] .mx-star { color: #64748b !important; }
+body.light-mode .mx-shell .mx-btn-elim,
+.mx-shell[data-theme="light"] .mx-btn-elim {
+  background: #fee2e2 !important;
+  border-color: rgba(185, 28, 28, 0.35) !important;
+  color: #991b1b !important;
+}
+body.light-mode .mx-shell .mx-elim-badge,
+.mx-shell[data-theme="light"] .mx-elim-badge {
+  background: #fee2e2 !important;
+  color: #991b1b !important;
+  border-color: rgba(185, 28, 28, 0.3) !important;
+}
+body.light-mode .mx-shell .mx-card.is-elim,
+.mx-shell[data-theme="light"] .mx-card.is-elim {
+  background: #fff1f2 !important;
+  border-color: rgba(185, 28, 28, 0.25) !important;
+}
+body.light-mode .mx-shell .mx-elim-cell small,
+.mx-shell[data-theme="light"] .mx-elim-cell small { color: #991b1b !important; }
 body.light-mode .mx-shell .mx-star.is-on,
 .mx-shell[data-theme="light"] .mx-star.is-on { color: #d97706 !important; }
 body.light-mode .mx-shell .mx-meters i,

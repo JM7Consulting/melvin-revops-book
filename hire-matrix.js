@@ -305,6 +305,8 @@
             notes: notes || '',
             starred: false,
             phasesComplete: false,
+            eliminated: false,
+            eliminateReason: '',
             stage: 'triagem'
         };
     }
@@ -412,7 +414,9 @@
                     interviewNote: c.interviewNote || '',
                     phasesComplete: !!c.phasesComplete,
                     starred: !!c.starred,
-                    stage: c.stage || seed.stage || 'triagem'
+                    eliminated: !!c.eliminated,
+                    eliminateReason: c.eliminateReason || '',
+                    stage: c.eliminated ? 'recusado' : (c.stage || seed.stage || 'triagem')
                 });
             }
             // Sempre mantém os 12 candidatos padrão (dados não somem se o storage ficou incompleto)
@@ -540,11 +544,15 @@
         const bands = [...(cfg.bands || [])].sort((a, b) => b.minRaw - a.minRaw);
         const heat = bands.find((b) => raw >= b.minRaw) || bands[bands.length - 1] || { id: 'na', label: '—', color: '#94a3b8', minRaw: 0, minIndex: 0 };
         const ivCoverage = (cfg.interview || []).length ? ivAns.length / cfg.interview.length : 0;
-        const reco = processReco(proc, knockouts, index);
+        let reco = processReco(proc, knockouts, index);
+        if (c && c.eliminated) {
+            const why = (c.eliminateReason || '').trim();
+            reco = { id: 'eliminado', label: why ? ('Eliminado · ' + why) : 'Eliminado do processo' };
+        }
         const totalFields = (cfg.screen || []).length + (cfg.process || []).length;
         const coverage = totalFields ? Math.round(((totalFields - unanswered.length) / totalFields) * 100) : 0;
 
-        return { raw: Math.round(raw * 10) / 10, index, heat, reco, knockouts, unanswered, strengths, gaps, ivAvg, ivCoverage, coverage, process: proc };
+        return { raw: Math.round(raw * 10) / 10, index, heat, reco, knockouts, unanswered, strengths, gaps, ivAvg, ivCoverage, coverage, process: proc, eliminated: !!(c && c.eliminated) };
     }
 
     function processReco(proc, knockouts, index) {
@@ -600,15 +608,43 @@
     }
 
     function isShortlisted(c, score) {
+        if (c && c.eliminated) return false;
         const s = score || scoreCandidate(c, state.config);
         return !!(c.starred || s.index >= 66);
     }
 
-    /** Entrevistas: só quem você marcou com ★ na Matriz (entra/sai junto com a shortlist). */
+    /** Entrevistas: só quem você marcou com ★ e ainda está no processo. */
     function interviewShortlist() {
         return state.candidates
-            .filter((c) => !!c.starred)
+            .filter((c) => !!c.starred && !c.eliminated)
             .sort((a, b) => firstNameKey(a.name).localeCompare(firstNameKey(b.name), 'pt-BR') || a.name.localeCompare(b.name, 'pt-BR'));
+    }
+
+    function eliminateCandidate(c, reason) {
+        if (!c) return;
+        c.eliminated = true;
+        c.eliminateReason = String(reason || '').trim();
+        c.starred = false;
+        c.stage = 'recusado';
+        state.compare = state.compare.filter((id) => id !== c.id);
+    }
+
+    function reinstateCandidate(c) {
+        if (!c) return;
+        c.eliminated = false;
+        c.eliminateReason = '';
+        if (c.stage === 'recusado') c.stage = 'triagem';
+    }
+
+    function askEliminate(c) {
+        if (!c) return false;
+        const reason = window.prompt(
+            'Motivo da eliminação de ' + c.name + ' (ex.: não enviou o áudio até meio-dia):',
+            c.eliminateReason || 'Não cumpriu o prazo / requisito'
+        );
+        if (reason === null) return false;
+        eliminateCandidate(c, reason);
+        return true;
     }
 
     function selectOpts(crit, value) {
@@ -629,6 +665,8 @@
         const all = ranked();
         const filter = state.filter || 'all';
         const rows = all.filter((r) => {
+            if (filter === 'elim') return !!r.c.eliminated;
+            if (r.c.eliminated) return filter === 'all';
             if (filter === 'star') return r.c.starred;
             if (filter === 'pending') return r.s.ivCoverage < 0.4 && !r.s.knockouts.length;
             if (filter === 'knock') return r.s.knockouts.length > 0;
@@ -636,63 +674,77 @@
             if (filter === 'go') return r.s.index >= 66 && !r.s.knockouts.length;
             return true;
         });
-        const top = all[0];
-        const stars = all.filter((r) => r.c.starred).length;
-        const hunters = all.filter((r) => r.c.screen.outbound === 'bdr' || r.c.screen.outbound === 'hunter').length;
+        const top = all.find((r) => !r.c.eliminated) || all[0];
+        const stars = all.filter((r) => r.c.starred && !r.c.eliminated).length;
+        const elimN = all.filter((r) => r.c.eliminated).length;
+        const hunters = all.filter((r) => !r.c.eliminated && (r.c.screen.outbound === 'bdr' || r.c.screen.outbound === 'hunter')).length;
+        const activeN = all.filter((r) => !r.c.eliminated).length;
         const kpis = `
             <div class="mx-kpis">
-                <article class="mx-kpi"><span>Candidatos</span><strong>${all.length}</strong></article>
+                <article class="mx-kpi"><span>No processo</span><strong>${activeN}</strong></article>
                 <article class="mx-kpi"><span>Hunter / BDR / Out</span><strong>${hunters}</strong></article>
                 <article class="mx-kpi"><span>Shortlist ★</span><strong>${stars}</strong></article>
-                <article class="mx-kpi"><span>Líder agora</span><strong>${top ? esc(top.c.name.split(' ')[0]) : '—'}</strong><small>${top ? top.s.index + ' pts índice' : ''}</small></article>
+                <article class="mx-kpi"><span>Eliminados</span><strong>${elimN}</strong></article>
+                <article class="mx-kpi"><span>Líder agora</span><strong>${top && !top.c.eliminated ? esc(top.c.name.split(' ')[0]) : '—'}</strong><small>${top && !top.c.eliminated ? top.s.index + ' pts índice' : ''}</small></article>
             </div>
             <div class="mx-filters">
-                ${[['all', 'Todos'], ['hunter', 'BDR / prospecção ativa'], ['go', 'Avançar (≥66)'], ['star', 'Shortlist ★'], ['pending', 'Falta entrevista'], ['knock', 'Knockout']].map(([id, lab]) =>
+                ${[['all', 'Todos'], ['hunter', 'BDR / prospecção ativa'], ['go', 'Avançar (≥66)'], ['star', 'Shortlist ★'], ['pending', 'Falta entrevista'], ['knock', 'Knockout'], ['elim', 'Eliminados']].map(([id, lab]) =>
                     `<button type="button" class="mx-chip${filter === id ? ' is-on' : ''}" data-mx-filter="${id}">${lab}</button>`
                 ).join('')}
             </div>
-            <p class="mx-help">Item 1 do processo (triagem de CVs) já está nesta aba e na Planilha. ★ Shortlist = quem entra na aba Entrevistas. Notas 1–5 das fases 2–4 ficam em Entrevistas — em branco não penalizam. Corte: nota &lt; 3 na fase = não avançar.</p>`;
+            <p class="mx-help">★ Shortlist = Entrevistas. Use <b>Eliminar</b> a qualquer momento (ex.: não enviou o áudio no prazo) — o nome sai da shortlist e fica no filtro Eliminados. Dá para reativar depois.</p>`;
         const cards = rows.length ? rows.map((r) => {
             const i = all.indexOf(r) + 1;
             const checked = state.compare.includes(r.c.id) ? 'checked' : '';
-            return `<article class="mx-card" data-mx-open="${esc(r.c.id)}">
+            const elim = !!r.c.eliminated;
+            return `<article class="mx-card${elim ? ' is-elim' : ''}" data-mx-open="${esc(r.c.id)}">
                 <div class="mx-card-top">
                     <span class="mx-rank">#${i}</span>
-                    <button type="button" class="mx-star${r.c.starred ? ' is-on' : ''}" data-mx-star="${esc(r.c.id)}" title="Shortlist">★</button>
-                    <label class="mx-cmp"><input type="checkbox" data-mx-cmp="${esc(r.c.id)}" ${checked}> comparar</label>
+                    ${elim ? '<span class="mx-elim-badge">Eliminado</span>' : ''}
+                    <button type="button" class="mx-star${r.c.starred ? ' is-on' : ''}" data-mx-star="${esc(r.c.id)}" title="Shortlist" ${elim ? 'disabled' : ''}>★</button>
+                    <label class="mx-cmp"><input type="checkbox" data-mx-cmp="${esc(r.c.id)}" ${checked} ${elim ? 'disabled' : ''}> comparar</label>
                 </div>
                 <h3>${esc(r.c.name)}</h3>
                 <p class="mx-out-tag" data-out="${esc(r.c.screen.outbound || '')}">${esc(outboundLabel(r.c))}</p>
                 <p class="mx-gates">${esc(gateLine(r.c))}</p>
-                <p class="mx-card-reco" data-heat="${esc(r.s.heat.id)}" style="--h:${esc(r.s.heat.color)}">${esc(r.s.reco.label)}</p>
+                <p class="mx-card-reco" data-heat="${esc(r.s.heat.id)}" style="--h:${esc(elim ? '#f87171' : r.s.heat.color)}">${esc(r.s.reco.label)}</p>
                 <div class="mx-meters">
                     <div><span>Índice R&S</span><b>${r.s.index}</b><i style="width:${r.s.index}%"></i></div>
                     <div><span>Pontos brutos</span><b>${r.s.raw}</b></div>
                     <div><span>Calor</span><b>${esc(r.s.heat.label)}</b></div>
                     <div><span>Preenchido</span><b>${r.s.coverage}%</b></div>
                 </div>
-                <p class="mx-mini">${r.s.knockouts.length ? '⛔ ' + esc(r.s.knockouts.join(' · ')) : (r.s.strengths.slice(0, 2).join(' · ') || 'Complete a triagem / entrevista')}</p>
+                <p class="mx-mini">${elim
+                    ? '⛔ ' + esc(r.c.eliminateReason || 'Eliminado do processo')
+                    : (r.s.knockouts.length ? '⛔ ' + esc(r.s.knockouts.join(' · ')) : (r.s.strengths.slice(0, 2).join(' · ') || 'Complete a triagem / entrevista'))}</p>
                 <div class="mx-card-actions">
-                    <button type="button" data-mx-goto="entrevista" data-mx-focus="${esc(r.c.id)}">Abrir entrevistas</button>
+                    ${elim
+                        ? `<button type="button" class="mx-btn mx-btn--ghost" data-mx-reinstate="${esc(r.c.id)}">Reativar</button>`
+                        : `<button type="button" data-mx-goto="entrevista" data-mx-focus="${esc(r.c.id)}">Abrir entrevistas</button>
+                           <button type="button" class="mx-btn-elim" data-mx-elim="${esc(r.c.id)}">Eliminar</button>`}
                     <a href="#job-bdr" data-mx-cv="${esc(r.c.id)}">Ver CV</a>
                 </div>
             </article>`;
-        }).join('') : `<p class="mx-help">Nenhum candidato neste filtro${filter === 'star' ? ' (Shortlist ★ vazia — marque a estrela nos cards)' : ''}. <button type="button" class="mx-link" data-mx-filter="all">Ver todos</button></p>`;
+        }).join('') : `<p class="mx-help">Nenhum candidato neste filtro${filter === 'star' ? ' (Shortlist ★ vazia — marque a estrela nos cards)' : ''}${filter === 'elim' ? ' (ninguém eliminado ainda)' : ''}. <button type="button" class="mx-link" data-mx-filter="all">Ver todos</button></p>`;
         return kpis + `<div class="mx-cards">${cards}</div>`;
     }
 
     function renderPlanilha() {
         const cfg = state.config;
-        const head = ['★', 'Candidato', ...cfg.process.map((g) => g.step), ...cfg.screen.map((c) => c.label), 'Roteiro', 'Bruto', 'Índice', 'Calor', 'Recomendação', 'Fase']
+        const head = ['★', 'Candidato', 'Status', ...cfg.process.map((g) => g.step), ...cfg.screen.map((c) => c.label), 'Roteiro', 'Bruto', 'Índice', 'Calor', 'Recomendação', 'Fase']
             .map((h) => `<th>${esc(h)}</th>`).join('');
         const body = ranked().map((r) => {
-            const procCells = cfg.process.map((g) => `<td><select data-mx-proc="${esc(r.c.id)}" data-field="${esc(g.id)}">${gateSelect(r.c.id, g.id, r.c.process && r.c.process[g.id])}</select></td>`).join('');
-            const cells = cfg.screen.map((crit) => `<td><select data-mx-screen="${esc(r.c.id)}" data-field="${esc(crit.id)}">${selectOpts(crit, r.c.screen[crit.id])}</select></td>`).join('');
+            const procCells = cfg.process.map((g) => `<td><select data-mx-proc="${esc(r.c.id)}" data-field="${esc(g.id)}" ${r.c.eliminated ? 'disabled' : ''}>${gateSelect(r.c.id, g.id, r.c.process && r.c.process[g.id])}</select></td>`).join('');
+            const cells = cfg.screen.map((crit) => `<td><select data-mx-screen="${esc(r.c.id)}" data-field="${esc(crit.id)}" ${r.c.eliminated ? 'disabled' : ''}>${selectOpts(crit, r.c.screen[crit.id])}</select></td>`).join('');
             const iv = r.s.ivAvg == null ? '—' : r.s.ivAvg.toFixed(1);
             const st = STAGES.map((s) => `<option value="${s.id}" ${r.c.stage === s.id ? 'selected' : ''}>${s.label}</option>`).join('');
-            return `<tr>
-                <td><button type="button" class="mx-star${r.c.starred ? ' is-on' : ''}" data-mx-star="${esc(r.c.id)}">★</button></td>
-                <td class="mx-name-cell"><button type="button" data-mx-goto="entrevista" data-mx-focus="${esc(r.c.id)}">${esc(r.c.name)}</button></td>
+            const statusCell = r.c.eliminated
+                ? `<td class="mx-elim-cell"><span class="mx-elim-badge">Eliminado</span><small>${esc(r.c.eliminateReason || '')}</small><button type="button" class="mx-btn mx-btn--ghost mx-btn--tiny" data-mx-reinstate="${esc(r.c.id)}">Reativar</button></td>`
+                : `<td><button type="button" class="mx-btn-elim mx-btn-elim--row" data-mx-elim="${esc(r.c.id)}">Eliminar</button></td>`;
+            return `<tr class="${r.c.eliminated ? 'is-elim-row' : ''}">
+                <td><button type="button" class="mx-star${r.c.starred ? ' is-on' : ''}" data-mx-star="${esc(r.c.id)}" ${r.c.eliminated ? 'disabled' : ''}>★</button></td>
+                <td class="mx-name-cell"><button type="button" data-mx-goto="entrevista" data-mx-focus="${esc(r.c.id)}" ${r.c.eliminated ? 'disabled' : ''}>${esc(r.c.name)}</button></td>
+                ${statusCell}
                 ${procCells}
                 ${cells}
                 <td>${iv}</td>
@@ -700,10 +752,10 @@
                 <td><strong>${r.s.index}</strong></td>
                 <td><span class="mx-heat" data-heat="${esc(r.s.heat.id)}" style="--h:${esc(r.s.heat.color)}">${esc(r.s.heat.label)}</span></td>
                 <td>${esc(r.s.reco.label)}</td>
-                <td><select data-mx-stage="${esc(r.c.id)}">${st}</select></td>
+                <td><select data-mx-stage="${esc(r.c.id)}" ${r.c.eliminated ? 'disabled' : ''}>${st}</select></td>
             </tr>`;
         }).join('');
-        return `<p class="mx-help">Colunas 2 / 3.1 / 3.2 / 4 = notas oficiais do processo (1–5). O restante é a triagem de CV. Em branco = fase ainda não feita.</p>
+        return `<p class="mx-help">Coluna Status: elimine a qualquer momento (prazo do áudio, desistência, etc.). Colunas 2 / 3.1 / 3.2 / 4 = notas oficiais. Em branco = fase ainda não feita.</p>
             <div class="mx-table-wrap"><table class="mx-table"><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table></div>`;
     }
 
@@ -774,6 +826,7 @@
                             <input type="checkbox" data-mx-phases="${esc(focus.id)}" ${focus.phasesComplete ? 'checked' : ''}>
                             <span>Passou por todas as fases</span>
                         </label>
+                        <button type="button" class="mx-btn-elim" data-mx-elim="${esc(focus.id)}">Eliminar do processo</button>
                         <a class="mx-link" href="#job-bdr" data-mx-cv="${esc(focus.id)}">Abrir CV →</a>
                     </div>
                 </div>
@@ -887,6 +940,7 @@
 
     function whyText(r) {
         const bits = [];
+        if (r.c.eliminated) bits.push('Eliminado: ' + (r.c.eliminateReason || 'sem motivo registrado') + '.');
         if (r.s.knockouts.length) bits.push('Knockout: ' + r.s.knockouts.join('; ') + '.');
         if (r.s.strengths.length) bits.push('Pontos: ' + r.s.strengths.join(', ') + '.');
         if (r.s.gaps.length) bits.push('Lacunas: ' + r.s.gaps.join(', ') + '.');
@@ -896,19 +950,20 @@
     }
 
     function renderDecisao() {
-        const rows = ranked();
+        const rows = ranked().filter((r) => !r.c.eliminated);
         const shortlist = rows.filter((r) => isShortlisted(r.c, r.s));
+        const elimN = state.candidates.filter((c) => c.eliminated).length;
         const pipeline = STAGES.map((st) => {
-            const n = state.candidates.filter((c) => c.stage === st.id).length;
+            const n = state.candidates.filter((c) => !c.eliminated && c.stage === st.id).length;
             return `<span class="mx-pipe"><b>${n}</b> ${esc(st.label)}</span>`;
-        }).join('');
+        }).join('') + `<span class="mx-pipe mx-pipe--elim"><b>${elimN}</b> Eliminados</span>`;
         const lis = shortlist.map((r, i) => `<article class="mx-decision">
             <header><span>#${i + 1}</span><h3>${esc(r.c.name)}</h3><em>${esc(r.s.reco.label)}</em></header>
             <p>${esc(whyText(r))}</p>
             <p class="mx-mini">Fase: ${esc((STAGES.find((s) => s.id === r.c.stage) || {}).label || r.c.stage)} · ${esc(gateLine(r.c))} · índice ${r.s.index}</p>
         </article>`).join('');
         return `<div class="mx-kpis">${pipeline}</div>
-            <p class="mx-help">Decisão de comitê: shortlist = ★ ou índice ≥ 66. Use isto na reunião com Vinícius — não o CV isolado.</p>
+            <p class="mx-help">Decisão de comitê: shortlist = ★ ou índice ≥ 66 (eliminados não entram). Use isto na reunião com Vinícius — não o CV isolado.</p>
             <div class="mx-toolbar">
                 <button type="button" class="mx-btn" data-mx-export>Exportar CSV</button>
                 <button type="button" class="mx-btn mx-btn--ghost" data-mx-copy>Copiar parecer</button>
@@ -931,8 +986,12 @@
 
     function openEntrevistas(id) {
         if (id) {
-            state.focusId = id;
             const c = candById(id);
+            if (c && c.eliminated) {
+                window.alert(c.name + ' está eliminado. Reative na Matriz (filtro Eliminados) se quiser voltar ao processo.');
+                return;
+            }
+            state.focusId = id;
             if (c) c.starred = true;
         }
         saveState(state);
@@ -1040,10 +1099,10 @@
 
     function exportCsv() {
         const cfg = state.config;
-        const header = ['Nome', ...cfg.process.map((g) => g.step + ' ' + g.label), ...cfg.screen.map((c) => c.label), 'Roteiro médio', 'Bruto', 'Índice', 'Calor', 'Recomendação', 'Fase', 'Notas'];
+        const header = ['Nome', 'Eliminado', 'Motivo eliminação', ...cfg.process.map((g) => g.step + ' ' + g.label), ...cfg.screen.map((c) => c.label), 'Roteiro médio', 'Bruto', 'Índice', 'Calor', 'Recomendação', 'Fase', 'Notas'];
         const lines = [header];
         ranked().forEach((r) => {
-            const row = [r.c.name];
+            const row = [r.c.name, r.c.eliminated ? 'sim' : 'não', r.c.eliminateReason || ''];
             cfg.process.forEach((g) => row.push((r.c.process && r.c.process[g.id]) || ''));
             cfg.screen.forEach((crit) => {
                 const opt = optionOf(crit, r.c.screen[crit.id]);
@@ -1064,7 +1123,7 @@
 
     function copyParecer() {
         const text = ranked()
-            .filter((r) => r.c.starred || r.s.index >= 66)
+            .filter((r) => !r.c.eliminated && (r.c.starred || r.s.index >= 66))
             .map((r, i) => `${i + 1}. ${r.c.name} — ${r.s.reco.label} (índice ${r.s.index}, bruto ${r.s.raw}). ${whyText(r)}`)
             .join('\n\n');
         navigator.clipboard?.writeText(text || 'Sem shortlist ainda.').catch(() => {});
@@ -1088,16 +1147,38 @@
         root.querySelectorAll('[data-mx-open]').forEach((card) => {
             card.addEventListener('click', (e) => {
                 if (e.target.closest('button, a, label, input, select, textarea')) return;
-                openEntrevistas(card.getAttribute('data-mx-open'));
+                const id = card.getAttribute('data-mx-open');
+                const c = candById(id);
+                if (c && c.eliminated) return;
+                openEntrevistas(id);
             });
         });
         root.querySelectorAll('[data-mx-star]').forEach((btn) => {
             btn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 const c = candById(btn.getAttribute('data-mx-star'));
-                if (!c) return;
+                if (!c || c.eliminated) return;
                 c.starred = !c.starred;
                 if (c.starred) state.focusId = c.id;
+                saveState(state);
+                render();
+            });
+        });
+        root.querySelectorAll('[data-mx-elim]').forEach((btn) => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const c = candById(btn.getAttribute('data-mx-elim'));
+                if (!askEliminate(c)) return;
+                saveState(state);
+                render();
+            });
+        });
+        root.querySelectorAll('[data-mx-reinstate]').forEach((btn) => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const c = candById(btn.getAttribute('data-mx-reinstate'));
+                if (!c) return;
+                reinstateCandidate(c);
                 saveState(state);
                 render();
             });
@@ -1163,7 +1244,17 @@
         root.querySelectorAll('[data-mx-stage]').forEach((sel) => {
             sel.addEventListener('change', () => {
                 const c = candById(sel.getAttribute('data-mx-stage'));
-                if (!c) return;
+                if (!c || c.eliminated) return;
+                const prev = c.stage;
+                if (sel.value === 'recusado') {
+                    if (!askEliminate(c)) {
+                        sel.value = prev;
+                        return;
+                    }
+                    saveState(state);
+                    render();
+                    return;
+                }
                 c.stage = sel.value;
                 saveState(state);
                 render();
@@ -1319,7 +1410,7 @@
         state = loadState();
         // Só corrige view inválida — não reseta Ranking a cada F5
         if (!['ranking', 'planilha', 'comparar', 'pesos'].includes(state.view)) state.view = 'ranking';
-        if (!['all', 'hunter', 'go', 'star', 'pending', 'knock'].includes(state.filter)) state.filter = 'all';
+        if (!['all', 'hunter', 'go', 'star', 'pending', 'knock', 'elim'].includes(state.filter)) state.filter = 'all';
         saveState(state);
         syncTheme();
         new MutationObserver(syncTheme).observe(document.body, { attributes: true, attributeFilter: ['class'] });
