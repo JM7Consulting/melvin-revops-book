@@ -735,7 +735,8 @@
         </div>`;
         const gates = (cfg.process || []).map((g) => {
             const val = proc[g.id] || '';
-            return `<article class="mx-q mx-q--gate">
+            const scoreAttr = val === '' || val == null ? 'none' : String(val);
+            return `<article class="mx-q mx-q--gate" data-gate-score="${esc(scoreAttr)}">
                 <header><strong>${esc(g.step)} · ${esc(g.label)}</strong><select data-mx-proc="${esc(focus.id)}" data-field="${esc(g.id)}">${gateSelect(focus.id, g.id, val)}</select></header>
                 <p>${esc(g.prompt)}</p>
             </article>`;
