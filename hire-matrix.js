@@ -701,8 +701,10 @@
                 <div class="mx-card-top">
                     <span class="mx-rank">#${i}</span>
                     ${elim ? '<span class="mx-elim-badge">Eliminado</span>' : ''}
-                    <button type="button" class="mx-star${r.c.starred ? ' is-on' : ''}" data-mx-star="${esc(r.c.id)}" title="Shortlist" ${elim ? 'disabled' : ''}>★</button>
-                    <label class="mx-cmp"><input type="checkbox" data-mx-cmp="${esc(r.c.id)}" ${checked} ${elim ? 'disabled' : ''}> comparar</label>
+                    <div class="mx-card-top-actions">
+                        <button type="button" class="mx-star${r.c.starred ? ' is-on' : ''}" data-mx-star="${esc(r.c.id)}" title="Shortlist" ${elim ? 'disabled' : ''}>★</button>
+                        ${elim ? '' : `<label class="mx-cmp"><input type="checkbox" data-mx-cmp="${esc(r.c.id)}" ${checked}> comparar</label>`}
+                    </div>
                 </div>
                 <h3>${esc(r.c.name)}</h3>
                 <p class="mx-out-tag" data-out="${esc(r.c.screen.outbound || '')}">${esc(outboundLabel(r.c))}</p>
