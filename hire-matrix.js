@@ -759,7 +759,7 @@
                     <span class="mx-rank">${elim || rank == null ? '—' : '#' + rank}</span>
                     ${elim ? '<span class="mx-elim-badge">Eliminado</span>' : ''}
                     <div class="mx-card-top-actions">
-                        <button type="button" class="mx-star${r.c.starred ? ' is-on' : ''}" data-mx-star="${esc(r.c.id)}" title="Shortlist" ${elim ? 'disabled' : ''}>★</button>
+                        <button type="button" class="mx-star${r.c.starred ? ' is-on' : ''}" data-mx-star="${esc(r.c.id)}" title="Participando do processo" ${elim ? 'disabled' : ''}>★</button>
                         ${elim ? '' : `<label class="mx-cmp"><input type="checkbox" data-mx-cmp="${esc(r.c.id)}" ${checked}> comparar</label>`}
                     </div>
                 </div>
@@ -784,7 +784,7 @@
                     <a href="#job-bdr" data-mx-cv="${esc(r.c.id)}">Ver CV</a>
                 </div>
             </article>`;
-        }).join('') : `<p class="mx-help">Nenhum candidato neste filtro${filter === 'star' ? ' (Shortlist ★ vazia — marque a estrela nos cards)' : ''}${filter === 'elim' ? ' (ninguém eliminado ainda)' : ''}. <button type="button" class="mx-link" data-mx-filter="all">Ver todos</button></p>`;
+        }).join('') : `<p class="mx-help">Nenhum candidato neste filtro${filter === 'star' ? ' (ninguém marcado como Participando do processo — use a ★ nos cards)' : ''}${filter === 'elim' ? ' (ninguém eliminado ainda)' : ''}. <button type="button" class="mx-link" data-mx-filter="all">Ver todos</button></p>`;
         return kpis + `<div class="mx-cards">${cards}</div>`;
     }
 
