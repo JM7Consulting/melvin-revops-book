@@ -783,7 +783,7 @@
                     <a href="#job-bdr" data-mx-cv="${esc(r.c.id)}">Ver CV</a>
                 </div>
             </article>`;
-        }).join('') : `<p class="mx-help">Nenhum candidato neste filtro${filter === 'star' ? ' (ninguém marcado como Participando do processo — use a ★ nos cards)' : ''}${filter === 'elim' ? ' (ninguém eliminado ainda)' : ''}. <button type="button" class="mx-link" data-mx-filter="all">Ver todos</button></p>`;
+        }).join('') : `<p class="mx-help">Nenhum candidato neste filtro${filter === 'star' ? ' (ninguém na fase de entrevistas — use a ★ nos cards)' : ''}${filter === 'elim' ? ' (ninguém eliminado ainda)' : ''}. <button type="button" class="mx-link" data-mx-filter="all">Ver todos</button></p>`;
         return kpis + `<div class="mx-cards">${cards}</div>`;
     }
 
