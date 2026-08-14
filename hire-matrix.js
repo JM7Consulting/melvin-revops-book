@@ -652,13 +652,53 @@
     }
 
     function navHtml() {
-        const items = [
-            ['ranking', 'Ranking'],
-            ['planilha', 'Planilha'],
-            ['comparar', 'Comparar'],
-            ['pesos', 'Pesos & regras']
-        ];
-        return items.map(([id, label]) => `<button type="button" class="mx-tab${state.view === id ? ' is-active' : ''}" data-mx-view="${id}">${label}</button>`).join('');
+        return '';
+    }
+
+    const VIEW_TITLES = {
+        ranking: 'Ranking',
+        planilha: 'Planilha',
+        comparar: 'Comparar',
+        pesos: 'Pesos & regras'
+    };
+
+    function syncOuterSelTab() {
+        const id = state.view;
+        if (!['ranking', 'planilha', 'comparar', 'pesos'].includes(id)) return;
+        const root = document.getElementById('job-bdr');
+        if (!root) return;
+        root.querySelectorAll('[data-sel-tab]').forEach((t) => {
+            const on = t.getAttribute('data-sel-tab') === id;
+            t.classList.toggle('is-active', on);
+            t.setAttribute('aria-selected', on ? 'true' : 'false');
+        });
+        root.querySelectorAll('[data-sel-panel]').forEach((panel) => {
+            const pid = panel.getAttribute('data-sel-panel');
+            const match = pid === 'matriz' || pid === id;
+            const show = pid === 'matriz';
+            panel.classList.toggle('is-active', show);
+            if (show) panel.removeAttribute('hidden');
+            else if (pid !== 'cvs') panel.setAttribute('hidden', '');
+        });
+        // Keep CVs panel hidden while on matrix views
+        const cvs = root.querySelector('[data-sel-panel="cvs"]');
+        if (cvs) {
+            cvs.classList.remove('is-active');
+            cvs.setAttribute('hidden', '');
+        }
+        try {
+            const raw = localStorage.getItem('melvinHireTabs.v1');
+            const cur = raw ? JSON.parse(raw) : {};
+            localStorage.setItem('melvinHireTabs.v1', JSON.stringify(Object.assign(cur, { selTab: id, ts: Date.now() })));
+        } catch (e) {}
+    }
+
+    function setView(id) {
+        if (!['ranking', 'planilha', 'comparar', 'pesos'].includes(id)) return;
+        state.view = id;
+        saveState(state);
+        syncOuterSelTab();
+        render();
     }
 
     function renderRanking() {
@@ -1027,12 +1067,11 @@
         root.innerHTML = `<div class="mx-app">
             <header class="mx-head">
                 <div>
-                    <p class="mx-kicker">R&S · Seleção BDR</p>
-                    <h2>Matriz de Candidatos</h2>
+                    <p class="mx-kicker">R&S · Seleção BDR · Matriz</p>
+                    <h2>${esc(VIEW_TITLES[state.view] || 'Matriz de Candidatos')}</h2>
                     <p class="mx-sub">${esc(state.config.role)} · ${state.candidates.length} candidatos · ★ = shortlist / Entrevistas</p>
                 </div>
             </header>
-            <div class="mx-tabs">${navHtml()}</div>
             <div class="mx-body">${body}</div>
         </div>`;
         bind(root);
@@ -1417,11 +1456,12 @@
         syncTheme();
         new MutationObserver(syncTheme).observe(document.body, { attributes: true, attributeFilter: ['class'] });
         render();
-        document.querySelectorAll('[data-hire-tab="entrevistas"], [data-hire-tab="decisao"], [data-sel-tab="matriz"]').forEach((tab) => {
+        document.querySelectorAll('[data-hire-tab="entrevistas"], [data-hire-tab="decisao"], [data-sel-tab="ranking"], [data-sel-tab="planilha"], [data-sel-tab="comparar"], [data-sel-tab="pesos"]').forEach((tab) => {
             tab.addEventListener('click', () => { try { render(); } catch (e) { console.error(e); } });
         });
         window.melvinHireMatrix = {
             refresh: render,
+            setView,
             shortlist: () => interviewShortlist().map((c) => ({ id: c.id, name: c.name, starred: !!c.starred }))
         };
     }

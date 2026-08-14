@@ -226,15 +226,51 @@
             return true;
         }
 
+        const MATRIX_SEL = ['ranking', 'planilha', 'comparar', 'pesos'];
+
+        function normalizeSelTab(id) {
+            if (!id) return 'cvs';
+            if (id === 'matriz') return 'ranking';
+            return id;
+        }
+
+        function activateSelTab(id) {
+            id = normalizeSelTab(id);
+            const tabs = root.querySelectorAll('[data-sel-tab]');
+            const panels = root.querySelectorAll('[data-sel-panel]');
+            const has = [...tabs].some((t) => t.getAttribute('data-sel-tab') === id);
+            if (!has) return false;
+            tabs.forEach((t) => {
+                const on = t.getAttribute('data-sel-tab') === id;
+                t.classList.toggle('is-active', on);
+                t.setAttribute('aria-selected', on ? 'true' : 'false');
+            });
+            panels.forEach((panel) => {
+                const pid = panel.getAttribute('data-sel-panel');
+                const match = pid === id || (pid === 'matriz' && MATRIX_SEL.includes(id));
+                panel.classList.toggle('is-active', match);
+                if (match) panel.removeAttribute('hidden');
+                else panel.setAttribute('hidden', '');
+            });
+            if (MATRIX_SEL.includes(id) && typeof window.melvinHireMatrix?.setView === 'function') {
+                try { window.melvinHireMatrix.setView(id); } catch (e) {}
+            }
+            writeHireView({ selTab: id });
+            return true;
+        }
+
         function wireTabs(tabAttr, panelAttr, saveKey) {
             const tabs = root.querySelectorAll(`[${tabAttr}]`);
-            const panels = root.querySelectorAll(`[${panelAttr}]`);
             if (!tabs.length) return;
             tabs.forEach((tab) => {
                 tab.addEventListener('click', () => {
                     const id = tab.getAttribute(tabAttr);
-                    activateTabGroup(tabAttr, panelAttr, id);
-                    if (saveKey) writeHireView({ [saveKey]: id });
+                    if (tabAttr === 'data-sel-tab') {
+                        activateSelTab(id);
+                    } else {
+                        activateTabGroup(tabAttr, panelAttr, id);
+                        if (saveKey) writeHireView({ [saveKey]: id });
+                    }
                     if (typeof scheduleSaveView === 'function') scheduleSaveView();
                     else if (typeof saveView === 'function') saveView(window.location.hash);
                 });
@@ -294,14 +330,18 @@
             const snap = saved || readHireView() || {};
             if (snap.hireTab) activateTabGroup('data-hire-tab', 'data-hire-panel', snap.hireTab);
             if (snap.hireTab === 'jd' && snap.jdTab) activateTabGroup('data-jd-tab', 'data-jd-panel', snap.jdTab);
-            if (snap.hireTab === 'selecao' && snap.selTab) activateTabGroup('data-sel-tab', 'data-sel-panel', snap.selTab);
-            if (snap.hireTab === 'selecao' && snap.selTab === 'cvs' && snap.cvId && showCv) showCv(snap.cvId);
+            if (snap.hireTab === 'selecao') {
+                const sel = normalizeSelTab(snap.selTab || 'cvs');
+                activateSelTab(sel);
+                if (sel === 'cvs' && snap.cvId && showCv) showCv(snap.cvId);
+            }
             if (typeof window.melvinHireMatrix?.refresh === 'function') {
                 try { window.melvinHireMatrix.refresh(); } catch (e) {}
             }
         }
 
         window.melvinRestoreHireTabs = restoreHireTabs;
+        window.melvinActivateSelTab = activateSelTab;
         // Restaura abas do seletivo após o boot (F5)
         setTimeout(() => restoreHireTabs(), 80);
     })();
