@@ -194,33 +194,59 @@
     (function initHireTabs() {
         const root = document.getElementById('job-bdr');
         if (!root) return;
+        const HIRE_VIEW_KEY = 'melvinHireTabs.v1';
 
-        function wireTabs(tabAttr, panelAttr) {
+        function readHireView() {
+            try { return JSON.parse(localStorage.getItem(HIRE_VIEW_KEY) || 'null'); } catch (e) { return null; }
+        }
+        function writeHireView(partial) {
+            try {
+                const cur = readHireView() || {};
+                localStorage.setItem(HIRE_VIEW_KEY, JSON.stringify(Object.assign(cur, partial, { ts: Date.now() })));
+            } catch (e) {}
+        }
+
+        function activateTabGroup(tabAttr, panelAttr, id) {
+            if (!id) return false;
+            const tabs = root.querySelectorAll(`[${tabAttr}]`);
+            const panels = root.querySelectorAll(`[${panelAttr}]`);
+            const has = [...tabs].some((t) => t.getAttribute(tabAttr) === id);
+            if (!has) return false;
+            tabs.forEach((t) => {
+                const on = t.getAttribute(tabAttr) === id;
+                t.classList.toggle('is-active', on);
+                t.setAttribute('aria-selected', on ? 'true' : 'false');
+            });
+            panels.forEach((panel) => {
+                const match = panel.getAttribute(panelAttr) === id;
+                panel.classList.toggle('is-active', match);
+                if (match) panel.removeAttribute('hidden');
+                else panel.setAttribute('hidden', '');
+            });
+            return true;
+        }
+
+        function wireTabs(tabAttr, panelAttr, saveKey) {
             const tabs = root.querySelectorAll(`[${tabAttr}]`);
             const panels = root.querySelectorAll(`[${panelAttr}]`);
             if (!tabs.length) return;
             tabs.forEach((tab) => {
                 tab.addEventListener('click', () => {
                     const id = tab.getAttribute(tabAttr);
-                    tabs.forEach((t) => {
-                        t.classList.toggle('is-active', t === tab);
-                        t.setAttribute('aria-selected', t === tab ? 'true' : 'false');
-                    });
-                    panels.forEach((panel) => {
-                        const match = panel.getAttribute(panelAttr) === id;
-                        panel.classList.toggle('is-active', match);
-                        if (match) panel.removeAttribute('hidden');
-                        else panel.setAttribute('hidden', '');
-                    });
+                    activateTabGroup(tabAttr, panelAttr, id);
+                    if (saveKey) writeHireView({ [saveKey]: id });
+                    if (typeof scheduleSaveView === 'function') scheduleSaveView();
+                    else if (typeof saveView === 'function') saveView(window.location.hash);
                 });
             });
         }
 
-        wireTabs('data-hire-tab', 'data-hire-panel');
-        wireTabs('data-jd-tab', 'data-jd-panel');
-        wireTabs('data-sel-tab', 'data-sel-panel');
+        wireTabs('data-hire-tab', 'data-hire-panel', 'hireTab');
+        wireTabs('data-jd-tab', 'data-jd-panel', 'jdTab');
+        wireTabs('data-sel-tab', 'data-sel-panel', 'selTab');
 
         const cvBrowser = root.querySelector('#cvBrowser');
+        let showCv = null;
         if (cvBrowser) {
             const navList = cvBrowser.querySelector('.cv-nav-list');
             if (navList) {
@@ -238,7 +264,8 @@
             }
             const navItems = cvBrowser.querySelectorAll('[data-cv-nav]');
             const sheets = cvBrowser.querySelectorAll('[data-cv-sheet]');
-            function showCv(id) {
+            showCv = function (id) {
+                if (!id) return;
                 navItems.forEach((n) => n.classList.toggle('is-active', n.getAttribute('data-cv-nav') === id));
                 sheets.forEach((sheet) => {
                     const match = sheet.getAttribute('data-cv-sheet') === id;
@@ -251,13 +278,32 @@
                         sheet.style.display = 'none';
                     }
                 });
-            }
-            const firstId = navItems[0]?.getAttribute('data-cv-nav');
+                writeHireView({ cvId: id });
+            };
+            const savedHire = readHireView();
+            const firstId = savedHire && savedHire.cvId && root.querySelector(`[data-cv-nav="${savedHire.cvId}"]`)
+                ? savedHire.cvId
+                : navItems[0]?.getAttribute('data-cv-nav');
             if (firstId) showCv(firstId);
             navItems.forEach((btn) => {
                 btn.addEventListener('click', () => showCv(btn.getAttribute('data-cv-nav')));
             });
         }
+
+        function restoreHireTabs(saved) {
+            const snap = saved || readHireView() || {};
+            if (snap.hireTab) activateTabGroup('data-hire-tab', 'data-hire-panel', snap.hireTab);
+            if (snap.hireTab === 'jd' && snap.jdTab) activateTabGroup('data-jd-tab', 'data-jd-panel', snap.jdTab);
+            if (snap.hireTab === 'selecao' && snap.selTab) activateTabGroup('data-sel-tab', 'data-sel-panel', snap.selTab);
+            if (snap.hireTab === 'selecao' && snap.selTab === 'cvs' && snap.cvId && showCv) showCv(snap.cvId);
+            if (typeof window.melvinHireMatrix?.refresh === 'function') {
+                try { window.melvinHireMatrix.refresh(); } catch (e) {}
+            }
+        }
+
+        window.melvinRestoreHireTabs = restoreHireTabs;
+        // Restaura abas do seletivo após o boot (F5)
+        setTimeout(() => restoreHireTabs(), 80);
     })();
 
     // D1–D35 Outbound · Fluxo Sinais / Régua tabs
@@ -1143,18 +1189,49 @@
         if (arrow) arrow.textContent = '▲';
     }
 
-    // Mantém a mesma página + scroll ao atualizar (F5 / Ctrl+R)
-    const VIEW_KEY = 'melvinView.v1';
+    // Mantém a mesma página + abas + scroll ao atualizar (F5 / Ctrl+R)
+    const VIEW_KEY = 'melvinView.v2';
+    const VIEW_KEY_LEGACY = 'melvinView.v1';
     try { if ('scrollRestoration' in history) history.scrollRestoration = 'manual'; } catch (e) {}
 
     function readSavedView() {
-        try { return JSON.parse(sessionStorage.getItem(VIEW_KEY) || 'null'); } catch (e) { return null; }
+        try {
+            const raw = localStorage.getItem(VIEW_KEY) || sessionStorage.getItem(VIEW_KEY) || sessionStorage.getItem(VIEW_KEY_LEGACY);
+            return raw ? JSON.parse(raw) : null;
+        } catch (e) { return null; }
+    }
+    function captureHireSnapshot() {
+        const root = document.getElementById('job-bdr');
+        if (!root) return {};
+        const hireTab = root.querySelector('[data-hire-tab].is-active')?.getAttribute('data-hire-tab') || null;
+        const jdTab = root.querySelector('[data-jd-tab].is-active')?.getAttribute('data-jd-tab') || null;
+        const selTab = root.querySelector('[data-sel-tab].is-active')?.getAttribute('data-sel-tab') || null;
+        const cvId = root.querySelector('[data-cv-nav].is-active')?.getAttribute('data-cv-nav') || null;
+        return { hireTab, jdTab, selTab, cvId };
     }
     function saveView(hash, scrollY) {
         try {
             const h = hash || window.location.hash || '#home-dashboard';
             const y = typeof scrollY === 'number' ? scrollY : (window.scrollY || window.pageYOffset || 0);
-            sessionStorage.setItem(VIEW_KEY, JSON.stringify({ hash: h, scrollY: y, ts: Date.now() }));
+            const payload = Object.assign({
+                hash: h,
+                scrollY: y,
+                ts: Date.now()
+            }, h === '#job-bdr' || (h && h.indexOf('job-bdr') >= 0) ? captureHireSnapshot() : {});
+            const raw = JSON.stringify(payload);
+            localStorage.setItem(VIEW_KEY, raw);
+            sessionStorage.setItem(VIEW_KEY, raw);
+            if (payload.hireTab) {
+                try {
+                    localStorage.setItem('melvinHireTabs.v1', JSON.stringify({
+                        hireTab: payload.hireTab,
+                        jdTab: payload.jdTab,
+                        selTab: payload.selTab,
+                        cvId: payload.cvId,
+                        ts: Date.now()
+                    }));
+                } catch (e2) {}
+            }
         } catch (e) {}
     }
     let saveViewTimer = null;
@@ -1164,6 +1241,9 @@
     }
     window.addEventListener('scroll', scheduleSaveView, { passive: true });
     window.addEventListener('beforeunload', () => saveView(window.location.hash));
+    document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'hidden') saveView(window.location.hash);
+    });
 
     function forceScreenChange(hash, options = {}) {
         // Plano de Ação unificado no Roadmap
@@ -1234,6 +1314,10 @@
         if (openCronoTab && typeof activateCronoTab === 'function') {
             activateCronoTab(openCronoTab);
         }
+        if (pageHash === '#job-bdr' && typeof window.melvinRestoreHireTabs === 'function') {
+            const saved = readSavedView();
+            window.melvinRestoreHireTabs(saved);
+        }
         closeMobileSidebar();
         return true;
     }
@@ -1265,8 +1349,8 @@
         let hash = urlHash;
         let restoreY = null;
 
+        // Preferência: URL com hash válido; senão, última página salva (F5 sem perder o lugar)
         if (hash && document.querySelector(hash)) {
-            // Refresh na mesma URL: restaura o scroll guardado dessa página
             if (saved && saved.hash === hash && typeof saved.scrollY === 'number') {
                 restoreY = saved.scrollY;
             }
@@ -1280,6 +1364,14 @@
 
         if (!forceScreenChange(hash, { restoreScrollY: restoreY }) && document.getElementById('home-dashboard')) {
             forceScreenChange('#home-dashboard');
+        }
+        if (hash === '#job-bdr' && typeof window.melvinRestoreHireTabs === 'function') {
+            window.melvinRestoreHireTabs(saved);
+        }
+        // Reforço do scroll depois das abas (layout muda)
+        if (typeof restoreY === 'number') {
+            requestAnimationFrame(() => window.scrollTo({ top: restoreY, behavior: 'auto' }));
+            setTimeout(() => window.scrollTo({ top: restoreY, behavior: 'auto' }), 120);
         }
     }, 50);
 });

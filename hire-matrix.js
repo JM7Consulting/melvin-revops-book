@@ -1317,9 +1317,9 @@
         const decisionRoot = document.getElementById('hireDecisionRoot');
         if (!matrixRoot && !processRoot && !decisionRoot) return;
         state = loadState();
-        // Sempre reabre a Matriz no Ranking com todos os candidatos (evita “sumiu” por filtro/view antiga)
-        state.view = 'ranking';
-        state.filter = 'all';
+        // Só corrige view inválida — não reseta Ranking a cada F5
+        if (!['ranking', 'planilha', 'comparar', 'pesos'].includes(state.view)) state.view = 'ranking';
+        if (!['all', 'hunter', 'go', 'star', 'pending', 'knock'].includes(state.filter)) state.filter = 'all';
         saveState(state);
         syncTheme();
         new MutationObserver(syncTheme).observe(document.body, { attributes: true, attributeFilter: ['class'] });
