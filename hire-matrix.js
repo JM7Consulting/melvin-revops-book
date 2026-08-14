@@ -735,22 +735,20 @@
         const top = all.find((r) => !r.c.eliminated) || null;
         const stars = all.filter((r) => r.c.starred && !r.c.eliminated).length;
         const elimN = all.filter((r) => r.c.eliminated).length;
-        const hunters = all.filter((r) => !r.c.eliminated && (r.c.screen.outbound === 'bdr' || r.c.screen.outbound === 'hunter')).length;
         const activeN = all.filter((r) => !r.c.eliminated).length;
         const kpis = `
             <div class="mx-kpis">
                 <article class="mx-kpi"><span>No processo</span><strong>${activeN}</strong></article>
-                <article class="mx-kpi"><span>Hunter / BDR / Out</span><strong>${hunters}</strong></article>
-                <article class="mx-kpi"><span>Participando do processo</span><strong>${stars}</strong></article>
+                <article class="mx-kpi"><span>Na fase de entrevistas</span><strong>${stars}</strong></article>
                 <article class="mx-kpi"><span>Eliminados</span><strong>${elimN}</strong></article>
                 <article class="mx-kpi"><span>Líder agora</span><strong>${top ? esc(top.c.name.split(' ')[0]) : '—'}</strong><small>${top ? top.s.index + ' pts índice' : ''}</small></article>
             </div>
             <div class="mx-filters">
-                ${[['all', 'Todos'], ['hunter', 'BDR / prospecção ativa'], ['go', 'Avançar (≥66)'], ['star', 'Participando do processo'], ['pending', 'Falta entrevista'], ['elim', 'Eliminados']].map(([id, lab]) =>
+                ${[['all', 'Todos'], ['hunter', 'BDR / prospecção ativa'], ['go', 'Avançar (≥66)'], ['star', 'Na fase de entrevistas'], ['pending', 'Falta entrevista'], ['elim', 'Eliminados']].map(([id, lab]) =>
                     `<button type="button" class="mx-chip${filter === id ? ' is-on' : ''}" data-mx-filter="${id}">${lab}</button>`
                 ).join('')}
             </div>
-            <p class="mx-help">★ = Participando do processo (vai para Entrevistas). Use <b>Eliminar</b> a qualquer momento (ex.: não enviou o áudio no prazo) — sai daqui, perde o # do ranking e fica em Eliminados. Reativar devolve a posição.</p>`;
+            <p class="mx-help">★ = Na fase de entrevistas. Use <b>Eliminar</b> a qualquer momento (ex.: não enviou o áudio no prazo) — sai daqui, perde o # do ranking e fica em Eliminados. Reativar devolve a posição.</p>`;
         const cards = rows.length ? rows.map((r) => {
             const rank = ranks[r.c.id];
             const checked = state.compare.includes(r.c.id) ? 'checked' : '';
@@ -760,7 +758,7 @@
                     <span class="mx-rank">${elim || rank == null ? '—' : '#' + rank}</span>
                     ${elim ? '<span class="mx-elim-badge">Eliminado</span>' : ''}
                     <div class="mx-card-top-actions">
-                        <button type="button" class="mx-star${r.c.starred ? ' is-on' : ''}" data-mx-star="${esc(r.c.id)}" title="Participando do processo" ${elim ? 'disabled' : ''}>★</button>
+                        <button type="button" class="mx-star${r.c.starred ? ' is-on' : ''}" data-mx-star="${esc(r.c.id)}" title="Na fase de entrevistas" ${elim ? 'disabled' : ''}>★</button>
                         ${elim ? '' : `<label class="mx-cmp"><input type="checkbox" data-mx-cmp="${esc(r.c.id)}" ${checked}> comparar</label>`}
                     </div>
                 </div>
