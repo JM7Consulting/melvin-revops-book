@@ -28,7 +28,7 @@
         return {
             role: 'BDR Outbound · Melvin',
             offer: 'PJ · 160h/mês · R$ 3.500 + variável',
-            rev: 4,
+            rev: 5,
             screen: [
                 {
                     id: 'age',
@@ -258,7 +258,7 @@
                     prompt: 'Quando você começaria? Há aviso prévio, outro processo ou restrição de horário (160h / home office)?'
                 }
             ],
-            interviewWeight: 0,
+            interviewWeight: 25,
             bands: [
                 { id: 'muito-quente', label: 'Muito quente', minRaw: 30, minIndex: 82, color: '#34d399' },
                 { id: 'quente', label: 'Quente', minRaw: 25, minIndex: 70, color: '#fbbf24' },
@@ -388,7 +388,10 @@
                 if (saved.config.role) cfg.role = saved.config.role;
                 if (saved.config.offer) cfg.offer = saved.config.offer;
             }
-            cfg.rev = 4;
+            if (Number((saved.config && saved.config.rev) || 0) < 5 && cfg.interviewWeight === 0) {
+                cfg.interviewWeight = defaultConfig().interviewWeight;
+            }
+            cfg.rev = 5;
             const seeds = base.candidates;
             const savedById = {};
             if (Array.isArray(saved.candidates)) {
@@ -748,7 +751,7 @@
                     `<button type="button" class="mx-chip${filter === id ? ' is-on' : ''}" data-mx-filter="${id}">${lab}</button>`
                 ).join('')}
             </div>
-            <p class="mx-help">★ = Na fase de entrevistas. Use <b>Eliminar</b> a qualquer momento (ex.: não enviou o áudio no prazo) — sai daqui, perde o # do ranking e fica em Eliminados. Reativar devolve a posição.</p>`;
+            <p class="mx-help">★ = Na fase de entrevistas. Notas oficiais (2 / 3.1 / 3.2 / 4) e a média do roteiro de apoio (peso ${state.config.interviewWeight}) entram no índice; em branco não puxa para baixo. Use <b>Eliminar</b> a qualquer momento — sai daqui, perde o # e fica em Eliminados. Reativar devolve a posição.</p>`;
         const cards = rows.length ? rows.map((r) => {
             const rank = ranks[r.c.id];
             const checked = state.compare.includes(r.c.id) ? 'checked' : '';
@@ -769,8 +772,8 @@
                 <div class="mx-meters">
                     <div><span>Índice R&S</span><b>${r.s.index}</b><i style="width:${r.s.index}%"></i></div>
                     <div><span>Pontos brutos</span><b>${r.s.raw}</b></div>
+                    <div><span>Roteiro</span><b>${r.s.ivAvg == null ? '—' : r.s.ivAvg.toFixed(1)}</b></div>
                     <div><span>Calor</span><b>${esc(r.s.heat.label)}</b></div>
-                    <div><span>Preenchido</span><b>${r.s.coverage}%</b></div>
                 </div>
                 <p class="mx-mini">${elim
                     ? '⛔ ' + esc(r.c.eliminateReason || 'Eliminado do processo')
@@ -863,9 +866,10 @@
                     <p>${esc(q.prompt)}</p>
                 </article>`;
             }).join('');
+            const ivw = cfg.interviewWeight || 0;
             const hint = pending.length
-                ? `<p class="mx-mini">${pending.length} pergunta(s) ainda em branco — não entram no índice; servem de evidência para a nota oficial da fase.</p>`
-                : `<p class="mx-mini">Roteiro preenchido. Lance a nota oficial da fase acima.</p>`;
+                ? `<p class="mx-mini">${pending.length} pergunta(s) em branco — não puxam o ranking. As notas preenchidas entram no índice (média × peso ${ivw}).</p>`
+                : `<p class="mx-mini">Média ${s.ivAvg == null ? '—' : s.ivAvg.toFixed(1)}/5 já entra no ranking (peso ${ivw}). A nota oficial da fase acima continua valendo à parte.</p>`;
             return `<h4 class="mx-h4">${esc(title)}</h4>${hint}${cards}`;
         };
         return `<div class="mx-iv">
@@ -877,7 +881,7 @@
                 <div class="mx-iv-head">
                     <div>
                         <h3><span class="mx-iv-rank">#${ranks[focus.id]}</span> ${esc(focus.name)}</h3>
-                        <p>${esc(s.reco.label)} · índice ${s.index} · ${esc(gateLine(focus))}</p>
+                        <p>${esc(s.reco.label)} · índice ${s.index}${s.ivAvg == null ? '' : ' · roteiro ' + s.ivAvg.toFixed(1) + '/5'} · ${esc(gateLine(focus))}</p>
                     </div>
                     <div class="mx-iv-head-actions">
                         <label class="mx-done-check">
@@ -898,7 +902,7 @@
                         <li><b>Conversa final com CSO</b> — nota 1–5.</li>
                     </ol>
                 </div>
-                <h4 class="mx-h4">Notas oficiais das fases (entram no índice)</h4>
+                <h4 class="mx-h4">Notas oficiais das fases (entram no índice${(cfg.process || []).length ? ', pesos ' + (cfg.process || []).map((g) => g.weight).join(' + ') : ''})</h4>
                 ${gates}
                 <label class="mx-notes">Evidências do case / role-play / CSO
                     <textarea data-mx-procnote="${esc(focus.id)}" rows="3" placeholder="Link ou recado do áudio de 30s, como foi a abertura, o que o CSO combinou…">${esc(focus.processNote || '')}</textarea>
@@ -956,8 +960,11 @@
         const cfg = state.config;
         const wScreen = cfg.screen.reduce((a, c) => a + Number(c.weight || 0), 0);
         const wProc = (cfg.process || []).reduce((a, g) => a + Number(g.weight || 0), 0);
-        const total = wScreen + wProc + Number(cfg.interviewWeight || 0);
-        const warn = Math.abs(total - 100) > 0.5 ? `<p class="mx-warn">Soma dos pesos = ${total}. Ideal: 100.</p>` : `<p class="mx-ok">Pesos somam ${total}.</p>`;
+        const ivw = Number(cfg.interviewWeight || 0);
+        const baseW = wScreen + wProc;
+        const warn = Math.abs(baseW - 100) > 0.5
+            ? `<p class="mx-warn">Triagem + fases oficiais = ${baseW}. Ideal: 100 (o roteiro é peso extra).</p>`
+            : `<p class="mx-ok">Triagem + fases oficiais = ${baseW}. Roteiro de apoio: peso ${ivw} extra (média Likert entra no índice).</p>`;
         const legalOn = cfg.screen.some((c) => c.legalRisk && Number(c.weight) > 0);
         const rows = cfg.screen.map((c) => `<tr>
             <td>${esc(c.label)}${c.legalRisk ? ' <em class="mx-legal">risco jurídico · Lei 9.029</em>' : ''}<div class="mx-hint">${esc(c.hint || '')}</div></td>
@@ -984,7 +991,7 @@
             <div class="mx-table-wrap"><table class="mx-table"><thead><tr><th>Critério</th><th>Peso</th><th>Opções (nota)</th></tr></thead><tbody>
             ${rows}
             ${(cfg.process || []).map((g) => `<tr><td>${esc(g.step)} · ${esc(g.label)}<div class="mx-hint">${esc(g.prompt)}</div></td><td><input type="number" min="0" max="40" step="1" value="${g.weight}" data-mx-procw="${esc(g.id)}"></td><td>Nota 1–5 · em branco = fase não feita</td></tr>`).join('')}
-            <tr><td>Roteiro de apoio (média 0–5, opcional)</td><td><input type="number" min="0" max="50" value="${cfg.interviewWeight}" data-mx-ivw></td><td>${cfg.interview.length} perguntas · padrão 0 (não entra no índice)</td></tr>
+            <tr><td>Roteiro de apoio (média 0–5 das perguntas preenchidas)</td><td><input type="number" min="0" max="50" value="${cfg.interviewWeight}" data-mx-ivw></td><td>${cfg.interview.length} perguntas · padrão ${ivw} · em branco não entra</td></tr>
             </tbody></table></div>
             <h4 class="mx-h4">Faixas de calor (pontos brutos, como na Excel)</h4>
             <div class="mx-table-wrap"><table class="mx-table"><thead><tr><th>Faixa</th><th>Mín. bruto</th><th>Mín. índice</th></tr></thead><tbody>${bands}</tbody></table></div>
