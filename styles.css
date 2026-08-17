@@ -11156,6 +11156,7 @@ tr.is-elim-row td { opacity: 0.75; background: rgba(127, 29, 29, 0.08); }
 }
 .mx-q--gate[data-gate-score="none"] header strong,
 .mx-q--gate[data-gate-score="none"] p { color: #334155; }
+.mx-q--gate[data-gate-score="0"],
 .mx-q--gate[data-gate-score="1"] {
   background: #fee2e2;
   border-color: rgba(185, 28, 28, 0.35);
@@ -11176,6 +11177,8 @@ tr.is-elim-row td { opacity: 0.75; background: rgba(127, 29, 29, 0.08); }
   background: #bbf7d0;
   border-color: rgba(4, 120, 87, 0.45);
 }
+.mx-q--gate[data-gate-score="0"] header strong,
+.mx-q--gate[data-gate-score="0"] p,
 .mx-q--gate[data-gate-score="1"] header strong,
 .mx-q--gate[data-gate-score="1"] p { color: #7f1d1d; }
 .mx-q--gate[data-gate-score="2"] header strong,
@@ -11335,7 +11338,9 @@ body.light-mode .mx-shell .mx-q--gate[data-gate-score="none"],
   background: #ffffff !important;
   border-color: rgba(15, 23, 42, 0.14) !important;
 }
+body.light-mode .mx-shell .mx-q--gate[data-gate-score="0"],
 body.light-mode .mx-shell .mx-q--gate[data-gate-score="1"],
+.mx-shell[data-theme="light"] .mx-q--gate[data-gate-score="0"],
 .mx-shell[data-theme="light"] .mx-q--gate[data-gate-score="1"] {
   background: #fee2e2 !important;
   border-color: rgba(185, 28, 28, 0.35) !important;
@@ -11360,8 +11365,12 @@ body.light-mode .mx-shell .mx-q--gate[data-gate-score="5"],
   background: #bbf7d0 !important;
   border-color: rgba(4, 120, 87, 0.45) !important;
 }
+body.light-mode .mx-shell .mx-q--gate[data-gate-score="0"] header strong,
+body.light-mode .mx-shell .mx-q--gate[data-gate-score="0"] p,
 body.light-mode .mx-shell .mx-q--gate[data-gate-score="1"] header strong,
 body.light-mode .mx-shell .mx-q--gate[data-gate-score="1"] p,
+.mx-shell[data-theme="light"] .mx-q--gate[data-gate-score="0"] header strong,
+.mx-shell[data-theme="light"] .mx-q--gate[data-gate-score="0"] p,
 .mx-shell[data-theme="light"] .mx-q--gate[data-gate-score="1"] header strong,
 .mx-shell[data-theme="light"] .mx-q--gate[data-gate-score="1"] p { color: #7f1d1d !important; }
 body.light-mode .mx-shell .mx-q--gate[data-gate-score="2"] header strong,

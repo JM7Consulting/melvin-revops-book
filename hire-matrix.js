@@ -856,8 +856,9 @@
             const pending = qs.filter((q) => !focus.interview[q.id]);
             const cards = qs.map((q) => {
                 const val = focus.interview[q.id] || '';
+                const scoreAttr = val === '' || val == null ? 'none' : String(val);
                 const opts = LIKERT.map((o) => `<option value="${esc(o.value)}" ${String(val) === String(o.value) ? 'selected' : ''}>${esc(o.label)}</option>`).join('');
-                return `<article class="mx-q">
+                return `<article class="mx-q mx-q--gate" data-gate-score="${esc(scoreAttr)}">
                     <header><strong>${esc(q.label)}</strong><select data-mx-iv="${esc(focus.id)}" data-q="${esc(q.id)}">${opts}</select></header>
                     <p>${esc(q.prompt)}</p>
                 </article>`;
