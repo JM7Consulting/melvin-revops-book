@@ -1,4 +1,1093 @@
 {
   "v": 1,
-  "publishedAt": null
+  "publishedAt": "2026-08-18T20:49:31.797Z",
+  "config": {
+    "role": "BDR Outbound · Melvin",
+    "offer": "PJ · 160h/mês · R$ 3.500 + variável",
+    "rev": 5,
+    "screen": [
+      {
+        "id": "age",
+        "label": "Idade / senioridade",
+        "hint": "Critério legado da planilha. Use com cautela (risco de viés).",
+        "weight": 4,
+        "options": [
+          {
+            "value": "",
+            "label": "— não perguntado",
+            "points": null,
+            "knockout": false
+          },
+          {
+            "value": "18-21",
+            "label": "18 a 21",
+            "points": 2,
+            "knockout": false
+          },
+          {
+            "value": "21-25",
+            "label": "21 a 25",
+            "points": 3,
+            "knockout": false
+          },
+          {
+            "value": "25-30",
+            "label": "25 a 30",
+            "points": 4,
+            "knockout": false
+          },
+          {
+            "value": "30-40",
+            "label": "30 a 40",
+            "points": 5,
+            "knockout": false
+          },
+          {
+            "value": "40+",
+            "label": "mais de 40",
+            "points": 2,
+            "knockout": false
+          }
+        ]
+      },
+      {
+        "id": "education",
+        "label": "Formação",
+        "hint": "Modelo original: superior em andamento pontua acima do completo.",
+        "weight": 6,
+        "options": [
+          {
+            "value": "",
+            "label": "— não perguntado",
+            "points": null,
+            "knockout": false
+          },
+          {
+            "value": "medio",
+            "label": "Ensino Médio",
+            "points": 0,
+            "knockout": false
+          },
+          {
+            "value": "superior-andamento",
+            "label": "Superior em andamento",
+            "points": 5,
+            "knockout": false
+          },
+          {
+            "value": "superior-completo",
+            "label": "Superior completo",
+            "points": 4,
+            "knockout": false
+          },
+          {
+            "value": "pos",
+            "label": "Pós-graduação",
+            "points": 3,
+            "knockout": false
+          }
+        ]
+      },
+      {
+        "id": "marital",
+        "label": "Estado civil",
+        "hint": "Legado da planilha. Lei 9.029/95 — peso 0 por padrão (não usar em decisão).",
+        "weight": 0,
+        "legalRisk": true,
+        "options": [
+          {
+            "value": "",
+            "label": "— não usar",
+            "points": null,
+            "knockout": false
+          },
+          {
+            "value": "casado",
+            "label": "Casado(a)",
+            "points": 5,
+            "knockout": false
+          },
+          {
+            "value": "solteiro",
+            "label": "Solteiro(a)",
+            "points": 3,
+            "knockout": false
+          }
+        ]
+      },
+      {
+        "id": "salary",
+        "label": "Expectativa salarial vs oferta",
+        "hint": "Oferta atual: R$ 3.500 + bônus/comissão, PJ 160h.",
+        "weight": 8,
+        "options": [
+          {
+            "value": "",
+            "label": "— não perguntado",
+            "points": null,
+            "knockout": false
+          },
+          {
+            "value": "abaixo",
+            "label": "Abaixo",
+            "points": 4,
+            "knockout": false
+          },
+          {
+            "value": "compativel",
+            "label": "Compatível",
+            "points": 5,
+            "knockout": false
+          },
+          {
+            "value": "ligeiro",
+            "label": "Ligeiramente acima",
+            "points": 2,
+            "knockout": false
+          },
+          {
+            "value": "muito-acima",
+            "label": "Muito acima",
+            "points": -5,
+            "knockout": true
+          }
+        ]
+      },
+      {
+        "id": "crm",
+        "label": "Experiência com ERP / CRM / afins",
+        "weight": 8,
+        "options": [
+          {
+            "value": "",
+            "label": "— não perguntado",
+            "points": null,
+            "knockout": false
+          },
+          {
+            "value": "sim",
+            "label": "Sim",
+            "points": 5,
+            "knockout": false
+          },
+          {
+            "value": "nao",
+            "label": "Não",
+            "points": 3,
+            "knockout": false
+          }
+        ]
+      },
+      {
+        "id": "service",
+        "label": "Atendimento ao cliente",
+        "weight": 6,
+        "options": [
+          {
+            "value": "",
+            "label": "— não perguntado",
+            "points": null,
+            "knockout": false
+          },
+          {
+            "value": "online",
+            "label": "Meios online apenas",
+            "points": 4,
+            "knockout": false
+          },
+          {
+            "value": "telefone-online",
+            "label": "Telefone e meios online",
+            "points": 5,
+            "knockout": false
+          },
+          {
+            "value": "telefone",
+            "label": "Por telefone, apenas",
+            "points": 3,
+            "knockout": false
+          },
+          {
+            "value": "presencial",
+            "label": "Somente presencial",
+            "points": 2,
+            "knockout": false
+          },
+          {
+            "value": "pouca",
+            "label": "Pouca ou nenhuma",
+            "points": 0,
+            "knockout": false
+          }
+        ]
+      },
+      {
+        "id": "sales1",
+        "label": "Experiência comercial 1 (principal)",
+        "hint": "Não some SDR com BDR. SDR inbound ≠ hunter.",
+        "weight": 12,
+        "options": [
+          {
+            "value": "",
+            "label": "— não perguntado",
+            "points": null,
+            "knockout": false
+          },
+          {
+            "value": "bdr-out",
+            "label": "BDR / Outbound (cargo ou função)",
+            "points": 5,
+            "knockout": false
+          },
+          {
+            "value": "sdr-hunter",
+            "label": "SDR hunter · prospecção ativa",
+            "points": 5,
+            "knockout": false
+          },
+          {
+            "value": "sdr-in",
+            "label": "SDR inbound · lead que chega",
+            "points": 3,
+            "knockout": false
+          },
+          {
+            "value": "complexas",
+            "label": "Closer / AM / vendas complexas",
+            "points": 3,
+            "knockout": false
+          },
+          {
+            "value": "tele",
+            "label": "Telemarketing",
+            "points": 2,
+            "knockout": false
+          },
+          {
+            "value": "ti",
+            "label": "Tecnologia da Informação",
+            "points": 2,
+            "knockout": false
+          },
+          {
+            "value": "outras",
+            "label": "Outras na área comercial",
+            "points": 2,
+            "knockout": false
+          }
+        ]
+      },
+      {
+        "id": "sales2",
+        "label": "Experiência comercial 2 (complementar)",
+        "weight": 8,
+        "options": [
+          {
+            "value": "",
+            "label": "— não perguntado",
+            "points": null,
+            "knockout": false
+          },
+          {
+            "value": "bdr-out",
+            "label": "BDR / Outbound (cargo ou função)",
+            "points": 5,
+            "knockout": false
+          },
+          {
+            "value": "sdr-hunter",
+            "label": "SDR hunter · prospecção ativa",
+            "points": 5,
+            "knockout": false
+          },
+          {
+            "value": "sdr-in",
+            "label": "SDR inbound · lead que chega",
+            "points": 3,
+            "knockout": false
+          },
+          {
+            "value": "complexas",
+            "label": "Closer / AM / vendas complexas",
+            "points": 3,
+            "knockout": false
+          },
+          {
+            "value": "tele",
+            "label": "Telemarketing",
+            "points": 2,
+            "knockout": false
+          },
+          {
+            "value": "ti",
+            "label": "Tecnologia da Informação",
+            "points": 2,
+            "knockout": false
+          },
+          {
+            "value": "outras",
+            "label": "Outras na área comercial",
+            "points": 2,
+            "knockout": false
+          }
+        ]
+      },
+      {
+        "id": "outbound",
+        "label": "Prospecção ativa (BDR / Outbound)",
+        "hint": "Critério decisivo desta vaga. Título SDR não basta: vale quem abriu conta fria (lista ICP, cold call, LinkedIn, Apollo, cadência outbound). SDR inbound (tráfego pago / lead que chega) pontua menos.",
+        "weight": 20,
+        "options": [
+          {
+            "value": "",
+            "label": "— não perguntado",
+            "points": null,
+            "knockout": false
+          },
+          {
+            "value": "bdr",
+            "label": "Cargo BDR e/ou outbound como função",
+            "points": 5,
+            "knockout": false
+          },
+          {
+            "value": "hunter",
+            "label": "Título SDR/outro, mas prospecção ativa clara",
+            "points": 5,
+            "knockout": false
+          },
+          {
+            "value": "misto",
+            "label": "Inbound + outbound no mesmo ciclo",
+            "points": 4,
+            "knockout": false
+          },
+          {
+            "value": "sdr-in",
+            "label": "SDR inbound / qualifica demanda gerada",
+            "points": 2,
+            "knockout": false
+          },
+          {
+            "value": "farmer",
+            "label": "Closer / AM / carteira (pouca abertura fria)",
+            "points": 1,
+            "knockout": false
+          },
+          {
+            "value": "nenhuma",
+            "label": "Sem evidência de hunter",
+            "points": 0,
+            "knockout": false
+          }
+        ]
+      },
+      {
+        "id": "vertical",
+        "label": "Fit de vertical (SaaS / industrial)",
+        "hint": "Melvin = SaaS industrial. Hunter de software > closer de infoproduto.",
+        "weight": 8,
+        "options": [
+          {
+            "value": "",
+            "label": "— não perguntado",
+            "points": null,
+            "knockout": false
+          },
+          {
+            "value": "saas-ind",
+            "label": "SaaS e/ou industrial",
+            "points": 5,
+            "knockout": false
+          },
+          {
+            "value": "saas",
+            "label": "SaaS / tech (sem indústria)",
+            "points": 4,
+            "knockout": false
+          },
+          {
+            "value": "b2b",
+            "label": "B2B comercial genérico",
+            "points": 3,
+            "knockout": false
+          },
+          {
+            "value": "b2c",
+            "label": "B2C / varejo / high ticket edu",
+            "points": 2,
+            "knockout": false
+          },
+          {
+            "value": "ops",
+            "label": "Ops / projetos / qualidade (sem hunter)",
+            "points": 1,
+            "knockout": false
+          }
+        ]
+      }
+    ],
+    "process": [
+      {
+        "id": "case",
+        "step": "2",
+        "label": "Case curto — áudio de como 'venderia' o MELVIN (máx. 30s)",
+        "prompt": "Nota 1–5 no áudio de até 30 segundos: como você venderia a Melvin para um decisor de manutenção. 1 = genérico, jargão de startup, pitch de produto ou estourou o tempo. 3 = claro, mas raso (fala do app sem dor de PCM). 5 = ≤30s, fala com operação industrial, dor (Excel / corretiva / disponibilidade), gancho e pedido de conversa.",
+        "weight": 6
+      },
+      {
+        "id": "fit",
+        "step": "3.1",
+        "label": "Entrevista de fit",
+        "prompt": "Nota 1–5 da fase 3.1 (não confundir com o roteiro de apoio abaixo). 1 = não quer hunter / rejeita oferta. 3 = cabe, sem fome. 5 = fome de outbound + fit Melvin (PJ/160h) + coachability.",
+        "weight": 5
+      },
+      {
+        "id": "roleplay",
+        "step": "3.2",
+        "label": "Role-play de abertura Outbound",
+        "prompt": "Nota 1–5. PCM de indústria que nunca ouviu a Melvin — 30 segundos. 1 = travou ou fez pitch de produto. 3 = educado, sem gancho. 5 = dor, pergunta, pedido de reunião.",
+        "weight": 6
+      },
+      {
+        "id": "cso",
+        "step": "4",
+        "label": "Conversa final com CSO",
+        "prompt": "Nota 1–5 da conversa com o CSO. 1 = desalinhado. 3 = CSO em dúvida. 5 = CSO recomenda contratar.",
+        "weight": 3
+      }
+    ],
+    "interview": [
+      {
+        "id": "hunter",
+        "phase": "3.1",
+        "label": "Hunter / cadência",
+        "prompt": "Me conta uma cadência recente (e-mail, call, LinkedIn, WA) do primeiro toque até SQL. O que você media? O que mudou na régua?"
+      },
+      {
+        "id": "sdrVsBdr",
+        "phase": "3.1",
+        "label": "SDR vs BDR (prospecção ativa)",
+        "prompt": "Muita gente escreve SDR e na prática fez BDR. Me prova prospecção ativa: como montava a lista (ICP), canal de 1º toque (cold call / LinkedIn / e-mail), cadência até a reunião, e o que era SQL. Se a demanda já chegava pronta (inbound / tráfego pago), diz isso com clareza."
+      },
+      {
+        "id": "crmhygiene",
+        "phase": "3.1",
+        "label": "Higiene de CRM",
+        "prompt": "Como o CRM fica no seu dia a dia? Me dá um exemplo de Lost com motivo e um follow-up que você não deixou morrer."
+      },
+      {
+        "id": "coldcall",
+        "phase": "3.2",
+        "label": "Apoio 3.2 · Cold call / abertura",
+        "prompt": "Role-play de treino (a nota oficial da fase é 3.2 acima): você liga para um PCM de indústria que nunca ouviu falar da Melvin. Primeiros 30 segundos — vai."
+      },
+      {
+        "id": "resilience",
+        "phase": "3.1",
+        "label": "Resiliência a rejeição",
+        "prompt": "Última semana pesada: quantos “não”? O que você fez no dia seguinte? Exemplo concreto, não discurso."
+      },
+      {
+        "id": "icp",
+        "phase": "3.1",
+        "label": "Fit ICP industrial",
+        "prompt": "Por que manutenção industrial / PCM — e não mais um SaaS genérico? O que você já vendeu para operação/chão de fábrica?"
+      },
+      {
+        "id": "offer",
+        "phase": "3.1",
+        "label": "Fit da oferta",
+        "prompt": "PJ, 160h, home office, R$ 3.500 + variável. O que precisa ser verdade para você aceitar? Quando começa?"
+      },
+      {
+        "id": "coach",
+        "phase": "3.1",
+        "label": "Coachability",
+        "prompt": "Me conta um feedback duro que você recebeu em vendas. O que mudou na semana seguinte?"
+      },
+      {
+        "id": "comm",
+        "phase": "3.1",
+        "label": "Comunicação / clareza",
+        "prompt": "Explica a Melvin em 40 segundos para um líder de manutenção cético. Sem jargão de startup."
+      },
+      {
+        "id": "start",
+        "phase": "3.1",
+        "label": "Disponibilidade / início",
+        "prompt": "Quando você começaria? Há aviso prévio, outro processo ou restrição de horário (160h / home office)?"
+      }
+    ],
+    "interviewWeight": 25,
+    "bands": [
+      {
+        "id": "muito-quente",
+        "label": "Muito quente",
+        "minRaw": 30,
+        "minIndex": 82,
+        "color": "#34d399"
+      },
+      {
+        "id": "quente",
+        "label": "Quente",
+        "minRaw": 25,
+        "minIndex": 70,
+        "color": "#fbbf24"
+      },
+      {
+        "id": "morno",
+        "label": "Morno",
+        "minRaw": 20,
+        "minIndex": 58,
+        "color": "#fb923c"
+      },
+      {
+        "id": "frio",
+        "label": "Frio",
+        "minRaw": 15,
+        "minIndex": 45,
+        "color": "#38bdf8"
+      },
+      {
+        "id": "congelado",
+        "label": "Congelado",
+        "minRaw": 0,
+        "minIndex": 0,
+        "color": "#94a3b8"
+      }
+    ],
+    "reco": [
+      {
+        "id": "case",
+        "label": "Avançar · case + final",
+        "minIndex": 80,
+        "needInterview": true
+      },
+      {
+        "id": "entrevista",
+        "label": "Avançar · entrevista estruturada",
+        "minIndex": 66,
+        "needInterview": false
+      },
+      {
+        "id": "banco",
+        "label": "Banco / 2ª leva",
+        "minIndex": 52,
+        "needInterview": false
+      },
+      {
+        "id": "nao",
+        "label": "Não avançar agora",
+        "minIndex": 0,
+        "needInterview": false
+      }
+    ]
+  },
+  "candidates": [
+    {
+      "id": "antony-trindade",
+      "name": "Antony Trindade",
+      "screen": {
+        "age": "",
+        "education": "medio",
+        "marital": "",
+        "salary": "",
+        "crm": "sim",
+        "service": "telefone-online",
+        "sales1": "outras",
+        "sales2": "",
+        "outbound": "nenhuma",
+        "vertical": "ops"
+      },
+      "interview": {
+        "hunter": "",
+        "sdrVsBdr": "",
+        "crmhygiene": "",
+        "coldcall": "",
+        "resilience": "",
+        "icp": "",
+        "offer": "",
+        "coach": "",
+        "comm": "",
+        "start": ""
+      },
+      "process": {
+        "case": "",
+        "fit": "",
+        "roleplay": "",
+        "cso": ""
+      },
+      "interviewNote": "",
+      "processNote": "",
+      "notes": "CV: qualidade/ops (Frigelar, NET). HubSpot citado. Sem BDR/outbound — não há prospecção ativa.",
+      "starred": false,
+      "phasesComplete": false,
+      "eliminated": false,
+      "eliminateReason": "",
+      "stage": "triagem"
+    },
+    {
+      "id": "carlos-carmo",
+      "name": "Carlos Carmo",
+      "screen": {
+        "age": "",
+        "education": "medio",
+        "marital": "",
+        "salary": "",
+        "crm": "sim",
+        "service": "telefone-online",
+        "sales1": "sdr-hunter",
+        "sales2": "complexas",
+        "outbound": "hunter",
+        "vertical": "saas"
+      },
+      "interview": {
+        "hunter": "",
+        "sdrVsBdr": "",
+        "crmhygiene": "",
+        "coldcall": "",
+        "resilience": "",
+        "icp": "",
+        "offer": "",
+        "coach": "",
+        "comm": "",
+        "start": ""
+      },
+      "process": {
+        "case": "",
+        "fit": "",
+        "roleplay": "",
+        "cso": ""
+      },
+      "interviewNote": "",
+      "processNote": "",
+      "notes": "CV: título SDR, mas prospecção ativa (ligações para agendar, telefone/e-mail/WA, outbound na Diversa, Growth Machine). Conta como hunter, não como SDR inbound. Checar se ainda quer BDR (já foi exec. de contas).",
+      "starred": false,
+      "phasesComplete": false,
+      "eliminated": true,
+      "eliminateReason": "Celular inexistente,",
+      "stage": "recusado"
+    },
+    {
+      "id": "eduardo-rufino",
+      "name": "Eduardo Rufino",
+      "screen": {
+        "age": "",
+        "education": "superior-andamento",
+        "marital": "",
+        "salary": "",
+        "crm": "sim",
+        "service": "telefone-online",
+        "sales1": "sdr-hunter",
+        "sales2": "complexas",
+        "outbound": "hunter",
+        "vertical": "saas"
+      },
+      "interview": {
+        "hunter": "",
+        "sdrVsBdr": "",
+        "crmhygiene": "",
+        "coldcall": "",
+        "resilience": "",
+        "icp": "",
+        "offer": "",
+        "coach": "",
+        "comm": "",
+        "start": ""
+      },
+      "process": {
+        "case": "",
+        "fit": "",
+        "roleplay": "",
+        "cso": ""
+      },
+      "interviewNote": "",
+      "processNote": "",
+      "notes": "CV: Analista de Prospecção | SDR (abc71) + SDR Inovage (novas contas). Skills inbound/outbound. Houve AM/farmer na Ikki — na conversa separar hunter vs expansão de carteira.",
+      "starred": false,
+      "phasesComplete": false,
+      "eliminated": true,
+      "eliminateReason": "Não cumpriu o prazo / requisito",
+      "stage": "recusado"
+    },
+    {
+      "id": "gabriel-cavalcante",
+      "name": "Gabriel Cavalcante",
+      "screen": {
+        "age": "30-40",
+        "education": "superior-andamento",
+        "marital": "",
+        "salary": "compativel",
+        "crm": "sim",
+        "service": "telefone-online",
+        "sales1": "bdr-out",
+        "sales2": "complexas",
+        "outbound": "bdr",
+        "vertical": "saas"
+      },
+      "interview": {
+        "hunter": "3",
+        "sdrVsBdr": "4",
+        "crmhygiene": "4",
+        "coldcall": "4",
+        "resilience": "5",
+        "icp": "4",
+        "offer": "5",
+        "coach": "3",
+        "comm": "5",
+        "start": "5"
+      },
+      "process": {
+        "case": "5",
+        "fit": "4",
+        "roleplay": "4",
+        "cso": ""
+      },
+      "interviewNote": "Boa voz, bons detalhes, apresenta falas com mais de 30s.",
+      "processNote": "",
+      "notes": "CV: cargo SDR/BDR/Closer + outbound (EnfConcursos, BrandMonitor, InDriver). Pontua BDR. Risco: papel atual é closer/GTM — combinar se aceita executor de abertura fria.",
+      "starred": true,
+      "phasesComplete": true,
+      "eliminated": false,
+      "eliminateReason": "",
+      "stage": "final"
+    },
+    {
+      "id": "janete-pelucio",
+      "name": "Janete de Souza Pelucio",
+      "screen": {
+        "age": "",
+        "education": "pos",
+        "marital": "",
+        "salary": "",
+        "crm": "sim",
+        "service": "telefone-online",
+        "sales1": "sdr-in",
+        "sales2": "complexas",
+        "outbound": "sdr-in",
+        "vertical": "b2c"
+      },
+      "interview": {
+        "hunter": "",
+        "sdrVsBdr": "",
+        "crmhygiene": "",
+        "coldcall": "",
+        "resilience": "",
+        "icp": "",
+        "offer": "",
+        "coach": "",
+        "comm": "",
+        "start": ""
+      },
+      "process": {
+        "case": "3",
+        "fit": "",
+        "roleplay": "",
+        "cso": ""
+      },
+      "interviewNote": "",
+      "processNote": "",
+      "notes": "CV: SDR inbound (tráfego pago / Kommo) → closer high ticket. Supervisora de SDR. Não é hunter outbound. Overqualification para BDR industrial.",
+      "starred": false,
+      "phasesComplete": false,
+      "eliminated": true,
+      "eliminateReason": "Faltou na entrevista marcada e confirmada",
+      "stage": "recusado"
+    },
+    {
+      "id": "joao-erbolato",
+      "name": "João Pedro M. B. Erbolato",
+      "screen": {
+        "age": "",
+        "education": "pos",
+        "marital": "",
+        "salary": "",
+        "crm": "sim",
+        "service": "online",
+        "sales1": "outras",
+        "sales2": "",
+        "outbound": "nenhuma",
+        "vertical": "ops"
+      },
+      "interview": {
+        "hunter": "",
+        "sdrVsBdr": "",
+        "crmhygiene": "",
+        "coldcall": "",
+        "resilience": "",
+        "icp": "",
+        "offer": "",
+        "coach": "",
+        "comm": "",
+        "start": ""
+      },
+      "process": {
+        "case": "",
+        "fit": "",
+        "roleplay": "",
+        "cso": ""
+      },
+      "interviewNote": "",
+      "processNote": "",
+      "notes": "CV: implementação/processos (Meu Chapa). HubSpot inbound/outbound citado em ops — não há evidência de cadência hunter. Validar se já abriu conta fria.",
+      "starred": false,
+      "phasesComplete": false,
+      "eliminated": false,
+      "eliminateReason": "",
+      "stage": "triagem"
+    },
+    {
+      "id": "joao-camarinha",
+      "name": "João Pedro Minetti Camarinha",
+      "screen": {
+        "age": "",
+        "education": "pos",
+        "marital": "",
+        "salary": "",
+        "crm": "nao",
+        "service": "online",
+        "sales1": "outras",
+        "sales2": "",
+        "outbound": "nenhuma",
+        "vertical": "ops"
+      },
+      "interview": {
+        "hunter": "",
+        "sdrVsBdr": "",
+        "crmhygiene": "",
+        "coldcall": "",
+        "resilience": "",
+        "icp": "",
+        "offer": "",
+        "coach": "",
+        "comm": "",
+        "start": ""
+      },
+      "process": {
+        "case": "",
+        "fit": "",
+        "roleplay": "",
+        "cso": ""
+      },
+      "interviewNote": "",
+      "processNote": "",
+      "notes": "CV: gestão de projetos / Legal Ops. Relacionamento comercial ≠ prospecção ativa. Sem BDR/outbound.",
+      "starred": false,
+      "phasesComplete": false,
+      "eliminated": false,
+      "eliminateReason": "",
+      "stage": "triagem"
+    },
+    {
+      "id": "manuel-felipe",
+      "name": "Manuel Felipe Quinderé Perestrelo",
+      "screen": {
+        "age": "30-40",
+        "education": "superior-andamento",
+        "marital": "",
+        "salary": "compativel",
+        "crm": "sim",
+        "service": "telefone-online",
+        "sales1": "bdr-out",
+        "sales2": "sdr-hunter",
+        "outbound": "bdr",
+        "vertical": "b2b"
+      },
+      "interview": {
+        "hunter": "4",
+        "sdrVsBdr": "4",
+        "crmhygiene": "3",
+        "coldcall": "4",
+        "resilience": "4",
+        "icp": "3",
+        "offer": "4",
+        "coach": "4",
+        "comm": "4",
+        "start": "5"
+      },
+      "process": {
+        "case": "2",
+        "fit": "2",
+        "roleplay": "4",
+        "cso": ""
+      },
+      "interviewNote": "",
+      "processNote": "",
+      "notes": "CV: cargo BDR (Kollecta) + SDR com cold call (Wayno) + Apollo/Snov/ICP. Outbound explícito. Um dos fits mais literais da JD.",
+      "starred": true,
+      "phasesComplete": true,
+      "eliminated": false,
+      "eliminateReason": "",
+      "stage": "final"
+    },
+    {
+      "id": "michelle-nunes",
+      "name": "Michelle Santos Nunes",
+      "screen": {
+        "age": "",
+        "education": "superior-completo",
+        "marital": "",
+        "salary": "",
+        "crm": "sim",
+        "service": "telefone-online",
+        "sales1": "sdr-hunter",
+        "sales2": "sdr-hunter",
+        "outbound": "hunter",
+        "vertical": "saas"
+      },
+      "interview": {
+        "hunter": "",
+        "sdrVsBdr": "",
+        "crmhygiene": "",
+        "coldcall": "",
+        "resilience": "",
+        "icp": "",
+        "offer": "",
+        "coach": "",
+        "comm": "",
+        "start": ""
+      },
+      "process": {
+        "case": "",
+        "fit": "",
+        "roleplay": "",
+        "cso": ""
+      },
+      "interviewNote": "",
+      "processNote": "",
+      "notes": "CV: título SDR, mas prospecção ativa (LinkedIn, e-mail, telefone, WA) e “abordagem outbound” (FLUA). Curso Exact BDR 2025. Conta como hunter, não inbound.",
+      "starred": false,
+      "phasesComplete": false,
+      "eliminated": true,
+      "eliminateReason": "Não cumpriu o prazo / requisito",
+      "stage": "recusado"
+    },
+    {
+      "id": "nayara-athayde",
+      "name": "Nayara Athayde",
+      "screen": {
+        "age": "",
+        "education": "superior-completo",
+        "marital": "",
+        "salary": "",
+        "crm": "sim",
+        "service": "telefone-online",
+        "sales1": "sdr-hunter",
+        "sales2": "complexas",
+        "outbound": "misto",
+        "vertical": "saas"
+      },
+      "interview": {
+        "hunter": "",
+        "sdrVsBdr": "",
+        "crmhygiene": "",
+        "coldcall": "",
+        "resilience": "",
+        "icp": "",
+        "offer": "",
+        "coach": "",
+        "comm": "",
+        "start": ""
+      },
+      "process": {
+        "case": "",
+        "fit": "",
+        "roleplay": "",
+        "cso": ""
+      },
+      "interviewNote": "",
+      "processNote": "",
+      "notes": "CV: SDR com outbound/inbound (Omni, Sysmiddle) + Meetime. Também foi exec. de contas (ciclo completo / Miami). Mix hunter + farmer — validar fome de abertura fria.",
+      "starred": false,
+      "phasesComplete": false,
+      "eliminated": true,
+      "eliminateReason": "Desistiu/aceitou outra oportunidade",
+      "stage": "recusado"
+    },
+    {
+      "id": "osvaldo-oliveira",
+      "name": "Osvaldo Oliveira",
+      "screen": {
+        "age": "",
+        "education": "medio",
+        "marital": "",
+        "salary": "",
+        "crm": "sim",
+        "service": "telefone-online",
+        "sales1": "sdr-hunter",
+        "sales2": "complexas",
+        "outbound": "hunter",
+        "vertical": "saas"
+      },
+      "interview": {
+        "hunter": "",
+        "sdrVsBdr": "",
+        "crmhygiene": "",
+        "coldcall": "",
+        "resilience": "",
+        "icp": "",
+        "offer": "",
+        "coach": "",
+        "comm": "",
+        "start": ""
+      },
+      "process": {
+        "case": "",
+        "fit": "",
+        "roleplay": "",
+        "cso": ""
+      },
+      "interviewNote": "",
+      "processNote": "",
+      "notes": "CV: 5+ anos SDR sênior com prospecção de novos clientes, BANT/SPIN, Lusha/Apollo/LSN, “prospecção ativa”. Título SDR, DNA de BDR hunter. Validar estabilidade (jobs curtos).",
+      "starred": false,
+      "phasesComplete": false,
+      "eliminated": true,
+      "eliminateReason": "Não cumpriu o prazo / requisito",
+      "stage": "recusado"
+    },
+    {
+      "id": "poliana-sampaio",
+      "name": "Poliana Estevão Sampaio",
+      "screen": {
+        "age": "30-40",
+        "education": "superior-completo",
+        "marital": "",
+        "salary": "compativel",
+        "crm": "sim",
+        "service": "telefone-online",
+        "sales1": "complexas",
+        "sales2": "sdr-hunter",
+        "outbound": "hunter",
+        "vertical": "saas"
+      },
+      "interview": {
+        "hunter": "4",
+        "sdrVsBdr": "4",
+        "crmhygiene": "5",
+        "coldcall": "5",
+        "resilience": "5",
+        "icp": "4",
+        "offer": "5",
+        "coach": "5",
+        "comm": "4",
+        "start": "5"
+      },
+      "process": {
+        "case": "4",
+        "fit": "5",
+        "roleplay": "5",
+        "cso": ""
+      },
+      "interviewNote": "Boa voz, bons detalhes, apresenta falas com mais de 30s.",
+      "processNote": "",
+      "notes": "CV: Hunter/SDR na V4 (2018–2021) com prospecção ativa — isso pontua. Papel recente é AM/closer (TOTVS, Super Professor). Checar se volta para abertura fria.",
+      "starred": true,
+      "phasesComplete": true,
+      "eliminated": false,
+      "eliminateReason": "",
+      "stage": "final"
+    }
+  ]
 }
