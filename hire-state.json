@@ -1,6 +1,6 @@
 {
   "v": 1,
-  "publishedAt": "2026-08-18T20:49:31.797Z",
+  "publishedAt": "2026-08-18T20:51:21.085Z",
   "config": {
     "role": "BDR Outbound · Melvin",
     "offer": "PJ · 160h/mês · R$ 3.500 + variável",
@@ -907,8 +907,8 @@
         "start": "5"
       },
       "process": {
-        "case": "2",
-        "fit": "2",
+        "case": "3",
+        "fit": "3",
         "roleplay": "4",
         "cso": ""
       },
