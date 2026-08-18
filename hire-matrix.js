@@ -503,13 +503,21 @@
         sync.dirty = !!(sync.publishedHash && h !== sync.publishedHash);
     }
 
+    function sanitizeToken(value) {
+        return String(value || '')
+            .replace(/^\s*Bearer\s+/i, '')
+            .replace(/["'`]/g, '')
+            .trim();
+    }
+
     function getToken() {
-        try { return (localStorage.getItem(TOKEN_KEY) || '').trim(); } catch (e) { return ''; }
+        try { return sanitizeToken(localStorage.getItem(TOKEN_KEY) || ''); } catch (e) { return ''; }
     }
 
     function setToken(value) {
         try {
-            if (value) localStorage.setItem(TOKEN_KEY, value.trim());
+            const t = sanitizeToken(value);
+            if (t) localStorage.setItem(TOKEN_KEY, t);
             else localStorage.removeItem(TOKEN_KEY);
         } catch (e) {}
     }
@@ -563,8 +571,7 @@
     }
 
     async function fetchRemoteFile() {
-        const token = getToken();
-        const res = await fetch(ghFileUrl() + '&t=' + Date.now(), { headers: ghHeaders(token) });
+        const res = await fetch(ghFileUrl() + '&t=' + Date.now(), { headers: ghHeaders('') });
         if (res.status === 404) return null;
         if (!res.ok) {
             const err = await res.json().catch(() => ({}));
@@ -573,6 +580,20 @@
         const data = await res.json();
         const payload = JSON.parse(b64ToUtf8(data.content));
         return { sha: data.sha, payload };
+    }
+
+    function publishErrorMessage(status, data) {
+        const msg = (data && data.message) ? String(data.message) : ('GitHub ' + status);
+        if (status === 401) {
+            return 'Token inválido ou colado com aspas. Gere outro fine-grained e cole sem aspas.';
+        }
+        if (status === 403 || /resource not accessible/i.test(msg)) {
+            return msg + '\n\nO token não tem permissão de escrita. Confira:\n1) Resource owner = JM7Consulting (não sua conta pessoal)\n2) Repository = só melvin-revops-book\n3) Permissions → Contents = Read and write\n4) Se a org pedir aprovação: JM7Consulting → Settings → Personal access tokens → Pending.';
+        }
+        if (status === 409 || status === 422) {
+            return msg + '\n\nO arquivo mudou no GitHub. Clique em Atualizar e publique de novo.';
+        }
+        return msg;
     }
 
     function applyPublishedPayload(payload, sha) {
@@ -608,8 +629,8 @@
             ''
         );
         if (next == null) return getToken();
-        if (next.trim()) setToken(next.trim());
-        return getToken();
+            if (sanitizeToken(next)) setToken(next);
+            return getToken();
     }
 
     async function pullRemote(opts) {
@@ -679,10 +700,7 @@
             });
             const data = await res.json().catch(() => ({}));
             if (!res.ok) {
-                if (res.status === 401 || res.status === 403) {
-                    throw new Error('Token recusado. Gere um fine-grained com Contents: Read and write neste repositório.');
-                }
-                throw new Error(data.message || ('GitHub ' + res.status));
+                throw new Error(publishErrorMessage(res.status, data));
             }
             sync.remoteSha = data.content && data.content.sha ? data.content.sha : sha;
             sync.lastPublishedAt = payload.publishedAt;
