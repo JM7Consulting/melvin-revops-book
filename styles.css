@@ -10744,6 +10744,45 @@ body.light-mode .paper-sheet {
 }
 .mx-sync.is-dirty .mx-sync-status { color: #fbbf24; }
 .mx-sync button[disabled] { opacity: 0.55; pointer-events: none; }
+.mx-sync-box {
+  flex: 1 0 100%;
+  margin-top: 4px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(196, 181, 253, 0.35);
+  background: rgba(8, 12, 18, 0.4);
+  font-size: 0.8rem;
+  line-height: 1.45;
+  color: #cbd5e1;
+}
+.mx-sync-box p { margin: 0 0 8px; }
+.mx-sync-box textarea {
+  width: 100%;
+  box-sizing: border-box;
+  margin: 6px 0 10px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  background: rgba(2, 6, 12, 0.45);
+  color: #e2e8f0;
+  font-family: ui-monospace, Consolas, monospace;
+  font-size: 0.78rem;
+}
+.mx-sync-box-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+body.light-mode .mx-shell .mx-sync-box,
+.mx-shell[data-theme="light"] .mx-sync-box {
+  background: #f8fafc !important;
+  border-color: rgba(91, 33, 182, 0.2) !important;
+}
+body.light-mode .mx-shell .mx-sync-box,
+body.light-mode .mx-shell .mx-sync-box p,
+.mx-shell[data-theme="light"] .mx-sync-box,
+.mx-shell[data-theme="light"] .mx-sync-box p { color: #334155 !important; }
+body.light-mode .mx-shell .mx-sync-box textarea,
+.mx-shell[data-theme="light"] .mx-sync-box textarea {
+  background: #ffffff !important;
+  color: #0f172a !important;
+}
 body.light-mode .mx-shell .mx-sync-status,
 .mx-shell[data-theme="light"] .mx-sync-status { color: #64748b !important; }
 body.light-mode .mx-shell .mx-sync.is-dirty .mx-sync-status,

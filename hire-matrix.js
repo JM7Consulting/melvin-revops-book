@@ -562,12 +562,25 @@
         else if (sync.dirty) status = 'Alterações locais · não publicadas' + (when ? ' · última no Book ' + when : '');
         else status = 'Notas no Book' + (when ? ' · ' + when : '') + ' · os outros atualizam a página';
         const cls = 'mx-sync' + (sync.dirty && !sync.busy ? ' is-dirty' : '') + (sync.busy ? ' is-busy' : '');
+        const saved = !!getToken();
+        const box = sync.showTokenBox ? `<div class="mx-sync-box">
+            <p>Cole o token <b>sem aspas</b>. Fica só neste navegador — não vai para o site.</p>
+            <p><strong>Se o fine-grained for recusado pela org</strong>, use um token Classic: <a href="https://github.com/settings/tokens" target="_blank" rel="noopener">github.com/settings/tokens</a> → Generate classic → marque só <code>public_repo</code>.</p>
+            <p>Fine-grained só vale com Resource owner = <b>JM7Consulting</b> (não a conta pessoal) + Contents Read and write + aprovação da org, se pedir.</p>
+            <textarea data-mx-token-input rows="3" placeholder="ghp_… ou github_pat_…" autocomplete="off" spellcheck="false"></textarea>
+            <div class="mx-sync-box-actions">
+                <button type="button" class="mx-btn" data-mx-token-save>Guardar</button>
+                <button type="button" class="mx-btn mx-btn--ghost" data-mx-token-test>Testar acesso</button>
+                ${saved ? '<button type="button" class="mx-btn mx-btn--ghost" data-mx-token-clear>Remover</button>' : ''}
+            </div>
+            <p class="mx-mini">${saved ? 'Já há um token salvo neste PC. Testar acesso mostra se o GitHub autoriza escrita.' : 'Nenhum token neste PC ainda.'}</p>
+        </div>` : '';
         return `<div class="${cls}">
             <span class="mx-sync-status">${esc(status)}</span>
             <button type="button" class="mx-btn" data-mx-publish ${sync.busy ? 'disabled' : ''}>Publicar notas</button>
             <button type="button" class="mx-btn mx-btn--ghost" data-mx-sync-pull ${sync.busy ? 'disabled' : ''}>Atualizar</button>
-            <button type="button" class="mx-btn mx-btn--ghost" data-mx-sync-token>Token</button>
-        </div>`;
+            <button type="button" class="mx-btn mx-btn--ghost" data-mx-sync-token>${sync.showTokenBox ? 'Fechar token' : 'Token'}</button>
+        </div>${box}`;
     }
 
     async function fetchRemoteFile() {
@@ -582,18 +595,61 @@
         return { sha: data.sha, payload };
     }
 
-    function publishErrorMessage(status, data) {
+    function publishErrorMessage(status, data, probe) {
         const msg = (data && data.message) ? String(data.message) : ('GitHub ' + status);
+        const who = probe && probe.login ? ('Conta do token: @' + probe.login + '. ') : '';
+        const push = probe ? (probe.push ? 'A API diz que esta conta PODE enviar commit. ' : 'A API diz que esta conta NÃO tem write no repo. ') : '';
         if (status === 401) {
-            return 'Token inválido ou colado com aspas. Gere outro fine-grained e cole sem aspas.';
+            return 'Token inválido, cortado ou colado com aspas. Abra Token, cole de novo (Classic public_repo costuma funcionar melhor na org) e teste o acesso.';
         }
         if (status === 403 || /resource not accessible/i.test(msg)) {
-            return msg + '\n\nO token não tem permissão de escrita. Confira:\n1) Resource owner = JM7Consulting (não sua conta pessoal)\n2) Repository = só melvin-revops-book\n3) Permissions → Contents = Read and write\n4) Se a org pedir aprovação: JM7Consulting → Settings → Personal access tokens → Pending.';
+            return who + push + msg + '\n\nO GitHub recusou a escrita. Causas mais comuns neste repo (org JM7Consulting):\n1) Token fine-grained criado na conta pessoal — precisa Resource owner = JM7Consulting\n2) Org ainda não aprovou o token (Settings da org → Personal access tokens → Pending)\n3) Sua conta não é collaborator com write em melvin-revops-book\n4) Use Classic token com scope public_repo se o fine-grained continuar 403.';
         }
         if (status === 409 || status === 422) {
             return msg + '\n\nO arquivo mudou no GitHub. Clique em Atualizar e publique de novo.';
         }
-        return msg;
+        return who + msg;
+    }
+
+    async function probeToken(token) {
+        const h = ghHeaders(token);
+        const userRes = await fetch('https://api.github.com/user', { headers: h });
+        const user = await userRes.json().catch(() => ({}));
+        if (!userRes.ok) {
+            return { ok: false, status: userRes.status, login: '', push: false, detail: user.message || 'token não autenticou' };
+        }
+        const repoRes = await fetch('https://api.github.com/repos/' + GH_OWNER + '/' + GH_REPO, { headers: h });
+        const repo = await repoRes.json().catch(() => ({}));
+        const push = !!(repo.permissions && repo.permissions.push);
+        return {
+            ok: repoRes.ok && push,
+            status: repoRes.status,
+            login: user.login || '',
+            push,
+            detail: repo.message || ''
+        };
+    }
+
+    async function putHireFile(token, body) {
+        const url = 'https://api.github.com/repos/' + GH_OWNER + '/' + GH_REPO + '/contents/' + GH_FILE;
+        const variants = [
+            Object.assign(ghHeaders(token), { 'Content-Type': 'application/json' }),
+            {
+                Accept: 'application/vnd.github+json',
+                'X-GitHub-Api-Version': '2022-11-28',
+                'Content-Type': 'application/json',
+                Authorization: 'token ' + token
+            }
+        ];
+        let last = { ok: false, status: 0, data: {} };
+        for (let i = 0; i < variants.length; i++) {
+            const res = await fetch(url, { method: 'PUT', headers: variants[i], body: JSON.stringify(body) });
+            const data = await res.json().catch(() => ({}));
+            last = { ok: res.ok, status: res.status, data };
+            if (res.ok) return last;
+            if (res.status !== 401 && res.status !== 403) return last;
+        }
+        return last;
     }
 
     function applyPublishedPayload(payload, sha) {
@@ -620,17 +676,36 @@
     }
 
     function askToken() {
-        const has = !!getToken();
-        const next = window.prompt(
-            (has ? 'Token já salvo neste navegador. Cole outro para trocar, ou deixe em branco para manter.\n\n' : '') +
-            'Personal Access Token (fine-grained) com Contents: Read and write só em JM7Consulting/melvin-revops-book.\n' +
-            'Fica só neste PC — não vai para o site.\n\n' +
-            'Criar: https://github.com/settings/personal-access-tokens',
-            ''
-        );
-        if (next == null) return getToken();
-            if (sanitizeToken(next)) setToken(next);
-            return getToken();
+        sync.showTokenBox = true;
+        render();
+        return getToken();
+    }
+
+    async function testSavedToken() {
+        const token = getToken();
+        if (!token) {
+            window.alert('Guarde um token antes de testar.');
+            return;
+        }
+        try {
+            const probe = await probeToken(token);
+            if (probe.ok) {
+                window.alert('Token OK. GitHub reconhece @' + probe.login + ' com write em ' + GH_OWNER + '/' + GH_REPO + '. Pode publicar.');
+                return;
+            }
+            if (probe.status === 401) {
+                window.alert('GitHub não aceitou o token (401). Ele está inválido, expirado ou foi colado incompleto. Gere um Classic (public_repo) e cole de novo.');
+                return;
+            }
+            window.alert(
+                'GitHub autenticou' + (probe.login ? (' @' + probe.login) : '') +
+                ', mas recusou escrita neste repo.\n\n' +
+                (probe.detail ? probe.detail + '\n\n' : '') +
+                'Isso não é bug da página: a org JM7Consulting está negando o PAT. Use Classic token com public_repo, Resource owner da org no fine-grained, ou peça write/aprovação do token na org.'
+            );
+        } catch (e) {
+            window.alert('Falha ao testar: ' + (e && e.message ? e.message : e));
+        }
     }
 
     async function pullRemote(opts) {
@@ -667,9 +742,8 @@
     async function publishNotes() {
         if (sync.busy) return;
         let token = getToken();
-        if (!token) token = askToken();
         if (!token) {
-            window.alert('Sem token não dá para publicar. Só quem publica precisa de token; os outros só atualizam a página.');
+            askToken();
             return;
         }
         sync.busy = true;
@@ -693,16 +767,13 @@
                 branch: GH_BRANCH
             };
             if (sha) body.sha = sha;
-            const res = await fetch('https://api.github.com/repos/' + GH_OWNER + '/' + GH_REPO + '/contents/' + GH_FILE, {
-                method: 'PUT',
-                headers: Object.assign(ghHeaders(token), { 'Content-Type': 'application/json' }),
-                body: JSON.stringify(body)
-            });
-            const data = await res.json().catch(() => ({}));
-            if (!res.ok) {
-                throw new Error(publishErrorMessage(res.status, data));
+            const put = await putHireFile(token, body);
+            if (!put.ok) {
+                let probe = null;
+                try { probe = await probeToken(token); } catch (e) {}
+                throw new Error(publishErrorMessage(put.status, put.data, probe));
             }
-            sync.remoteSha = data.content && data.content.sha ? data.content.sha : sha;
+            sync.remoteSha = put.data.content && put.data.content.sha ? put.data.content.sha : sha;
             sync.lastPublishedAt = payload.publishedAt;
             sync.publishedHash = notesHash(state.config, state.candidates);
             sync.dirty = false;
@@ -863,7 +934,7 @@
     ];
 
     let state = null;
-    let sync = { dirty: false, busy: false, status: '', lastPublishedAt: null, publishedHash: null, remoteSha: null };
+    let sync = { dirty: false, busy: false, status: '', lastPublishedAt: null, publishedHash: null, remoteSha: null, showTokenBox: false };
 
     function ranked() {
         return state.candidates
@@ -1720,9 +1791,29 @@
         if (pull) pull.addEventListener('click', () => { pullRemote({ silent: false }); });
         const tok = root.querySelector('[data-mx-sync-token]');
         if (tok) tok.addEventListener('click', () => {
-            askToken();
+            sync.showTokenBox = !sync.showTokenBox;
             render();
         });
+        const tokenInput = root.querySelector('[data-mx-token-input]');
+        const tokenSave = root.querySelector('[data-mx-token-save]');
+        if (tokenSave && tokenInput) tokenSave.addEventListener('click', () => {
+            const t = sanitizeToken(tokenInput.value);
+            if (!t) {
+                window.alert('Cole o token no campo antes de guardar.');
+                return;
+            }
+            setToken(t);
+            tokenInput.value = '';
+            window.alert('Token guardado neste navegador. Clique em Testar acesso.');
+            render();
+        });
+        const tokenClear = root.querySelector('[data-mx-token-clear]');
+        if (tokenClear) tokenClear.addEventListener('click', () => {
+            setToken('');
+            render();
+        });
+        const tokenTest = root.querySelector('[data-mx-token-test]');
+        if (tokenTest) tokenTest.addEventListener('click', () => { testSavedToken(); });
         root.querySelectorAll('[data-mx-cv]').forEach((a) => {
             a.addEventListener('click', (e) => {
                 e.preventDefault();
