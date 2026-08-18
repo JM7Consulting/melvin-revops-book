@@ -10718,10 +10718,36 @@ body.light-mode .paper-sheet {
   line-height: 1.45;
 }
 .mx-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px 18px;
   margin-bottom: 16px;
   padding: 4px 2px 14px;
   border-bottom: 1px solid rgba(148, 163, 184, 0.14);
 }
+.mx-sync {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  max-width: 460px;
+}
+.mx-sync-status {
+  width: 100%;
+  font-size: 0.72rem;
+  line-height: 1.4;
+  color: #94a3b8;
+  text-align: right;
+}
+.mx-sync.is-dirty .mx-sync-status { color: #fbbf24; }
+.mx-sync button[disabled] { opacity: 0.55; pointer-events: none; }
+body.light-mode .mx-shell .mx-sync-status,
+.mx-shell[data-theme="light"] .mx-sync-status { color: #64748b !important; }
+body.light-mode .mx-shell .mx-sync.is-dirty .mx-sync-status,
+.mx-shell[data-theme="light"] .mx-sync.is-dirty .mx-sync-status { color: #b45309 !important; }
 .mx-tabs {
   display: flex;
   flex-wrap: wrap;

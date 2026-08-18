@@ -2,6 +2,12 @@
 (function () {
     const KEY = 'melvinBdrMatrix.v2';
     const LEGACY_KEY = 'melvinBdrMatrix.v1';
+    const TOKEN_KEY = 'melvinHireGithubToken';
+    const SYNC_KEY = 'melvinHireSync.v1';
+    const GH_OWNER = 'JM7Consulting';
+    const GH_REPO = 'melvin-revops-book';
+    const GH_FILE = 'hire-state.json';
+    const GH_BRANCH = 'main';
     const LIKERT = [
         { value: '', label: '— não perguntado' },
         { value: '0', label: '0 · Não demonstrou' },
@@ -367,83 +373,87 @@
                 migrating = !!raw;
             }
             if (!raw) return base;
-            const saved = JSON.parse(raw);
-            if (!saved.config || Number(saved.config.rev || 0) < 2) migrating = true;
-            const cfg = defaultConfig();
-            const fromV2 = saved.config && Number(saved.config.rev || 0) >= 2 && Number(saved.config.rev || 0) < 3;
-            if (!migrating && saved.config) {
-                if (Array.isArray(saved.config.screen) && saved.config.screen.some((c) => c.id === 'outbound')) cfg.screen = saved.config.screen;
-                if (Array.isArray(saved.config.interview) && saved.config.interview.length) {
-                    cfg.interview = saved.config.interview;
-                    if (!cfg.interview.some((q) => q.id === 'sdrVsBdr')) {
-                        const extra = defaultConfig().interview.find((q) => q.id === 'sdrVsBdr');
-                        const at = cfg.interview.findIndex((q) => q.id === 'hunter');
-                        cfg.interview.splice(at < 0 ? 0 : at + 1, 0, extra);
-                    }
-                }
-                if (Number(saved.config.rev || 0) >= 4 && Array.isArray(saved.config.process) && saved.config.process.length) cfg.process = saved.config.process;
-                if (!fromV2 && typeof saved.config.interviewWeight === 'number') cfg.interviewWeight = saved.config.interviewWeight;
-                if (saved.config.bands) cfg.bands = saved.config.bands;
-                if (saved.config.reco) cfg.reco = saved.config.reco;
-                if (saved.config.role) cfg.role = saved.config.role;
-                if (saved.config.offer) cfg.offer = saved.config.offer;
-            }
-            if (Number((saved.config && saved.config.rev) || 0) < 5 && cfg.interviewWeight === 0) {
-                cfg.interviewWeight = defaultConfig().interviewWeight;
-            }
-            cfg.rev = 5;
-            const seeds = base.candidates;
-            const savedById = {};
-            if (Array.isArray(saved.candidates)) {
-                saved.candidates.forEach((c) => {
-                    if (c && c.id) savedById[c.id] = c;
-                });
-            }
-            function mergeCand(seed, c) {
-                if (!c) return seed;
-                const prev = Object.assign({}, c.screen || {});
-                if (prev.sales1 === 'pre-vendas') delete prev.sales1;
-                if (prev.sales2 === 'pre-vendas') delete prev.sales2;
-                return Object.assign({}, seed, c, {
-                    id: seed.id,
-                    name: seed.name || c.name,
-                    screen: migrating
-                        ? Object.assign(blankScreen(), prev, seed.screen)
-                        : Object.assign(blankScreen(), seed.screen, prev),
-                    notes: migrating ? seed.notes : (c.notes != null ? c.notes : seed.notes),
-                    interview: Object.assign(blankInterview(), c.interview || {}),
-                    process: Object.assign(blankProcess(), c.process || {}),
-                    processNote: c.processNote || '',
-                    interviewNote: c.interviewNote || '',
-                    phasesComplete: !!c.phasesComplete,
-                    starred: !!c.starred,
-                    eliminated: !!c.eliminated,
-                    eliminateReason: c.eliminateReason || '',
-                    stage: c.eliminated ? 'recusado' : (c.stage || seed.stage || 'triagem')
-                });
-            }
-            // Sempre mantém os 12 candidatos padrão (dados não somem se o storage ficou incompleto)
-            const cands = seeds.map((seed) => mergeCand(seed, savedById[seed.id]));
-            const known = new Set(cands.map((c) => c.id));
-            Object.keys(savedById).forEach((id) => {
-                if (!known.has(id)) cands.push(mergeCand(seedCandidate(id, savedById[id].name || 'Candidato', {}, ''), savedById[id]));
-            });
-            const matrixViews = ['ranking', 'planilha', 'comparar', 'pesos'];
-            const view = matrixViews.includes(saved.view) ? saved.view : 'ranking';
-            const filter = ['all', 'hunter', 'go', 'star', 'pending', 'elim'].includes(saved.filter)
-                ? saved.filter
-                : (saved.filter === 'knock' ? 'elim' : 'all');
-            return {
-                config: cfg,
-                candidates: cands,
-                view,
-                focusId: saved.focusId || cands[0]?.id,
-                compare: Array.isArray(saved.compare) ? saved.compare.filter((id) => known.has(id) || savedById[id]).slice(0, 3) : [],
-                filter
-            };
+            return loadStateFromSaved(JSON.parse(raw), migrating);
         } catch (e) {
-            return base;
+            return { config: defaultConfig(), candidates: defaultCandidates(), view: 'ranking', focusId: 'manuel-felipe', compare: [], filter: 'all' };
         }
+    }
+
+    function loadStateFromSaved(saved, migrating) {
+        const base = { config: defaultConfig(), candidates: defaultCandidates(), view: 'ranking', focusId: 'manuel-felipe', compare: [], filter: 'all' };
+        if (!saved) return base;
+        if (!saved.config || Number(saved.config.rev || 0) < 2) migrating = true;
+        const cfg = defaultConfig();
+        const fromV2 = saved.config && Number(saved.config.rev || 0) >= 2 && Number(saved.config.rev || 0) < 3;
+        if (!migrating && saved.config) {
+            if (Array.isArray(saved.config.screen) && saved.config.screen.some((c) => c.id === 'outbound')) cfg.screen = saved.config.screen;
+            if (Array.isArray(saved.config.interview) && saved.config.interview.length) {
+                cfg.interview = saved.config.interview;
+                if (!cfg.interview.some((q) => q.id === 'sdrVsBdr')) {
+                    const extra = defaultConfig().interview.find((q) => q.id === 'sdrVsBdr');
+                    const at = cfg.interview.findIndex((q) => q.id === 'hunter');
+                    cfg.interview.splice(at < 0 ? 0 : at + 1, 0, extra);
+                }
+            }
+            if (Number(saved.config.rev || 0) >= 4 && Array.isArray(saved.config.process) && saved.config.process.length) cfg.process = saved.config.process;
+            if (!fromV2 && typeof saved.config.interviewWeight === 'number') cfg.interviewWeight = saved.config.interviewWeight;
+            if (saved.config.bands) cfg.bands = saved.config.bands;
+            if (saved.config.reco) cfg.reco = saved.config.reco;
+            if (saved.config.role) cfg.role = saved.config.role;
+            if (saved.config.offer) cfg.offer = saved.config.offer;
+        }
+        if (Number((saved.config && saved.config.rev) || 0) < 5 && cfg.interviewWeight === 0) {
+            cfg.interviewWeight = defaultConfig().interviewWeight;
+        }
+        cfg.rev = 5;
+        const seeds = base.candidates;
+        const savedById = {};
+        if (Array.isArray(saved.candidates)) {
+            saved.candidates.forEach((c) => {
+                if (c && c.id) savedById[c.id] = c;
+            });
+        }
+        function mergeCand(seed, c) {
+            if (!c) return seed;
+            const prev = Object.assign({}, c.screen || {});
+            if (prev.sales1 === 'pre-vendas') delete prev.sales1;
+            if (prev.sales2 === 'pre-vendas') delete prev.sales2;
+            return Object.assign({}, seed, c, {
+                id: seed.id,
+                name: seed.name || c.name,
+                screen: migrating
+                    ? Object.assign(blankScreen(), prev, seed.screen)
+                    : Object.assign(blankScreen(), seed.screen, prev),
+                notes: migrating ? seed.notes : (c.notes != null ? c.notes : seed.notes),
+                interview: Object.assign(blankInterview(), c.interview || {}),
+                process: Object.assign(blankProcess(), c.process || {}),
+                processNote: c.processNote || '',
+                interviewNote: c.interviewNote || '',
+                phasesComplete: !!c.phasesComplete,
+                starred: !!c.starred,
+                eliminated: !!c.eliminated,
+                eliminateReason: c.eliminateReason || '',
+                stage: c.eliminated ? 'recusado' : (c.stage || seed.stage || 'triagem')
+            });
+        }
+        const cands = seeds.map((seed) => mergeCand(seed, savedById[seed.id]));
+        const known = new Set(cands.map((c) => c.id));
+        Object.keys(savedById).forEach((id) => {
+            if (!known.has(id)) cands.push(mergeCand(seedCandidate(id, savedById[id].name || 'Candidato', {}, ''), savedById[id]));
+        });
+        const matrixViews = ['ranking', 'planilha', 'comparar', 'pesos'];
+        const view = matrixViews.includes(saved.view) ? saved.view : (matrixViews.includes(state && state.view) ? state.view : 'ranking');
+        const filter = ['all', 'hunter', 'go', 'star', 'pending', 'elim'].includes(saved.filter)
+            ? saved.filter
+            : (saved.filter === 'knock' ? 'elim' : ((state && state.filter) || 'all'));
+        return {
+            config: cfg,
+            candidates: cands,
+            view,
+            focusId: saved.focusId || (state && state.focusId) || cands[0]?.id,
+            compare: Array.isArray(saved.compare) ? saved.compare.filter((id) => known.has(id) || savedById[id]).slice(0, 3) : ((state && state.compare) || []),
+            filter
+        };
     }
 
     function saveState(state) {
@@ -457,6 +467,236 @@
                 filter: state.filter || 'all'
             }));
         } catch (e) {}
+        markDirty();
+    }
+
+    function notesHash(cfg, cands) {
+        return JSON.stringify({ config: cfg, candidates: cands });
+    }
+
+    function loadSyncMeta() {
+        try {
+            const m = JSON.parse(localStorage.getItem(SYNC_KEY) || '{}');
+            sync.publishedHash = m.publishedHash || null;
+            sync.lastPublishedAt = m.lastPublishedAt || null;
+            sync.remoteSha = m.remoteSha || null;
+        } catch (e) {}
+        markDirty();
+    }
+
+    function persistSyncMeta() {
+        try {
+            localStorage.setItem(SYNC_KEY, JSON.stringify({
+                publishedHash: sync.publishedHash,
+                lastPublishedAt: sync.lastPublishedAt,
+                remoteSha: sync.remoteSha
+            }));
+        } catch (e) {}
+    }
+
+    function markDirty() {
+        if (!state) {
+            sync.dirty = false;
+            return;
+        }
+        const h = notesHash(state.config, state.candidates);
+        sync.dirty = !!(sync.publishedHash && h !== sync.publishedHash);
+    }
+
+    function getToken() {
+        try { return (localStorage.getItem(TOKEN_KEY) || '').trim(); } catch (e) { return ''; }
+    }
+
+    function setToken(value) {
+        try {
+            if (value) localStorage.setItem(TOKEN_KEY, value.trim());
+            else localStorage.removeItem(TOKEN_KEY);
+        } catch (e) {}
+    }
+
+    function formatWhen(iso) {
+        if (!iso) return '';
+        const d = new Date(iso);
+        if (isNaN(d.getTime())) return '';
+        const p = (n) => String(n).padStart(2, '0');
+        return p(d.getDate()) + '/' + p(d.getMonth() + 1) + ' ' + p(d.getHours()) + ':' + p(d.getMinutes());
+    }
+
+    function utf8ToB64(str) {
+        const bytes = new TextEncoder().encode(str);
+        let bin = '';
+        bytes.forEach((b) => { bin += String.fromCharCode(b); });
+        return btoa(bin);
+    }
+
+    function b64ToUtf8(b64) {
+        const bin = atob(String(b64 || '').replace(/\s/g, ''));
+        const bytes = new Uint8Array(bin.length);
+        for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+        return new TextDecoder().decode(bytes);
+    }
+
+    function ghHeaders(token) {
+        const h = { Accept: 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28' };
+        if (token) h.Authorization = 'Bearer ' + token;
+        return h;
+    }
+
+    function ghFileUrl() {
+        return 'https://api.github.com/repos/' + GH_OWNER + '/' + GH_REPO + '/contents/' + GH_FILE + '?ref=' + GH_BRANCH;
+    }
+
+    function syncBarHtml() {
+        const when = formatWhen(sync.lastPublishedAt);
+        let status;
+        if (sync.busy) status = sync.status === 'publishing' ? 'Publicando no GitHub…' : 'Carregando notas…';
+        else if (!sync.publishedHash && !sync.lastPublishedAt) status = 'Ainda não há notas publicadas. Publique para o time ver.';
+        else if (sync.dirty) status = 'Alterações locais · não publicadas' + (when ? ' · última no Book ' + when : '');
+        else status = 'Notas no Book' + (when ? ' · ' + when : '') + ' · os outros atualizam a página';
+        const cls = 'mx-sync' + (sync.dirty && !sync.busy ? ' is-dirty' : '') + (sync.busy ? ' is-busy' : '');
+        return `<div class="${cls}">
+            <span class="mx-sync-status">${esc(status)}</span>
+            <button type="button" class="mx-btn" data-mx-publish ${sync.busy ? 'disabled' : ''}>Publicar notas</button>
+            <button type="button" class="mx-btn mx-btn--ghost" data-mx-sync-pull ${sync.busy ? 'disabled' : ''}>Atualizar</button>
+            <button type="button" class="mx-btn mx-btn--ghost" data-mx-sync-token>Token</button>
+        </div>`;
+    }
+
+    async function fetchRemoteFile() {
+        const token = getToken();
+        const res = await fetch(ghFileUrl() + '&t=' + Date.now(), { headers: ghHeaders(token) });
+        if (res.status === 404) return null;
+        if (!res.ok) {
+            const err = await res.json().catch(() => ({}));
+            throw new Error(err.message || ('GitHub ' + res.status));
+        }
+        const data = await res.json();
+        const payload = JSON.parse(b64ToUtf8(data.content));
+        return { sha: data.sha, payload };
+    }
+
+    function applyPublishedPayload(payload, sha) {
+        if (!payload || !payload.candidates) return false;
+        const next = loadStateFromSaved({
+            config: payload.config,
+            candidates: payload.candidates,
+            view: state.view,
+            focusId: state.focusId,
+            compare: state.compare,
+            filter: state.filter
+        }, false);
+        state.config = next.config;
+        state.candidates = next.candidates;
+        sync.remoteSha = sha || sync.remoteSha;
+        sync.lastPublishedAt = payload.publishedAt || new Date().toISOString();
+        sync.publishedHash = notesHash(state.config, state.candidates);
+        sync.dirty = false;
+        persistSyncMeta();
+        saveState(state);
+        sync.dirty = false;
+        persistSyncMeta();
+        return true;
+    }
+
+    function askToken() {
+        const has = !!getToken();
+        const next = window.prompt(
+            (has ? 'Token já salvo neste navegador. Cole outro para trocar, ou deixe em branco para manter.\n\n' : '') +
+            'Personal Access Token (fine-grained) com Contents: Read and write só em JM7Consulting/melvin-revops-book.\n' +
+            'Fica só neste PC — não vai para o site.\n\n' +
+            'Criar: https://github.com/settings/personal-access-tokens',
+            ''
+        );
+        if (next == null) return getToken();
+        if (next.trim()) setToken(next.trim());
+        return getToken();
+    }
+
+    async function pullRemote(opts) {
+        const silent = !!(opts && opts.silent);
+        if (sync.busy) return;
+        sync.busy = true;
+        sync.status = 'loading';
+        if (!silent) render();
+        try {
+            const remote = await fetchRemoteFile();
+            if (!remote || !remote.payload || !remote.payload.candidates) {
+                if (!silent) window.alert('Ainda não há notas publicadas no Book.');
+                return;
+            }
+            const remoteHash = notesHash(remote.payload.config, remote.payload.candidates);
+            if (sync.dirty) {
+                if (silent) return;
+                const newer = sync.publishedHash && remoteHash !== sync.publishedHash;
+                const ok = window.confirm(newer
+                    ? 'Há notas mais novas no Book e você tem alterações locais. Descartar as locais e carregar o Book?'
+                    : 'Você tem alterações não publicadas. Carregar o Book mesmo assim?');
+                if (!ok) return;
+            }
+            applyPublishedPayload(remote.payload, remote.sha);
+        } catch (e) {
+            if (!silent) window.alert('Não deu para ler o Book: ' + (e && e.message ? e.message : e));
+        } finally {
+            sync.busy = false;
+            sync.status = '';
+            render();
+        }
+    }
+
+    async function publishNotes() {
+        if (sync.busy) return;
+        let token = getToken();
+        if (!token) token = askToken();
+        if (!token) {
+            window.alert('Sem token não dá para publicar. Só quem publica precisa de token; os outros só atualizam a página.');
+            return;
+        }
+        sync.busy = true;
+        sync.status = 'publishing';
+        render();
+        try {
+            let sha = sync.remoteSha;
+            try {
+                const current = await fetchRemoteFile();
+                if (current) sha = current.sha;
+            } catch (e) {}
+            const payload = {
+                v: 1,
+                publishedAt: new Date().toISOString(),
+                config: state.config,
+                candidates: state.candidates
+            };
+            const body = {
+                message: 'Publicar notas da seleção BDR.',
+                content: utf8ToB64(JSON.stringify(payload, null, 2)),
+                branch: GH_BRANCH
+            };
+            if (sha) body.sha = sha;
+            const res = await fetch('https://api.github.com/repos/' + GH_OWNER + '/' + GH_REPO + '/contents/' + GH_FILE, {
+                method: 'PUT',
+                headers: Object.assign(ghHeaders(token), { 'Content-Type': 'application/json' }),
+                body: JSON.stringify(body)
+            });
+            const data = await res.json().catch(() => ({}));
+            if (!res.ok) {
+                if (res.status === 401 || res.status === 403) {
+                    throw new Error('Token recusado. Gere um fine-grained com Contents: Read and write neste repositório.');
+                }
+                throw new Error(data.message || ('GitHub ' + res.status));
+            }
+            sync.remoteSha = data.content && data.content.sha ? data.content.sha : sha;
+            sync.lastPublishedAt = payload.publishedAt;
+            sync.publishedHash = notesHash(state.config, state.candidates);
+            sync.dirty = false;
+            persistSyncMeta();
+            window.alert('Notas publicadas. O time vê no Book em 1–3 min (ou clique em Atualizar).');
+        } catch (e) {
+            window.alert('Não publicou: ' + (e && e.message ? e.message : e));
+        } finally {
+            sync.busy = false;
+            sync.status = '';
+            render();
+        }
     }
 
     function gateLine(c) {
@@ -605,6 +845,7 @@
     ];
 
     let state = null;
+    let sync = { dirty: false, busy: false, status: '', lastPublishedAt: null, publishedHash: null, remoteSha: null };
 
     function ranked() {
         return state.candidates
@@ -1094,6 +1335,7 @@
                     <h2>${esc(VIEW_TITLES[state.view] || 'Matriz de Candidatos')}</h2>
                     <p class="mx-sub">${esc(state.config.role)} · ${state.candidates.length} candidatos · ★ = shortlist / Entrevistas</p>
                 </div>
+                ${syncBarHtml()}
             </header>
             <div class="mx-body">${body}</div>
         </div>`;
@@ -1119,6 +1361,7 @@
                     <h2>Entrevistas</h2>
                     <p class="mx-sub">Integrada à ★ Shortlist da Matriz · fases 2 (áudio 30s), 3.1 (fit), 3.2 (role-play) e 4 (CSO)</p>
                 </div>
+                ${syncBarHtml()}
             </header>
             <div class="mx-body">${body}</div>
         </div>`;
@@ -1142,6 +1385,7 @@
                     <h2>Decisão</h2>
                     <p class="mx-sub">Shortlist e parecer de comitê · os mesmos dados da Matriz e das Entrevistas</p>
                 </div>
+                ${syncBarHtml()}
             </header>
             <div class="mx-body">${body}</div>
         </div>`;
@@ -1452,6 +1696,15 @@
             copy.textContent = 'Copiado';
             setTimeout(() => { copy.textContent = 'Copiar parecer'; }, 1200);
         });
+        const pub = root.querySelector('[data-mx-publish]');
+        if (pub) pub.addEventListener('click', () => { publishNotes(); });
+        const pull = root.querySelector('[data-mx-sync-pull]');
+        if (pull) pull.addEventListener('click', () => { pullRemote({ silent: false }); });
+        const tok = root.querySelector('[data-mx-sync-token]');
+        if (tok) tok.addEventListener('click', () => {
+            askToken();
+            render();
+        });
         root.querySelectorAll('[data-mx-cv]').forEach((a) => {
             a.addEventListener('click', (e) => {
                 e.preventDefault();
@@ -1472,6 +1725,7 @@
         const decisionRoot = document.getElementById('hireDecisionRoot');
         if (!matrixRoot && !processRoot && !decisionRoot) return;
         state = loadState();
+        loadSyncMeta();
         // Só corrige view inválida — não reseta Ranking a cada F5
         if (!['ranking', 'planilha', 'comparar', 'pesos'].includes(state.view)) state.view = 'ranking';
         if (state.filter === 'knock') state.filter = 'elim';
@@ -1480,6 +1734,7 @@
         syncTheme();
         new MutationObserver(syncTheme).observe(document.body, { attributes: true, attributeFilter: ['class'] });
         render();
+        pullRemote({ silent: true });
         document.querySelectorAll('[data-hire-tab="entrevistas"], [data-hire-tab="decisao"], [data-sel-tab="ranking"], [data-sel-tab="planilha"], [data-sel-tab="comparar"], [data-sel-tab="pesos"]').forEach((tab) => {
             tab.addEventListener('click', () => { try { render(); } catch (e) { console.error(e); } });
         });
