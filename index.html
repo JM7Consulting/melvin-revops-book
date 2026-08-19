@@ -6,7 +6,7 @@
     <title>REBUILD 7 | MELVIN</title>
     
 	<link rel="icon" type="image/png" href="logo_simples_removebcg.png">
-  <link rel="stylesheet" href="styles.css?v=matriz-35">
+  <link rel="stylesheet" href="styles.css?v=matriz-36">
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sora:wght@600;700;800&family=Carlito:ital,wght@0,400;0,700;1,400&family=Libre+Baskerville:wght@400;700&display=swap" rel="stylesheet">
@@ -113,7 +113,8 @@
                     <div class="submenu">
                         <div class="submenu-label">Posicionamento</div>
                         <a href="#matriz-icp-in"><span style="display:flex; gap:10px;"><span>📐</span> Matriz ICP</span><span class="dot dot-active"></span></a>
-                        <a href="#fluxo-comerc-inbound"><span style="display:flex; gap:10px;"><span>➡️</span> Fluxo Comercial</span><span class="dot dot-active"></span></a>
+                        <a href="#fluxo-comerc-inbound"><span style="display:flex; gap:10px;"><span>➡️</span> Fluxo Comercial [SDR Humano]</span><span class="dot dot-active"></span></a>
+                        <a href="#fluxo-comerc-inbound-ia"><span style="display:flex; gap:10px;"><span>🤖</span> Fluxo Comercial [SDR IA]</span><span class="dot dot-active"></span></a>
 
                         <div class="submenu-label">Inteligência</div>
                         <a href="#dores-ocultas-in"><span style="display:flex; gap:10px;"><span>👁️‍🗨️</span> Dores Ocultas</span><span class="dot dot-active"></span></a>
@@ -8290,7 +8291,7 @@ Um abraço!"
         <section id="fluxo-comerc-inbound" class="blueprint-page" style="padding: 40px; border-radius: 16px;">
 
             <div class="cadencia-header-block" style="margin-bottom: 18px;">
-                <div class="cadencia-title-line" style="font-size: 1.8rem; color: #10b981;">FLUXO COMERCIAL INBOUND</div>
+                <div class="cadencia-title-line" style="font-size: 1.8rem; color: #10b981;">FLUXO COMERCIAL INBOUND · SDR HUMANO</div>
                 <p class="cadencia-subtitle" style="padding-left: 0;">Diagrama <strong>oficial</strong> do PDF Melvin (draw.io) — reprodução pixel-perfect, sem redesenho de setas.</p>
                 <div class="gim-source-chip">Fonte: Fluxos comerciais — Comercial inbound.drawio.pdf</div>
             </div>
@@ -8353,6 +8354,70 @@ Um abraço!"
                     <a href="#fluxo-comerc-outbound">Fluxo Outbound</a> ·
                     <a href="#fluxo-comerc-cs">Fluxo CS</a> ·
                     <a href="#funil-vendas">Funil de Vendas</a>
+                </p>
+            </div>
+
+        </section>
+        <section id="fluxo-comerc-inbound-ia" class="blueprint-page" style="padding: 40px; border-radius: 16px;">
+
+            <div class="cadencia-header-block" style="margin-bottom: 18px;">
+                <div class="cadencia-title-line" style="font-size: 1.8rem; color: #10b981;">FLUXO COMERCIAL INBOUND · SDR IA</div>
+                <p class="cadencia-subtitle" style="padding-left: 0;">Diagrama <strong>oficial</strong> Melvin (draw.io) — qualificação automática + ocioso/nutrição. Zoom e arraste como nos outros fluxos.</p>
+                <div class="gim-source-chip">Fonte: Fluxo SDR IA.drawio</div>
+            </div>
+
+            <div class="crono-tabs sdr-ia-tabs" role="tablist" aria-label="Processos SDR IA" id="fluxoSdrIaToolbar">
+                <button type="button" class="crono-tab is-active" role="tab" aria-selected="true" data-fluxo-pdf="p1">Processo 1 · Qualificação</button>
+                <button type="button" class="crono-tab" role="tab" aria-selected="false" data-fluxo-pdf="p2">Processo 2 · Ocioso &amp; Nutrição</button>
+                <button type="button" class="crono-tab" role="tab" aria-selected="false" data-fluxo-pdf="full">Mapa completo</button>
+                <span class="fluxo-toolbar-spacer" aria-hidden="true"></span>
+                <button type="button" class="fluxo-tool" data-fluxo-zoom="out" title="Diminuir">−</button>
+                <button type="button" class="fluxo-tool" data-fluxo-zoom="reset" title="100%">100%</button>
+                <button type="button" class="fluxo-tool" data-fluxo-zoom="in" title="Aumentar">+</button>
+                <button type="button" class="fluxo-tool" data-fluxo-fit title="Enquadrar">⊡ Enquadrar</button>
+            </div>
+            <p class="fluxo-toolbar-hint" style="margin: 8px 0 12px;">Arraste para navegar · zoom na imagem oficial</p>
+
+            <div class="fluxo-board-wrap fluxo-board-wrap-in fluxo-pdf-wrap" id="fluxoSdrIaViewport">
+                <div class="fluxo-zoom-layer" id="fluxoSdrIaZoom">
+                    <div class="fluxo-pdf-stage" id="fluxoSdrIaStage" data-pdf-ver="p1">
+                        <img
+                            id="fluxoSdrIaImg"
+                            class="fluxo-pdf-img"
+                            src="assets/fluxo-sdr-ia-p1.png"
+                            alt="Fluxo Comercial Inbound SDR IA — Processo 1 Qualificação"
+                            draggable="false"
+                            width="1490"
+                            height="2198"
+                        />
+                        <svg class="fluxo-pdf-wires" id="fluxoSdrIaPathSvg" aria-hidden="true"></svg>
+                        <div class="fluxo-pdf-hots" id="fluxoSdrIaHots" aria-hidden="false"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="fluxo-path-strip" id="fluxoSdrIaPathStrip" hidden>
+                <strong>Caminho:</strong> <span id="fluxoSdrIaPathText"></span>
+                <button type="button" class="fluxo-tool" data-fluxo-clear>Limpar</button>
+            </div>
+
+            <div class="fluxo-legend" style="margin-top:14px;">
+                <span><i class="lg-swatch lg-mkt"></i> META / Site</span>
+                <span><i class="lg-swatch lg-sdr"></i> SDR IA</span>
+                <span><i class="lg-swatch lg-closer"></i> Closer</span>
+                <span style="color:#b91c1c;font-weight:700;">● DESCARTE</span>
+                <span style="color:#c2410c;font-weight:700;">■ OCIOSO</span>
+            </div>
+
+            <div class="fluxo-links-bar">
+                <strong>Módulos RevOps conectados</strong>
+                <p>
+                    <a href="#fluxo-comerc-inbound">Fluxo SDR Humano</a> ·
+                    <a href="#matriz-icp-in">Matriz ICP Inbound</a> ·
+                    <a href="#filtro-qualificacao-in">Qualificação</a> ·
+                    <a href="#wf-contato-nutricao-in">D1–D15 Contato &amp; Nutrição</a> ·
+                    <a href="#gim-lead-scoring">Lead Scoring A–D</a> ·
+                    <a href="#funil-inbound">Funil Inbound</a>
                 </p>
             </div>
 
@@ -13722,8 +13787,8 @@ Um abraço!"
         </section>
 
 	</main>
-  <script src="app.js?v=matriz-35"></script>
-  <script src="hire-matrix.js?v=matriz-35"></script>
+  <script src="app.js?v=matriz-36"></script>
+  <script src="hire-matrix.js?v=matriz-36"></script>
 	
 </body>
 </html>

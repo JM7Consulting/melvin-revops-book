@@ -2387,7 +2387,11 @@ function initFluxoPdfUX(cfg) {
             const waiting = isWaitingVer(key);
             if (!waiting && !sources[key]) return;
             pdfVer = key;
-            toolbar.querySelectorAll('[data-fluxo-pdf]').forEach((b) => b.classList.toggle('is-active', b === pdfBtn));
+            toolbar.querySelectorAll('[data-fluxo-pdf]').forEach((b) => {
+                const on = b === pdfBtn;
+                b.classList.toggle('is-active', on);
+                if (b.getAttribute('role') === 'tab') b.setAttribute('aria-selected', on ? 'true' : 'false');
+            });
             clearFocus();
             applyVersionUI();
             if (!waiting) {
@@ -2693,6 +2697,27 @@ initFluxoPdfUX({
     },
     hots: { v1: FLUXO_CS_PDF_HOTS },
     edges: { v1: FLUXO_CS_PDF_EDGES }
+});
+
+initFluxoPdfUX({
+    viewportId: 'fluxoSdrIaViewport',
+    zoomId: 'fluxoSdrIaZoom',
+    stageId: 'fluxoSdrIaStage',
+    imgId: 'fluxoSdrIaImg',
+    hotsId: 'fluxoSdrIaHots',
+    svgId: 'fluxoSdrIaPathSvg',
+    toolbarId: 'fluxoSdrIaToolbar',
+    stripId: 'fluxoSdrIaPathStrip',
+    stripTextId: 'fluxoSdrIaPathText',
+    defaultVer: 'p1',
+    readyHint: 'Arraste para navegar · zoom na imagem oficial',
+    sources: {
+        p1: 'assets/fluxo-sdr-ia-p1.png',
+        p2: 'assets/fluxo-sdr-ia-p2.png',
+        full: 'assets/fluxo-sdr-ia-oficial.png'
+    },
+    hots: { p1: [], p2: [], full: [] },
+    edges: { p1: [], p2: [], full: [] }
 });
 
 /* Objeções kit: busca + filtros por página */

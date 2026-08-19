@@ -5468,14 +5468,21 @@ body.light-mode .welcome-lead { color: #64748B; }
 }
 
 .crono-tabs {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin: 22px 0 16px;
-  padding: 6px;
-  border-radius: 14px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid var(--border);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 22px 0 16px;
+    padding: 6px;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border);
+}
+.sdr-ia-tabs {
+    align-items: center;
+    margin-top: 0;
+}
+.fluxo-toolbar-spacer {
+    flex: 1 1 12px;
 }
 .crono-tab {
   border: 0;
