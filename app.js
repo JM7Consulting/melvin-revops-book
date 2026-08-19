@@ -116,8 +116,14 @@
     if (navSearchInput) {
         navSearchInput.addEventListener('input', () => runNavFilter(navSearchInput.value));
         document.addEventListener('keydown', (e) => {
-            if (e.key === '/' && document.activeElement !== navSearchInput && document.activeElement?.tagName !== 'INPUT' && document.activeElement?.tagName !== 'TEXTAREA') {
+            if (e.key === '/' && document.activeElement !== navSearchInput && document.activeElement !== document.getElementById('siteSearchInput') && document.activeElement?.tagName !== 'INPUT' && document.activeElement?.tagName !== 'TEXTAREA') {
                 e.preventDefault();
+                const siteInput = document.getElementById('siteSearchInput');
+                if (siteInput) {
+                    siteInput.focus();
+                    siteInput.select();
+                    return;
+                }
                 if (sidebar?.classList.contains('collapsed')) {
                     sidebar.classList.remove('collapsed');
                     if (mainContent) mainContent.classList.remove('expanded');
@@ -1361,6 +1367,250 @@
         closeMobileSidebar();
         return true;
     }
+
+    (function initSiteSearch() {
+        const root = document.getElementById('siteSearchRoot');
+        const input = document.getElementById('siteSearchInput');
+        const panel = document.getElementById('siteSearchPanel');
+        const list = document.getElementById('siteSearchList');
+        const empty = document.getElementById('siteSearchEmpty');
+        if (!root || !input || !panel || !list) return;
+
+        let index = null;
+        let shown = [];
+        let active = -1;
+        let hitSeq = 0;
+
+        function norm(value) {
+            return (value || '')
+                .toLowerCase()
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '')
+                .replace(/\s+/g, ' ')
+                .trim();
+        }
+
+        function pageTitleOf(section) {
+            const el = section.querySelector('.cadencia-title-line, .welcome-heading, h2, h1');
+            return (el ? el.textContent : section.id || 'Página').replace(/\s+/g, ' ').trim();
+        }
+
+        function stamp(el) {
+            if (!el || el.nodeType !== 1) return '';
+            let id = el.getAttribute('data-site-hit');
+            if (!id) {
+                hitSeq += 1;
+                id = String(hitSeq);
+                el.setAttribute('data-site-hit', id);
+            }
+            return id;
+        }
+
+        function addItem(arr, item) {
+            const hay = norm(item.title + ' ' + (item.blurb || '') + ' ' + (item.hay || ''));
+            if (hay.length < 2) return;
+            arr.push({
+                kind: item.kind,
+                pageId: item.pageId,
+                hit: item.hit || '',
+                title: item.title,
+                blurb: (item.blurb || '').replace(/\s+/g, ' ').trim(),
+                hay: hay
+            });
+        }
+
+        function buildIndex() {
+            const items = [];
+            const seenNav = new Set();
+            document.querySelectorAll('.nav-container a[href^="#"]').forEach((a) => {
+                const href = a.getAttribute('href');
+                if (!href || href === '#' || seenNav.has(href)) return;
+                seenNav.add(href);
+                const pageId = href.slice(1);
+                addItem(items, {
+                    kind: 'menu',
+                    pageId,
+                    title: (a.querySelector('.text') || a).textContent.replace(/\s+/g, ' ').trim(),
+                    blurb: 'Menu · ' + (a.closest('.nav-lane')?.querySelector('.sidebar-section-title')?.textContent || 'RevOps Book'),
+                    hay: a.textContent
+                });
+            });
+            document.querySelectorAll('main > section[id]').forEach((section) => {
+                const pageId = section.id;
+                const title = pageTitleOf(section);
+                addItem(items, {
+                    kind: 'página',
+                    pageId,
+                    hit: stamp(section),
+                    title,
+                    blurb: (section.querySelector('.cadencia-subtitle, .welcome-lead, p')?.textContent || '').slice(0, 160),
+                    hay: title + ' ' + pageId
+                });
+                section.querySelectorAll('h2, h3, h4, .cadencia-title-line, .mx-h4, .crono-card-head strong, .ops-card strong').forEach((h) => {
+                    const t = h.textContent.replace(/\s+/g, ' ').trim();
+                    if (t.length < 3 || t.length > 160) return;
+                    addItem(items, {
+                        kind: 'item',
+                        pageId,
+                        hit: stamp(h),
+                        title: t,
+                        blurb: title,
+                        hay: t
+                    });
+                });
+                section.querySelectorAll('p, li, td, .cadencia-subtitle, .mx-help, .mx-mini, dt, dd').forEach((el) => {
+                    const t = el.textContent.replace(/\s+/g, ' ').trim();
+                    if (t.length < 18 || t.length > 420) return;
+                    addItem(items, {
+                        kind: 'texto',
+                        pageId,
+                        hit: stamp(el),
+                        title: t.length > 92 ? t.slice(0, 90) + '…' : t,
+                        blurb: title,
+                        hay: t
+                    });
+                });
+            });
+            return items;
+        }
+
+        function ensureIndex() {
+            if (!index) index = buildIndex();
+            return index;
+        }
+
+        function score(item, q) {
+            const hay = item.hay;
+            const title = norm(item.title);
+            if (title === q) return 200;
+            if (title.startsWith(q)) return 160;
+            if (title.includes(q)) return 120;
+            const idx = hay.indexOf(q);
+            if (idx < 0) return 0;
+            let s = item.kind === 'menu' || item.kind === 'página' ? 90 : item.kind === 'item' ? 70 : 40;
+            if (idx < 24) s += 12;
+            return s;
+        }
+
+        function closePanel() {
+            panel.hidden = true;
+            shown = [];
+            active = -1;
+        }
+
+        function renderResults(q) {
+            const query = norm(q);
+            list.innerHTML = '';
+            empty.hidden = true;
+            if (!query || query.length < 2) {
+                closePanel();
+                return;
+            }
+            const ranked = ensureIndex()
+                .map((item) => ({ item, s: score(item, query) }))
+                .filter((row) => row.s > 0)
+                .sort((a, b) => b.s - a.s || a.item.title.localeCompare(b.item.title, 'pt-BR'));
+            const uniq = [];
+            const seen = new Set();
+            ranked.forEach((row) => {
+                const key = row.item.kind + '|' + row.item.pageId + '|' + row.item.title.slice(0, 80);
+                if (seen.has(key)) return;
+                seen.add(key);
+                uniq.push(row.item);
+            });
+            shown = uniq.slice(0, 28);
+            active = shown.length ? 0 : -1;
+            panel.hidden = false;
+            if (!shown.length) {
+                empty.hidden = false;
+                return;
+            }
+            list.innerHTML = shown.map((item, i) =>
+                `<li><button type="button" class="site-search-item${i === 0 ? ' is-active' : ''}" data-site-go="${i}" role="option">
+                    <div class="site-search-kicker">${item.kind}</div>
+                    <strong>${item.title.replace(/</g, '')}</strong>
+                    <span>${(item.blurb || '').replace(/</g, '')}</span>
+                </button></li>`
+            ).join('');
+        }
+
+        function go(i) {
+            const item = shown[i];
+            if (!item) return;
+            const hash = '#' + item.pageId;
+            if (typeof forceScreenChange === 'function') {
+                forceScreenChange(hash, { skipScroll: true });
+                history.pushState(null, '', hash);
+            }
+            requestAnimationFrame(() => {
+                const el = item.hit ? document.querySelector('[data-site-hit="' + item.hit + '"]') : document.getElementById(item.pageId);
+                if (el) {
+                    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    el.classList.add('is-jump-target');
+                    setTimeout(() => el.classList.remove('is-jump-target'), 1600);
+                } else {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+            });
+            input.blur();
+            closePanel();
+        }
+
+        input.addEventListener('input', () => renderResults(input.value));
+        input.addEventListener('focus', () => {
+            ensureIndex();
+            if (norm(input.value).length >= 2) renderResults(input.value);
+        });
+        list.addEventListener('mousedown', (e) => {
+            const btn = e.target.closest('[data-site-go]');
+            if (!btn) return;
+            e.preventDefault();
+            go(Number(btn.getAttribute('data-site-go')));
+        });
+        input.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                input.value = '';
+                closePanel();
+                input.blur();
+                return;
+            }
+            if (!shown.length) return;
+            if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                active = (active + 1) % shown.length;
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                active = (active - 1 + shown.length) % shown.length;
+            } else if (e.key === 'Enter' && active >= 0) {
+                e.preventDefault();
+                go(active);
+                return;
+            } else {
+                return;
+            }
+            list.querySelectorAll('.site-search-item').forEach((el, i) => el.classList.toggle('is-active', i === active));
+            list.querySelector('.site-search-item.is-active')?.scrollIntoView({ block: 'nearest' });
+        });
+        document.addEventListener('click', (e) => {
+            if (!root.contains(e.target)) closePanel();
+        });
+        document.addEventListener('keydown', (e) => {
+            const inField = document.activeElement && (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA');
+            if ((e.key === 'k' || e.key === 'K') && (e.ctrlKey || e.metaKey)) {
+                e.preventDefault();
+                input.focus();
+                input.select();
+                return;
+            }
+            if (e.key === '/' && !inField && document.activeElement !== input && document.activeElement !== navSearchInput) {
+                e.preventDefault();
+                input.focus();
+                input.select();
+            }
+        });
+        if (window.requestIdleCallback) requestIdleCallback(() => ensureIndex(), { timeout: 1800 });
+        else setTimeout(ensureIndex, 600);
+    })();
 
     document.querySelectorAll('a[href^="#"]').forEach((link) => {
         link.addEventListener('click', (e) => {

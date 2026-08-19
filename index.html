@@ -6,7 +6,7 @@
     <title>REBUILD 7 | MELVIN</title>
     
 	<link rel="icon" type="image/png" href="logo_simples_removebcg.png">
-  <link rel="stylesheet" href="styles.css?v=matriz-32">
+  <link rel="stylesheet" href="styles.css?v=matriz-34">
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sora:wght@600;700;800&family=Carlito:ital,wght@0,400;0,700;1,400&family=Libre+Baskerville:wght@400;700&display=swap" rel="stylesheet">
@@ -269,6 +269,17 @@
         <div class="topbar">
             <div class="breadcrumb">
                 📍 ONDE ESTOU: <span id="current-location">RevOps Book</span>
+            </div>
+            <div class="site-search" id="siteSearchRoot">
+                <label class="site-search-field" for="siteSearchInput">
+                    <span class="site-search-ico" aria-hidden="true">⌕</span>
+                    <input type="search" id="siteSearchInput" placeholder="Buscar no Book: páginas, palavras, itens…" autocomplete="off" spellcheck="false">
+                    <kbd class="site-search-hint">Ctrl K</kbd>
+                </label>
+                <div class="site-search-panel" id="siteSearchPanel" hidden>
+                    <ul class="site-search-list" id="siteSearchList" role="listbox"></ul>
+                    <p class="site-search-empty" id="siteSearchEmpty" hidden>Nada encontrado para essa busca.</p>
+                </div>
             </div>
             <div class="topbar-actions">
                 <button class="topbar-btn" id="themeToggleBtn" title="Alternar Tema (Claro/Escuro)">🌓</button>
@@ -13704,8 +13715,8 @@ Um abraço!"
         </section>
 
 	</main>
-  <script src="app.js?v=matriz-32"></script>
-  <script src="hire-matrix.js?v=matriz-32"></script>
+  <script src="app.js?v=matriz-34"></script>
+  <script src="hire-matrix.js?v=matriz-34"></script>
 	
 </body>
 </html>
