@@ -2792,7 +2792,7 @@ initFluxoPdfUX({
     defaultVer: 'full',
     readyHint: 'Arraste para mover · scroll no mapa · Ctrl + scroll para zoom',
     sources: {
-        full: 'assets/fluxo-sdr-ia-oficial.png'
+        full: 'assets/fluxo-sdr-ia-oficial.png?v=matriz-41'
     },
     hots: { full: [] },
     edges: { full: [] }
