@@ -2269,15 +2269,57 @@ function initFluxoPdfUX(cfg) {
         });
     }
 
+    function mapSize() {
+        const native = stage.classList.contains('fluxo-pdf-stage--native');
+        const iw = img.naturalWidth || img.offsetWidth || 1100;
+        const ih = img.naturalHeight || img.offsetHeight || 1500;
+        if (native) return { w: iw, h: ih };
+        const w = stage.offsetWidth || img.offsetWidth || 1100;
+        const h = stage.offsetHeight || Math.round(w * (ih / Math.max(iw, 1))) || 1500;
+        return { w, h };
+    }
+
     function applyZoom() {
         zoomLayer.style.transform = `scale(${zoom})`;
-        const w = stage.offsetWidth || img.offsetWidth || 1100;
-        const h = stage.offsetHeight || img.offsetHeight || 1500;
+        const { w, h } = mapSize();
         zoomLayer.style.marginRight = `${Math.max(0, w * (zoom - 1))}px`;
         zoomLayer.style.marginBottom = `${Math.max(0, h * (zoom - 1))}px`;
         const resetBtn = toolbar?.querySelector('[data-fluxo-zoom="reset"]');
         if (resetBtn) resetBtn.textContent = `${Math.round(zoom * 100)}%`;
         syncSvgSize();
+    }
+
+    function clampZoom(value) {
+        return Math.min(3, Math.max(0.25, +Number(value).toFixed(3)));
+    }
+
+    function zoomAt(next, clientX, clientY) {
+        const prev = zoom;
+        zoom = clampZoom(next);
+        if (zoom === prev) {
+            applyZoom();
+            return;
+        }
+        const rect = viewport.getBoundingClientRect();
+        const x = (clientX == null ? rect.left + rect.width / 2 : clientX) - rect.left;
+        const y = (clientY == null ? rect.top + rect.height / 2 : clientY) - rect.top;
+        const cx = viewport.scrollLeft + x;
+        const cy = viewport.scrollTop + y;
+        applyZoom();
+        const ratio = zoom / prev;
+        viewport.scrollLeft = cx * ratio - x;
+        viewport.scrollTop = cy * ratio - y;
+    }
+
+    function fitDiagram(mode) {
+        const { w, h } = mapSize();
+        const vw = viewport.clientWidth - 24;
+        const vh = viewport.clientHeight - 24;
+        if (vw < 80 || vh < 80 || w < 10 || h < 10) return;
+        if (mode === 'width') zoom = clampZoom(vw / w);
+        else zoom = clampZoom(Math.min(vw / w, vh / h));
+        applyZoom();
+        viewport.scrollTo({ left: 0, top: 0 });
     }
 
     function syncSvgSize() {
@@ -2397,9 +2439,16 @@ function initFluxoPdfUX(cfg) {
             if (!waiting) {
                 img.src = sources[key];
                 buildHots();
-                zoom = 1;
-                img.onload = applyZoom;
-                applyZoom();
+                const ready = () => {
+                    if (stage.classList.contains('fluxo-pdf-stage--native')) fitDiagram('width');
+                    else {
+                        zoom = 1;
+                        applyZoom();
+                        viewport.scrollTo({ left: 0, top: 0 });
+                    }
+                };
+                img.onload = ready;
+                if (img.complete && img.naturalWidth) ready();
             }
             return;
         }
@@ -2407,16 +2456,17 @@ function initFluxoPdfUX(cfg) {
         const btn = e.target.closest('[data-fluxo-zoom], [data-fluxo-fit]');
         if (!btn || btn.disabled) return;
         if (btn.hasAttribute('data-fluxo-fit')) {
-            zoom = 1;
-            applyZoom();
-            viewport.scrollTo({ left: 0, top: 0, behavior: 'smooth' });
+            fitDiagram('contain');
             return;
         }
         const mode = btn.getAttribute('data-fluxo-zoom');
-        if (mode === 'in') zoom = Math.min(2.2, +(zoom + 0.15).toFixed(2));
-        if (mode === 'out') zoom = Math.max(0.4, +(zoom - 0.15).toFixed(2));
-        if (mode === 'reset') zoom = 1;
-        applyZoom();
+        if (mode === 'in') zoomAt(zoom + 0.15);
+        if (mode === 'out') zoomAt(zoom - 0.15);
+        if (mode === 'reset') {
+            zoom = 1;
+            applyZoom();
+            viewport.scrollTo({ left: 0, top: 0 });
+        }
         if (activeId && stage.classList.contains('is-focus')) focusNode(activeId);
     });
 
@@ -2433,7 +2483,6 @@ function initFluxoPdfUX(cfg) {
     viewport.addEventListener('pointerdown', (e) => {
         if (e.target.closest('.fluxo-tool')) return;
         if (e.target.closest('.fluxo-pdf-hot')) {
-            // hotspot handles its own click; don't pan
             ignoreClick = false;
             moved = false;
             return;
@@ -2446,6 +2495,7 @@ function initFluxoPdfUX(cfg) {
         startY = e.clientY;
         scrollLeft = viewport.scrollLeft;
         scrollTop = viewport.scrollTop;
+        viewport.setPointerCapture?.(e.pointerId);
     });
     viewport.addEventListener('pointermove', (e) => {
         if (!panning) return;
@@ -2472,6 +2522,16 @@ function initFluxoPdfUX(cfg) {
         panning = false;
         viewport.classList.remove('is-panning');
     });
+    viewport.addEventListener('wheel', (e) => {
+        e.preventDefault();
+        if (e.ctrlKey || e.metaKey) {
+            const next = e.deltaY > 0 ? zoom * 0.9 : zoom * 1.1;
+            zoomAt(next, e.clientX, e.clientY);
+            return;
+        }
+        viewport.scrollLeft += e.shiftKey ? e.deltaY : e.deltaX;
+        viewport.scrollTop += e.shiftKey ? 0 : e.deltaY;
+    }, { passive: false });
 
     hotsBox.addEventListener('click', (e) => {
         const hot = e.target.closest('.fluxo-pdf-hot');
@@ -2494,12 +2554,32 @@ function initFluxoPdfUX(cfg) {
         else focusNode(hit.id);
     });
 
-    if (img.complete) applyZoom();
-    else img.addEventListener('load', applyZoom);
+    if (img.complete && img.naturalWidth) {
+        if (stage.classList.contains('fluxo-pdf-stage--native')) fitDiagram('width');
+        else applyZoom();
+    } else {
+        img.addEventListener('load', () => {
+            if (stage.classList.contains('fluxo-pdf-stage--native')) fitDiagram('width');
+            else applyZoom();
+        }, { once: true });
+    }
     window.addEventListener('resize', () => {
         applyZoom();
         if (activeId && stage.classList.contains('is-focus')) focusNode(activeId);
     });
+    if (typeof ResizeObserver === 'function') {
+        let primed = false;
+        const ro = new ResizeObserver(() => {
+            if (viewport.clientWidth < 80) return;
+            if (!primed && stage.classList.contains('fluxo-pdf-stage--native')) {
+                primed = true;
+                fitDiagram('width');
+                return;
+            }
+            applyZoom();
+        });
+        ro.observe(viewport);
+    }
 }
 
 const FLUXO_INBOUND_PDF_HOTS = [
@@ -2710,7 +2790,7 @@ initFluxoPdfUX({
     stripId: 'fluxoSdrIaPathStrip',
     stripTextId: 'fluxoSdrIaPathText',
     defaultVer: 'p1',
-    readyHint: 'Arraste para navegar · zoom na imagem oficial',
+    readyHint: 'Arraste para mover · scroll no mapa · Ctrl + scroll para zoom',
     sources: {
         p1: 'assets/fluxo-sdr-ia-p1.png',
         p2: 'assets/fluxo-sdr-ia-p2.png',

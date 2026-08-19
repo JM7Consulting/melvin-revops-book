@@ -3173,6 +3173,8 @@ body.light-mode .gim-accordion.gim-dor-oculta {
         rgba(2, 6, 23, 0.25);
     cursor: grab;
     scrollbar-width: thin;
+    overscroll-behavior: contain;
+    touch-action: none;
 }
 .fluxo-board-wrap-in.is-panning { cursor: grabbing; }
 .fluxo-board-wrap-in::-webkit-scrollbar { height: 10px; width: 10px; }
@@ -3322,6 +3324,19 @@ body.light-mode .gim-accordion.gim-dor-oculta {
     user-select: none;
     -webkit-user-drag: none;
     border-radius: 0;
+}
+.fluxo-pdf-wrap--map {
+    min-height: min(68vh, 760px);
+    max-height: min(84vh, 1020px);
+}
+.fluxo-pdf-stage--native {
+    max-width: none;
+    width: max-content;
+    margin: 0;
+}
+.fluxo-pdf-stage--native .fluxo-pdf-img {
+    width: auto;
+    max-width: none;
 }
 .fluxo-pdf-wires,
 .fluxo-pdf-hots {
@@ -5479,10 +5494,7 @@ body.light-mode .welcome-lead { color: #64748B; }
 }
 .sdr-ia-tabs {
     align-items: center;
-    margin-top: 0;
-}
-.fluxo-toolbar-spacer {
-    flex: 1 1 12px;
+    margin: 0 0 10px;
 }
 .crono-tab {
   border: 0;

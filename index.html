@@ -6,7 +6,7 @@
     <title>REBUILD 7 | MELVIN</title>
     
 	<link rel="icon" type="image/png" href="logo_simples_removebcg.png">
-  <link rel="stylesheet" href="styles.css?v=matriz-36">
+  <link rel="stylesheet" href="styles.css?v=matriz-37">
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sora:wght@600;700;800&family=Carlito:ital,wght@0,400;0,700;1,400&family=Libre+Baskerville:wght@400;700&display=swap" rel="stylesheet">
@@ -8366,21 +8366,28 @@ Um abraço!"
                 <div class="gim-source-chip">Fonte: Fluxo SDR IA.drawio</div>
             </div>
 
-            <div class="crono-tabs sdr-ia-tabs" role="tablist" aria-label="Processos SDR IA" id="fluxoSdrIaToolbar">
-                <button type="button" class="crono-tab is-active" role="tab" aria-selected="true" data-fluxo-pdf="p1">Processo 1 · Qualificação</button>
-                <button type="button" class="crono-tab" role="tab" aria-selected="false" data-fluxo-pdf="p2">Processo 2 · Ocioso &amp; Nutrição</button>
-                <button type="button" class="crono-tab" role="tab" aria-selected="false" data-fluxo-pdf="full">Mapa completo</button>
-                <span class="fluxo-toolbar-spacer" aria-hidden="true"></span>
-                <button type="button" class="fluxo-tool" data-fluxo-zoom="out" title="Diminuir">−</button>
-                <button type="button" class="fluxo-tool" data-fluxo-zoom="reset" title="100%">100%</button>
-                <button type="button" class="fluxo-tool" data-fluxo-zoom="in" title="Aumentar">+</button>
-                <button type="button" class="fluxo-tool" data-fluxo-fit title="Enquadrar">⊡ Enquadrar</button>
+            <div id="fluxoSdrIaToolbar">
+                <div class="crono-tabs sdr-ia-tabs" role="tablist" aria-label="Processos SDR IA">
+                    <button type="button" class="crono-tab is-active" role="tab" aria-selected="true" data-fluxo-pdf="p1">Processo 1 · Qualificação</button>
+                    <button type="button" class="crono-tab" role="tab" aria-selected="false" data-fluxo-pdf="p2">Processo 2 · Ocioso &amp; Nutrição</button>
+                    <button type="button" class="crono-tab" role="tab" aria-selected="false" data-fluxo-pdf="full">Mapa completo</button>
+                </div>
+                <div class="fluxo-toolbar">
+                    <div class="fluxo-toolbar-left">
+                        <button type="button" class="fluxo-tool" data-fluxo-zoom="out" title="Diminuir">−</button>
+                        <button type="button" class="fluxo-tool" data-fluxo-zoom="reset" title="100%">100%</button>
+                        <button type="button" class="fluxo-tool" data-fluxo-zoom="in" title="Aumentar">+</button>
+                    </div>
+                    <div class="fluxo-toolbar-hint">Arraste para mover · scroll no mapa · Ctrl + scroll para zoom</div>
+                    <div class="fluxo-toolbar-right">
+                        <button type="button" class="fluxo-tool" data-fluxo-fit title="Ver o mapa inteiro">⊡ Enquadrar</button>
+                    </div>
+                </div>
             </div>
-            <p class="fluxo-toolbar-hint" style="margin: 8px 0 12px;">Arraste para navegar · zoom na imagem oficial</p>
 
-            <div class="fluxo-board-wrap fluxo-board-wrap-in fluxo-pdf-wrap" id="fluxoSdrIaViewport">
+            <div class="fluxo-board-wrap fluxo-board-wrap-in fluxo-pdf-wrap fluxo-pdf-wrap--map" id="fluxoSdrIaViewport">
                 <div class="fluxo-zoom-layer" id="fluxoSdrIaZoom">
-                    <div class="fluxo-pdf-stage" id="fluxoSdrIaStage" data-pdf-ver="p1">
+                    <div class="fluxo-pdf-stage fluxo-pdf-stage--native" id="fluxoSdrIaStage" data-pdf-ver="p1">
                         <img
                             id="fluxoSdrIaImg"
                             class="fluxo-pdf-img"
@@ -13787,8 +13794,8 @@ Um abraço!"
         </section>
 
 	</main>
-  <script src="app.js?v=matriz-36"></script>
-  <script src="hire-matrix.js?v=matriz-36"></script>
+  <script src="app.js?v=matriz-37"></script>
+  <script src="hire-matrix.js?v=matriz-37"></script>
 	
 </body>
 </html>
