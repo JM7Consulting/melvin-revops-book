@@ -2789,16 +2789,13 @@ initFluxoPdfUX({
     toolbarId: 'fluxoSdrIaToolbar',
     stripId: 'fluxoSdrIaPathStrip',
     stripTextId: 'fluxoSdrIaPathText',
-    defaultVer: 'p1',
+    defaultVer: 'full',
     readyHint: 'Arraste para mover · scroll no mapa · Ctrl + scroll para zoom',
     sources: {
-        p1: 'assets/fluxo-sdr-ia-p1.png',
-        p2: 'assets/fluxo-sdr-ia-p2.png',
-        p3: 'assets/fluxo-sdr-ia-p3.png',
         full: 'assets/fluxo-sdr-ia-oficial.png'
     },
-    hots: { p1: [], p2: [], p3: [], full: [] },
-    edges: { p1: [], p2: [], p3: [], full: [] }
+    hots: { full: [] },
+    edges: { full: [] }
 });
 
 /* Objeções kit: busca + filtros por página */
