@@ -499,29 +499,10 @@
         }
     })();
 
-    // Personas · tabs + Lead Scoring matrix
+    // Lead Scoring A–D matrix
     (function initPersonaLeadScoring() {
-        const root = document.getElementById('gim-personas');
+        const root = document.getElementById('gim-lead-scoring');
         if (!root) return;
-
-        const tabs = root.querySelectorAll('[data-persona-tab]');
-        const panels = root.querySelectorAll('[data-persona-panel]');
-        tabs.forEach((tab) => {
-            tab.addEventListener('click', () => {
-                const id = tab.getAttribute('data-persona-tab');
-                tabs.forEach((t) => {
-                    const on = t === tab;
-                    t.classList.toggle('is-active', on);
-                    t.setAttribute('aria-selected', on ? 'true' : 'false');
-                });
-                panels.forEach((panel) => {
-                    const on = panel.getAttribute('data-persona-panel') === id;
-                    panel.classList.toggle('is-active', on);
-                    if (on) panel.removeAttribute('hidden');
-                    else panel.setAttribute('hidden', '');
-                });
-            });
-        });
 
         const matrix = document.getElementById('leadScoreMatrix');
         if (!matrix) return;
