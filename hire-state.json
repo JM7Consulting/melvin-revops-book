@@ -1,6 +1,6 @@
 {
   "v": 1,
-  "publishedAt": "2026-08-20T17:48:07.387Z",
+  "publishedAt": "2026-08-20T18:11:38.799Z",
   "config": {
     "role": "BDR Outbound · Melvin",
     "offer": "PJ · 160h/mês · R$ 3.500 + variável",
@@ -898,7 +898,7 @@
         "hunter": "4",
         "sdrVsBdr": "4",
         "crmhygiene": "3",
-        "coldcall": "",
+        "coldcall": "4",
         "resilience": "4",
         "icp": "3",
         "offer": "4",
@@ -910,7 +910,7 @@
         "case": "2",
         "fit": "2",
         "roleplay": "4",
-        "cso": ""
+        "cso": "5"
       },
       "interviewNote": "",
       "processNote": "",
