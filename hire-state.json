@@ -1,6 +1,6 @@
 {
   "v": 1,
-  "publishedAt": "2026-08-20T13:59:24.403Z",
+  "publishedAt": "2026-08-20T17:48:07.387Z",
   "config": {
     "role": "BDR Outbound · Melvin",
     "offer": "PJ · 160h/mês · R$ 3.500 + variável",
@@ -742,7 +742,7 @@
         "case": "5",
         "fit": "4",
         "roleplay": "4",
-        "cso": ""
+        "cso": "3"
       },
       "interviewNote": "Boa voz, bons detalhes, apresenta falas com mais de 30s.",
       "processNote": "",
@@ -903,13 +903,13 @@
         "icp": "3",
         "offer": "4",
         "coach": "4",
-        "comm": "",
+        "comm": "4",
         "start": "5"
       },
       "process": {
         "case": "2",
         "fit": "2",
-        "roleplay": "",
+        "roleplay": "4",
         "cso": ""
       },
       "interviewNote": "",
@@ -1078,7 +1078,7 @@
         "case": "4",
         "fit": "5",
         "roleplay": "5",
-        "cso": ""
+        "cso": "4"
       },
       "interviewNote": "Boa voz, bons detalhes, apresenta falas com mais de 30s.",
       "processNote": "",
