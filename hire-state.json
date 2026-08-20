@@ -1,6 +1,6 @@
 {
   "v": 1,
-  "publishedAt": "2026-08-18T20:51:21.085Z",
+  "publishedAt": "2026-08-20T13:59:24.403Z",
   "config": {
     "role": "BDR Outbound · Melvin",
     "offer": "PJ · 160h/mês · R$ 3.500 + variável",
@@ -715,7 +715,7 @@
       "id": "gabriel-cavalcante",
       "name": "Gabriel Cavalcante",
       "screen": {
-        "age": "30-40",
+        "age": "",
         "education": "superior-andamento",
         "marital": "",
         "salary": "compativel",
@@ -885,7 +885,7 @@
       "screen": {
         "age": "30-40",
         "education": "superior-andamento",
-        "marital": "",
+        "marital": "casado",
         "salary": "compativel",
         "crm": "sim",
         "service": "telefone-online",
@@ -898,18 +898,18 @@
         "hunter": "4",
         "sdrVsBdr": "4",
         "crmhygiene": "3",
-        "coldcall": "4",
+        "coldcall": "",
         "resilience": "4",
         "icp": "3",
         "offer": "4",
         "coach": "4",
-        "comm": "4",
+        "comm": "",
         "start": "5"
       },
       "process": {
-        "case": "3",
-        "fit": "3",
-        "roleplay": "4",
+        "case": "2",
+        "fit": "2",
+        "roleplay": "",
         "cso": ""
       },
       "interviewNote": "",
@@ -919,7 +919,7 @@
       "phasesComplete": true,
       "eliminated": false,
       "eliminateReason": "",
-      "stage": "final"
+      "stage": "entrevista"
     },
     {
       "id": "michelle-nunes",
@@ -1051,8 +1051,8 @@
       "id": "poliana-sampaio",
       "name": "Poliana Estevão Sampaio",
       "screen": {
-        "age": "30-40",
-        "education": "superior-completo",
+        "age": "",
+        "education": "superior-andamento",
         "marital": "",
         "salary": "compativel",
         "crm": "sim",
