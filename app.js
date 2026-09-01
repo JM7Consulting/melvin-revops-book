@@ -1155,9 +1155,17 @@
     })();
 
     // Roadmap RevOps · tabs (+ deep-link data-crono-goto)
-    const cronoTabs = document.querySelectorAll('[data-crono-tab]');
-    const cronoPanels = document.querySelectorAll('[data-crono-panel]');
+    const cronoRoot = document.getElementById('agenda-entregas');
+    const cronoTabs = cronoRoot ? cronoRoot.querySelectorAll('[data-crono-tab]') : [];
+    const cronoPanels = cronoRoot ? cronoRoot.querySelectorAll('[data-crono-panel]') : [];
+    function normalizeCronoTab(id) {
+        if (!id) return id;
+        if (id === 'seq' || id === 's3') return 'overview';
+        if (id === 's1' || id === 's2') return 'history';
+        return id;
+    }
     function activateCronoTab(id) {
+        id = normalizeCronoTab(id);
         if (!id) return;
         cronoTabs.forEach((t) => {
             const on = t.getAttribute('data-crono-tab') === id;
@@ -1176,7 +1184,7 @@
     });
     document.querySelectorAll('[data-crono-goto]').forEach((el) => {
         el.addEventListener('click', (e) => {
-            const id = el.getAttribute('data-crono-goto');
+            const id = normalizeCronoTab(el.getAttribute('data-crono-goto'));
             if (!id) return;
             e.preventDefault();
             if (typeof forceScreenChange === 'function') {
@@ -1277,7 +1285,7 @@
         let openCronoTab = null;
         if (hash === '#plano-acao') {
             hash = '#agenda-entregas';
-            openCronoTab = 'seq';
+            openCronoTab = 'overview';
         }
         if (hash === '#roadmap-backlog') {
             openCronoTab = 'overview';

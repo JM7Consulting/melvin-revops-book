@@ -6,7 +6,7 @@
     <title>REBUILD 7 | MELVIN</title>
     
 	<link rel="icon" type="image/png" href="logo_simples_removebcg.png">
-  <link rel="stylesheet" href="styles.css?v=matriz-45">
+  <link rel="stylesheet" href="styles.css?v=matriz-46">
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sora:wght@600;700;800&family=Carlito:ital,wght@0,400;0,700;1,400&family=Libre+Baskerville:wght@400;700&display=swap" rel="stylesheet">
@@ -321,7 +321,7 @@
 <section id="plano-acao" class="blueprint-page" style="padding: 40px; border-radius: 16px; margin-top: 40px;" data-hidden-nav="true">
             <div class="cadencia-header-block">
                 <div class="cadencia-title-line" style="font-size: 1.6rem; color: #f59e0b;">⚡ Redirecionado</div>
-                <p class="cadencia-subtitle" style="padding-left:0;max-width:52ch;">O <strong>Plano de Ação</strong> e o <strong>Cronograma</strong> viraram um único lugar: <a href="#agenda-entregas" style="color:var(--melvin-cyan);font-weight:700;">Roadmap RevOps</a>. Abra a aba <em>Sequência · Agora</em>.</p>
+                <p class="cadencia-subtitle" style="padding-left:0;max-width:52ch;">O <strong>Plano de Ação</strong> e o <strong>Cronograma</strong> viraram um único lugar: <a href="#agenda-entregas" style="color:var(--melvin-cyan);font-weight:700;">Roadmap RevOps</a> · aba <em>Operação</em>.</p>
             </div>
             <p style="margin-top:18px;"><a class="crono-cta" href="#agenda-entregas">Ir ao Roadmap RevOps →</a></p>
             <p class="crono-card-note" style="margin-top:14px;">A seção <strong>ATA 30/07 — Desenvolver</strong> foi removida deste fluxo (pedido 04/08/2026). Ata Melvin = OK no Roadmap.</p>
@@ -1527,980 +1527,210 @@
             <p class="jd-hash-hint">Acesso: menu Ops · <code>#job-bdr</code></p>
         </section>
 
-		<!-- PÁGINA INDEPENDENTE: CRONOGRAMA DE TRABALHO (HIGH-LEVEL DASHBOARD) -->
-		<section id="agenda-entregas" class="crono-page blueprint-page">
+		<section id="agenda-entregas" class="crono-page rm-page blueprint-page">
 
-			<div class="crono-header">
-				<div class="crono-header-top">
-					<div>
-						<div class="cadencia-title-line crono-title">🗺️ Roadmap RevOps</div>
+			<header class="rm-hero">
+				<div class="rm-hero-copy">
+					<div class="cadencia-title-line crono-title">🗺️ Roadmap RevOps</div>
+					<p class="rm-lead">Sequência operacional do projeto · atualizado <strong>01/09/2026</strong></p>
+				</div>
+				<div class="rm-focus-strip" aria-label="Foco atual">
+					<div class="rm-focus-pill rm-focus-pill--now">
+						<span class="rm-focus-label">Agora</span>
+						<strong>Onboarding BDR</strong>
+						<small>31/08–04/09 · day one 04/09</small>
 					</div>
-					<div class="crono-now-stack" aria-label="Fases atuais em paralelo">
-						<div class="crono-now-flag" title="Fase atual do projeto">
-							<span class="crono-now-pulse"></span>
-							<span class="crono-now-label">AGORA</span>
-							<strong>Onboarding · 31/08–04/09</strong>
-						</div>
-						<div class="crono-now-flag crono-now-flag--violet" title="Em seguida · Bitrix relatórios">
-							<span class="crono-now-pulse crono-now-pulse--violet"></span>
-							<span class="crono-now-label">NEXT</span>
-							<strong>Relatórios · 02–11/09</strong>
-						</div>
+					<div class="rm-focus-pill rm-focus-pill--next">
+						<span class="rm-focus-label">Next</span>
+						<strong>Relatórios Bitrix</strong>
+						<small>02–11/09 · Histórico 2026 · 07–11/09</small>
+					</div>
+					<div class="rm-focus-pill rm-focus-pill--progress">
+						<span class="rm-focus-label">Progresso</span>
+						<strong>96%</strong>
+						<small>6 fases OK · 2 programadas · backlog aberto</small>
 					</div>
 				</div>
+			</header>
 
-				<div class="crono-kpi-grid">
-					<article class="crono-kpi">
-						<div class="crono-kpi-ring" style="--p:100; --c:#10b981;"><span>OK</span></div>
-						<div>
-							<div class="crono-kpi-label">Contratação BDR</div>
-							<div class="crono-kpi-value">Fechado</div>
-							<div class="crono-kpi-meta">OK em 28/08 · seletivo concluído</div>
-						</div>
-					</article>
-					<article class="crono-kpi">
-						<div class="crono-kpi-ring" style="--p:100; --c:#10b981;"><span>OK</span></div>
-						<div>
-							<div class="crono-kpi-label">Atuação BDR</div>
-							<div class="crono-kpi-value">Fechado</div>
-							<div class="crono-kpi-meta">OK em 28/08 · prática + handoff</div>
-						</div>
-					</article>
-					<article class="crono-kpi">
-						<div class="crono-kpi-ring" style="--p:20; --c:#fbbf24;"><span>AGORA</span></div>
-						<div>
-							<div class="crono-kpi-label">Onboarding BDR</div>
-							<div class="crono-kpi-value">Em andamento</div>
-							<div class="crono-kpi-meta">31/08–04/09 · 5 dias úteis · day one 04/09</div>
-						</div>
-					</article>
-					<article class="crono-kpi">
-						<div class="crono-kpi-ring" style="--p:0; --c:#c4b5fd;"><span>NEXT</span></div>
-						<div>
-							<div class="crono-kpi-label">Relatórios Bitrix</div>
-							<div class="crono-kpi-value">Programado</div>
-							<div class="crono-kpi-meta">Aprendizado 02–11/09 · Histórico 07–11/09</div>
-						</div>
-					</article>
-				</div>
-
-				<!-- Trilho de fases -->
-				<div class="crono-phase-rail" aria-label="Fases do roadmap">
-					<div class="crono-phase done"><span class="crono-phase-dot"></span><div class="crono-phase-copy"><strong>Bitrix In</strong><small>configurado</small></div><span class="crono-flag flag-done">OK</span></div>
-					<div class="crono-phase-line done"></div>
-					<div class="crono-phase done"><span class="crono-phase-dot"></span><div class="crono-phase-copy"><strong>Contratação</strong><small>28/08</small></div><span class="crono-flag flag-done">OK</span></div>
-					<div class="crono-phase-line done"></div>
-					<div class="crono-phase done"><span class="crono-phase-dot"></span><div class="crono-phase-copy"><strong>Atuação BDR</strong><small>28/08</small></div><span class="crono-flag flag-done">OK</span></div>
-					<div class="crono-phase-line active"></div>
-					<div class="crono-phase active"><span class="crono-phase-dot"></span><div class="crono-phase-copy"><strong>Onboarding</strong><small>31/08–04/09</small></div><span class="crono-flag flag-now">AGORA</span></div>
-					<div class="crono-phase-line"></div>
-					<div class="crono-phase"><span class="crono-phase-dot"></span><div class="crono-phase-copy"><strong>Bitrix relatórios</strong><small>02–11/09</small></div><span class="crono-flag flag-info">NEXT</span></div>
-					<div class="crono-phase-line"></div>
-					<div class="crono-phase"><span class="crono-phase-dot"></span><div class="crono-phase-copy"><strong>Histórico 2026</strong><small>07–11/09</small></div><span class="crono-flag flag-info">NEXT</span></div>
-				</div>
+			<div class="rm-tabs crono-tabs" role="tablist" aria-label="Visões do Roadmap">
+				<button type="button" class="crono-tab rm-tab is-active" role="tab" aria-selected="true" data-crono-tab="overview">Operação</button>
+				<button type="button" class="crono-tab rm-tab" role="tab" aria-selected="false" data-crono-tab="history">Histórico</button>
 			</div>
 
-			<!-- Abas -->
-			<div class="crono-tabs" role="tablist" aria-label="Visões do Roadmap">
-				<button type="button" class="crono-tab is-active" role="tab" aria-selected="true" data-crono-tab="overview">Visão Geral</button>
-				<button type="button" class="crono-tab" role="tab" aria-selected="false" data-crono-tab="seq">Sequência · Agora</button>
-				<button type="button" class="crono-tab" role="tab" aria-selected="false" data-crono-tab="s1">Histórico · S1</button>
-				<button type="button" class="crono-tab" role="tab" aria-selected="false" data-crono-tab="s2">Histórico · S2</button>
-				<button type="button" class="crono-tab" role="tab" aria-selected="false" data-crono-tab="s3">Arquivo · entregas</button>
-			</div>
+			<!-- OPERAÇÃO -->
+			<div class="crono-panel rm-panel is-active" data-crono-panel="overview" role="tabpanel">
 
-			<!-- TAB: VISÃO GERAL -->
-			<div class="crono-panel is-active" data-crono-panel="overview" role="tabpanel">
-				<div class="crono-overview-grid">
-					<div class="crono-card">
-						<div class="crono-card-head">
-							<strong>Status do projeto</strong>
-							<span class="crono-flag flag-info">31/08/2026</span>
-						</div>
-						<div class="crono-chart-wrap">
-							<div class="crono-donut-visual" aria-hidden="true"></div>
-							<div class="crono-donut-center">
-								<strong>96%</strong>
-								<span>projeto</span>
-							</div>
-						</div>
-						<ul class="crono-legend">
-							<li><i class="lg-done"></i> Book · Out · Ata · Bitrix In · contratação · atuação BDR <b>OK</b></li>
-							<li><i class="lg-gap"></i> Onboarding 31/08–04/09 · Bitrix relatórios 02–11/09 · Histórico 2026 07–11/09</li>
-						</ul>
-					</div>
+				<details class="rm-fold rm-fold--done">
+					<summary>
+						<span class="rm-fold-title">Concluído · Book → Atuação BDR</span>
+						<span class="rm-fold-meta">6 fases · até 28/08</span>
+					</summary>
+					<ul class="rm-done-list">
+						<li><span class="rm-badge rm-badge--done">OK</span><strong>Book + Sprint</strong><time>31/07</time><span>Esteiras In/Out no ar</span></li>
+						<li><span class="rm-badge rm-badge--done">OK</span><strong>Revisão Out + Ata</strong><time>04/08</time><span>Call Vinícius · gaps · Ata Melvin</span></li>
+						<li><span class="rm-badge rm-badge--done">OK</span><strong>Bitrix Inbound</strong><time>07/08</time><span>Funil · SLA · SPN · D1–D15 · réguas</span></li>
+						<li><span class="rm-badge rm-badge--done">OK</span><strong>Contratação BDR</strong><time>28/08</time><span><a href="#job-bdr">Seletivo fechado</a></span></li>
+						<li><span class="rm-badge rm-badge--done">OK</span><strong>Atuação BDR</strong><time>28/08</time><span>Prática + handoff · material do onboarding</span></li>
+						<li><span class="rm-badge rm-badge--done">OK</span><strong>Inbound no Bitrix</strong><time>—</time><span><a href="#funil-inbound">Funil</a> · <a href="#wf-contato-nutricao-in">D1–D15</a> · <a href="#filtro-qualificacao-in">SPN</a></span></li>
+					</ul>
+				</details>
 
-					<div class="crono-card">
-						<div class="crono-card-head">
-							<strong>Burn-up por fase</strong>
-							<span class="crono-flag flag-now">Onboarding</span>
-						</div>
-						<div class="crono-bars">
-							<div class="crono-bar-row"><span>Book + Sprint</span><div class="crono-bar"><i style="width:100%"></i></div><em>31/07</em></div>
-							<div class="crono-bar-row"><span>Out + Ata (revisão)</span><div class="crono-bar"><i style="width:100%"></i></div><em>04/08</em></div>
-							<div class="crono-bar-row"><span>Bitrix In</span><div class="crono-bar"><i style="width:100%"></i></div><em>07/08</em></div>
-							<div class="crono-bar-row"><span>Contratação BDR</span><div class="crono-bar"><i style="width:100%"></i></div><em>28/08</em></div>
-							<div class="crono-bar-row"><span>Atuação BDR</span><div class="crono-bar"><i style="width:100%"></i></div><em>28/08</em></div>
-							<div class="crono-bar-row"><span>Onboarding BDR</span><div class="crono-bar crono-bar--amber"><i style="width:20%"></i></div><em>04/09</em></div>
-							<div class="crono-bar-row"><span>Bitrix · aprendizado</span><div class="crono-bar crono-bar--amber"><i style="width:0%"></i></div><em>11/09</em></div>
-							<div class="crono-bar-row"><span>Relatórios Histórico 2026</span><div class="crono-bar crono-bar--amber"><i style="width:0%"></i></div><em>11/09</em></div>
-						</div>
-						<p class="crono-card-note">Detalhe operacional na aba <strong>Sequência · Agora</strong>.</p>
-					</div>
+				<div class="rm-track" aria-label="Sequência operacional">
 
-					<div class="crono-card crono-card--wide">
-						<div class="crono-card-head">
-							<strong>Linha do tempo</strong>
-							<span class="crono-flag flag-done">ATUALIZADO</span>
+					<article class="rm-step rm-step--active">
+						<div class="rm-step-rail"><span class="rm-step-dot"></span></div>
+						<div class="rm-step-card">
+							<div class="rm-step-head">
+								<span class="rm-badge rm-badge--now">AGORA</span>
+								<h3>Onboarding BDR</h3>
+								<time datetime="2026-08-31/2026-09-04">31/08–04/09</time>
+							</div>
+							<p>5 dias úteis · day one na função em <strong>sex 04/09</strong>. Fundamentos · Book · persona · Bitrix · handoff.</p>
+							<div class="rm-step-links">
+								<a href="#bdr-copilot">BDR Copilot</a>
+								<a href="#jornada-conta">Jornada da Conta</a>
+								<a href="#presales-outbound">Presales</a>
+							</div>
 						</div>
-						<div class="crono-bars" style="gap:10px;">
-							<div class="crono-bar-row"><span style="min-width:88px;">20–31/07</span><em style="flex:1;text-align:left;font-style:normal;color:var(--text-muted);"><strong style="color:#10b981">✅</strong> Book · Sprint · esteiras In/Out no ar</em></div>
-							<div class="crono-bar-row"><span style="min-width:88px;">Ago/início</span><em style="flex:1;text-align:left;font-style:normal;color:var(--text-muted);"><strong style="color:#10b981">✅</strong> Revisão Out · alterações · gaps · Ata Melvin</em></div>
-							<div class="crono-bar-row"><span style="min-width:88px;">07/08</span><em style="flex:1;text-align:left;font-style:normal;color:var(--text-muted);"><strong style="color:#10b981">✅</strong> Bitrix Inbound configurado (funil · SLA · SPN · réguas)</em></div>
-							<div class="crono-bar-row"><span style="min-width:88px;">28/08</span><em style="flex:1;text-align:left;font-style:normal;color:var(--text-muted);"><strong style="color:#10b981">✅</strong> Contratação BDR OK · Atuação BDR OK</em></div>
-							<div class="crono-bar-row"><span style="min-width:88px;">31/08–04/09</span><em style="flex:1;text-align:left;font-style:normal;color:var(--text-muted);"><strong style="color:var(--melvin-cyan)">Onboarding BDR</strong> — em andamento · <strong>5 dias úteis</strong> · day one 04/09</em></div>
-							<div class="crono-bar-row"><span style="min-width:88px;">02–11/09</span><em style="flex:1;text-align:left;font-style:normal;color:var(--text-muted);"><strong style="color:#c4b5fd">Aprendizado Bitrix24</strong> — construção de relatórios</em></div>
-							<div class="crono-bar-row"><span style="min-width:88px;">07–11/09</span><em style="flex:1;text-align:left;font-style:normal;color:var(--text-muted);"><strong style="color:#6ee7b7">Relatórios Histórico 2026</strong> — Comercial</em></div>
-						</div>
-					</div>
+					</article>
 
-					<div class="crono-card crono-card--wide">
-						<div class="crono-card-head">
-							<strong>Now → Next → Later</strong>
-							<a href="#agenda-entregas" class="crono-link" data-crono-goto="seq">Abrir Sequência →</a>
+					<article class="rm-step rm-step--next">
+						<div class="rm-step-rail"><span class="rm-step-dot"></span></div>
+						<div class="rm-step-card">
+							<div class="rm-step-head">
+								<span class="rm-badge rm-badge--next">NEXT</span>
+								<h3>Aprendizado Bitrix24 · Relatórios</h3>
+								<time>02–11/09</time>
+							</div>
+							<p>Capacitação para construção de relatórios no Bitrix24 · datasets, filtros e visualizações.</p>
 						</div>
-						<div class="crono-next-grid">
-							<div class="crono-next">
-								<span class="crono-flag flag-now">NOW</span>
-								<strong>Onboarding BDR · 31/08–04/09</strong>
-								<p>Começou <strong>seg 31/08</strong>. <strong>5 dias úteis</strong> até day one na função em <strong>sex 04/09</strong>.</p>
+					</article>
+
+					<article class="rm-step rm-step--next">
+						<div class="rm-step-rail"><span class="rm-step-dot"></span></div>
+						<div class="rm-step-card">
+							<div class="rm-step-head">
+								<span class="rm-badge rm-badge--next">NEXT</span>
+								<h3>Relatórios Histórico 2026 Comercial</h3>
+								<time>07–11/09</time>
 							</div>
-							<div class="crono-next">
-								<span class="crono-flag flag-warn">NEXT</span>
-								<strong>Bitrix24 · aprendizado de relatórios · 02–11/09</strong>
-								<p>Capacitação para construção de relatórios no Bitrix24 (paralelo ao fim do onboarding).</p>
-							</div>
-							<div class="crono-next">
-								<span class="crono-flag flag-info">NEXT</span>
-								<strong>Relatórios Histórico 2026 Comercial · 07–11/09</strong>
-								<p>Construção dos relatórios comerciais com base no histórico 2026.</p>
-							</div>
-							<div class="crono-next">
-								<span class="crono-flag flag-info">BACKLOG</span>
-								<strong>Fluxos &amp; cadências · sem data</strong>
-								<p>Nutrição Out personalizada · 3 caminhos Inbound ICP · Copiloto Vinícius. <a href="#roadmap-backlog">Ver lista completa ↓</a></p>
-							</div>
+							<p>Painéis de funil, conversão e Lost com motivo · validar números In + Out.</p>
 						</div>
-					</div>
+					</article>
 				</div>
 
-				<article id="roadmap-backlog" class="crono-card crono-card--wide roadmap-backlog" style="margin-top:22px;border-left:4px solid #fb923c;">
-					<div class="crono-card-head">
-						<strong>📋 Ações pendentes · próximas semanas</strong>
-						<span class="crono-flag flag-info">SEM DATA</span>
+				<section id="roadmap-backlog" class="rm-backlog">
+					<div class="rm-backlog-head">
+						<h3>📋 Backlog · sem data</h3>
+						<span class="rm-badge rm-badge--backlog">5 itens</span>
 					</div>
-					<p class="crono-card-note" style="margin:0 0 12px;">Backlog operacional sem prazo fixo — priorizar após onboarding e relatórios. Incluir o <a href="#bdr-copilot">Copiloto do Vinícius</a> nos fluxos abaixo.</p>
-					<ol class="roadmap-backlog-list">
+					<p class="rm-backlog-note">Priorizar após onboarding e relatórios · incluir o <a href="#bdr-copilot">Copiloto do Vinícius</a>.</p>
+					<ol class="rm-backlog-list">
 						<li>
-							<span class="roadmap-backlog-num">01</span>
+							<span class="rm-backlog-num">01</span>
 							<div>
 								<strong>Cadência Outbound em Nutrição · personalização automática</strong>
-								<p>Pensar numa forma de a cadência de leads outbound em Nutrição ser personalizada automaticamente para cada lead.</p>
+								<p>Personalizar automaticamente a cadência de leads outbound em Nutrição para cada lead.</p>
 							</div>
 						</li>
 						<li>
-							<span class="roadmap-backlog-num">02</span>
+							<span class="rm-backlog-num">02</span>
 							<div>
 								<strong>Inbound ICP · sem contato</strong>
-								<p>Desenhar o fluxo do lead inbound que é ICP, mas ainda sem contato.</p>
+								<p>Fluxo do lead inbound ICP ainda sem contato.</p>
 							</div>
 						</li>
 						<li>
-							<span class="roadmap-backlog-num">03</span>
+							<span class="rm-backlog-num">03</span>
 							<div>
 								<strong>Inbound ICP · com contato · fora de momento de compra</strong>
-								<p>Desenhar o fluxo do lead inbound que é ICP, com contato, mas ainda não está em momento de compra.</p>
+								<p>Fluxo do lead ICP com contato, sem timing de compra.</p>
 							</div>
 						</li>
 						<li>
-							<span class="roadmap-backlog-num">04</span>
+							<span class="rm-backlog-num">04</span>
 							<div>
 								<strong>Inbound ICP · pós-reunião · fora de momento de compra</strong>
-								<p>Desenhar o fluxo do lead inbound que é ICP, fez reunião, mas não está em momento de compra.</p>
+								<p>Fluxo pós-reunião sem momento de compra.</p>
 							</div>
 						</li>
 						<li>
-							<span class="roadmap-backlog-num">05</span>
+							<span class="rm-backlog-num">05</span>
 							<div>
 								<strong>Copiloto do Vinícius nestes momentos</strong>
-								<p>Incluir o copiloto do Vinícius nos fluxos e momentos acima (nutrição personalizada + caminhos Inbound ICP).</p>
+								<p>Incluir o copiloto nos fluxos acima (nutrição + caminhos Inbound ICP).</p>
 							</div>
 						</li>
 					</ol>
-				</article>
+				</section>
 			</div>
 
-			<!-- TAB: SEQUÊNCIA -->
-			<div class="crono-panel" data-crono-panel="seq" role="tabpanel" hidden>
-				<div class="crono-panel-banner">
-					<div>
-						<strong>🗺️ Sequência operacional · única fonte de verdade</strong>
-						<p>Substitui o antigo Plano de Ação paralelo. Atualizado 31/08/2026.</p>
-					</div>
-					<span class="crono-flag flag-now">Onboarding · 31/08–04/09</span>
-				</div>
+			<!-- HISTÓRICO -->
+			<div class="crono-panel rm-panel" data-crono-panel="history" role="tabpanel" hidden>
 
-				<div class="crono-golive-grid">
-					<article class="crono-golive-card">
-						<div class="crono-golive-top"><span class="crono-flag flag-done">OK</span><strong>Revisão do OUTBOUND</strong></div>
-						<ul><li>Call / passagem com Vinícius concluída</li><li>Esteira Out validada no Book</li></ul>
-					</article>
-					<article class="crono-golive-card">
-						<div class="crono-golive-top"><span class="crono-flag flag-done">OK</span><strong>Alterações Out no site (pós-call)</strong></div>
-						<ul><li>Ajustes aplicados no RevOps Book</li><li>Fluxo Sinais · Régua · conteúdo alinhado</li></ul>
-					</article>
-					<article class="crono-golive-card">
-						<div class="crono-golive-top"><span class="crono-flag flag-done">OK</span><strong>Gaps de conteúdo pós-revisão</strong></div>
-						<ul><li>Gaps tratados / fechados no Book</li><li>Backlog residual (se houver) não bloqueia a semana Out</li></ul>
-					</article>
-					<article class="crono-golive-card">
-						<div class="crono-golive-top"><span class="crono-flag flag-done">OK</span><strong>Ata MELVIN</strong></div>
-						<ul><li>Pendências da ata consideradas fechadas neste roadmap</li><li>Checklist histórico permanece em <a href="#ops-pendencias">#ops-pendencias</a> (arquivo)</li></ul>
-					</article>
-					<article class="crono-golive-card">
-						<div class="crono-golive-top"><span class="crono-flag flag-done">OK</span><strong>Bitrix Inbound</strong></div>
-						<ul><li>Configuração In pronta (funil · SLA · SPN · D1–D15 · réguas)</li><li>Liberado para atuação BDR + contratação</li></ul>
-					</article>
-					<article class="crono-golive-card">
-						<div class="crono-golive-top"><span class="crono-flag flag-done">OK</span><strong>Contratação BDR</strong></div>
-						<ul><li>Seletivo concluído em <strong>28/08</strong></li><li>Registro em <a href="#job-bdr">#job-bdr</a></li></ul>
-					</article>
-					<article class="crono-golive-card">
-						<div class="crono-golive-top"><span class="crono-flag flag-done">OK</span><strong>Atuação BDR</strong></div>
-						<ul><li>Prática / handoff fechados em <strong>28/08</strong></li><li>Material alimenta o onboarding</li></ul>
-					</article>
-				</div>
+				<p class="rm-history-intro">Entregas do sprint inicial do RevOps Book (jul/2026). Checklist da Ata Melvin → <a href="#ops-pendencias">Ops Pendências</a>.</p>
 
-				<div class="roadmap-seq" style="margin-top:22px;display:flex;flex-direction:column;gap:14px;">
-					<article class="crono-card" style="border-left:4px solid #10b981;">
-						<div class="crono-card-head"><strong>1 · OK — INBOUND no Bitrix</strong><span class="crono-flag flag-done">PRONTO</span></div>
-						<p class="crono-card-note" style="margin:0;">Pipeline = Funil In · SLA &lt;15 min · SPN / Qualificação · D1–D15 · réguas de agenda · Feedback In · Lost com motivo.</p>
-						<ul style="margin:10px 0 0;padding-left:1.15rem;color:var(--text-muted);font-size:0.88rem;line-height:1.55;">
-							<li>Estágios e automações alinhados ao <a href="#funil-inbound">Funil Inbound</a></li>
-							<li>Cadência e réguas: <a href="#wf-contato-nutricao-in">D1–D15</a> · <a href="#wf-confirmacao-in">Confirmação</a></li>
-							<li>Qualificação: <a href="#filtro-qualificacao-in">Filtro / SPN</a></li>
-						</ul>
-					</article>
+				<details class="rm-fold">
+					<summary>
+						<span class="rm-fold-title">Semana 1 · Fundações &amp; Diagnóstico</span>
+						<span class="rm-fold-meta">20–24/07 · 7 entregas</span>
+					</summary>
+					<ul class="rm-history-list">
+						<li><strong>Infra &amp; Diagnóstico</strong><span>SPA · Inspeção Noturna · NΞΞMIAS</span><time>20/07</time></li>
+						<li><strong>Matrizes SWOT &amp; TOWS</strong><span>Arsenal comercial</span><time>20/07</time></li>
+						<li><strong>Matriz ICP (In/Out)</strong><span>Ghost CAC · Sniper Enterprise</span><time>20/07</time></li>
+						<li><strong>Roadmap RevOps (Fases 1–11)</strong><span>Roteiro alinhado</span><time>21/07</time></li>
+						<li><strong>Dores Ocultas &amp; Sangrentas</strong><span>Mapas In/Out GIM</span><time>22/07</time></li>
+						<li><strong>Matriz de Objeções</strong><span>GIM publicado</span><time>23/07</time></li>
+						<li><strong>Pipelines IN + OUT</strong><span>Funis e qualificação</span><time>24/07</time></li>
+					</ul>
+				</details>
 
-					<article class="crono-card" style="border-left:4px solid #10b981;">
-						<div class="crono-card-head"><strong>2 · OK — Contratação BDR</strong><span class="crono-flag flag-done">28/08</span></div>
-						<p class="crono-card-note" style="margin:0;">Seletivo fechado em <strong>28/08</strong>. JD, CVs, ranking e entrevistas em <a href="#job-bdr">#job-bdr</a>.</p>
-						<ul style="margin:10px 0 0;padding-left:1.15rem;color:var(--text-muted);font-size:0.88rem;line-height:1.55;">
-							<li>Triagem · entrevistas · decisão de comitê concluídas</li>
-							<li>Decisão: BDR externo (não treinar Gabi como BDR)</li>
-						</ul>
-					</article>
+				<details class="rm-fold">
+					<summary>
+						<span class="rm-fold-title">Semana 2 · Funil &amp; Outbound</span>
+						<span class="rm-fold-meta">25–27/07 · 5 entregas</span>
+					</summary>
+					<ul class="rm-history-list">
+						<li><strong>Pipelines de Vendas</strong><span>BDR Copilot · Multicanal · Jornada</span><time>25/07</time></li>
+						<li><strong>Filtros de Qualificação</strong><span>SPN In + 3 Gates Out</span><time>25/07</time></li>
+						<li><strong>Cadências Outbound</strong><span>D1–D35 · Confirmação Out</span><time>26/07</time></li>
+						<li><strong>Réguas Críticas</strong><span>Cancelamento · No-Show · Pós-Reunião</span><time>26/07</time></li>
+						<li><strong>Manuais de Rotina</strong><span>Presales · Closer · CS</span><time>27/07</time></li>
+					</ul>
+				</details>
 
-					<article class="crono-card" style="border-left:4px solid #10b981;">
-						<div class="crono-card-head"><strong>3 · OK — Atuação BDR</strong><span class="crono-flag flag-done">28/08</span></div>
-						<p class="crono-card-note" style="margin:0;">Atuação / prática BDR fechada em <strong>28/08</strong>. Aprendizados e gravações viram material do onboarding (31/08–04/09).</p>
-						<ul style="margin:10px 0 0;padding-left:1.15rem;color:var(--text-muted);font-size:0.88rem;line-height:1.55;">
-							<li>Cadência Out / Probe→Gate rodados na prática · <a href="#wf-contato-nutricao-out">Cadência Out</a></li>
-							<li>Diário de aprendizados + gravações curtas disponíveis para o onboarding</li>
-						</ul>
-					</article>
+				<details class="rm-fold">
+					<summary>
+						<span class="rm-fold-title">Publicação · 27/07</span>
+						<span class="rm-fold-meta">5 entregas · site live</span>
+					</summary>
+					<ul class="rm-history-list">
+						<li><strong>Kits de Objeções Presales</strong><span>In + Out HARDCORE</span><time>27/07</time></li>
+						<li><strong>Battlecards Concorrentes</strong><span>Fracttal · Engeman · SAP…</span><time>27/07</time></li>
+						<li><strong>Fluxos oficiais In + Out</strong><span>PDF draw.io · zoom/pan</span><time>27/07</time></li>
+						<li><strong>Funil Inbound (ajuste UX)</strong><span>Tags “Enxugar?”</span><time>27/07</time></li>
+						<li><strong>Rebrand RevOps + GitHub Pages</strong><span>Repo renomeado</span><time>27/07</time></li>
+					</ul>
+				</details>
 
-					<article class="crono-card" style="border-left:4px solid #fbbf24;">
-						<div class="crono-card-head"><strong>4 · AGORA — Programa de Onboarding BDR</strong><span class="crono-flag flag-now">31/08–04/09</span></div>
-						<p class="crono-card-note" style="margin:0;">Janela <strong>31/08–04/09</strong> · <strong>5 dias úteis</strong>. Day one na função em <strong>sexta 04/09</strong>.</p>
-						<ul style="margin:10px 0 0;padding-left:1.15rem;color:var(--text-muted);font-size:0.88rem;line-height:1.55;">
-							<li>Fundamentos · Book · persona · Bitrix · handoff para a função</li>
-							<li>Referência no Book: <a href="#bdr-copilot">BDR Copilot</a> · <a href="#jornada-conta">Jornada da Conta</a> · <a href="#presales-outbound">Presales</a></li>
-						</ul>
-					</article>
-
-					<article class="crono-card" style="border-left:4px solid #c4b5fd;">
-						<div class="crono-card-head"><strong>5 · NEXT — Aprendizado Bitrix24 · Relatórios</strong><span class="crono-flag flag-warn">02–11/09</span></div>
-						<p class="crono-card-note" style="margin:0;">Capacitação em Bitrix24 para <strong>construção de relatórios</strong> · <strong>02 a 11/09</strong>.</p>
-						<ul style="margin:10px 0 0;padding-left:1.15rem;color:var(--text-muted);font-size:0.88rem;line-height:1.55;">
-							<li>Dominar datasets, filtros e visualizações no Bitrix24</li>
-							<li>Preparar base para os relatórios comerciais do histórico 2026</li>
-						</ul>
-					</article>
-
-					<article class="crono-card" style="border-left:4px solid #6ee7b7;">
-						<div class="crono-card-head"><strong>6 · NEXT — Relatórios Histórico 2026 Comercial</strong><span class="crono-flag flag-info">07–11/09</span></div>
-						<p class="crono-card-note" style="margin:0;">Construção dos relatórios comerciais com <strong>Histórico 2026</strong> · <strong>07 a 11/09</strong>.</p>
-						<ul style="margin:10px 0 0;padding-left:1.15rem;color:var(--text-muted);font-size:0.88rem;line-height:1.55;">
-							<li>Painéis / views de funil, conversão e Lost com motivo</li>
-							<li>Validar números com a operação (In + Out)</li>
-						</ul>
-					</article>
-				</div>
-
-				<article class="crono-card roadmap-backlog" style="margin-top:22px;border-left:4px solid #fb923c;">
-					<div class="crono-card-head">
-						<strong>📋 Ações pendentes · próximas semanas</strong>
-						<span class="crono-flag flag-info">SEM DATA</span>
-					</div>
-					<p class="crono-card-note" style="margin:0 0 12px;">Backlog operacional sem prazo fixo — priorizar após onboarding e relatórios. Incluir o <a href="#bdr-copilot">Copiloto do Vinícius</a> nos fluxos abaixo.</p>
-					<ol class="roadmap-backlog-list">
-						<li>
-							<span class="roadmap-backlog-num">01</span>
-							<div>
-								<strong>Cadência Outbound em Nutrição · personalização automática</strong>
-								<p>Pensar numa forma de a cadência de leads outbound em Nutrição ser personalizada automaticamente para cada lead.</p>
-							</div>
-						</li>
-						<li>
-							<span class="roadmap-backlog-num">02</span>
-							<div>
-								<strong>Inbound ICP · sem contato</strong>
-								<p>Desenhar o fluxo do lead inbound que é ICP, mas ainda sem contato.</p>
-							</div>
-						</li>
-						<li>
-							<span class="roadmap-backlog-num">03</span>
-							<div>
-								<strong>Inbound ICP · com contato · fora de momento de compra</strong>
-								<p>Desenhar o fluxo do lead inbound que é ICP, com contato, mas ainda não está em momento de compra.</p>
-							</div>
-						</li>
-						<li>
-							<span class="roadmap-backlog-num">04</span>
-							<div>
-								<strong>Inbound ICP · pós-reunião · fora de momento de compra</strong>
-								<p>Desenhar o fluxo do lead inbound que é ICP, fez reunião, mas não está em momento de compra.</p>
-							</div>
-						</li>
-						<li>
-							<span class="roadmap-backlog-num">05</span>
-							<div>
-								<strong>Copiloto do Vinícius nestes momentos</strong>
-								<p>Incluir o copiloto do Vinícius nos fluxos e momentos acima (nutrição personalizada + caminhos Inbound ICP).</p>
-							</div>
-						</li>
-					</ol>
-				</article>
-
-				<div style="margin-top:22px;padding:18px 20px;border-radius:12px;border:1px dashed rgba(245,158,11,0.4);background:rgba(245,158,11,0.06);">
-					<strong style="color:#f59e0b;">Ordem correta</strong>
-					<p style="margin:8px 0 0;color:var(--text-muted);font-size:0.9rem;line-height:1.6;">Book/revisão Out/Ata/Bitrix In ✅ → <b>contratação OK 28/08 + atuação BDR OK 28/08</b> → <b>onboarding BDR 31/08–04/09</b> → aprendizado Bitrix24 relatórios (02–11/09) → relatórios Histórico 2026 Comercial (07–11/09) → backlog de fluxos/cadências (sem data).</p>
-				</div>
+				<details class="rm-fold">
+					<summary>
+						<span class="rm-fold-title">Sprint Book · 28–31/07</span>
+						<span class="rm-fold-meta">5 entregas · semana fechada</span>
+					</summary>
+					<ul class="rm-history-list">
+						<li><strong>Concorrentes v2</strong><span><a href="#gim-concorrentes">SW · HW · M&amp;A · Radar</a></span><time>30–31/07</time></li>
+						<li><strong>Seção ABM</strong><span><a href="#abm-programa">Programa + Paper</a></span><time>30–31/07</time></li>
+						<li><strong>Produtos Melvin × M&amp;A</strong><span><a href="#gim-produtos">Abas software/hardware</a></span><time>28–31/07</time></li>
+						<li><strong>Lead Scoring A–D</strong><span><a href="#gim-lead-scoring">Matriz interativa</a></span><time>28–31/07</time></li>
+						<li><strong>Ops Pendências UX</strong><span><a href="#ops-pendencias">Checklist arrastável</a></span><time>31/07</time></li>
+					</ul>
+				</details>
 			</div>
 
-			<!-- TAB: SEMANA 1 -->
-			<div class="crono-panel" data-crono-panel="s1" role="tabpanel" hidden>
-				<div class="crono-panel-banner">
-					<div>
-						<strong>🚀 Semana 1 · Fundações, Inteligência &amp; Diagnóstico</strong>
-						<p>Seg 20/07 → Sex 24/07 · base RevOps, matrizes e ICPs</p>
-					</div>
-					<span class="crono-flag flag-done">7 ENTREGAS · 100%</span>
-				</div>
-				<div class="crono-delivery-list">
-					<article class="crono-delivery done">
-						<div class="crono-delivery-id">01</div>
-						<div class="crono-delivery-body">
-							<div class="crono-delivery-top"><strong>Infra &amp; Diagnóstico</strong><span class="crono-flag flag-done">CONCLUÍDO</span></div>
-							<p>Motor SPA do site, Inspeção Noturna e Relatório NΞΞMIAS.</p>
-						</div>
-						<span class="crono-delivery-day">Seg 20/07</span>
-					</article>
-					<article class="crono-delivery done">
-						<div class="crono-delivery-id">02</div>
-						<div class="crono-delivery-body">
-							<div class="crono-delivery-top"><strong>Matrizes SWOT &amp; TOWS</strong><span class="crono-flag flag-done">CONCLUÍDO</span></div>
-							<p>Arsenal comercial · blindagem vs ERP e “Fazia Manual”.</p>
-						</div>
-						<span class="crono-delivery-day">Seg 20/07</span>
-					</article>
-					<article class="crono-delivery done">
-						<div class="crono-delivery-id">03</div>
-						<div class="crono-delivery-body">
-							<div class="crono-delivery-top"><strong>Matriz ICP (In/Out)</strong><span class="crono-flag flag-done">CONCLUÍDO</span></div>
-							<p>Barreira Ghost CAC + arquitetura Sniper Enterprise.</p>
-						</div>
-						<span class="crono-delivery-day">Seg 20/07</span>
-					</article>
-					<article class="crono-delivery done">
-						<div class="crono-delivery-id">04</div>
-						<div class="crono-delivery-body">
-							<div class="crono-delivery-top"><strong>Roadmap RevOps (Fases 1–11)</strong><span class="crono-flag flag-done">CONCLUÍDO</span></div>
-							<p>Roteiro alinhado ao Cronograma · atalho <code>#plano-acao</code>.</p>
-						</div>
-						<span class="crono-delivery-day">Ter 21/07</span>
-					</article>
-					<article class="crono-delivery done">
-						<div class="crono-delivery-id">05</div>
-						<div class="crono-delivery-body">
-							<div class="crono-delivery-top"><strong>Dores Ocultas &amp; Sangrentas</strong><span class="crono-flag flag-done">CONCLUÍDO</span></div>
-							<p>Mapas Inbound e Outbound (base GIM) publicados.</p>
-						</div>
-						<span class="crono-delivery-day">Qua 22/07</span>
-					</article>
-					<article class="crono-delivery done">
-						<div class="crono-delivery-id">06</div>
-						<div class="crono-delivery-body">
-							<div class="crono-delivery-top"><strong>Matriz de Objeções (base)</strong><span class="crono-flag flag-done">CONCLUÍDO</span></div>
-							<p>GIM no ar · stubs sensores/negociação ficaram em backlog (A.2).</p>
-						</div>
-						<span class="crono-delivery-day">Qui 23/07</span>
-					</article>
-					<article class="crono-delivery done">
-						<div class="crono-delivery-id">07</div>
-						<div class="crono-delivery-body">
-							<div class="crono-delivery-top"><strong>Pipelines (IN + OUT)</strong><span class="crono-flag flag-done">CONCLUÍDO</span></div>
-							<p>Funis, fluxos lógicos e qualificação no documento-mor.</p>
-						</div>
-						<span class="crono-delivery-day">Sex 24/07</span>
-					</article>
-				</div>
-			</div>
-
-			<!-- TAB: SEMANA 2 -->
-			<div class="crono-panel" data-crono-panel="s2" role="tabpanel" hidden>
-				<div class="crono-panel-banner crono-panel-banner--blue">
-					<div>
-						<strong>⚙️ Semana 2 · Engenharia de Funil &amp; Máquina Outbound</strong>
-						<p>Sáb 25/07 → Seg 27/07 · filtros, cadências, réguas e rotinas</p>
-					</div>
-					<span class="crono-flag flag-done">5 ENTREGAS · 100%</span>
-				</div>
-				<div class="crono-delivery-list">
-					<article class="crono-delivery done">
-						<div class="crono-delivery-id">08</div>
-						<div class="crono-delivery-body">
-							<div class="crono-delivery-top"><strong>Pipelines de Vendas (IN + OUT)</strong><span class="crono-flag flag-done">CONCLUÍDO</span></div>
-							<p>Funil/Fluxo BDR + Copilot, Multicanal e Jornada da Conta.</p>
-						</div>
-						<span class="crono-delivery-day">Sáb 25/07</span>
-					</article>
-					<article class="crono-delivery done">
-						<div class="crono-delivery-id">09</div>
-						<div class="crono-delivery-body">
-							<div class="crono-delivery-top"><strong>Filtros de Qualificação</strong><span class="crono-flag flag-done">CONCLUÍDO</span></div>
-							<p>SPN CC In + 3 Gates Out + SPN CC Out.</p>
-						</div>
-						<span class="crono-delivery-day">Sáb 25/07</span>
-					</article>
-					<article class="crono-delivery done">
-						<div class="crono-delivery-id">10</div>
-						<div class="crono-delivery-body">
-							<div class="crono-delivery-top"><strong>Cadências Outbound</strong><span class="crono-flag flag-done">CONCLUÍDO</span></div>
-							<p>D1–D35 + Confirmação Out + Cadência Multicanal.</p>
-						</div>
-						<span class="crono-delivery-day">Dom 26/07</span>
-					</article>
-					<article class="crono-delivery done">
-						<div class="crono-delivery-id">11</div>
-						<div class="crono-delivery-body">
-							<div class="crono-delivery-top"><strong>Réguas Críticas</strong><span class="crono-flag flag-done">CONCLUÍDO</span></div>
-							<p>Cancelamento, No-Show e Pós-Reunião Outbound.</p>
-						</div>
-						<span class="crono-delivery-day">Dom 26/07</span>
-					</article>
-					<article class="crono-delivery done">
-						<div class="crono-delivery-id">12</div>
-						<div class="crono-delivery-body">
-							<div class="crono-delivery-top"><strong>Manuais de Rotina</strong><span class="crono-flag flag-done">CONCLUÍDO</span></div>
-							<p>Presales SDR/BDR, Rotina Closer e Fluxo CS.</p>
-						</div>
-						<span class="crono-delivery-day">Seg 27/07</span>
-					</article>
-				</div>
-			</div>
-
-			<!-- TAB: FEITO / FALTA / REVISÕES -->
-			<div class="crono-panel" data-crono-panel="s3" role="tabpanel" hidden>
-				<div class="crono-panel-banner crono-panel-banner--amber">
-					<div>
-						<strong>📋 Status atual · 31/08/2026</strong>
-						<p>Contratação + atuação BDR ✅ 28/08 · Agora: onboarding 31/08–04/09 · Next: Bitrix relatórios 02–11/09 · Histórico 2026 07–11/09</p>
-					</div>
-					<span class="crono-flag flag-now">Onboarding</span>
-				</div>
-
-				<div class="crono-panel-banner" style="margin-bottom:16px;">
-					<div>
-						<strong>✅ Entregue em 27/07 · estabilização do RevOps Book</strong>
-						<p>Publicação + UX + rebrand — site live em <a href="https://jm7consulting.github.io/melvin-revops-book/" style="color:var(--melvin-cyan);font-weight:700;">melvin-revops-book</a></p>
-					</div>
-					<span class="crono-flag flag-done">5 ENTREGAS</span>
-				</div>
-				<div class="crono-delivery-list" style="margin-bottom:22px;">
-					<article class="crono-delivery done">
-						<div class="crono-delivery-id">13</div>
-						<div class="crono-delivery-body">
-							<div class="crono-delivery-top"><strong>Kits de Objeções Presales</strong><span class="crono-flag flag-done">CONCLUÍDO</span></div>
-							<p>Inbound (leve) + Outbound (HARDCORE) com busca e filtros.</p>
-						</div>
-						<span class="crono-delivery-day">Seg 27/07</span>
-					</article>
-					<article class="crono-delivery done">
-						<div class="crono-delivery-id">14</div>
-						<div class="crono-delivery-body">
-							<div class="crono-delivery-top"><strong>Battlecards de Concorrentes</strong><span class="crono-flag flag-done">CONCLUÍDO</span></div>
-							<p>Cards com fonte (GIM + site) · Fracttal, Engeman, Auvo, SAP, TOTVS etc.</p>
-						</div>
-						<span class="crono-delivery-day">Seg 27/07</span>
-					</article>
-					<article class="crono-delivery done">
-						<div class="crono-delivery-id">15</div>
-						<div class="crono-delivery-body">
-							<div class="crono-delivery-top"><strong>Fluxos oficiais Inbound + Outbound</strong><span class="crono-flag flag-done">CONCLUÍDO</span></div>
-							<p>PDF draw.io no site · zoom/pan · clique no caminho (hotspots).</p>
-						</div>
-						<span class="crono-delivery-day">Seg 27/07</span>
-					</article>
-					<article class="crono-delivery done">
-						<div class="crono-delivery-id">16</div>
-						<div class="crono-delivery-body">
-							<div class="crono-delivery-top"><strong>Funil Inbound (ajuste operacional)</strong><span class="crono-flag flag-done">CONCLUÍDO</span></div>
-							<p>Tags “Enxugar?” + preview para ocultar estágios opcionais · colunas iguais.</p>
-						</div>
-						<span class="crono-delivery-day">Seg 27/07</span>
-					</article>
-					<article class="crono-delivery done">
-						<div class="crono-delivery-id">17</div>
-						<div class="crono-delivery-body">
-							<div class="crono-delivery-top"><strong>Rebrand RevOps + URL Pages</strong><span class="crono-flag flag-done">CONCLUÍDO</span></div>
-							<p>“Playbook” removido · RevOps Book / Revenue Operations Book · repo renomeado.</p>
-						</div>
-						<span class="crono-delivery-day">Seg 27/07</span>
-					</article>
-				</div>
-
-				<div class="crono-panel-banner" style="margin-bottom:16px;">
-					<div>
-						<strong>✅ Sprint Book · 28–31/07 · semana fechada</strong>
-						<p>Detalhe em <a href="#agenda-entregas" style="color:var(--melvin-cyan);font-weight:700;">Plano · Fase 4A</a></p>
-					</div>
-					<span class="crono-flag flag-done">5 ENTREGAS</span>
-				</div>
-				<div class="crono-delivery-list" style="margin-bottom:22px;">
-					<article class="crono-delivery done">
-						<div class="crono-delivery-id">18</div>
-						<div class="crono-delivery-body">
-							<div class="crono-delivery-top"><strong>Concorrentes v2 (SW · HW · M&amp;A)</strong><span class="crono-flag flag-done">CONCLUÍDO</span></div>
-							<p>Lacunas ata · Tractian, Fracttal, Dynamox, TEBE, BBX · abas + Radar · <a href="#gim-concorrentes">#gim-concorrentes</a></p>
-						</div>
-						<span class="crono-delivery-day">Qui–Sex<br>30–31/07</span>
-					</article>
-					<article class="crono-delivery done">
-						<div class="crono-delivery-id">19</div>
-						<div class="crono-delivery-body">
-							<div class="crono-delivery-top"><strong>Seção ABM (Programa + Paper)</strong><span class="crono-flag flag-done">CONCLUÍDO</span></div>
-							<p>Menu 05 · PPT visual em abas · Paper Dores &amp; Produtos · <a href="#abm-programa">#abm-programa</a></p>
-						</div>
-						<span class="crono-delivery-day">Qui–Sex<br>30–31/07</span>
-					</article>
-					<article class="crono-delivery done">
-						<div class="crono-delivery-id">20</div>
-						<div class="crono-delivery-body">
-							<div class="crono-delivery-top"><strong>Produtos Melvin × Manutenção em Ação</strong><span class="crono-flag flag-done">CONCLUÍDO</span></div>
-							<p>Abas separando software/hardware vs cursos/serviços · <a href="#gim-produtos">#gim-produtos</a></p>
-						</div>
-						<span class="crono-delivery-day">28–31/07</span>
-					</article>
-					<article class="crono-delivery done">
-						<div class="crono-delivery-id">21</div>
-						<div class="crono-delivery-body">
-							<div class="crono-delivery-top"><strong>Personas · Lead Scoring A–D</strong><span class="crono-flag flag-done">CONCLUÍDO</span></div>
-							<p>Matriz interativa + Qualificação · menu próprio · <a href="#gim-lead-scoring">#gim-lead-scoring</a></p>
-						</div>
-						<span class="crono-delivery-day">28–31/07</span>
-					</article>
-					<article class="crono-delivery done">
-						<div class="crono-delivery-id">22</div>
-						<div class="crono-delivery-body">
-							<div class="crono-delivery-top"><strong>Ops Pendências · UX Ata</strong><span class="crono-flag flag-done">CONCLUÍDO</span></div>
-							<p>How-tos + checklist arrastável · Cronograma/Plano atualizados 31/07 · <a href="#ops-pendencias">#ops-pendencias</a></p>
-						</div>
-						<span class="crono-delivery-day">Sex 31/07</span>
-					</article>
-				</div>
-
-				<div class="crono-golive-grid">
-					<article class="crono-golive-card is-priority">
-						<div class="crono-golive-top">
-							<span class="crono-flag flag-now">AGORA</span>
-							<strong>Onboarding BDR · 31/08–04/09</strong>
-						</div>
-						<ul>
-							<li>5 dias úteis · day one na função em sex 04/09</li>
-							<li>Contratação + atuação OK em 28/08</li>
-						</ul>
-						<a class="crono-cta" href="#agenda-entregas" data-crono-goto="seq">Abrir Sequência →</a>
-					</article>
-					<article class="crono-golive-card">
-						<div class="crono-golive-top">
-							<span class="crono-flag flag-done">SPRINT · 28–31/07</span>
-							<strong>Book · semana fechada</strong>
-						</div>
-						<ul>
-							<li>Concorrentes v2 · ABM · Produtos Melvin/M&amp;A</li>
-							<li>Lead Scoring · Pendências UX · Cronograma/Plano</li>
-							<li>t10 (concorrência Book) e t01 (esta atualização) cobertos no Book</li>
-						</ul>
-						<a class="crono-cta" href="#agenda-entregas">Ver histórico Sprint →</a>
-					</article>
-					<article class="crono-golive-card">
-						<div class="crono-golive-top">
-							<span class="crono-flag flag-done">OK</span>
-							<strong>Contratação + Atuação BDR</strong>
-						</div>
-						<ul>
-							<li>Contratação OK em 28/08 → <a href="#job-bdr">#job-bdr</a></li>
-							<li>Atuação BDR OK em 28/08</li>
-						</ul>
-					</article>
-					<article class="crono-golive-card">
-						<div class="crono-golive-top">
-							<span class="crono-flag flag-done">OK</span>
-							<strong>Ata MELVIN</strong>
-						</div>
-						<ul>
-							<li>Marcada como OK no Roadmap (04/08/2026)</li>
-							<li>Checklist legado: <a href="#ops-pendencias">#ops-pendencias</a></li>
-						</ul>
-					</article>
-					<article class="crono-golive-card">
-						<div class="crono-golive-top">
-							<span class="crono-flag flag-warn">NEXT</span>
-							<strong>Bitrix + Histórico 2026</strong>
-						</div>
-						<ul>
-							<li>Aprendizado Bitrix24 · relatórios · 02–11/09</li>
-							<li>Relatórios Histórico 2026 Comercial · 07–11/09</li>
-						</ul>
-						<a class="crono-cta" href="#agenda-entregas" data-crono-goto="seq">Ver sequência →</a>
-					</article>
-				</div>
-
-				<div class="crono-panel-banner" style="margin:22px 0 14px;">
-					<div>
-						<strong>Ata Melvin · Fazer agora · carryover até Sex 07/08/2026</strong>
-						<p>Prazo original 31/07 · Book cobriu t01/t10 · demais rolam · <a href="#agenda-entregas" style="color:var(--melvin-cyan);font-weight:700;">Plano · item 4B.4</a></p>
-					</div>
-					<span class="crono-flag flag-now">15 ITENS</span>
-				</div>
-				<div class="crono-delivery-list" style="margin-bottom:22px;">
-					<article class="crono-delivery crono-delivery--task">
-						<div class="crono-delivery-id">A01</div>
-						<div class="crono-delivery-body">
-							<label class="ops-pend-item" style="margin:0;border:0;background:transparent;padding:0;">
-								<input type="checkbox" data-pend-id="t01">
-								<span class="ops-pend-tag">Cronograma</span>
-								<span class="ops-pend-body"><strong>Atualizar o Cronograma ≥ 1× por semana</strong><small>✅ Atualização 31/07: Cronograma + Plano alinhados (semana Book fechada · ops rolam). Ritual: ≥1×/semana marcar status real. · prazo <b>31/07/2026</b></small></span>
-							</label>
-						</div>
-						<span class="crono-delivery-day">Sex 31/07<br><span class="crono-flag flag-done" style="margin-top:6px;display:inline-flex;">BOOK OK</span></span>
-					</article>
-					<article class="crono-delivery crono-delivery--task">
-						<div class="crono-delivery-id">A02</div>
-						<div class="crono-delivery-body">
-							<label class="ops-pend-item" style="margin:0;border:0;background:transparent;padding:0;">
-								<input type="checkbox" data-pend-id="t02">
-								<span class="ops-pend-tag">Outbound</span>
-								<span class="ops-pend-body"><strong>Agendar / realizar reunião de revisão da esteira Outbound</strong><small>Marcar call com Vinícius; levar o que já funciona na esteira Out + gaps do Book; sair com lista do que formalizar vs. o que testar. · prazo <b>31/07/2026</b></small></span>
-							</label>
-						</div>
-						<span class="crono-delivery-day">Sex 31/07<br><span class="crono-flag flag-now" style="margin-top:6px;display:inline-flex;">FAZER</span></span>
-					</article>
-					<article class="crono-delivery crono-delivery--task">
-						<div class="crono-delivery-id">A03</div>
-						<div class="crono-delivery-body">
-							<label class="ops-pend-item" style="margin:0;border:0;background:transparent;padding:0;">
-								<input type="checkbox" data-pend-id="t03">
-								<span class="ops-pend-tag">Outbound</span>
-								<span class="ops-pend-body"><strong>Testar a nova metodologia de prospecção</strong><small>Piloto da abordagem direta (estilo Vinícius) em contas reais; comparar resposta vs. cadência convencional; documentar o que escalar. Roda em paralelo ao seletivo do BDR. · prazo <b>31/07/2026</b></small></span>
-							</label>
-						</div>
-						<span class="crono-delivery-day">Sex 31/07<br><span class="crono-flag flag-now" style="margin-top:6px;display:inline-flex;">FAZER</span></span>
-					</article>
-					<article class="crono-delivery crono-delivery--task">
-						<div class="crono-delivery-id">A04</div>
-						<div class="crono-delivery-body">
-							<label class="ops-pend-item" style="margin:0;border:0;background:transparent;padding:0;">
-								<input type="checkbox" data-pend-id="t04">
-								<span class="ops-pend-tag">Mensagens</span>
-								<span class="ops-pend-body"><strong>Revisar templates Outbound em grupo</strong><small>Workshop com Jonatas, Fabrício e Heimar: revisar templates e-mail/WA/LinkedIn; cortar tom de vendedor; abrir pela dor do interlocutor (rotina de manutenção). · prazo <b>31/07/2026</b></small></span>
-							</label>
-						</div>
-						<span class="crono-delivery-day">Sex 31/07<br><span class="crono-flag flag-now" style="margin-top:6px;display:inline-flex;">FAZER</span></span>
-					</article>
-					<article class="crono-delivery crono-delivery--task">
-						<div class="crono-delivery-id">A05</div>
-						<div class="crono-delivery-body">
-							<label class="ops-pend-item" style="margin:0;border:0;background:transparent;padding:0;">
-								<input type="checkbox" data-pend-id="t05">
-								<span class="ops-pend-tag">Mensagens</span>
-								<span class="ops-pend-body"><strong>Refinar textos / comentários da cadência comercial</strong><small>Varredura nos pitches da cadência no Book; remover frases que geram repulsa; linguagem que reconheça chão de fábrica e rotina corrida. · prazo <b>31/07/2026</b></small></span>
-							</label>
-						</div>
-						<span class="crono-delivery-day">Sex 31/07<br><span class="crono-flag flag-now" style="margin-top:6px;display:inline-flex;">FAZER</span></span>
-					</article>
-					<article class="crono-delivery crono-delivery--task">
-						<div class="crono-delivery-id">A06</div>
-						<div class="crono-delivery-body">
-							<label class="ops-pend-item" style="margin:0;border:0;background:transparent;padding:0;">
-								<input type="checkbox" data-pend-id="t06">
-								<span class="ops-pend-tag">Identidade</span>
-								<span class="ops-pend-body"><strong>Trocar logo pela versão da pasta Identidade Visual (Drive)</strong><small>Usar arquivos oficiais da pasta Identidade Visual (Drive do Igor); substituir logo desatualizada no Book/site e validar o lockup final. · prazo <b>31/07/2026</b></small></span>
-							</label>
-						</div>
-						<span class="crono-delivery-day">Sex 31/07<br><span class="crono-flag flag-now" style="margin-top:6px;display:inline-flex;">FAZER</span></span>
-					</article>
-					<article class="crono-delivery crono-delivery--task">
-						<div class="crono-delivery-id">A07</div>
-						<div class="crono-delivery-body">
-							<label class="ops-pend-item" style="margin:0;border:0;background:transparent;padding:0;">
-								<input type="checkbox" data-pend-id="t07">
-								<span class="ops-pend-tag">Personas</span>
-								<span class="ops-pend-body"><strong>Atualizar lista de personas no material</strong><small>Espelhar no Book/Personas: Supervisor · Gerente · Planejador (estrutura da ata). Remover personas desatualizadas do material comercial. · prazo <b>31/07/2026</b></small></span>
-							</label>
-						</div>
-						<span class="crono-delivery-day">Sex 31/07<br><span class="crono-flag flag-now" style="margin-top:6px;display:inline-flex;">FAZER</span></span>
-					</article>
-					<article class="crono-delivery crono-delivery--task">
-						<div class="crono-delivery-id">A08</div>
-						<div class="crono-delivery-body">
-							<label class="ops-pend-item" style="margin:0;border:0;background:transparent;padding:0;">
-								<input type="checkbox" data-pend-id="t08">
-								<span class="ops-pend-tag">Produtos</span>
-								<span class="ops-pend-body"><strong>Validar hierarquia de produtos/módulos no Bitrix</strong><small>Alinhar com Fabrício o cadastro no Bitrix (software / hardware / módulos); anotar a hierarquia real para documentar depois no Book (item Desenvolver). · prazo <b>31/07/2026</b></small></span>
-							</label>
-						</div>
-						<span class="crono-delivery-day">Sex 31/07<br><span class="crono-flag flag-now" style="margin-top:6px;display:inline-flex;">FAZER</span></span>
-					</article>
-					<article class="crono-delivery crono-delivery--task">
-						<div class="crono-delivery-id">A09</div>
-						<div class="crono-delivery-body">
-							<label class="ops-pend-item" style="margin:0;border:0;background:transparent;padding:0;">
-								<input type="checkbox" data-pend-id="t09">
-								<span class="ops-pend-tag">Calculadora</span>
-								<span class="ops-pend-body"><strong>Revisar lógica da Calculadora de Soberania</strong><small>Abrir a Calculadora de Soberania; listar métricas de conversão erradas citadas na reunião; corrigir o que for rápido ou abrir a reescrita completa (Desenvolver). · prazo <b>31/07/2026</b></small></span>
-							</label>
-						</div>
-						<span class="crono-delivery-day">Sex 31/07<br><span class="crono-flag flag-now" style="margin-top:6px;display:inline-flex;">FAZER</span></span>
-					</article>
-					<article class="crono-delivery crono-delivery--task">
-						<div class="crono-delivery-id">A10</div>
-						<div class="crono-delivery-body">
-							<label class="ops-pend-item" style="margin:0;border:0;background:transparent;padding:0;">
-								<input type="checkbox" data-pend-id="t10">
-								<span class="ops-pend-tag">Concorrência</span>
-								<span class="ops-pend-body"><strong>Completar análise competitiva no Book</strong><small>✅ Book fechado 31/07: Concorrentes v2 (SW/HW/M&amp;A + Radar) · Tractian/Fracttal/Dynamox/TEBE/BBX. Restante: revisar Lost no CRM (ops). · prazo original <b>31/07/2026</b></small></span>
-							</label>
-						</div>
-						<span class="crono-delivery-day">Sex 31/07<br><span class="crono-flag flag-done" style="margin-top:6px;display:inline-flex;">BOOK OK</span></span>
-					</article>
-					<article class="crono-delivery crono-delivery--task">
-						<div class="crono-delivery-id">A11</div>
-						<div class="crono-delivery-body">
-							<label class="ops-pend-item" style="margin:0;border:0;background:transparent;padding:0;">
-								<input type="checkbox" data-pend-id="t11">
-								<span class="ops-pend-tag">CS</span>
-								<span class="ops-pend-body"><strong>Entrevista de caso de sucesso a cada 15 dias</strong><small>Agendar entrevista de caso de sucesso a cada 15 dias (modelo que Pedro fazia); extrair dores reais e alimentar SPN / mensagens. · prazo <b>31/07/2026</b></small></span>
-							</label>
-						</div>
-						<span class="crono-delivery-day">Sex 31/07<br><span class="crono-flag flag-now" style="margin-top:6px;display:inline-flex;">FAZER</span></span>
-					</article>
-					<article class="crono-delivery crono-delivery--task">
-						<div class="crono-delivery-id">A12</div>
-						<div class="crono-delivery-body">
-							<label class="ops-pend-item" style="margin:0;border:0;background:transparent;padding:0;">
-								<input type="checkbox" data-pend-id="t12">
-								<span class="ops-pend-tag">Processos</span>
-								<span class="ops-pend-body"><strong>Procedimentar conhecimento crítico (Gabi / Fabrício)</strong><small>Mapear o que só Gabi/Fabrício sabem operar; rascunhar SOPs mínimos. Risco &gt;50% de dependência — alimenta os playbooks (Desenvolver). · prazo <b>31/07/2026</b></small></span>
-							</label>
-						</div>
-						<span class="crono-delivery-day">Sex 31/07<br><span class="crono-flag flag-now" style="margin-top:6px;display:inline-flex;">FAZER</span></span>
-					</article>
-					<article class="crono-delivery crono-delivery--task">
-						<div class="crono-delivery-id">A13</div>
-						<div class="crono-delivery-body">
-							<label class="ops-pend-item" style="margin:0;border:0;background:transparent;padding:0;">
-								<input type="checkbox" data-pend-id="t13">
-								<span class="ops-pend-tag">CRM</span>
-								<span class="ops-pend-body"><strong>Reforçar rigor de preenchimento no CRM (Lost com motivo)</strong><small>Exigir motivo de Lost no CRM; incluir essa regra no onboarding do BDR novo. Sem motivo não há análise de funil. · prazo <b>31/07/2026</b></small></span>
-							</label>
-						</div>
-						<span class="crono-delivery-day">Sex 31/07<br><span class="crono-flag flag-now" style="margin-top:6px;display:inline-flex;">FAZER</span></span>
-					</article>
-					<article class="crono-delivery crono-delivery--task">
-						<div class="crono-delivery-id">A14</div>
-						<div class="crono-delivery-body">
-							<label class="ops-pend-item" style="margin:0;border:0;background:transparent;padding:0;">
-								<input type="checkbox" data-pend-id="t14">
-								<span class="ops-pend-tag">Lead scoring</span>
-								<span class="ops-pend-body"><strong>Receber planilha de lead scoring do Igor</strong><small>Cobrar/receber a planilha do Igor (pesos A/B: função, indústria, nº de PCM); confrontar com a aba Lead Scoring do Book e amarrar ao funil pré-SDR. · prazo <b>31/07/2026</b></small></span>
-							</label>
-						</div>
-						<span class="crono-delivery-day">Sex 31/07<br><span class="crono-flag flag-now" style="margin-top:6px;display:inline-flex;">FAZER</span></span>
-					</article>
-					<article class="crono-delivery crono-delivery--task">
-						<div class="crono-delivery-id">A15</div>
-						<div class="crono-delivery-body">
-							<label class="ops-pend-item" style="margin:0;border:0;background:transparent;padding:0;">
-								<input type="checkbox" data-pend-id="t15">
-								<span class="ops-pend-tag">Contratação</span>
-								<span class="ops-pend-body"><strong>Seguir processo seletivo do BDR (já decidido)</strong><small>Manter seletivo de BDR externo (decisão: não treinar Gabi). Testes de atividade da nova metodologia já podem rodar em paralelo. · prazo <b>31/07/2026</b></small></span>
-							</label>
-						</div>
-						<span class="crono-delivery-day">Sex 31/07<br><span class="crono-flag flag-now" style="margin-top:6px;display:inline-flex;">FAZER</span></span>
-					</article>
-				</div>
-
-				<div class="crono-panel-banner crono-panel-banner--blue" style="margin:8px 0 14px;">
-					<div>
-						<strong>Ata Melvin · Desenvolver · entrega até Sex 07/08/2026</strong>
-						<p>Ata Melvin marcada OK no Roadmap · checklist legado em <a href="#ops-pendencias" style="color:var(--melvin-cyan);font-weight:700;">#ops-pendencias</a></p>
-					</div>
-					<span class="crono-flag flag-info">12 ITENS</span>
-				</div>
-				<div class="crono-delivery-list" style="margin-bottom:22px;">
-					<article class="crono-delivery crono-delivery--task">
-						<div class="crono-delivery-id">D01</div>
-						<div class="crono-delivery-body">
-							<label class="ops-pend-item" style="margin:0;border:0;background:transparent;padding:0;">
-								<input type="checkbox" data-pend-id="d01">
-								<span class="ops-pend-tag">IA / Latência</span>
-								<span class="ops-pend-body"><strong>Contato inicial com IA fora do horário comercial</strong><small>Problema: latência alta pós-expediente/fds. Desenhar: lead fora do horário → IA faz 1º contato + qualifica com dados públicos (ex.: CNPJ) → handoff humano. · prazo <b>07/08/2026</b></small></span>
-							</label>
-						</div>
-						<span class="crono-delivery-day">Sex 07/08<br><span class="crono-flag flag-info" style="margin-top:6px;display:inline-flex;">DEV</span></span>
-					</article>
-					<article class="crono-delivery crono-delivery--task">
-						<div class="crono-delivery-id">D02</div>
-						<div class="crono-delivery-body">
-							<label class="ops-pend-item" style="margin:0;border:0;background:transparent;padding:0;">
-								<input type="checkbox" data-pend-id="d02">
-								<span class="ops-pend-tag">CX</span>
-								<span class="ops-pend-body"><strong>Nutrição de fim de semana com conteúdo educativo</strong><small>Cadência sáb/dom com blog/notícia útil até a reunião de segunda — manter o lead quente sem parecer spam. · prazo <b>07/08/2026</b></small></span>
-							</label>
-						</div>
-						<span class="crono-delivery-day">Sex 07/08<br><span class="crono-flag flag-info" style="margin-top:6px;display:inline-flex;">DEV</span></span>
-					</article>
-					<article class="crono-delivery crono-delivery--task">
-						<div class="crono-delivery-id">D03</div>
-						<div class="crono-delivery-body">
-							<label class="ops-pend-item" style="margin:0;border:0;background:transparent;padding:0;">
-								<input type="checkbox" data-pend-id="d03">
-								<span class="ops-pend-tag">Tom de voz</span>
-								<span class="ops-pend-body"><strong>Diretrizes formais de Tom de Voz (comercial + marketing)</strong><small>Documento formal de Tom de Voz (comercial + marketing) no Book. Hoje só há orientação verbal do Igor. · prazo <b>07/08/2026</b></small></span>
-							</label>
-						</div>
-						<span class="crono-delivery-day">Sex 07/08<br><span class="crono-flag flag-info" style="margin-top:6px;display:inline-flex;">DEV</span></span>
-					</article>
-					<article class="crono-delivery crono-delivery--task">
-						<div class="crono-delivery-id">D04</div>
-						<div class="crono-delivery-body">
-							<label class="ops-pend-item" style="margin:0;border:0;background:transparent;padding:0;">
-								<input type="checkbox" data-pend-id="d04">
-								<span class="ops-pend-tag">Calculadora</span>
-								<span class="ops-pend-body"><strong>Corrigir / reescrever métricas da Calculadora de Soberania</strong><small>Reescrever a lógica de conversão da Calculadora de Soberania e republicar no Book (além do review rápido do “Fazer agora”). · prazo <b>07/08/2026</b></small></span>
-							</label>
-						</div>
-						<span class="crono-delivery-day">Sex 07/08<br><span class="crono-flag flag-info" style="margin-top:6px;display:inline-flex;">DEV</span></span>
-					</article>
-					<article class="crono-delivery crono-delivery--task">
-						<div class="crono-delivery-id">D05</div>
-						<div class="crono-delivery-body">
-							<label class="ops-pend-item" style="margin:0;border:0;background:transparent;padding:0;">
-								<input type="checkbox" data-pend-id="d05">
-								<span class="ops-pend-tag">Concorrência</span>
-								<span class="ops-pend-body"><strong>Página/seção de análise competitiva completa</strong><small>✅ Entregue no Book 31/07 (#gim-concorrentes · abas SW/HW/M&amp;A/Radar). Manter marcado quando validar Lost no CRM + eventual ajuste fino pós-feedback Igor. · prazo <b>07/08/2026</b></small></span>
-							</label>
-						</div>
-						<span class="crono-delivery-day">Sex 07/08<br><span class="crono-flag flag-done" style="margin-top:6px;display:inline-flex;">BOOK OK</span></span>
-					</article>
-					<article class="crono-delivery crono-delivery--task">
-						<div class="crono-delivery-id">D06</div>
-						<div class="crono-delivery-body">
-							<label class="ops-pend-item" style="margin:0;border:0;background:transparent;padding:0;">
-								<input type="checkbox" data-pend-id="d06">
-								<span class="ops-pend-tag">Mensagens</span>
-								<span class="ops-pend-body"><strong>Bateria de testes A/B das mensagens Outbound</strong><small>Plano A/B de mensagens Out com Fabrício, Jonatas/Jonathan e Heimar; medir conversão e incorporar o vencedor nos templates. · prazo <b>07/08/2026</b></small></span>
-							</label>
-						</div>
-						<span class="crono-delivery-day">Sex 07/08<br><span class="crono-flag flag-info" style="margin-top:6px;display:inline-flex;">DEV</span></span>
-					</article>
-					<article class="crono-delivery crono-delivery--task">
-						<div class="crono-delivery-id">D07</div>
-						<div class="crono-delivery-body">
-							<label class="ops-pend-item" style="margin:0;border:0;background:transparent;padding:0;">
-								<input type="checkbox" data-pend-id="d07">
-								<span class="ops-pend-tag">Playbooks</span>
-								<span class="ops-pend-body"><strong>SOPs dos processos críticos (anti-dependência)</strong><small>Transformar o conhecimento táito de Gabi/Fabrício em SOPs/playbooks no Book (e depois intranet). · prazo <b>07/08/2026</b></small></span>
-							</label>
-						</div>
-						<span class="crono-delivery-day">Sex 07/08<br><span class="crono-flag flag-info" style="margin-top:6px;display:inline-flex;">DEV</span></span>
-					</article>
-					<article class="crono-delivery crono-delivery--task">
-						<div class="crono-delivery-id">D08</div>
-						<div class="crono-delivery-body">
-							<label class="ops-pend-item" style="margin:0;border:0;background:transparent;padding:0;">
-								<input type="checkbox" data-pend-id="d08">
-								<span class="ops-pend-tag">Lead scoring</span>
-								<span class="ops-pend-body"><strong>Integrar lead scoring A/B no fluxo / documentação</strong><small>Após receber a planilha (t14): documentar pesos A–D + amarrar ao funil pré-SDR conforme volume. · prazo <b>07/08/2026</b></small></span>
-							</label>
-						</div>
-						<span class="crono-delivery-day">Sex 07/08<br><span class="crono-flag flag-info" style="margin-top:6px;display:inline-flex;">DEV</span></span>
-					</article>
-					<article class="crono-delivery crono-delivery--task">
-						<div class="crono-delivery-id">D09</div>
-						<div class="crono-delivery-body">
-							<label class="ops-pend-item" style="margin:0;border:0;background:transparent;padding:0;">
-								<input type="checkbox" data-pend-id="d09">
-								<span class="ops-pend-tag">Produtos</span>
-								<span class="ops-pend-body"><strong>Documentar hierarquia real de produtos no Book</strong><small>Base no Book já existe (abas Melvin vs Manutenção em Ação). Fechar após validar Bitrix com Fabrício (t08) e espelhar hierarquia real software/hardware/módulos. · prazo <b>07/08/2026</b></small></span>
-							</label>
-						</div>
-						<span class="crono-delivery-day">Sex 07/08<br><span class="crono-flag flag-info" style="margin-top:6px;display:inline-flex;">DEV</span></span>
-					</article>
-					<article class="crono-delivery crono-delivery--task">
-						<div class="crono-delivery-id">D10</div>
-						<div class="crono-delivery-body">
-							<label class="ops-pend-item" style="margin:0;border:0;background:transparent;padding:0;">
-								<input type="checkbox" data-pend-id="d10">
-								<span class="ops-pend-tag">Plataforma</span>
-								<span class="ops-pend-body"><strong>Plataforma de indicadores (zoom out / zoom in) — Igor</strong><small>Acompanhar a plataforma de indicadores do Igor (zoom operacional / tático / gerencial). Não é entrega sua do Book — integração futura. · prazo <b>07/08/2026</b></small></span>
-							</label>
-						</div>
-						<span class="crono-delivery-day">Sex 07/08<br><span class="crono-flag flag-info" style="margin-top:6px;display:inline-flex;">DEV</span></span>
-					</article>
-					<article class="crono-delivery crono-delivery--task">
-						<div class="crono-delivery-id">D11</div>
-						<div class="crono-delivery-body">
-							<label class="ops-pend-item" style="margin:0;border:0;background:transparent;padding:0;">
-								<input type="checkbox" data-pend-id="d11">
-								<span class="ops-pend-tag">Intranet</span>
-								<span class="ops-pend-body"><strong>Mover documentos do projeto para intranet Melvin Gestão</strong><small>Planejar migração GitHub + Book → intranet Melvin Gestão com acessos/permissões (docs são da Melvin). · prazo <b>07/08/2026</b></small></span>
-							</label>
-						</div>
-						<span class="crono-delivery-day">Sex 07/08<br><span class="crono-flag flag-info" style="margin-top:6px;display:inline-flex;">DEV</span></span>
-					</article>
-					<article class="crono-delivery crono-delivery--task">
-						<div class="crono-delivery-id">D12</div>
-						<div class="crono-delivery-body">
-							<label class="ops-pend-item" style="margin:0;border:0;background:transparent;padding:0;">
-								<input type="checkbox" data-pend-id="d12">
-								<span class="ops-pend-tag">Automação</span>
-								<span class="ops-pend-body"><strong>Avaliar automação de mensagens utilitárias (WA / Meta)</strong><small>Fechar o que é mensagem UTILITY automatizada (WA/Meta) vs. humano no fluxo e-mail + call + WhatsApp. · prazo <b>07/08/2026</b></small></span>
-							</label>
-						</div>
-						<span class="crono-delivery-day">Sex 07/08<br><span class="crono-flag flag-info" style="margin-top:6px;display:inline-flex;">DEV</span></span>
-					</article>
-				</div>
-
-				<div class="crono-risk">
-					<strong>⚠️ Ordem correta</strong>
-					<p>Book / revisão Out / Ata / Bitrix In ✅. <strong>Contratação OK 28/08</strong> + <strong>atuação BDR OK 28/08</strong>. Agora: <strong>onboarding BDR 31/08–04/09</strong> (5 dias úteis · day one 04/09). Next: <strong>aprendizado Bitrix24 relatórios 02–11/09</strong> · <strong>relatórios Histórico 2026 Comercial 07–11/09</strong>. Mesma ordem do <a href="#agenda-entregas" style="color:var(--melvin-cyan);font-weight:700;">Roadmap RevOps</a> · aba Sequência · Agora.</p>
-				</div>
-			</div>
-
+		</section>
 		</section>
 	
 	<!--
@@ -13882,8 +13112,8 @@ Um abraço!"
         </section>
 
 	</main>
-  <script src="app.js?v=matriz-45"></script>
-  <script src="hire-matrix.js?v=matriz-45"></script>
+  <script src="app.js?v=matriz-46"></script>
+  <script src="hire-matrix.js?v=matriz-46"></script>
 	
 </body>
 </html>
