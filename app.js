@@ -1290,9 +1290,6 @@
         if (hash === '#roadmap-backlog') {
             openCronoTab = 'overview';
         }
-        if (hash === '#rm-entregas-mes') {
-            openCronoTab = 'overview';
-        }
 
         const targetEl = document.querySelector(hash);
         if (!targetEl) return false;
