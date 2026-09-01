@@ -6316,55 +6316,83 @@ a.rm-stepper-item:hover > small {
 
 /* Entregas do mês · rodapé full-width */
 .rm-foot {
-  margin-top: 4px;
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  scroll-margin-top: 88px;
 }
-.rm-foot-acc {
+.rm-foot-head {
+  padding: 4px 2px 8px;
+}
+.rm-foot-head h3 {
+  margin: 0 0 4px;
+  font-size: 1rem;
+  color: var(--text-main);
+}
+.rm-foot-head p {
+  margin: 0;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  line-height: 1.45;
+}
+
+.rm-month-acc {
   border: 1px solid var(--border);
   border-radius: 14px;
   background: var(--melvin-bg-card);
-  overflow: hidden;
+  overflow: visible;
 }
-.rm-foot-acc-summary {
+.rm-month-acc--backlog {
+  border-color: rgba(251, 146, 60, 0.35);
+  background: rgba(251, 146, 60, 0.05);
+}
+.rm-month-summary {
   list-style: none;
   cursor: pointer;
   display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
+  align-items: center;
   justify-content: space-between;
-  gap: 8px 16px;
-  padding: 14px 18px;
+  gap: 12px;
+  padding: 14px 16px;
   user-select: none;
-  background: rgba(255, 255, 255, 0.02);
 }
-.rm-foot-acc-summary::-webkit-details-marker { display: none; }
-.rm-foot-acc-summary strong {
-  font-size: 0.95rem;
+.rm-month-summary::-webkit-details-marker { display: none; }
+.rm-month-summary::after {
+  content: '▾';
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+.rm-month-acc[open] > .rm-month-summary::after {
+  transform: rotate(180deg);
+}
+.rm-month-summary span {
+  font-weight: 800;
+  font-size: 0.92rem;
   color: var(--text-main);
 }
-.rm-foot-acc-summary span {
-  font-size: 0.78rem;
+.rm-month-summary em {
+  font-style: normal;
+  font-size: 0.72rem;
   color: var(--text-muted);
+  margin-left: auto;
+  padding-right: 8px;
 }
-.rm-foot-acc[open] > .rm-foot-acc-summary {
+.rm-month-acc[open] > .rm-month-summary {
   border-bottom: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.03);
 }
-.rm-foot-body {
-  padding: 14px 18px 16px;
+.rm-month-acc--backlog[open] > .rm-month-summary {
+  background: rgba(251, 146, 60, 0.1);
 }
-.rm-foot .rm-month-tabs {
-  margin-bottom: 14px;
-  max-width: none;
+.rm-month-body {
+  padding: 12px 14px 14px;
+  display: block;
 }
-.rm-foot .rm-month-tab {
-  flex: 1;
-  min-width: 0;
-  text-align: center;
-  font-size: 0.82rem;
-}
-.rm-month-panel[hidden] { display: none !important; }
-.rm-month-panel.is-active { display: block; }
 .rm-month-intro {
-  margin: 0 0 12px;
+  margin: 0 0 10px;
   font-size: 0.82rem;
   line-height: 1.45;
   color: var(--text-muted);
@@ -6373,11 +6401,12 @@ a.rm-stepper-item:hover > small {
 
 .rm-week-acc {
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: 10px;
   background: rgba(255, 255, 255, 0.02);
   margin-bottom: 8px;
-  overflow: hidden;
+  overflow: visible;
 }
+.rm-week-acc:last-child { margin-bottom: 0; }
 .rm-week-acc > summary {
   list-style: none;
   cursor: pointer;
@@ -6385,21 +6414,34 @@ a.rm-stepper-item:hover > small {
   align-items: center;
   justify-content: space-between;
   gap: 10px;
-  padding: 10px 14px;
+  padding: 10px 12px;
   font-size: 0.84rem;
   user-select: none;
 }
 .rm-week-acc > summary::-webkit-details-marker { display: none; }
+.rm-week-acc > summary::after {
+  content: '▾';
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+.rm-week-acc[open] > summary::after { transform: rotate(180deg); }
 .rm-week-acc > summary span { font-weight: 700; color: var(--text-main); }
 .rm-week-acc > summary em {
   font-style: normal;
   font-size: 0.72rem;
   color: var(--text-muted);
   white-space: nowrap;
+  margin-left: auto;
+  padding-right: 6px;
 }
 .rm-week-acc[open] > summary {
   border-bottom: 1px solid var(--border);
   background: rgba(255, 255, 255, 0.03);
+}
+.rm-week-acc > ul.rm-index-links {
+  display: grid !important;
 }
 
 .rm-index-links {
@@ -6534,16 +6576,17 @@ a.rm-stepper-item:hover > small {
 
 body.light-mode .rm-chart,
 body.light-mode .rm-focus-card,
-body.light-mode .rm-foot-acc,
+body.light-mode .rm-month-acc,
 body.light-mode .rm-week-acc,
 body.light-mode .rm-backlog-list li {
   background: #fff;
 }
+body.light-mode .rm-month-acc--backlog { background: #fffbeb; }
 body.light-mode .rm-backlog-list li { background: #fff; border-color: rgba(15, 23, 42, 0.1); }
 body.light-mode .rm-donut-ring::before {
   background: #fff;
 }
-body.light-mode .rm-foot-acc-summary,
+body.light-mode .rm-month-acc[open] > .rm-month-summary,
 body.light-mode .rm-week-acc[open] > summary {
   background: #f8fafc;
 }
@@ -6557,7 +6600,6 @@ body.light-mode .rm-week-acc[open] > summary {
   .rm-focus3 { grid-template-columns: 1fr; }
   .rm-bar { grid-template-columns: 100px 1fr 40px; }
   .rm-index-links { grid-template-columns: 1fr; }
-  .rm-foot .rm-month-tabs { flex-wrap: wrap; }
 }
 
 /* Light mode */

@@ -1197,27 +1197,6 @@
         });
     });
 
-    // Roadmap · subabas por mês (Entregas do mês)
-    const rmMonthTabs = cronoRoot ? cronoRoot.querySelectorAll('[data-rm-month]') : [];
-    const rmMonthPanels = cronoRoot ? cronoRoot.querySelectorAll('[data-rm-month-panel]') : [];
-    function activateRmMonth(id) {
-        if (!id) return;
-        rmMonthTabs.forEach((t) => {
-            const on = t.getAttribute('data-rm-month') === id;
-            t.classList.toggle('is-active', on);
-            t.setAttribute('aria-selected', on ? 'true' : 'false');
-        });
-        rmMonthPanels.forEach((panel) => {
-            const match = panel.getAttribute('data-rm-month-panel') === id;
-            panel.classList.toggle('is-active', match);
-            if (match) panel.removeAttribute('hidden');
-            else panel.setAttribute('hidden', '');
-        });
-    }
-    rmMonthTabs.forEach((tab) => {
-        tab.addEventListener('click', () => activateRmMonth(tab.getAttribute('data-rm-month')));
-    });
-
     const themeToggleBtn = document.getElementById('themeToggleBtn');
     if (localStorage.getItem('theme') === 'light') {
         document.body.classList.add('light-mode');
@@ -1309,6 +1288,9 @@
             openCronoTab = 'overview';
         }
         if (hash === '#roadmap-backlog') {
+            openCronoTab = 'overview';
+        }
+        if (hash === '#rm-entregas-mes') {
             openCronoTab = 'overview';
         }
 
