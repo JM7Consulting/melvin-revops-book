@@ -6323,7 +6323,7 @@ a.rm-stepper-item:hover > small {
 }
 
 .rm-index {
-  padding: 16px 16px 14px;
+  padding: 0 16px;
   border-radius: 14px;
   border: 1px solid var(--border);
   background: var(--melvin-bg-card);
@@ -6333,16 +6333,37 @@ a.rm-stepper-item:hover > small {
   max-height: none;
   overflow: visible;
 }
-.rm-index h3 {
-  margin: 0 0 6px;
+.rm-index > summary {
+  cursor: pointer;
+  padding: 16px 0;
+  list-style: none;
+  user-select: none;
+}
+.rm-index > summary::-webkit-details-marker { display: none; }
+.rm-index > summary::after {
+  content: "▾";
+  float: right;
+  font-size: 0.9rem;
+  opacity: 0.55;
+  transition: transform 0.15s;
+  margin-top: 2px;
+}
+.rm-index[open] > summary::after { transform: rotate(180deg); }
+.rm-index-head strong {
+  display: block;
   font-size: 0.92rem;
   color: var(--text-main);
+  font-weight: 700;
 }
 .rm-index-note {
-  margin: 0 0 12px;
+  display: block;
+  margin-top: 4px;
   font-size: 0.78rem;
   line-height: 1.45;
   color: var(--text-muted);
+}
+.rm-index-body {
+  padding-bottom: 14px;
 }
 .rm-index-acc {
   border: 1px solid var(--border);
