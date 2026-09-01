@@ -1279,6 +1279,9 @@
             hash = '#agenda-entregas';
             openCronoTab = 'seq';
         }
+        if (hash === '#roadmap-backlog') {
+            openCronoTab = 'overview';
+        }
 
         const targetEl = document.querySelector(hash);
         if (!targetEl) return false;
