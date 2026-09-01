@@ -5989,6 +5989,7 @@ body.light-mode .roadmap-backlog-num {
 .rm-dot--ok { background: #10b981; }
 .rm-dot--now { background: #f59e0b; }
 .rm-dot--next { background: #c4b5fd; }
+.rm-dot--backlog { background: #fb923c; }
 
 .rm-bars { display: flex; flex-direction: column; gap: 9px; }
 .rm-bar {
@@ -6033,6 +6034,84 @@ body.light-mode .roadmap-backlog-num {
   opacity: 0.4;
   min-width: 4px;
 }
+
+.rm-bars-backlog {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 2px dashed rgba(251, 146, 60, 0.35);
+  scroll-margin-top: 88px;
+}
+.rm-bars-backlog-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 6px 12px;
+  margin-bottom: 10px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  background: rgba(251, 146, 60, 0.1);
+  border: 1px solid rgba(251, 146, 60, 0.35);
+}
+.rm-bars-backlog-head strong {
+  font-size: 0.82rem;
+  color: #fdba74;
+}
+.rm-bars-backlog-head span {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.rm-bar-block--backlog {
+  padding: 8px 10px 10px;
+  margin-bottom: 6px;
+  border-radius: 10px;
+  border: 1px solid rgba(251, 146, 60, 0.28);
+  background: rgba(251, 146, 60, 0.05);
+  scroll-margin-top: 88px;
+}
+.rm-bar-block--backlog:target {
+  border-color: #fb923c;
+  background: rgba(251, 146, 60, 0.12);
+  box-shadow: 0 0 0 2px rgba(251, 146, 60, 0.2);
+}
+.rm-bar--backlog > i {
+  background: repeating-linear-gradient(90deg, #fb923c 0 10px, rgba(251, 146, 60, 0.15) 10px 18px);
+  opacity: 0.85;
+  min-width: 6px;
+}
+.rm-bar--backlog > a { color: #fdba74; }
+.rm-bar--backlog > a:hover { color: #fed7aa; background: rgba(251, 146, 60, 0.12); }
+.rm-bar-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.35rem;
+  height: 1.35rem;
+  margin-right: 6px;
+  border-radius: 6px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: #fdba74;
+  background: rgba(251, 146, 60, 0.18);
+  border: 1px solid rgba(251, 146, 60, 0.35);
+  vertical-align: middle;
+}
+.rm-bar-desc {
+  margin: 6px 0 0;
+  padding-left: 2px;
+  font-size: 0.78rem;
+  line-height: 1.45;
+  color: var(--text-muted);
+}
+.rm-bar-desc a { color: var(--melvin-cyan); font-weight: 700; }
+
+.rm-stepper-item--backlog > span {
+  background: transparent;
+  border-color: #fb923c;
+  box-shadow: 0 0 0 2px rgba(251, 146, 60, 0.25);
+}
+.rm-stepper-item--backlog > small { color: #fdba74; font-weight: 700; }
 
 .rm-stepper {
   display: flex;

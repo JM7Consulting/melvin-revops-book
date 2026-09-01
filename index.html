@@ -6,7 +6,7 @@
     <title>REBUILD 7 | MELVIN</title>
     
 	<link rel="icon" type="image/png" href="logo_simples_removebcg.png">
-  <link rel="stylesheet" href="styles.css?v=matriz-48">
+  <link rel="stylesheet" href="styles.css?v=matriz-49">
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sora:wght@600;700;800&family=Carlito:ital,wght@0,400;0,700;1,400&family=Libre+Baskerville:wght@400;700&display=swap" rel="stylesheet">
@@ -1545,7 +1545,8 @@
 						<ul class="rm-legend">
 							<li><i class="rm-dot rm-dot--ok"></i>6 fases OK</li>
 							<li><i class="rm-dot rm-dot--now"></i>1 em andamento</li>
-							<li><i class="rm-dot rm-dot--next"></i>2 programadas · 5 backlog</li>
+							<li><i class="rm-dot rm-dot--next"></i>2 programadas</li>
+							<li><i class="rm-dot rm-dot--backlog"></i>5 backlog · sem data</li>
 						</ul>
 					</article>
 
@@ -1561,6 +1562,49 @@
 							<div class="rm-bar rm-bar--next"><a href="#agenda-entregas">Bitrix relat.</a><i style="width:0%"></i><em>11/09</em></div>
 							<div class="rm-bar rm-bar--next"><a href="#agenda-entregas">Histórico 2026</a><i style="width:0%"></i><em>11/09</em></div>
 						</div>
+
+						<div class="rm-bars-backlog" id="roadmap-backlog">
+							<div class="rm-bars-backlog-head">
+								<strong>📋 Backlog · ações pendentes</strong>
+								<span>Sem data · 5 tarefas para desenvolver</span>
+							</div>
+
+							<div class="rm-bar-block rm-bar-block--backlog" id="backlog-01">
+								<div class="rm-bar rm-bar--backlog">
+									<a href="#backlog-01"><span class="rm-bar-num">01</span> Nutrição Out · personalização automática</a>
+									<i style="width:0%"></i><em>—</em>
+								</div>
+								<p class="rm-bar-desc">Pensar numa forma de a cadência de leads outbound em Nutrição ser personalizada automaticamente para cada lead.</p>
+							</div>
+							<div class="rm-bar-block rm-bar-block--backlog" id="backlog-02">
+								<div class="rm-bar rm-bar--backlog">
+									<a href="#backlog-02"><span class="rm-bar-num">02</span> Inbound ICP · sem contato</a>
+									<i style="width:0%"></i><em>—</em>
+								</div>
+								<p class="rm-bar-desc">Desenhar o fluxo do lead que vem do inbound, é ICP, mas ainda sem contato.</p>
+							</div>
+							<div class="rm-bar-block rm-bar-block--backlog" id="backlog-03">
+								<div class="rm-bar rm-bar--backlog">
+									<a href="#backlog-03"><span class="rm-bar-num">03</span> Inbound ICP · com contato · sem timing</a>
+									<i style="width:0%"></i><em>—</em>
+								</div>
+								<p class="rm-bar-desc">Desenhar o fluxo do lead inbound ICP com contato, mas que ainda não está em momento de compra.</p>
+							</div>
+							<div class="rm-bar-block rm-bar-block--backlog" id="backlog-04">
+								<div class="rm-bar rm-bar--backlog">
+									<a href="#backlog-04"><span class="rm-bar-num">04</span> Inbound ICP · pós-reunião · sem timing</a>
+									<i style="width:0%"></i><em>—</em>
+								</div>
+								<p class="rm-bar-desc">Desenhar o fluxo do lead inbound ICP que fez reunião, mas não está em momento de compra.</p>
+							</div>
+							<div class="rm-bar-block rm-bar-block--backlog" id="backlog-05">
+								<div class="rm-bar rm-bar--backlog">
+									<a href="#backlog-05"><span class="rm-bar-num">05</span> Copiloto Vinícius · nestes momentos</a>
+									<i style="width:0%"></i><em>—</em>
+								</div>
+								<p class="rm-bar-desc">Incluir o copiloto do Vinícius nos fluxos acima. Ver <a href="#bdr-copilot">BDR Copilot</a>.</p>
+							</div>
+						</div>
 					</article>
 				</div>
 
@@ -1573,6 +1617,7 @@
 					<a href="#bdr-copilot" class="rm-stepper-item rm-stepper-item--now" title="Onboarding · 31/08–04/09"><span></span><small>Onboarding</small></a>
 					<a href="#agenda-entregas" class="rm-stepper-item rm-stepper-item--next" title="Relatórios · 02–11/09"><span></span><small>Relatórios</small></a>
 					<a href="#agenda-entregas" class="rm-stepper-item rm-stepper-item--next" title="Histórico 2026 · 07–11/09"><span></span><small>Histórico</small></a>
+					<a href="#roadmap-backlog" class="rm-stepper-item rm-stepper-item--backlog" title="Backlog · 5 tarefas sem data"><span></span><small>Backlog</small></a>
 				</nav>
 			</div>
 
@@ -1602,50 +1647,6 @@
 						</article>
 					</div>
 
-					<section id="roadmap-backlog" class="rm-backlog">
-						<div class="rm-backlog-top">
-							<h3>📋 Ações pendentes · próximas semanas</h3>
-							<span class="rm-tag rm-tag--backlog">Sem data · 5 itens</span>
-						</div>
-						<p class="rm-backlog-intro">Backlog para desenvolver — priorizar após onboarding e relatórios.</p>
-						<ol class="rm-backlog-list">
-							<li>
-								<span class="rm-backlog-num">01</span>
-								<div>
-									<strong>Cadência Outbound em Nutrição · personalização automática</strong>
-									<p>Pensar numa forma de a cadência de leads outbound em Nutrição ser personalizada automaticamente para cada lead.</p>
-								</div>
-							</li>
-							<li>
-								<span class="rm-backlog-num">02</span>
-								<div>
-									<strong>Inbound ICP · sem contato</strong>
-									<p>Desenhar o fluxo do lead que vem do inbound, é ICP, mas ainda sem contato.</p>
-								</div>
-							</li>
-							<li>
-								<span class="rm-backlog-num">03</span>
-								<div>
-									<strong>Inbound ICP · com contato · fora de momento de compra</strong>
-									<p>Desenhar o fluxo do lead inbound ICP com contato, mas que ainda não está em momento de compra.</p>
-								</div>
-							</li>
-							<li>
-								<span class="rm-backlog-num">04</span>
-								<div>
-									<strong>Inbound ICP · pós-reunião · fora de momento de compra</strong>
-									<p>Desenhar o fluxo do lead inbound ICP que fez reunião, mas não está em momento de compra.</p>
-								</div>
-							</li>
-							<li>
-								<span class="rm-backlog-num">05</span>
-								<div>
-									<strong>Copiloto do Vinícius nestes momentos</strong>
-									<p>Incluir o copiloto do Vinícius nos fluxos acima (nutrição personalizada + caminhos Inbound ICP). Ver <a href="#bdr-copilot">BDR Copilot</a>.</p>
-								</div>
-							</li>
-						</ol>
-					</section>
 				</div>
 
 				<aside class="rm-index" aria-label="Índice de entregas">
@@ -1704,10 +1705,20 @@
 						</ul>
 					</div>
 					<div class="rm-index-group rm-index-group--open">
+						<h4>Backlog · sem data</h4>
+						<ul>
+							<li><a href="#backlog-01">01 · Nutrição Out personalizada</a></li>
+							<li><a href="#backlog-02">02 · Inbound ICP sem contato</a></li>
+							<li><a href="#backlog-03">03 · ICP com contato · sem timing</a></li>
+							<li><a href="#backlog-04">04 · ICP pós-reunião · sem timing</a></li>
+							<li><a href="#backlog-05">05 · Copiloto Vinícius</a></li>
+						</ul>
+					</div>
+					<div class="rm-index-group rm-index-group--open">
 						<h4>Em aberto</h4>
 						<ul>
 							<li><a href="#bdr-copilot">Onboarding BDR</a></li>
-							<li><a href="#roadmap-backlog">Backlog · 5 fluxos</a></li>
+							<li><a href="#roadmap-backlog">Ver backlog no burn-up</a></li>
 						</ul>
 					</div>
 				</aside>
@@ -13104,8 +13115,8 @@ Um abraço!"
         </section>
 
 	</main>
-  <script src="app.js?v=matriz-48"></script>
-  <script src="hire-matrix.js?v=matriz-48"></script>
+  <script src="app.js?v=matriz-49"></script>
+  <script src="hire-matrix.js?v=matriz-49"></script>
 	
 </body>
 </html>
