@@ -1932,6 +1932,59 @@ body.light-mode .waiting-badge {
     border-color: rgba(14, 165, 233, 0.25);
 }
 
+.dev-eta {
+    margin-top: 22px;
+    padding: 16px 22px;
+    border-radius: 14px;
+    border: 1px solid rgba(251, 191, 36, 0.35);
+    background: rgba(251, 191, 36, 0.08);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+    min-width: min(100%, 320px);
+}
+.dev-eta-label {
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #fbbf24;
+}
+.dev-eta strong {
+    font-size: 1.15rem;
+    color: var(--text-main);
+}
+.dev-eta-note {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+}
+.dev-related {
+    margin-top: 18px !important;
+    font-size: 0.88rem !important;
+    max-width: 560px;
+}
+.dev-related a {
+    color: var(--melvin-cyan);
+    font-weight: 700;
+    text-decoration: none;
+}
+.dev-related a:hover { text-decoration: underline; }
+.waiting-meta a {
+    color: var(--melvin-cyan);
+    font-weight: 700;
+    text-decoration: none;
+}
+.waiting-meta a:hover { text-decoration: underline; }
+body.light-mode .dev-eta {
+    background: rgba(245, 158, 11, 0.08);
+    border-color: rgba(245, 158, 11, 0.3);
+}
+body.light-mode .dev-eta-label { color: #b45309; }
+
+
 /* --- MOBILE + STATUS PENDENTE --- */
 .mobile-menu-btn {
     display: none;
