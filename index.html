@@ -6,13 +6,31 @@
     <title>REBUILD 7 | MELVIN</title>
     
 	<link rel="icon" type="image/png" href="logo_simples_removebcg.png">
-  <link rel="stylesheet" href="styles.css?v=matriz-56">
+  <link rel="stylesheet" href="styles.css?v=matriz-57">
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sora:wght@600;700;800&family=Carlito:ital,wght@0,400;0,700;1,400&family=Libre+Baskerville:wght@400;700&display=swap" rel="stylesheet">
+  <script>
+    (function () {
+      try {
+        var mode = localStorage.getItem('theme') || 'system';
+        if (mode !== 'light' && mode !== 'dark' && mode !== 'system') mode = 'system';
+        var light = mode === 'light' || (mode === 'system' && window.matchMedia('(prefers-color-scheme: light)').matches);
+        if (light) document.documentElement.classList.add('theme-boot-light');
+        document.documentElement.setAttribute('data-theme-mode', mode);
+      } catch (e) {}
+    })();
+  </script>
 
 </head>
 <body>
+    <script>
+      (function () {
+        if (document.documentElement.classList.contains('theme-boot-light')) {
+          document.body.classList.add('light-mode');
+        }
+      })();
+    </script>
     <button type="button" class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Abrir menu">☰</button>
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
 <!-- MENU LATERAL -->
@@ -299,7 +317,22 @@
                 </div>
             </div>
             <div class="topbar-actions">
-                <button class="topbar-btn" id="themeToggleBtn" title="Alternar Tema (Claro/Escuro)">🌓</button>
+                <div class="theme-pill" id="themePill" data-mode="system">
+                    <button type="button" class="theme-pill-face" id="themePillToggle" aria-expanded="false" aria-controls="themePillOptions" title="Tema">
+                        <span class="theme-pill-ico" data-theme-face aria-hidden="true">◐</span>
+                    </button>
+                    <div class="theme-pill-tray" id="themePillOptions" role="radiogroup" aria-label="Escolher tema" hidden>
+                        <button type="button" class="theme-pill-opt" data-theme="light" role="radio" aria-checked="false" title="Claro">
+                            <span aria-hidden="true">☀</span><em>Claro</em>
+                        </button>
+                        <button type="button" class="theme-pill-opt" data-theme="dark" role="radio" aria-checked="false" title="Escuro">
+                            <span aria-hidden="true">☾</span><em>Escuro</em>
+                        </button>
+                        <button type="button" class="theme-pill-opt" data-theme="system" role="radio" aria-checked="false" title="Seguir o sistema">
+                            <span aria-hidden="true">◐</span><em>Sistema</em>
+                        </button>
+                    </div>
+                </div>
                 <a href="#home-dashboard" class="topbar-btn" title="Início · RevOps Book MELVIN">🏠</a>
             </div>
         </div>
@@ -13068,8 +13101,8 @@ Um abraço!"
         </section>
 
 	</main>
-  <script src="app.js?v=matriz-56"></script>
-  <script src="hire-matrix.js?v=matriz-56"></script>
+  <script src="app.js?v=matriz-57"></script>
+  <script src="hire-matrix.js?v=matriz-57"></script>
 	
 </body>
 </html>

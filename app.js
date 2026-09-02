@@ -1197,19 +1197,101 @@
         });
     });
 
-    const themeToggleBtn = document.getElementById('themeToggleBtn');
-    if (localStorage.getItem('theme') === 'light') {
-        document.body.classList.add('light-mode');
-    }
-    if (themeToggleBtn) {
-        themeToggleBtn.addEventListener('click', () => {
-            document.body.classList.toggle('light-mode');
-            localStorage.setItem(
-                'theme',
-                document.body.classList.contains('light-mode') ? 'light' : 'dark'
-            );
+    // Theme pill · light / dark / system (segue Windows / mobile)
+    (function initThemePill() {
+        const root = document.getElementById('themePill');
+        const toggle = document.getElementById('themePillToggle');
+        const tray = document.getElementById('themePillOptions');
+        const face = root && root.querySelector('[data-theme-face]');
+        if (!root || !toggle || !tray) return;
+
+        const ICONS = { light: '☀', dark: '☾', system: '◐' };
+        const LABELS = { light: 'Claro', dark: 'Escuro', system: 'Sistema' };
+        const mq = window.matchMedia('(prefers-color-scheme: light)');
+        let closeTimer = null;
+
+        function readMode() {
+            let mode = 'system';
+            try {
+                mode = localStorage.getItem('theme') || 'system';
+            } catch (e) {}
+            if (mode !== 'light' && mode !== 'dark' && mode !== 'system') mode = 'system';
+            return mode;
+        }
+
+        function resolveLight(mode) {
+            if (mode === 'light') return true;
+            if (mode === 'dark') return false;
+            return mq.matches;
+        }
+
+        function applyMode(mode, persist) {
+            const light = resolveLight(mode);
+            document.body.classList.toggle('light-mode', light);
+            document.documentElement.classList.toggle('theme-boot-light', light);
+            document.documentElement.setAttribute('data-theme-mode', mode);
+            root.setAttribute('data-mode', mode);
+            if (face) face.textContent = ICONS[mode] || ICONS.system;
+            toggle.setAttribute('title', 'Tema · ' + (LABELS[mode] || 'Sistema'));
+            toggle.setAttribute('aria-label', 'Tema atual: ' + (LABELS[mode] || 'Sistema') + '. Abrir opções');
+            tray.querySelectorAll('[data-theme]').forEach((btn) => {
+                const on = btn.getAttribute('data-theme') === mode;
+                btn.classList.toggle('is-active', on);
+                btn.setAttribute('aria-checked', on ? 'true' : 'false');
+            });
+            if (persist !== false) {
+                try { localStorage.setItem('theme', mode); } catch (e) {}
+            }
+        }
+
+        function setOpen(open) {
+            root.classList.toggle('is-open', open);
+            toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+            tray.setAttribute('aria-hidden', open ? 'false' : 'true');
+            tray.querySelectorAll('[data-theme]').forEach((btn) => {
+                btn.tabIndex = open ? 0 : -1;
+            });
+        }
+
+        applyMode(readMode(), false);
+
+        if (typeof mq.addEventListener === 'function') {
+            mq.addEventListener('change', () => {
+                if (readMode() === 'system') applyMode('system', false);
+            });
+        } else if (typeof mq.addListener === 'function') {
+            mq.addListener(() => {
+                if (readMode() === 'system') applyMode('system', false);
+            });
+        }
+
+        toggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            setOpen(!root.classList.contains('is-open'));
         });
-    }
+
+        tray.querySelectorAll('[data-theme]').forEach((btn) => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                applyMode(btn.getAttribute('data-theme'));
+                setOpen(false);
+            });
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!root.contains(e.target)) setOpen(false);
+        });
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') setOpen(false);
+        });
+
+        root.addEventListener('mouseleave', () => {
+            closeTimer = setTimeout(() => setOpen(false), 420);
+        });
+        root.addEventListener('mouseenter', () => {
+            if (closeTimer) clearTimeout(closeTimer);
+        });
+    })();
 
     const allSections = document.querySelectorAll('main > section');
     const breadcrumbText = document.getElementById('current-location');
