@@ -2104,6 +2104,75 @@ body.light-mode .dev-eta {
 }
 body.light-mode .dev-eta-label { color: #b45309; }
 
+/* Capas · Entregue (espelho das páginas WIP) */
+.waiting-page--done {
+    background:
+        radial-gradient(ellipse at 50% 0%, rgba(52, 211, 153, 0.1), transparent 55%),
+        radial-gradient(ellipse at 80% 100%, rgba(16, 185, 129, 0.06), transparent 45%),
+        repeating-linear-gradient(45deg, rgba(52,211,153,0.015), rgba(52,211,153,0.015) 10px, rgba(0,0,0,0.08) 10px, rgba(0,0,0,0.08) 20px);
+    border-color: rgba(52, 211, 153, 0.28);
+}
+.waiting-badge--done {
+    color: #6ee7b7;
+    background: rgba(52, 211, 153, 0.1);
+    border-color: rgba(52, 211, 153, 0.35);
+}
+.waiting-badge--done .pulse {
+    background: #34d399;
+    box-shadow: 0 0 10px #34d399;
+}
+.dev-eta--done {
+    border-color: rgba(52, 211, 153, 0.35);
+    background: rgba(52, 211, 153, 0.08);
+}
+.dev-eta--done .dev-eta-label { color: #6ee7b7; }
+.dev-eta--done .dev-eta-note b {
+    color: var(--text-main);
+    font-weight: 800;
+}
+.done-cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 22px;
+    padding: 12px 22px;
+    border-radius: 999px;
+    font-weight: 800;
+    font-size: 0.92rem;
+    text-decoration: none;
+    color: #042f2e;
+    background: linear-gradient(135deg, #6ee7b7, #34d399);
+    box-shadow: 0 8px 22px rgba(52, 211, 153, 0.28);
+    position: relative;
+    z-index: 1;
+    transition: transform 0.15s, box-shadow 0.15s;
+}
+.done-cta:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba(52, 211, 153, 0.35);
+    color: #042f2e;
+}
+body.light-mode .waiting-page--done {
+    background:
+        radial-gradient(ellipse at 50% 0%, rgba(16, 185, 129, 0.08), transparent 55%),
+        repeating-linear-gradient(45deg, rgba(15,23,42,0.02), rgba(15,23,42,0.02) 10px, rgba(255,255,255,0.5) 10px, rgba(255,255,255,0.5) 20px);
+    border-color: rgba(16, 185, 129, 0.3);
+}
+body.light-mode .waiting-badge--done {
+    color: #047857;
+    background: rgba(16, 185, 129, 0.12);
+    border-color: rgba(16, 185, 129, 0.3);
+}
+body.light-mode .dev-eta--done {
+    background: rgba(16, 185, 129, 0.08);
+    border-color: rgba(16, 185, 129, 0.28);
+}
+body.light-mode .dev-eta--done .dev-eta-label { color: #047857; }
+body.light-mode .done-cta {
+    color: #fff;
+    background: linear-gradient(135deg, #10b981, #059669);
+}
+
 
 /* --- MOBILE + STATUS PENDENTE --- */
 .mobile-menu-btn {
