@@ -11,11 +11,10 @@ Estas páginas **não aparecem no menu lateral**, mas abrem se você digitar o h
 | Página | Atalho (barra de endereços) |
 |---|---|
 | **Plano de Ação** | `index.html#plano-acao` |
-| **Presales SDR (Rotina In)** | `index.html#presales-inbound` |
-| **Presales BDR (Rotina Out)** | `index.html#presales-outbound` |
-| **Rotina Closer** | `index.html#rotina-closer` |
 | **Arquivo GIM · Objeções (fonte)** | `index.html#gim-objecoes` |
 | *(ex.) Central de Comando antiga* | conteúdo substituído pela landing `#home-dashboard` |
+
+> **Removido em 02/09/2026:** páginas Stand-by · rotinas (`#presales-inbound`, `#presales-outbound`, `#rotina-closer`) — excluídas do Book. Menu interno renomeado para **RevOps Jailson** (Ativos + Entregues).
 
 **Como usar:** abra o site e acrescente `#plano-acao` ao final da URL, ex.:
 

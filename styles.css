@@ -10131,6 +10131,39 @@ body.light-mode .jd-doc li { color: #334155; }
   box-shadow: none !important;
 }
 
+/* ---- Ops hub layout · Ativos + Entregues ---- */
+.ops-hub-cols {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 18px;
+  align-items: start;
+}
+.ops-hub-col-title {
+  margin: 0 0 12px;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.ops-board-live--stack {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.ops-board-live--done .ops-card--done {
+  border-color: rgba(52, 211, 153, 0.28);
+  background: rgba(52, 211, 153, 0.06);
+}
+.ops-card--done strong { color: var(--text-main); }
+.ops-card--done:hover {
+  border-color: rgba(52, 211, 153, 0.5);
+  background: rgba(52, 211, 153, 0.1);
+}
+@media (max-width: 900px) {
+  .ops-hub-cols { grid-template-columns: 1fr; }
+}
+
 /* ---- Ops hub layout ? board + sanfona lateral ---- */
 .ops-board-head {
   margin-bottom: 14px;
