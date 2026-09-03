@@ -6,7 +6,7 @@
     <title>REBUILD 7 | MELVIN</title>
     
 	<link rel="icon" type="image/png" href="logo_simples_removebcg.png">
-  <link rel="stylesheet" href="styles.css?v=matriz-61">
+  <link rel="stylesheet" href="styles.css?v=matriz-62">
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sora:wght@600;700;800&family=Carlito:ital,wght@0,400;0,700;1,400&family=Libre+Baskerville:wght@400;700&display=swap" rel="stylesheet">
@@ -255,6 +255,8 @@
                         <a href="#dev-inbound-contato-sem-timing"><span style="display:flex; gap:10px;"><span>03</span> ICP com contato · sem timing</span><span class="dot"></span></a>
                         <a href="#dev-inbound-pos-reuniao"><span style="display:flex; gap:10px;"><span>04</span> ICP pós-reunião · sem timing</span><span class="dot"></span></a>
                         <a href="#dev-copiloto-vinicius"><span style="display:flex; gap:10px;"><span>05</span> Copiloto Vinícius</span><span class="dot"></span></a>
+                        <a href="#dev-cadencias-ma"><span style="display:flex; gap:10px;"><span>06</span> Cadências M&amp;A · e-mail + WA</span><span class="dot"></span></a>
+                        <a href="#dev-planilha-bonificacao"><span style="display:flex; gap:10px;"><span>07</span> Planilha de bonificação</span><span class="dot"></span></a>
 
                         <div class="submenu-label">Entregues</div>
                         <a href="#entrega-home-dashboard"><span style="display:flex; gap:10px;"><span>📘</span> RevOps Book</span><span class="dot dot-active"></span></a>
@@ -456,6 +458,16 @@
                             <span class="ops-card-ico">05</span>
                             <strong>Copiloto Vinícius</strong>
                             <small>Backlog · sem data</small>
+                        </a>
+                        <a class="ops-card ops-card--live" href="#dev-cadencias-ma">
+                            <span class="ops-card-ico">06</span>
+                            <strong>Cadências M&amp;A · e-mail + WA</strong>
+                            <small>MKT · prazo 11/09</small>
+                        </a>
+                        <a class="ops-card ops-card--live" href="#dev-planilha-bonificacao">
+                            <span class="ops-card-ico">07</span>
+                            <strong>Planilha de bonificação</strong>
+                            <small>Prazo 03/10 · 30 dias</small>
                         </a>
                     </div>
                 </div>
@@ -2081,6 +2093,34 @@
             </div>
         </section>
 
+        <section id="dev-cadencias-ma" class="blueprint-page dev-page" style="padding: 40px; border-radius: 16px;" data-hidden-nav="true">
+            <div class="waiting-page">
+                <div class="waiting-badge"><span class="pulse"></span> Em desenvolvimento</div>
+                <h2>06 · Cadências e-mail + WhatsApp · Manutenção em Ação</h2>
+                <p>Pedido MKT: reativação de vendas dos produtos Manutenção em Ação. Criar cadências de e-mail e WhatsApp para <strong>venda</strong> e <strong>recuperação de venda</strong>. Jailson será adicionado ao projeto.</p>
+                <div class="dev-eta">
+                    <span class="dev-eta-label">Entrega estimada</span>
+                    <strong>11/09/2026</strong>
+                    <span class="dev-eta-note">Roadmap · Backlog · MKT</span>
+                </div>
+                <p class="waiting-meta"><a href="#agenda-entregas">← Voltar ao Roadmap RevOps</a> · <a href="#ops-pendencias">Pendências · Ata</a></p>
+            </div>
+        </section>
+
+        <section id="dev-planilha-bonificacao" class="blueprint-page dev-page" style="padding: 40px; border-radius: 16px;" data-hidden-nav="true">
+            <div class="waiting-page">
+                <div class="waiting-badge"><span class="pulse"></span> Em desenvolvimento</div>
+                <h2>07 · Planilha de bonificação</h2>
+                <p>Construir a planilha de bonificação da operação comercial.</p>
+                <div class="dev-eta">
+                    <span class="dev-eta-label">Entrega estimada</span>
+                    <strong>03/10/2026</strong>
+                    <span class="dev-eta-note">Roadmap · Backlog · 30 dias a partir de 03/09</span>
+                </div>
+                <p class="waiting-meta"><a href="#agenda-entregas">← Voltar ao Roadmap RevOps</a> · <a href="#ops-pendencias">Pendências · Ata</a></p>
+            </div>
+        </section>
+
 		<section id="agenda-entregas" class="crono-page rm-page blueprint-page">
 
 			<header class="rm-head">
@@ -2100,7 +2140,7 @@
 							<li><i class="rm-dot rm-dot--ok"></i>6 fases OK</li>
 							<li><i class="rm-dot rm-dot--now"></i>1 em andamento</li>
 							<li><i class="rm-dot rm-dot--next"></i>2 programadas</li>
-							<li><i class="rm-dot rm-dot--backlog"></i>5 backlog · sem data</li>
+							<li><i class="rm-dot rm-dot--backlog"></i>7 backlog · 2 com prazo</li>
 						</ul>
 					</article>
 
@@ -2120,7 +2160,22 @@
 						<div class="rm-bars-backlog" id="roadmap-backlog">
 							<div class="rm-bars-backlog-head">
 								<strong>📋 Backlog · ações pendentes</strong>
-								<span>Sem data · 5 tarefas para desenvolver</span>
+								<span>7 tarefas · 2 com prazo (MKT + Bonificação)</span>
+							</div>
+
+							<div class="rm-bar-block rm-bar-block--backlog" id="rm-backlog-06">
+								<div class="rm-bar rm-bar--backlog">
+									<a href="#dev-cadencias-ma"><span class="rm-bar-num">06</span> Cadências e-mail + WhatsApp · Manutenção em Ação</a>
+									<i style="width:0%"></i><em>11/09</em>
+								</div>
+								<p class="rm-bar-desc">Pedido MKT: reativação de vendas. Criar cadências de e-mail e WhatsApp para <strong>venda</strong> e <strong>recuperação de venda</strong>. Jailson no projeto. · prazo <strong>11/09/2026</strong></p>
+							</div>
+							<div class="rm-bar-block rm-bar-block--backlog" id="rm-backlog-07">
+								<div class="rm-bar rm-bar--backlog">
+									<a href="#dev-planilha-bonificacao"><span class="rm-bar-num">07</span> Planilha de bonificação</a>
+									<i style="width:0%"></i><em>03/10</em>
+								</div>
+								<p class="rm-bar-desc">Construir a planilha de bonificação da operação comercial. · prazo <strong>03/10/2026</strong> (30 dias)</p>
 							</div>
 
 							<div class="rm-bar-block rm-bar-block--backlog" id="rm-backlog-01">
@@ -2170,7 +2225,7 @@
 					<a href="#entrega-bdr-copilot" class="rm-stepper-item rm-stepper-item--done" title="Atuação · 28/08"><span></span><small>Atuação</small></a>
 					<a href="#onboarding-bdr" class="rm-stepper-item rm-stepper-item--now" title="Onboarding · 31/08–04/09"><span></span><small>Onboarding</small></a>
 					<a href="#relatorios-bitrix" class="rm-stepper-item rm-stepper-item--next" title="Relatórios · 02–11/09"><span></span><small>Relatórios</small></a>
-					<a href="#roadmap-backlog" class="rm-stepper-item rm-stepper-item--backlog" title="Backlog · 5 tarefas sem data"><span></span><small>Backlog</small></a>
+					<a href="#roadmap-backlog" class="rm-stepper-item rm-stepper-item--backlog" title="Backlog · 7 tarefas"><span></span><small>Backlog</small></a>
 				</nav>
 			</div>
 
@@ -2272,8 +2327,10 @@
 						</ul>
 					</details>
 					<details class="rm-index-acc rm-index-acc--open">
-						<summary>Backlog · sem data</summary>
+						<summary>Backlog · 7 tarefas</summary>
 						<ul>
+							<li><a href="#dev-cadencias-ma">06 · Cadências M&amp;A · e-mail + WA · 11/09</a></li>
+							<li><a href="#dev-planilha-bonificacao">07 · Planilha de bonificação · 03/10</a></li>
 							<li><a href="#dev-nutricao-out">01 · Nutrição Out personalizada</a></li>
 							<li><a href="#dev-inbound-sem-contato">02 · Inbound ICP sem contato</a></li>
 							<li><a href="#dev-inbound-contato-sem-timing">03 · ICP com contato · sem timing</a></li>
@@ -13422,8 +13479,8 @@ Um abraço!"
         </section>
 
 	</main>
-  <script src="app.js?v=matriz-61"></script>
-  <script src="hire-matrix.js?v=matriz-61"></script>
+  <script src="app.js?v=matriz-62"></script>
+  <script src="hire-matrix.js?v=matriz-62"></script>
 	
 </body>
 </html>
