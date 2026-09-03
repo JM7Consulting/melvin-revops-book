@@ -1122,21 +1122,16 @@ document.addEventListener('DOMContentLoaded', () => {
         setTab(startTab);
     })();
 
-    // Roadmap · cockpit tabs (Visão / Backlog / Ata / Índice)
+    // Roadmap · cockpit tabs (Visão / Backlog / Índice) · Ata abre pelo Índice
     (function initRmDesk() {
         const page = document.getElementById('agenda-entregas');
         if (!page) return;
-        const tabs = page.querySelectorAll('[data-rm-desk]');
         const panels = page.querySelectorAll('[data-rm-desk-panel]');
         const KEY = 'melvinRmDesk.v1';
+        const TAB_IDS = { visao: true, backlog: true, indice: true };
 
         function setDesk(id, opts) {
             const target = id || 'visao';
-            tabs.forEach((tab) => {
-                if (!tab.hasAttribute('data-rm-desk')) return;
-                // only nav tabs, not goto buttons elsewhere
-                if (!tab.classList.contains('rm-desk-tab') && tab.tagName !== 'BUTTON') return;
-            });
             page.querySelectorAll('.rm-desk-tab[data-rm-desk]').forEach((tab) => {
                 const on = tab.getAttribute('data-rm-desk') === target;
                 tab.classList.toggle('is-active', on);
@@ -1148,9 +1143,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (on) panel.removeAttribute('hidden');
                 else panel.setAttribute('hidden', '');
             });
-            try { localStorage.setItem(KEY, target); } catch (e) {}
+            try {
+                localStorage.setItem(KEY, TAB_IDS[target] ? target : 'indice');
+            } catch (e) {}
             if (opts && opts.scroll) {
-                const el = page.querySelector(`[data-rm-desk-panel="${target}"]`) || page;
                 requestAnimationFrame(() => {
                     page.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 });
@@ -1185,7 +1181,7 @@ document.addEventListener('DOMContentLoaded', () => {
         let start = 'visao';
         try {
             const saved = localStorage.getItem(KEY);
-            if (saved && page.querySelector(`[data-rm-desk-panel="${saved}"]`)) start = saved;
+            if (saved && TAB_IDS[saved] && page.querySelector(`[data-rm-desk-panel="${saved}"]`)) start = saved;
         } catch (e) {}
 
         // Deep-links
@@ -1444,11 +1440,17 @@ document.addEventListener('DOMContentLoaded', () => {
             hash = '#agenda-entregas';
             openCronoTab = 'overview';
         }
-        if (hash === '#ops-pendencias' || hash === '#entrega-ops-pendencias') {
+        if (hash === '#ops-pendencias' || hash === '#entrega-ops-pendencias' || hash === '#rm-ata') {
             hash = '#agenda-entregas';
-            try { localStorage.setItem('melvinRmDesk.v1', 'ata'); } catch (e) {}
             setTimeout(() => {
                 if (typeof window.melvinRmDeskGoto === 'function') window.melvinRmDeskGoto('ata', { scroll: true });
+            }, 40);
+        }
+        if (hash === '#rm-indice') {
+            hash = '#agenda-entregas';
+            try { localStorage.setItem('melvinRmDesk.v1', 'indice'); } catch (e) {}
+            setTimeout(() => {
+                if (typeof window.melvinRmDeskGoto === 'function') window.melvinRmDeskGoto('indice', { scroll: true });
             }, 40);
         }
         if (hash === '#roadmap-backlog') {
@@ -1480,8 +1482,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const activeMenuLink =
             document.querySelector(`.nav-container a[href="${pageHash}"]`) ||
             document.querySelector(`.nav-container a[href="${hash}"]`);
-        if (activeMenuLink) activeMenuLink.classList.add('active');
-        expandMenuForHash(pageHash);
+        if (activeMenuLink) {
+            activeMenuLink.classList.add('active');
+            expandMenuForHash(pageHash);
+        } else if (document.querySelector(`.rm-cat-nav a[href="${pageHash}"], .rm-cat-nav a[href="${hash}"]`)) {
+            const roadmapLink = document.querySelector('.nav-container a[href="#agenda-entregas"]');
+            if (roadmapLink) roadmapLink.classList.add('active');
+            expandMenuForHash('#agenda-entregas');
+        }
 
         allSections.forEach((sec) => {
             sec.style.display = 'none';
@@ -1586,16 +1594,19 @@ document.addEventListener('DOMContentLoaded', () => {
         function buildIndex() {
             const items = [];
             const seenNav = new Set();
-            document.querySelectorAll('.nav-container a[href^="#"]').forEach((a) => {
+            document.querySelectorAll('.nav-container a[href^="#"], .rm-cat-nav a[href^="#"]').forEach((a) => {
                 const href = a.getAttribute('href');
                 if (!href || href === '#' || seenNav.has(href)) return;
                 seenNav.add(href);
                 const pageId = href.slice(1);
+                const fromCat = !!a.closest('.rm-cat-nav');
                 addItem(items, {
-                    kind: 'menu',
+                    kind: fromCat ? 'índice' : 'menu',
                     pageId,
-                    title: (a.querySelector('.text') || a).textContent.replace(/\s+/g, ' ').trim(),
-                    blurb: 'Menu · ' + (a.closest('.nav-lane')?.querySelector('.sidebar-section-title')?.textContent || 'RevOps Book'),
+                    title: (a.querySelector('.rm-cat-copy strong, .text') || a).textContent.replace(/\s+/g, ' ').trim(),
+                    blurb: fromCat
+                        ? 'Índice · Roadmap RevOps'
+                        : 'Menu · ' + (a.closest('.nav-lane')?.querySelector('.sidebar-section-title')?.textContent || 'RevOps Book'),
                     hay: a.textContent
                 });
             });
