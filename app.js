@@ -1459,6 +1459,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (typeof window.melvinRmDeskGoto === 'function') window.melvinRmDeskGoto('backlog', { scroll: true });
             }, 40);
         }
+        if (hash === '#dev-planilha-bonificacao') {
+            hash = '#planilha-bonificacao';
+        }
 
         const targetEl = document.querySelector(hash);
         if (!targetEl) return false;
