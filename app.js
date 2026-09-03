@@ -1132,6 +1132,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         function setDesk(id, opts) {
             const target = id || 'visao';
+            if (target !== 'indice' && typeof window.melvinRmIndiceRestore === 'function') {
+                window.melvinRmIndiceRestore();
+            }
             page.querySelectorAll('.rm-desk-tab[data-rm-desk]').forEach((tab) => {
                 const on = tab.getAttribute('data-rm-desk') === target;
                 tab.classList.toggle('is-active', on);
@@ -1150,6 +1153,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 requestAnimationFrame(() => {
                     page.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 });
+            }
+            if (target === 'indice' && typeof window.melvinRmIndiceEnsure === 'function') {
+                window.melvinRmIndiceEnsure();
             }
         }
 
@@ -1191,6 +1197,174 @@ document.addEventListener('DOMContentLoaded', () => {
         if (hash === 'rm-indice') start = 'indice';
 
         setDesk(start);
+    })();
+
+    // Roadmap · Índice: menu à esquerda + pré-visualização à direita
+    (function initRmIndiceCatalog() {
+        const nav = document.getElementById('rmCatNav');
+        const preview = document.getElementById('rmIndicePreview');
+        const titleEl = document.getElementById('rmIndiceTitle');
+        const openBtn = document.getElementById('rmIndiceOpen');
+        if (!nav || !preview || !titleEl || !openBtn) return;
+
+        let parkedSection = null;
+        let parkingSpot = null;
+        let currentOpen = null; // { hash, desk }
+        let selectedLink = null;
+
+        function restoreParked() {
+            if (!parkedSection || !parkingSpot) return;
+            parkedSection.classList.remove('rm-indice-hosted', 'page-active');
+            parkedSection.style.display = 'none';
+            if (parkingSpot.parentNode) {
+                parkingSpot.parentNode.insertBefore(parkedSection, parkingSpot);
+                parkingSpot.remove();
+            }
+            parkedSection = null;
+            parkingSpot = null;
+        }
+
+        function clearPreviewShell() {
+            preview.innerHTML = '';
+            preview.classList.remove('has-host');
+        }
+
+        function emptyState() {
+            restoreParked();
+            clearPreviewShell();
+            titleEl.textContent = 'Selecione um item à esquerda';
+            openBtn.hidden = true;
+            currentOpen = null;
+            preview.innerHTML = '<p class="rm-indice-empty">Clique numa entrega ou página da fila para ver aqui. Use <strong>Abrir em tela cheia</strong> quando quiser o formato grande.</p>';
+        }
+
+        function hostSection(section) {
+            restoreParked();
+            clearPreviewShell();
+            parkingSpot = document.createComment('rm-indice-slot');
+            section.parentNode.insertBefore(parkingSpot, section);
+            section.classList.add('rm-indice-hosted', 'page-active');
+            section.style.display = 'block';
+            preview.appendChild(section);
+            preview.classList.add('has-host');
+            parkedSection = section;
+        }
+
+        function showAtaClone() {
+            restoreParked();
+            clearPreviewShell();
+            const root = document.getElementById('ops-pendencias-root') || document.getElementById('rm-ata');
+            if (!root) {
+                preview.innerHTML = '<p class="rm-indice-empty">Ata não encontrada.</p>';
+                return;
+            }
+            const clone = root.cloneNode(true);
+            clone.removeAttribute('id');
+            clone.querySelectorAll('[id]').forEach((el) => el.removeAttribute('id'));
+            clone.classList.add('rm-indice-clone');
+            preview.appendChild(clone);
+        }
+
+        function resolveSource(link) {
+            if (link.getAttribute('data-rm-preview') === 'ata') {
+                return { mode: 'ata', openHash: '#agenda-entregas', openDesk: 'ata' };
+            }
+            const live = link.getAttribute('data-rm-live');
+            const href = link.getAttribute('href') || '';
+            let hash = live || href;
+            if (hash === '#rm-ata') hash = '#agenda-entregas';
+            let section = hash ? document.querySelector(hash) : null;
+            if (!section && href) section = document.querySelector(href);
+            if (section && section.classList.contains('done-page') && !live) {
+                const cta = section.querySelector('a.done-cta[href^="#"]');
+                if (cta) {
+                    const liveSec = document.querySelector(cta.getAttribute('href'));
+                    if (liveSec) {
+                        return {
+                            mode: 'host',
+                            section: liveSec,
+                            openHash: cta.getAttribute('href'),
+                            openDesk: cta.getAttribute('data-rm-desk-goto') || null
+                        };
+                    }
+                }
+            }
+            if (!section) return { mode: 'missing' };
+            return {
+                mode: 'host',
+                section,
+                openHash: '#' + section.id,
+                openDesk: null
+            };
+        }
+
+        function selectLink(link) {
+            if (!link) return;
+            nav.querySelectorAll('a.is-active').forEach((a) => a.classList.remove('is-active'));
+            link.classList.add('is-active');
+            selectedLink = link;
+            const label = (link.querySelector('.rm-cat-copy strong') || link).textContent.replace(/\s+/g, ' ').trim();
+            titleEl.textContent = label;
+            const resolved = resolveSource(link);
+            if (resolved.mode === 'missing') {
+                emptyState();
+                titleEl.textContent = label;
+                preview.innerHTML = '<p class="rm-indice-empty">Conteúdo não encontrado.</p>';
+                return;
+            }
+            if (resolved.mode === 'ata') {
+                showAtaClone();
+                currentOpen = { hash: '#agenda-entregas', desk: 'ata' };
+                openBtn.hidden = false;
+                return;
+            }
+            hostSection(resolved.section);
+            currentOpen = { hash: resolved.openHash, desk: resolved.openDesk };
+            openBtn.hidden = false;
+            try { localStorage.setItem('melvinRmIndice.v1', link.getAttribute('href') || ''); } catch (e) {}
+        }
+
+        window.melvinRmIndiceRestore = function () {
+            restoreParked();
+        };
+
+        window.melvinRmIndiceEnsure = function () {
+            if (selectedLink && selectedLink.isConnected) {
+                // re-host if we restored while switching tabs
+                if (!parkedSection) selectLink(selectedLink);
+                return;
+            }
+            let saved = '';
+            try { saved = localStorage.getItem('melvinRmIndice.v1') || ''; } catch (e) {}
+            const link = (saved && nav.querySelector(`a[href="${saved}"]`)) || nav.querySelector('a[href^="#"]');
+            if (link) selectLink(link);
+            else emptyState();
+        };
+
+        nav.querySelectorAll('a[href^="#"]').forEach((link) => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopImmediatePropagation();
+                selectLink(link);
+            }, true);
+        });
+
+        openBtn.addEventListener('click', () => {
+            if (!currentOpen || !currentOpen.hash) return;
+            restoreParked();
+            if (typeof forceScreenChange === 'function') {
+                forceScreenChange(currentOpen.hash);
+            }
+            try { history.pushState(null, '', currentOpen.hash === '#agenda-entregas' && currentOpen.desk === 'ata' ? '#agenda-entregas' : currentOpen.hash); } catch (e) {}
+            if (currentOpen.desk && typeof window.melvinRmDeskGoto === 'function') {
+                setTimeout(() => window.melvinRmDeskGoto(currentOpen.desk, { scroll: true }), 40);
+            }
+        });
+
+        const indicePanel = document.getElementById('rm-indice');
+        if (indicePanel && indicePanel.classList.contains('is-active')) {
+            window.melvinRmIndiceEnsure();
+        }
     })();
 
     // Plano de Ação · fases em accordion (fechadas por padrão)
@@ -1461,7 +1635,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (typeof window.melvinRmDeskGoto === 'function') window.melvinRmDeskGoto('backlog', { scroll: true });
             }, 40);
         }
-        if (hash === '#dev-planilha-bonificacao') {
+        if (hash === '#dev-planilha-bonificacao' || hash === '#entrega-planilha-bonificacao') {
             hash = '#planilha-bonificacao';
         }
 
@@ -1477,6 +1651,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const pageHash = targetSection.id ? `#${targetSection.id}` : hash;
         const restoreY = typeof options.restoreScrollY === 'number' ? options.restoreScrollY : null;
         const skipScroll = options.skipScroll === true;
+
+        if (typeof window.melvinRmIndiceRestore === 'function' && pageHash !== '#agenda-entregas') {
+            window.melvinRmIndiceRestore();
+        }
 
         document.querySelectorAll('.nav-container a').forEach((l) => l.classList.remove('active'));
         const activeMenuLink =
