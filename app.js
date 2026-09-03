@@ -1,4 +1,4 @@
-﻿document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', () => {
     const menuToggleFull = document.getElementById('menuToggleFull');
     const menuToggleMini = document.getElementById('menuToggleMini');
     const sidebar = document.getElementById('sidebar');
@@ -1086,8 +1086,8 @@
             });
         });
 
-        const root = document.getElementById('ops-pendencias');
-        if (!root) return;
+        const root = document.getElementById('ops-pendencias-root') || document.getElementById('rm-ata') || document.getElementById('ops-pendencias');
+        if (!root || !root.querySelector('[data-ops-pend-tab]')) return;
 
         const tabs = root.querySelectorAll('[data-ops-pend-tab]');
         const panels = root.querySelectorAll('[data-ops-pend-panel]');
@@ -1120,6 +1120,81 @@
             if (saved && root.querySelector(`[data-ops-pend-panel="${saved}"]`)) startTab = saved;
         } catch (e) {}
         setTab(startTab);
+    })();
+
+    // Roadmap · cockpit tabs (Visão / Backlog / Ata / Índice)
+    (function initRmDesk() {
+        const page = document.getElementById('agenda-entregas');
+        if (!page) return;
+        const tabs = page.querySelectorAll('[data-rm-desk]');
+        const panels = page.querySelectorAll('[data-rm-desk-panel]');
+        const KEY = 'melvinRmDesk.v1';
+
+        function setDesk(id, opts) {
+            const target = id || 'visao';
+            tabs.forEach((tab) => {
+                if (!tab.hasAttribute('data-rm-desk')) return;
+                // only nav tabs, not goto buttons elsewhere
+                if (!tab.classList.contains('rm-desk-tab') && tab.tagName !== 'BUTTON') return;
+            });
+            page.querySelectorAll('.rm-desk-tab[data-rm-desk]').forEach((tab) => {
+                const on = tab.getAttribute('data-rm-desk') === target;
+                tab.classList.toggle('is-active', on);
+                tab.setAttribute('aria-selected', on ? 'true' : 'false');
+            });
+            panels.forEach((panel) => {
+                const on = panel.getAttribute('data-rm-desk-panel') === target;
+                panel.classList.toggle('is-active', on);
+                if (on) panel.removeAttribute('hidden');
+                else panel.setAttribute('hidden', '');
+            });
+            try { localStorage.setItem(KEY, target); } catch (e) {}
+            if (opts && opts.scroll) {
+                const el = page.querySelector(`[data-rm-desk-panel="${target}"]`) || page;
+                requestAnimationFrame(() => {
+                    page.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                });
+            }
+        }
+
+        window.melvinRmDeskGoto = setDesk;
+
+        page.querySelectorAll('.rm-desk-tab[data-rm-desk]').forEach((tab) => {
+            tab.addEventListener('click', () => setDesk(tab.getAttribute('data-rm-desk')));
+        });
+
+        document.querySelectorAll('[data-rm-desk-goto]').forEach((el) => {
+            el.addEventListener('click', (e) => {
+                const id = el.getAttribute('data-rm-desk-goto');
+                if (!id) return;
+                // If navigating away via hash to agenda, still switch tab
+                if (el.tagName === 'A' && el.getAttribute('href') === '#agenda-entregas') {
+                    e.preventDefault();
+                    if (typeof forceScreenChange === 'function') forceScreenChange('#agenda-entregas');
+                    setDesk(id, { scroll: true });
+                    return;
+                }
+                if (el.tagName === 'BUTTON' || el.classList.contains('rm-inline-link') || el.classList.contains('rm-index-goto') || el.classList.contains('rm-stepper-item')) {
+                    e.preventDefault();
+                    if (typeof forceScreenChange === 'function') forceScreenChange('#agenda-entregas');
+                    setDesk(id, { scroll: true });
+                }
+            });
+        });
+
+        let start = 'visao';
+        try {
+            const saved = localStorage.getItem(KEY);
+            if (saved && page.querySelector(`[data-rm-desk-panel="${saved}"]`)) start = saved;
+        } catch (e) {}
+
+        // Deep-links
+        const hash = (location.hash || '').slice(1);
+        if (hash === 'roadmap-backlog' || hash === 'rm-backlog') start = 'backlog';
+        if (hash === 'rm-ata' || hash === 'ops-pendencias') start = 'ata';
+        if (hash === 'rm-indice') start = 'indice';
+
+        setDesk(start);
     })();
 
     // Plano de Ação · fases em accordion (fechadas por padrão)
@@ -1369,8 +1444,20 @@
             hash = '#agenda-entregas';
             openCronoTab = 'overview';
         }
+        if (hash === '#ops-pendencias' || hash === '#entrega-ops-pendencias') {
+            hash = '#agenda-entregas';
+            try { localStorage.setItem('melvinRmDesk.v1', 'ata'); } catch (e) {}
+            setTimeout(() => {
+                if (typeof window.melvinRmDeskGoto === 'function') window.melvinRmDeskGoto('ata', { scroll: true });
+            }, 40);
+        }
         if (hash === '#roadmap-backlog') {
+            hash = '#agenda-entregas';
+            try { localStorage.setItem('melvinRmDesk.v1', 'backlog'); } catch (e) {}
             openCronoTab = 'overview';
+            setTimeout(() => {
+                if (typeof window.melvinRmDeskGoto === 'function') window.melvinRmDeskGoto('backlog', { scroll: true });
+            }, 40);
         }
 
         const targetEl = document.querySelector(hash);

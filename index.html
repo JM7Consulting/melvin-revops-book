@@ -6,7 +6,7 @@
     <title>REBUILD 7 | MELVIN</title>
     
 	<link rel="icon" type="image/png" href="logo_simples_removebcg.png">
-  <link rel="stylesheet" href="styles.css?v=matriz-62">
+  <link rel="stylesheet" href="styles.css?v=matriz-63">
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sora:wght@600;700;800&family=Carlito:ital,wght@0,400;0,700;1,400&family=Libre+Baskerville:wght@400;700&display=swap" rel="stylesheet">
@@ -266,7 +266,7 @@
                         <a href="#entrega-funil-vendas"><span style="display:flex; gap:10px;"><span>💰</span> Pipelines In + Out</span><span class="dot dot-active"></span></a>
                         <a href="#entrega-fluxo-comerc-outbound"><span style="display:flex; gap:10px;"><span>➡️</span> Fluxo Comercial Out</span><span class="dot dot-active"></span></a>
                         <a href="#entrega-wf-contato-nutricao-out"><span style="display:flex; gap:10px;"><span>🔄</span> Cadência Out D1–D35</span><span class="dot dot-active"></span></a>
-                        <a href="#entrega-ops-pendencias"><span style="display:flex; gap:10px;"><span>✅</span> Ata Melvin · checklist</span><span class="dot dot-active"></span></a>
+                        <a href="#agenda-entregas" data-rm-desk-goto="ata"><span style="display:flex; gap:10px;"><span>✅</span> Ata Melvin · checklist</span><span class="dot dot-active"></span></a>
                         <a href="#entrega-funil-inbound"><span style="display:flex; gap:10px;"><span>📊</span> Funil Inbound</span><span class="dot dot-active"></span></a>
                         <a href="#entrega-wf-contato-nutricao-in"><span style="display:flex; gap:10px;"><span>🔄</span> D1–D15 In</span><span class="dot dot-active"></span></a>
                         <a href="#entrega-filtro-qualificacao-in"><span style="display:flex; gap:10px;"><span>⏳</span> SPN / Qualificação</span><span class="dot dot-active"></span></a>
@@ -505,7 +505,7 @@
                             <strong>Fluxo Comercial Out</strong>
                             <small>Out + Ata · 04/08</small>
                         </a>
-                        <a class="ops-card ops-card--done" href="#entrega-ops-pendencias">
+                        <a class="ops-card ops-card--done" href="#agenda-entregas" data-rm-desk-goto="ata">
                             <span class="ops-card-ico">✅</span>
                             <strong>Ata Melvin · checklist</strong>
                             <small>Sprint inicial · jul/2026</small>
@@ -535,202 +535,18 @@
             </div>
         </section>
 
-        <!-- Pendências · Ata 30/07 — oculta do menu/hub (pedido 07/08/2026); HTML preservado p/ arquivo -->
-        <section id="ops-pendencias" class="blueprint-page ops-page ops-pend-page" style="padding: 40px; border-radius: 16px;" data-hidden-nav="true">
-            <div class="fq-hero fq-hero--gim ops-hero">
-                <div class="fq-hero-copy">
-                    <div class="fq-kicker">JM7 · Interno · 31/07/2026</div>
-                    <div class="cadencia-title-line fq-hero-title">Pendências · Ata Melvin</div>
-                    <p class="cadencia-subtitle" style="padding-left:0;max-width:52ch;">Aba <strong>Ata</strong> = resumo. Sprint Book da semana fechado (concorrentes/ABM/produtos). <strong>Fazer agora</strong> rolou p/ 07/08 · marcar o que já fechou (t01/t10).</p>
-                </div>
-                <div class="fq-badge-stack" aria-hidden="true">
-                    <div class="fq-badge-orb fq-badge-orb--gim"><span>ATA</span><small>30/07</small></div>
-                    <p class="fq-badge-cap">Jailson · Igor</p>
-                </div>
-            </div>
-
-            <div class="ops-pend-tabs" role="tablist" aria-label="Pendências da ata">
-                <button type="button" class="ops-pend-tab ops-pend-tab--ata is-active" role="tab" aria-selected="true" data-ops-pend-tab="ata">
-                    <strong>Ata</strong>
-                    <span>Resumo da reunião</span>
-                </button>
-                <button type="button" class="ops-pend-stat ops-pend-stat--fazer" role="tab" aria-selected="false" data-ops-pend-tab="fazer">
-                    <strong>17</strong>
-                    <span>Fazer agora</span>
-                </button>
-                <button type="button" class="ops-pend-stat ops-pend-stat--ok" role="tab" aria-selected="false" data-ops-pend-tab="resposta">
-                    <strong>11</strong>
-                    <span>Já tem resposta</span>
-                </button>
-                <button type="button" class="ops-pend-stat ops-pend-stat--dev" role="tab" aria-selected="false" data-ops-pend-tab="dev">
-                    <strong>12</strong>
-                    <span>Desenvolver</span>
-                </button>
-            </div>
-
-            <!-- ABA: ATA -->
-            <div class="ops-pend-panel is-active" data-ops-pend-panel="ata" role="tabpanel">
-                <div class="ops-pend-priority">
-                    <strong>Prioridade imediata</strong>
-                    <p><strong>NOVO · MKT (prazo 11/09):</strong> cadências e-mail + WhatsApp para venda e recuperação · produtos Manutenção em Ação. <strong>Também · Bonificação (prazo 03/10):</strong> construir planilha de bonificação. Demais: logo oficial · Outbound com Vinícius · templates · personas · cronograma · BDR.</p>
-                </div>
-
-                <div class="ops-pend-block">
-                    <div class="ops-pend-block-head">
-                        <span class="ops-section-chip">RESUMO</span>
-                        <h3 class="ops-section-title">Reunião · RevOps Book</h3>
-                        <p class="ops-section-desc">Convidados: Jailson Martins · Igor Silveira. Fonte: transcrição Gemini (revisada).</p>
-                    </div>
-
-                    <div class="ops-pend-resumo-grid">
-                        <article class="ops-pend-card">
-                            <h4>Gestão e metas financeiras</h4>
-                            <p>Documentos centralizados na intranet / Book. Meta de recuperação de <strong>R$ 38.000/mês</strong> nos próximos <strong>90 dias</strong> (Inspeção Noturna: perda estimada ~R$ 130 mil/mês). Infraestrutura de dados unificada para controle gerencial. Resultados esperados rumo a janeiro via reestruturação comercial.</p>
-                        </article>
-                        <article class="ops-pend-card">
-                            <h4>Refinamento das operações comerciais</h4>
-                            <p>Rigor no CRM (Lost com motivo) e automatização via IA priorizados para otimizar leads. Fluxo de vendas ajustado para conversão. Cadência preferida <strong>D1–D35</strong>. Tom: dor do cliente, sem linguagem “de vendedor”. Latência alta fora do horário → IA no 1º contato + qualificação (ex.: CNPJ).</p>
-                        </article>
-                        <article class="ops-pend-card">
-                            <h4>Contratação estratégica</h4>
-                            <p>Decisão: <strong>contratar BDR externo</strong> — não treinar membros internos (ex.: Gabi). Mitiga dependência técnica &gt;50% (Gabi / Fabrício). Testes de atividade com Vinícius começam imediatamente enquanto o processo seletivo anda.</p>
-                        </article>
-                    </div>
-
-                    <div class="ops-pend-resumo-more">
-                        <details class="ops-pend-details" open>
-                            <summary>Detalhes da ata (pontos discutidos)</summary>
-                            <ul class="ops-pend-bullets">
-                                <li><strong>Menu oculto:</strong> 5 cliques no © do rodapé · Hub Ops com plano de ação, JD e cronograma (atualizar ≥1×/semana).</li>
-                                <li><strong>Identidade visual:</strong> logo do projeto desatualizada — usar pasta <em>Identidade Visual</em> no Google Drive. Falta diretriz formal de Tom de Voz (comercial + marketing).</li>
-                                <li><strong>Propriedade / GitHub:</strong> códigos no GitHub (Jailson). Docs são da Melvin → destino futuro: intranet Melvin Gestão (acessos/permissões).</li>
-                                <li><strong>Outbound:</strong> revisão da esteira com Vinícius; metodologia dele mais direta/assertiva que abordagens “spam”.</li>
-                                <li><strong>Lead scoring:</strong> pesos por função, indústria, nº de PCM · classificação A/B · funil pré-SDR conforme volume. Igor envia a planilha.</li>
-                                <li><strong>Produtos:</strong> alinhar hierarquia software / hardware / módulos com Fabrício (Bitrix).</li>
-                                <li><strong>Concorrência incompleta:</strong> SW Tractian + Fracttal · HW Dynamox, Tractian, TEBE, BBX — mapeados no Book.</li>
-                                <li><strong>CS:</strong> fluxo com TI · registro no Bitrix já configurado para Fabrício. Entrevistas de sucesso a cada 15 dias (como Pedro fazia).</li>
-                                <li><strong>Mensagens:</strong> revisar templates com Jonatas, Fabrício e Heimar · testes A/B · evitar frases corporativas.</li>
-                                <li><strong>CX weekend:</strong> nutrir leads com conteúdo educativo (blog/notícia) no fim de semana até a reunião de segunda.</li>
-                                <li><strong>Indicadores:</strong> Igor desenvolve plataforma zoom out / zoom in (operacional · tático · gerencial).</li>
-                                <li><strong>Metodologia:</strong> “Inspeção Noturna” / Bridge Mapping inspirados em Neemias — inspecionar fissuras + conversar + plano de ação.</li>
-                            </ul>
-                        </details>
-                        <details class="ops-pend-details">
-                            <summary>Próximas etapas (como saíram do Gemini)</summary>
-                            <ul class="ops-pend-bullets">
-                                <li>[Jailson] Atualizar Cronograma ≥1×/semana</li>
-                                <li>[Jailson] Finalizar Outbound — reunião com Vinícius</li>
-                                <li>[Jailson] Revisar Calculadora de Soberania</li>
-                                <li>[Jailson] Ajustar Personas (supervisor · gerente · planejador)</li>
-                                <li>[Jailson] Alinhar hierarquia de produtos com Fabrício (Bitrix)</li>
-                                <li>[Jailson] Entrevistas de sucesso a cada 15 dias</li>
-                                <li>[Jailson] Revisar mensagens da cadência (evitar repulsão)</li>
-                                <li>[Igor] Enviar arquivo da planilha (lead scoring)</li>
-                                <li>[Jailson, Jonatas, Fabrício, Heimar] Revisar templates Outbound</li>
-                                <li>[Jailson, Vinícius] Testar nova metodologia de prospecção</li>
-                            </ul>
-                        </details>
-                    </div>
-                </div>
-
-                <div class="ops-pend-footer-grid">
-                    <article class="ops-pend-card">
-                        <h4>Ordem sugerida de ataque</h4>
-                        <p><strong>Sprint A — rápido:</strong> logo · personas · concorrentes · cronograma · mensagens (com time)</p>
-                        <p><strong>Sprint B — alinhamento:</strong> Outbound com Vinícius · hierarquia com Fabrício · planilha Igor · processo BDR</p>
-                        <p><strong>Sprint C — construir:</strong> calculadora · tom de voz · IA latência · nutrição weekend · SOPs · análise competitiva completa</p>
-                    </article>
-                    <article class="ops-pend-card">
-                        <h4>Dependências fora do seu controle</h4>
-                        <p><strong>Igor:</strong> planilha lead scoring · plataforma de indicadores · pasta Identidade Visual · intranet Melvin Gestão</p>
-                        <p><strong>Vinícius:</strong> revisão + testes Outbound · apoio na contratação BDR</p>
-                        <p><strong>Fabrício:</strong> Bitrix (produtos) + CS · templates</p>
-                        <p><strong>Jonatas / Heimar:</strong> revisão coletiva dos modelos de mensagem</p>
-                    </article>
-                </div>
-
-                <p class="ops-pend-note">Nota: o resumo automático do Gemini acertou o grosso (meta 38k, BDR externo, Outbound, CRM, IA), mas omitiu logo/identidade, concorrentes, personas Supervisor/Gerente/Planejador, entrevistas a cada 15 dias e a Calculadora de Soberania — por isso esta página usa a ata completa, não só o resumo.</p>
-            </div>
-
-            <!-- ABA: FAZER -->
-            <div class="ops-pend-panel" data-ops-pend-panel="fazer" role="tabpanel" hidden>
-                <div class="ops-pend-block" id="opsPendFazer">
-                    <div class="ops-pend-block-head">
-                        <span class="ops-section-chip ops-section-chip--live">1 · FAZER AGORA</span>
-                        <h3 class="ops-section-title">O que você tem que fazer</h3>
-                        <p class="ops-section-desc">Marque conforme avançar — o estado fica salvo neste browser.</p>
-                    </div>
-                    <div class="ops-pend-list" data-ops-pend-list="fazer">
-                        <label class="ops-pend-item" draggable="true" data-pend-item="t16"><span class="ops-pend-handle" title="Arrastar para reordenar" aria-hidden="true">⋮⋮</span><input type="checkbox" data-pend-id="t16"><span class="ops-pend-tag">MKT · Cadências</span><span class="ops-pend-body"><strong>Cadências e-mail + WhatsApp · Manutenção em Ação (venda e recuperação)</strong><small>Pedido MKT (03/09): reativação de vendas dos produtos Manutenção em Ação. Criar cadências de e-mail e WhatsApp para <b>venda</b> e <b>recuperação de venda</b>. Jailson será adicionado ao projeto. · prazo <b>11/09/2026</b> (sexta)</small><span class="ops-pend-done-at" hidden></span></span></label>
-                        <label class="ops-pend-item" draggable="true" data-pend-item="t17"><span class="ops-pend-handle" title="Arrastar para reordenar" aria-hidden="true">⋮⋮</span><input type="checkbox" data-pend-id="t17"><span class="ops-pend-tag">Bonificação</span><span class="ops-pend-body"><strong>Construir planilha de bonificação</strong><small>Pedido (03/09): desenhar e entregar a planilha de bonificação da operação comercial. · prazo <b>03/10/2026</b> (30 dias)</small><span class="ops-pend-done-at" hidden></span></span></label>
-                        <label class="ops-pend-item" draggable="true" data-pend-item="t01"><span class="ops-pend-handle" title="Arrastar para reordenar" aria-hidden="true">⋮⋮</span><input type="checkbox" data-pend-id="t01"><span class="ops-pend-tag">Cronograma</span><span class="ops-pend-body"><strong>Atualizar o Cronograma ≥ 1× por semana</strong><small>✅ Atualização 31/07: Cronograma + Plano alinhados (semana Book fechada · ops rolam). Ritual: ≥1×/semana marcar status real. · prazo <b>31/07/2026</b></small><span class="ops-pend-done-at" hidden></span></span></label>
-                        <label class="ops-pend-item" draggable="true" data-pend-item="t02"><span class="ops-pend-handle" title="Arrastar para reordenar" aria-hidden="true">⋮⋮</span><input type="checkbox" data-pend-id="t02"><span class="ops-pend-tag">Outbound</span><span class="ops-pend-body"><strong>Agendar / realizar reunião de revisão da esteira Outbound</strong><small>Marcar call com Vinícius; levar o que já funciona na esteira Out + gaps do Book; sair com lista do que formalizar vs. o que testar. · prazo <b>31/07/2026</b></small><span class="ops-pend-done-at" hidden></span></span></label>
-                        <label class="ops-pend-item" draggable="true" data-pend-item="t03"><span class="ops-pend-handle" title="Arrastar para reordenar" aria-hidden="true">⋮⋮</span><input type="checkbox" data-pend-id="t03"><span class="ops-pend-tag">Outbound</span><span class="ops-pend-body"><strong>Testar a nova metodologia de prospecção</strong><small>Piloto da abordagem direta (estilo Vinícius) em contas reais; comparar resposta vs. cadência convencional; documentar o que escalar. Roda em paralelo ao seletivo do BDR. · prazo <b>31/07/2026</b></small><span class="ops-pend-done-at" hidden></span></span></label>
-                        <label class="ops-pend-item" draggable="true" data-pend-item="t04"><span class="ops-pend-handle" title="Arrastar para reordenar" aria-hidden="true">⋮⋮</span><input type="checkbox" data-pend-id="t04"><span class="ops-pend-tag">Mensagens</span><span class="ops-pend-body"><strong>Revisar templates Outbound em grupo</strong><small>Workshop com Jonatas, Fabrício e Heimar: revisar templates e-mail/WA/LinkedIn; cortar tom de vendedor; abrir pela dor do interlocutor (rotina de manutenção). · prazo <b>31/07/2026</b></small><span class="ops-pend-done-at" hidden></span></span></label>
-                        <label class="ops-pend-item" draggable="true" data-pend-item="t05"><span class="ops-pend-handle" title="Arrastar para reordenar" aria-hidden="true">⋮⋮</span><input type="checkbox" data-pend-id="t05"><span class="ops-pend-tag">Mensagens</span><span class="ops-pend-body"><strong>Refinar textos / comentários da cadência comercial</strong><small>Varredura nos pitches da cadência no Book; remover frases que geram repulsa; linguagem que reconheça chão de fábrica e rotina corrida. · prazo <b>31/07/2026</b></small><span class="ops-pend-done-at" hidden></span></span></label>
-                        <label class="ops-pend-item" draggable="true" data-pend-item="t06"><span class="ops-pend-handle" title="Arrastar para reordenar" aria-hidden="true">⋮⋮</span><input type="checkbox" data-pend-id="t06"><span class="ops-pend-tag">Identidade</span><span class="ops-pend-body"><strong>Trocar logo pela versão da pasta Identidade Visual (Drive)</strong><small>Usar arquivos oficiais da pasta Identidade Visual (Drive do Igor); substituir logo desatualizada no Book/site e validar o lockup final. · prazo <b>31/07/2026</b></small><span class="ops-pend-done-at" hidden></span></span></label>
-                        <label class="ops-pend-item" draggable="true" data-pend-item="t07"><span class="ops-pend-handle" title="Arrastar para reordenar" aria-hidden="true">⋮⋮</span><input type="checkbox" data-pend-id="t07"><span class="ops-pend-tag">Personas</span><span class="ops-pend-body"><strong>Atualizar lista de personas no material</strong><small>Espelhar no Book/Personas: Supervisor · Gerente · Planejador (estrutura da ata). Remover personas desatualizadas do material comercial. · prazo <b>31/07/2026</b></small><span class="ops-pend-done-at" hidden></span></span></label>
-                        <label class="ops-pend-item" draggable="true" data-pend-item="t08"><span class="ops-pend-handle" title="Arrastar para reordenar" aria-hidden="true">⋮⋮</span><input type="checkbox" data-pend-id="t08"><span class="ops-pend-tag">Produtos</span><span class="ops-pend-body"><strong>Validar hierarquia de produtos/módulos no Bitrix</strong><small>Alinhar com Fabrício o cadastro no Bitrix (software / hardware / módulos); anotar a hierarquia real para documentar depois no Book (item Desenvolver). · prazo <b>31/07/2026</b></small><span class="ops-pend-done-at" hidden></span></span></label>
-                        <label class="ops-pend-item" draggable="true" data-pend-item="t09"><span class="ops-pend-handle" title="Arrastar para reordenar" aria-hidden="true">⋮⋮</span><input type="checkbox" data-pend-id="t09"><span class="ops-pend-tag">Calculadora</span><span class="ops-pend-body"><strong>Revisar lógica da Calculadora de Soberania</strong><small>Abrir a Calculadora de Soberania; listar métricas de conversão erradas citadas na reunião; corrigir o que for rápido ou abrir a reescrita completa (Desenvolver). · prazo <b>31/07/2026</b></small><span class="ops-pend-done-at" hidden></span></span></label>
-                        <label class="ops-pend-item" draggable="true" data-pend-item="t10"><span class="ops-pend-handle" title="Arrastar para reordenar" aria-hidden="true">⋮⋮</span><input type="checkbox" data-pend-id="t10"><span class="ops-pend-tag">Concorrência</span><span class="ops-pend-body"><strong>Completar análise competitiva no Book</strong><small>✅ Book fechado 31/07: Concorrentes v2 (SW/HW/M&amp;A + Radar) · Tractian/Fracttal/Dynamox/TEBE/BBX. Restante: revisar Lost no CRM (ops). · prazo original <b>31/07/2026</b></small><span class="ops-pend-done-at" hidden></span></span></label>
-                        <label class="ops-pend-item" draggable="true" data-pend-item="t11"><span class="ops-pend-handle" title="Arrastar para reordenar" aria-hidden="true">⋮⋮</span><input type="checkbox" data-pend-id="t11"><span class="ops-pend-tag">CS</span><span class="ops-pend-body"><strong>Entrevista de caso de sucesso a cada 15 dias</strong><small>Agendar entrevista de caso de sucesso a cada 15 dias (modelo que Pedro fazia); extrair dores reais e alimentar SPN / mensagens. · prazo <b>31/07/2026</b></small><span class="ops-pend-done-at" hidden></span></span></label>
-                        <label class="ops-pend-item" draggable="true" data-pend-item="t12"><span class="ops-pend-handle" title="Arrastar para reordenar" aria-hidden="true">⋮⋮</span><input type="checkbox" data-pend-id="t12"><span class="ops-pend-tag">Processos</span><span class="ops-pend-body"><strong>Procedimentar conhecimento crítico (Gabi / Fabrício)</strong><small>Mapear o que só Gabi/Fabrício sabem operar; rascunhar SOPs mínimos. Risco &gt;50% de dependência — alimenta os playbooks (Desenvolver). · prazo <b>31/07/2026</b></small><span class="ops-pend-done-at" hidden></span></span></label>
-                        <label class="ops-pend-item" draggable="true" data-pend-item="t13"><span class="ops-pend-handle" title="Arrastar para reordenar" aria-hidden="true">⋮⋮</span><input type="checkbox" data-pend-id="t13"><span class="ops-pend-tag">CRM</span><span class="ops-pend-body"><strong>Reforçar rigor de preenchimento no CRM (Lost com motivo)</strong><small>Exigir motivo de Lost no CRM; incluir essa regra no onboarding do BDR novo. Sem motivo não há análise de funil. · prazo <b>31/07/2026</b></small><span class="ops-pend-done-at" hidden></span></span></label>
-                        <label class="ops-pend-item" draggable="true" data-pend-item="t14"><span class="ops-pend-handle" title="Arrastar para reordenar" aria-hidden="true">⋮⋮</span><input type="checkbox" data-pend-id="t14"><span class="ops-pend-tag">Lead scoring</span><span class="ops-pend-body"><strong>Receber planilha de lead scoring do Igor</strong><small>Cobrar/receber a planilha do Igor (pesos A/B: função, indústria, nº de PCM); confrontar com a aba Lead Scoring do Book e amarrar ao funil pré-SDR. · prazo <b>31/07/2026</b></small><span class="ops-pend-done-at" hidden></span></span></label>
-                        <label class="ops-pend-item" draggable="true" data-pend-item="t15"><span class="ops-pend-handle" title="Arrastar para reordenar" aria-hidden="true">⋮⋮</span><input type="checkbox" data-pend-id="t15"><span class="ops-pend-tag">Contratação</span><span class="ops-pend-body"><strong>Seguir processo seletivo do BDR (já decidido)</strong><small>Manter seletivo de BDR externo (decisão: não treinar Gabi). Testes de atividade da nova metodologia já podem rodar em paralelo. · prazo <b>31/07/2026</b></small><span class="ops-pend-done-at" hidden></span></span></label>
-                    </div>
-                </div>
-            </div>
-
-            <!-- ABA: JÁ TEM RESPOSTA -->
-            <div class="ops-pend-panel" data-ops-pend-panel="resposta" role="tabpanel" hidden>
-                <div class="ops-pend-block" id="opsPendResposta">
-                    <div class="ops-pend-block-head">
-                        <span class="ops-section-chip ops-section-chip--ok">2 · JÁ TEM RESPOSTA</span>
-                        <h3 class="ops-section-title">O que a própria reunião já fechou</h3>
-                        <p class="ops-section-desc">Não reinventar — use como referência ao executar os itens de “Fazer agora”.</p>
-                    </div>
-                    <div class="ops-pend-answers">
-                        <article class="ops-pend-answer"><span class="ops-pend-tag">Contratação</span><strong>BDR externo, não capacitação interna da Gabi</strong><p>Confirmado Jailson + Igor. Mitiga dependência e acelera Outbound.</p></article>
-                        <article class="ops-pend-answer"><span class="ops-pend-tag">Financeiro</span><strong>Meta: R$ 38 mil/mês em até 90 dias</strong><p>Inspeção Noturna: perda estimada ~R$ 130 mil/mês. Reestruturação comercial rumo a janeiro.</p></article>
-                        <article class="ops-pend-answer"><span class="ops-pend-tag">Personas</span><strong>Supervisor · Gerente · Planejador</strong><p>Estrutura correta citada na ata — falta só aplicar no Book.</p></article>
-                        <article class="ops-pend-answer"><span class="ops-pend-tag">Concorrência</span><strong>Lista explícita a incluir</strong><p>SW: Tractian (=Traction), Fracttal (=Fractal) · HW: Dynamox, Tractian, TEBE (=TEB), BBX. Já no Book.</p></article>
-                        <article class="ops-pend-answer"><span class="ops-pend-tag">Cadência</span><strong>Preferência D1–D35</strong><p>Fases densas e espaçadas para a reunião não esfriar.</p></article>
-                        <article class="ops-pend-answer"><span class="ops-pend-tag">Tom</span><strong>Dor do cliente &gt; linguagem corporativa</strong><p>Critério claro para revisão de pitches e templates.</p></article>
-                        <article class="ops-pend-answer"><span class="ops-pend-tag">Lead scoring</span><strong>Lógica A/B verbalizada</strong><p>Pesos: função, indústria, nº de PCM · funil pré-SDR conforme volume.</p></article>
-                        <article class="ops-pend-answer"><span class="ops-pend-tag">Identidade</span><strong>Logo certa = pasta Identidade Visual (Drive)</strong><p>Não inventar asset — usar arquivo oficial indicado pelo Igor.</p></article>
-                        <article class="ops-pend-answer"><span class="ops-pend-tag">Metodologia</span><strong>Inspeção Noturna / Bridge Mapping = Neemias</strong><p>Inspecionar fissuras + conversar com envolvidos + plano de ação.</p></article>
-                        <article class="ops-pend-answer"><span class="ops-pend-tag">CS</span><strong>Fluxo CS + Bitrix já configurado p/ Fabrício</strong><p>Necessidade do cliente com TI; registro no Bitrix é o ponto de acompanhamento.</p></article>
-                        <article class="ops-pend-answer"><span class="ops-pend-tag">Ops</span><strong>Menu oculto (5 cliques) + Hub Ops já apresentado</strong><p>Ferramenta de gestão interna já existe no site.</p></article>
-                    </div>
-                </div>
-            </div>
-
-            <!-- ABA: DESENVOLVER -->
-            <div class="ops-pend-panel" data-ops-pend-panel="dev" role="tabpanel" hidden>
-                <div class="ops-pend-block" id="opsPendDev">
-                    <div class="ops-pend-block-head">
-                        <span class="ops-section-chip ops-section-chip--vault">3 · DESENVOLVER</span>
-                        <h3 class="ops-section-title">O que ainda precisa ser construído</h3>
-                        <p class="ops-section-desc">Entregas novas ou incompletas. Alguns são seus; outros dependem da Melvin (Igor / intranet).</p>
-                    </div>
-                    <div class="ops-pend-list" data-ops-pend-list="dev">
-                        <label class="ops-pend-item" draggable="true" data-pend-item="d01"><span class="ops-pend-handle" title="Arrastar para reordenar" aria-hidden="true">⋮⋮</span><input type="checkbox" data-pend-id="d01"><span class="ops-pend-tag">IA / Latência</span><span class="ops-pend-body"><strong>Contato inicial com IA fora do horário comercial</strong><small>Problema: latência alta pós-expediente/fds. Desenhar: lead fora do horário → IA faz 1º contato + qualifica com dados públicos (ex.: CNPJ) → handoff humano. · prazo <b>07/08/2026</b></small><span class="ops-pend-done-at" hidden></span></span></label>
-                        <label class="ops-pend-item" draggable="true" data-pend-item="d02"><span class="ops-pend-handle" title="Arrastar para reordenar" aria-hidden="true">⋮⋮</span><input type="checkbox" data-pend-id="d02"><span class="ops-pend-tag">CX</span><span class="ops-pend-body"><strong>Nutrição de fim de semana com conteúdo educativo</strong><small>Cadência sáb/dom com blog/notícia útil até a reunião de segunda — manter o lead quente sem parecer spam. · prazo <b>07/08/2026</b></small><span class="ops-pend-done-at" hidden></span></span></label>
-                        <label class="ops-pend-item" draggable="true" data-pend-item="d03"><span class="ops-pend-handle" title="Arrastar para reordenar" aria-hidden="true">⋮⋮</span><input type="checkbox" data-pend-id="d03"><span class="ops-pend-tag">Tom de voz</span><span class="ops-pend-body"><strong>Diretrizes formais de Tom de Voz (comercial + marketing)</strong><small>Documento formal de Tom de Voz (comercial + marketing) no Book. Hoje só há orientação verbal do Igor. · prazo <b>07/08/2026</b></small><span class="ops-pend-done-at" hidden></span></span></label>
-                        <label class="ops-pend-item" draggable="true" data-pend-item="d04"><span class="ops-pend-handle" title="Arrastar para reordenar" aria-hidden="true">⋮⋮</span><input type="checkbox" data-pend-id="d04"><span class="ops-pend-tag">Calculadora</span><span class="ops-pend-body"><strong>Corrigir / reescrever métricas da Calculadora de Soberania</strong><small>Reescrever a lógica de conversão da Calculadora de Soberania e republicar no Book (além do review rápido do “Fazer agora”). · prazo <b>07/08/2026</b></small><span class="ops-pend-done-at" hidden></span></span></label>
-                        <label class="ops-pend-item" draggable="true" data-pend-item="d05"><span class="ops-pend-handle" title="Arrastar para reordenar" aria-hidden="true">⋮⋮</span><input type="checkbox" data-pend-id="d05"><span class="ops-pend-tag">Concorrência</span><span class="ops-pend-body"><strong>Página/seção de análise competitiva completa</strong><small>✅ Entregue no Book 31/07 (#gim-concorrentes · abas SW/HW/M&amp;A/Radar). Manter marcado quando validar Lost no CRM + eventual ajuste fino pós-feedback Igor. · prazo <b>07/08/2026</b></small><span class="ops-pend-done-at" hidden></span></span></label>
-                        <label class="ops-pend-item" draggable="true" data-pend-item="d06"><span class="ops-pend-handle" title="Arrastar para reordenar" aria-hidden="true">⋮⋮</span><input type="checkbox" data-pend-id="d06"><span class="ops-pend-tag">Mensagens</span><span class="ops-pend-body"><strong>Bateria de testes A/B das mensagens Outbound</strong><small>Plano A/B de mensagens Out com Fabrício, Jonatas/Jonathan e Heimar; medir conversão e incorporar o vencedor nos templates. · prazo <b>07/08/2026</b></small><span class="ops-pend-done-at" hidden></span></span></label>
-                        <label class="ops-pend-item" draggable="true" data-pend-item="d07"><span class="ops-pend-handle" title="Arrastar para reordenar" aria-hidden="true">⋮⋮</span><input type="checkbox" data-pend-id="d07"><span class="ops-pend-tag">Playbooks</span><span class="ops-pend-body"><strong>SOPs dos processos críticos (anti-dependência)</strong><small>Transformar o conhecimento táito de Gabi/Fabrício em SOPs/playbooks no Book (e depois intranet). · prazo <b>07/08/2026</b></small><span class="ops-pend-done-at" hidden></span></span></label>
-                        <label class="ops-pend-item" draggable="true" data-pend-item="d08"><span class="ops-pend-handle" title="Arrastar para reordenar" aria-hidden="true">⋮⋮</span><input type="checkbox" data-pend-id="d08"><span class="ops-pend-tag">Lead scoring</span><span class="ops-pend-body"><strong>Integrar lead scoring A/B no fluxo / documentação</strong><small>Após receber a planilha (t14): documentar pesos A–D + amarrar ao funil pré-SDR conforme volume. · prazo <b>07/08/2026</b></small><span class="ops-pend-done-at" hidden></span></span></label>
-                        <label class="ops-pend-item" draggable="true" data-pend-item="d09"><span class="ops-pend-handle" title="Arrastar para reordenar" aria-hidden="true">⋮⋮</span><input type="checkbox" data-pend-id="d09"><span class="ops-pend-tag">Produtos</span><span class="ops-pend-body"><strong>Documentar hierarquia real de produtos no Book</strong><small>Base no Book já existe (abas Melvin vs Manutenção em Ação). Fechar após validar Bitrix com Fabrício (t08) e espelhar hierarquia real software/hardware/módulos. · prazo <b>07/08/2026</b></small><span class="ops-pend-done-at" hidden></span></span></label>
-                        <label class="ops-pend-item" draggable="true" data-pend-item="d10"><span class="ops-pend-handle" title="Arrastar para reordenar" aria-hidden="true">⋮⋮</span><input type="checkbox" data-pend-id="d10"><span class="ops-pend-tag">Plataforma</span><span class="ops-pend-body"><strong>Plataforma de indicadores (zoom out / zoom in) — Igor</strong><small>Acompanhar a plataforma de indicadores do Igor (zoom operacional / tático / gerencial). Não é entrega sua do Book — integração futura. · prazo <b>07/08/2026</b></small><span class="ops-pend-done-at" hidden></span></span></label>
-                        <label class="ops-pend-item" draggable="true" data-pend-item="d11"><span class="ops-pend-handle" title="Arrastar para reordenar" aria-hidden="true">⋮⋮</span><input type="checkbox" data-pend-id="d11"><span class="ops-pend-tag">Intranet</span><span class="ops-pend-body"><strong>Mover documentos do projeto para intranet Melvin Gestão</strong><small>Planejar migração GitHub + Book → intranet Melvin Gestão com acessos/permissões (docs são da Melvin). · prazo <b>07/08/2026</b></small><span class="ops-pend-done-at" hidden></span></span></label>
-                        <label class="ops-pend-item" draggable="true" data-pend-item="d12"><span class="ops-pend-handle" title="Arrastar para reordenar" aria-hidden="true">⋮⋮</span><input type="checkbox" data-pend-id="d12"><span class="ops-pend-tag">Automação</span><span class="ops-pend-body"><strong>Avaliar automação de mensagens utilitárias (WA / Meta)</strong><small>Fechar o que é mensagem UTILITY automatizada (WA/Meta) vs. humano no fluxo e-mail + call + WhatsApp. · prazo <b>07/08/2026</b></small><span class="ops-pend-done-at" hidden></span></span></label>
-                    </div>
-                </div>
+        
+        <!-- Stub #ops-pendencias → Roadmap · aba Ata -->
+        <section id="ops-pendencias" class="blueprint-page" style="padding: 40px; border-radius: 16px;" data-hidden-nav="true">
+            <div class="waiting-page waiting-page--done">
+                <div class="waiting-badge waiting-badge--done"><span class="pulse"></span> Unificado</div>
+                <h2>Ata Melvin · agora no Roadmap</h2>
+                <p>A checklist da Ata 30/07 vive dentro do cockpit <strong>Roadmap RevOps</strong>. Pedidos novos entram só no <strong>Backlog</strong>.</p>
+                <a class="done-cta" href="#agenda-entregas" data-rm-desk-goto="ata">Abrir Ata no Roadmap →</a>
+                <p class="waiting-meta"><a href="#agenda-entregas" data-rm-desk-goto="backlog">Ir ao Backlog</a></p>
             </div>
         </section>
+
 
         <!-- Contratação BDR: JD + Seleção (Ops) -->
         <section id="job-bdr" class="blueprint-page jd-page" style="padding: 40px; border-radius: 16px;" data-hidden-nav="true">
@@ -1774,7 +1590,7 @@
                     <strong>01–04/08/2026</strong>
                     <span class="dev-eta-note">Entregue em <b>04/08/2026</b> · Out + Ata</span>
                 </div>
-                <a class="done-cta" href="#ops-pendencias">Abrir entrega →</a>
+                <a class="done-cta" href="#agenda-entregas" data-rm-desk-goto="ata">Abrir Ata no Roadmap →</a>
                 <p class="waiting-meta"><a href="#agenda-entregas">← Voltar ao Roadmap RevOps</a> · <a href="#ops">Hub Ops</a></p>
             </div>
         </section>
@@ -2103,7 +1919,7 @@
                     <strong>11/09/2026</strong>
                     <span class="dev-eta-note">Roadmap · Backlog · MKT</span>
                 </div>
-                <p class="waiting-meta"><a href="#agenda-entregas">← Voltar ao Roadmap RevOps</a> · <a href="#ops-pendencias">Pendências · Ata</a></p>
+                <p class="waiting-meta"><a href="#agenda-entregas">← Voltar ao Roadmap RevOps</a> </p>
             </div>
         </section>
 
@@ -2117,17 +1933,43 @@
                     <strong>03/10/2026</strong>
                     <span class="dev-eta-note">Roadmap · Backlog · 30 dias a partir de 03/09</span>
                 </div>
-                <p class="waiting-meta"><a href="#agenda-entregas">← Voltar ao Roadmap RevOps</a> · <a href="#ops-pendencias">Pendências · Ata</a></p>
+                <p class="waiting-meta"><a href="#agenda-entregas">← Voltar ao Roadmap RevOps</a> </p>
             </div>
         </section>
 
-		<section id="agenda-entregas" class="crono-page rm-page blueprint-page">
+		
+		<section id="agenda-entregas" class="crono-page rm-page blueprint-page rm-cockpit">
 
 			<header class="rm-head">
 				<div class="cadencia-title-line crono-title">🗺️ Roadmap RevOps</div>
-				<p class="rm-sub">Sequência operacional · atualizado <strong>01/09/2026</strong></p>
+				<p class="rm-sub">Cockpit único · sequência, backlog e ata · atualizado <strong>03/09/2026</strong></p>
 			</header>
 
+			<nav class="rm-desk-nav" aria-label="Navegação do Roadmap" id="rmDeskNav">
+				<button type="button" class="rm-desk-tab is-active" data-rm-desk="visao" aria-selected="true">
+					<span class="rm-desk-ico" aria-hidden="true">◎</span>
+					<strong>Visão</strong>
+					<em>progresso + foco</em>
+				</button>
+				<button type="button" class="rm-desk-tab" data-rm-desk="backlog" aria-selected="false">
+					<span class="rm-desk-ico" aria-hidden="true">▣</span>
+					<strong>Backlog</strong>
+					<em>7 tarefas · prazos</em>
+				</button>
+				<button type="button" class="rm-desk-tab" data-rm-desk="ata" aria-selected="false">
+					<span class="rm-desk-ico" aria-hidden="true">▤</span>
+					<strong>Ata 30/07</strong>
+					<em>checklist histórico</em>
+				</button>
+				<button type="button" class="rm-desk-tab" data-rm-desk="indice" aria-selected="false">
+					<span class="rm-desk-ico" aria-hidden="true">☰</span>
+					<strong>Índice</strong>
+					<em>entregas no Book</em>
+				</button>
+			</nav>
+
+			<!-- PAINEL: VISÃO -->
+			<div class="rm-desk-panel is-active" data-rm-desk-panel="visao" id="rm-visao">
 			<div class="rm-top">
 				<div class="rm-charts">
 					<article class="rm-chart">
@@ -2156,64 +1998,7 @@
 							<div class="rm-bar rm-bar--next"><a href="#relatorios-bitrix">Bitrix relat.</a><i style="width:0%"></i><em>11/09</em></div>
 							<div class="rm-bar rm-bar--next"><a href="#historico-comercial-2026">Histórico 2026</a><i style="width:0%"></i><em>11/09</em></div>
 						</div>
-
-						<div class="rm-bars-backlog" id="roadmap-backlog">
-							<div class="rm-bars-backlog-head">
-								<strong>📋 Backlog · ações pendentes</strong>
-								<span>7 tarefas · 2 com prazo (MKT + Bonificação)</span>
-							</div>
-
-							<div class="rm-bar-block rm-bar-block--backlog" id="rm-backlog-06">
-								<div class="rm-bar rm-bar--backlog">
-									<a href="#dev-cadencias-ma"><span class="rm-bar-num">06</span> Cadências e-mail + WhatsApp · Manutenção em Ação</a>
-									<i style="width:0%"></i><em>11/09</em>
-								</div>
-								<p class="rm-bar-desc">Pedido MKT: reativação de vendas. Criar cadências de e-mail e WhatsApp para <strong>venda</strong> e <strong>recuperação de venda</strong>. Jailson no projeto. · prazo <strong>11/09/2026</strong></p>
-							</div>
-							<div class="rm-bar-block rm-bar-block--backlog" id="rm-backlog-07">
-								<div class="rm-bar rm-bar--backlog">
-									<a href="#dev-planilha-bonificacao"><span class="rm-bar-num">07</span> Planilha de bonificação</a>
-									<i style="width:0%"></i><em>03/10</em>
-								</div>
-								<p class="rm-bar-desc">Construir a planilha de bonificação da operação comercial. · prazo <strong>03/10/2026</strong> (30 dias)</p>
-							</div>
-
-							<div class="rm-bar-block rm-bar-block--backlog" id="rm-backlog-01">
-								<div class="rm-bar rm-bar--backlog">
-									<a href="#dev-nutricao-out"><span class="rm-bar-num">01</span> Nutrição Out · personalização automática</a>
-									<i style="width:0%"></i><em>—</em>
-								</div>
-								<p class="rm-bar-desc">Pensar numa forma de a cadência de leads outbound em Nutrição ser personalizada automaticamente para cada lead.</p>
-							</div>
-							<div class="rm-bar-block rm-bar-block--backlog" id="rm-backlog-02">
-								<div class="rm-bar rm-bar--backlog">
-									<a href="#dev-inbound-sem-contato"><span class="rm-bar-num">02</span> Inbound ICP · sem contato</a>
-									<i style="width:0%"></i><em>—</em>
-								</div>
-								<p class="rm-bar-desc">Desenhar o fluxo do lead que vem do inbound, é ICP, mas ainda sem contato.</p>
-							</div>
-							<div class="rm-bar-block rm-bar-block--backlog" id="rm-backlog-03">
-								<div class="rm-bar rm-bar--backlog">
-									<a href="#dev-inbound-contato-sem-timing"><span class="rm-bar-num">03</span> Inbound ICP · com contato · sem timing</a>
-									<i style="width:0%"></i><em>—</em>
-								</div>
-								<p class="rm-bar-desc">Desenhar o fluxo do lead inbound ICP com contato, mas que ainda não está em momento de compra.</p>
-							</div>
-							<div class="rm-bar-block rm-bar-block--backlog" id="rm-backlog-04">
-								<div class="rm-bar rm-bar--backlog">
-									<a href="#dev-inbound-pos-reuniao"><span class="rm-bar-num">04</span> Inbound ICP · pós-reunião · sem timing</a>
-									<i style="width:0%"></i><em>—</em>
-								</div>
-								<p class="rm-bar-desc">Desenhar o fluxo do lead inbound ICP que fez reunião, mas não está em momento de compra.</p>
-							</div>
-							<div class="rm-bar-block rm-bar-block--backlog" id="rm-backlog-05">
-								<div class="rm-bar rm-bar--backlog">
-									<a href="#dev-copiloto-vinicius"><span class="rm-bar-num">05</span> Copiloto Vinícius · nestes momentos</a>
-									<i style="width:0%"></i><em>—</em>
-								</div>
-								<p class="rm-bar-desc">Incluir o copiloto do Vinícius nos fluxos acima. Ver <a href="#entrega-bdr-copilot">BDR Copilot</a>.</p>
-							</div>
-						</div>
+						<p class="rm-chart-foot">Backlog completo na aba <button type="button" class="rm-inline-link" data-rm-desk-goto="backlog">Backlog</button> · Ata histórica em <button type="button" class="rm-inline-link" data-rm-desk-goto="ata">Ata 30/07</button></p>
 					</article>
 				</div>
 
@@ -2225,7 +2010,7 @@
 					<a href="#entrega-bdr-copilot" class="rm-stepper-item rm-stepper-item--done" title="Atuação · 28/08"><span></span><small>Atuação</small></a>
 					<a href="#onboarding-bdr" class="rm-stepper-item rm-stepper-item--now" title="Onboarding · 31/08–04/09"><span></span><small>Onboarding</small></a>
 					<a href="#relatorios-bitrix" class="rm-stepper-item rm-stepper-item--next" title="Relatórios · 02–11/09"><span></span><small>Relatórios</small></a>
-					<a href="#roadmap-backlog" class="rm-stepper-item rm-stepper-item--backlog" title="Backlog · 7 tarefas"><span></span><small>Backlog</small></a>
+					<button type="button" class="rm-stepper-item rm-stepper-item--backlog" data-rm-desk-goto="backlog" title="Backlog · 7 tarefas"><span></span><small>Backlog</small></button>
 				</nav>
 			</div>
 
@@ -2254,104 +2039,387 @@
 				</article>
 			</div>
 
-			<div class="rm-bottom">
-				<details class="rm-archive">
-					<summary>Histórico jul/2026 · 22 entregas do sprint inicial</summary>
-					<p class="rm-archive-note">Checklist completo da Ata Melvin → <a href="#entrega-ops-pendencias">Ops Pendências</a></p>
-					<ul class="rm-archive-list">
-						<li><strong>S1 · 20–24/07</strong> — Infra, SWOT, ICP, Roadmap, Dores, Objeções, Pipelines <em>(7)</em></li>
-						<li><strong>S2 · 25–27/07</strong> — Funis, Filtros, Cadências Out, Réguas, Manuais <em>(5)</em></li>
-						<li><strong>27/07</strong> — Objeções Presales, Battlecards, Fluxos PDF, Funil UX, Rebrand <em>(5)</em></li>
-						<li><strong>28–31/07</strong> — Concorrentes, ABM, Produtos, Lead Scoring, Ops UX <em>(5)</em></li>
-					</ul>
-				</details>
+			<div class="rm-due-strip" aria-label="Prazos próximos do backlog">
+				<a class="rm-due-card rm-due-card--hot" href="#dev-cadencias-ma">
+					<span class="rm-due-when">11/09</span>
+					<strong>Cadências M&amp;A · e-mail + WA</strong>
+					<small>Venda + recuperação · pedido MKT</small>
+				</a>
+				<a class="rm-due-card" href="#dev-planilha-bonificacao">
+					<span class="rm-due-when">03/10</span>
+					<strong>Planilha de bonificação</strong>
+					<small>30 dias · operação comercial</small>
+				</a>
+				<button type="button" class="rm-due-card rm-due-card--more" data-rm-desk-goto="backlog">
+					<span class="rm-due-when">+5</span>
+					<strong>Ver backlog completo</strong>
+					<small>tarefas sem data</small>
+				</button>
+			</div>
+			</div>
 
-				<details class="rm-index rm-index--accordion" aria-label="Índice de entregas">
-					<summary>
-						<span class="rm-index-head">
-							<strong>Índice · entregas no Book</strong>
-							<span class="rm-index-note">Atalhos por fase — clique para expandir</span>
-						</span>
-					</summary>
-					<div class="rm-index-body">
-
-					<details class="rm-index-acc">
-						<summary>Book + Sprint · 31/07</summary>
-						<ul>
-							<li><a href="#entrega-home-dashboard">RevOps Book</a></li>
-							<li><a href="#entrega-transcricao-inspecao">Inspeção Noturna</a></li>
-							<li><a href="#entrega-gim-dores-ocultas">Dores · Inbound</a></li>
-							<li><a href="#entrega-gim-dores-sangrentas">Dores · Outbound</a></li>
-							<li><a href="#entrega-funil-vendas">Pipelines In + Out</a></li>
-						</ul>
-					</details>
-					<details class="rm-index-acc">
-						<summary>Out + Ata · 04/08</summary>
-						<ul>
-							<li><a href="#entrega-fluxo-comerc-outbound">Fluxo Comercial Out</a></li>
-							<li><a href="#entrega-wf-contato-nutricao-out">Cadência Out D1–D35</a></li>
-							<li><a href="#entrega-ops-pendencias">Ata Melvin · checklist</a></li>
-						</ul>
-					</details>
-					<details class="rm-index-acc">
-						<summary>Bitrix In · 07/08</summary>
-						<ul>
-							<li><a href="#entrega-funil-inbound">Funil Inbound</a></li>
-							<li><a href="#entrega-wf-contato-nutricao-in">D1–D15 In</a></li>
-							<li><a href="#entrega-filtro-qualificacao-in">SPN / Qualificação</a></li>
-							<li><a href="#entrega-fluxo-comerc-inbound">Fluxo SDR Humano</a></li>
-							<li><a href="#entrega-fluxo-comerc-inbound-ia">Fluxo SDR IA</a></li>
-						</ul>
-					</details>
-					<details class="rm-index-acc">
-						<summary>Contratação · 28/08</summary>
-						<ul>
-							<li><a href="#entrega-job-bdr">Seletivo BDR · CVs</a></li>
-						</ul>
-					</details>
-					<details class="rm-index-acc">
-						<summary>Atuação BDR · 28/08</summary>
-						<ul>
-							<li><a href="#entrega-bdr-copilot">BDR Copilot</a></li>
-							<li><a href="#entrega-cadencia-multicanal">Cadência Multicanal</a></li>
-							<li><a href="#entrega-jornada-conta">Jornada da Conta</a></li>
-						</ul>
-					</details>
-					<details class="rm-index-acc">
-						<summary>Sprint Book · 28–31/07</summary>
-						<ul>
-							<li><a href="#entrega-gim-concorrentes">Concorrentes v2</a></li>
-							<li><a href="#entrega-abm-programa">ABM Programa</a></li>
-							<li><a href="#entrega-gim-produtos">Produtos Melvin</a></li>
-							<li><a href="#entrega-gim-lead-scoring">Lead Scoring A–D</a></li>
-						</ul>
-					</details>
-					<details class="rm-index-acc rm-index-acc--open">
-						<summary>Backlog · 7 tarefas</summary>
-						<ul>
-							<li><a href="#dev-cadencias-ma">06 · Cadências M&amp;A · e-mail + WA · 11/09</a></li>
-							<li><a href="#dev-planilha-bonificacao">07 · Planilha de bonificação · 03/10</a></li>
-							<li><a href="#dev-nutricao-out">01 · Nutrição Out personalizada</a></li>
-							<li><a href="#dev-inbound-sem-contato">02 · Inbound ICP sem contato</a></li>
-							<li><a href="#dev-inbound-contato-sem-timing">03 · ICP com contato · sem timing</a></li>
-							<li><a href="#dev-inbound-pos-reuniao">04 · ICP pós-reunião · sem timing</a></li>
-							<li><a href="#dev-copiloto-vinicius">05 · Copiloto Vinícius</a></li>
-						</ul>
-					</details>
-					<details class="rm-index-acc rm-index-acc--open">
-						<summary>Em aberto</summary>
-						<ul>
-							<li><a href="#onboarding-bdr">Onboarding BDR</a></li>
-							<li><a href="#relatorios-bitrix">Relatórios Bitrix24</a></li>
-							<li><a href="#historico-comercial-2026">Histórico 2026</a></li>
-							<li><a href="#roadmap-backlog">Ver backlog no burn-up</a></li>
-						</ul>
-					</details>
+			<!-- PAINEL: BACKLOG -->
+			<div class="rm-desk-panel" data-rm-desk-panel="backlog" id="roadmap-backlog" hidden>
+				<div class="rm-panel-head">
+					<div>
+						<span class="rm-panel-kicker">Fila ativa</span>
+						<h3>Backlog · ações pendentes</h3>
+						<p>Pedidos novos entram aqui — cada um com página de espera e data estimada.</p>
 					</div>
-				</details>
+				</div>
+				<div class="rm-bars-backlog rm-bars-backlog--desk">
+					<div class="rm-bar-block rm-bar-block--backlog rm-bar-block--due" id="rm-backlog-06">
+						<div class="rm-bar rm-bar--backlog">
+							<a href="#dev-cadencias-ma"><span class="rm-bar-num">06</span> Cadências e-mail + WhatsApp · Manutenção em Ação</a>
+							<i style="width:0%"></i><em>11/09</em>
+						</div>
+						<p class="rm-bar-desc">Pedido MKT: reativação de vendas. Criar cadências de e-mail e WhatsApp para <strong>venda</strong> e <strong>recuperação de venda</strong>. Jailson no projeto. · prazo <strong>11/09/2026</strong></p>
+					</div>
+					<div class="rm-bar-block rm-bar-block--backlog rm-bar-block--due" id="rm-backlog-07">
+						<div class="rm-bar rm-bar--backlog">
+							<a href="#dev-planilha-bonificacao"><span class="rm-bar-num">07</span> Planilha de bonificação</a>
+							<i style="width:0%"></i><em>03/10</em>
+						</div>
+						<p class="rm-bar-desc">Construir a planilha de bonificação da operação comercial. · prazo <strong>03/10/2026</strong> (30 dias)</p>
+					</div>
+					<div class="rm-bar-block rm-bar-block--backlog" id="rm-backlog-01">
+						<div class="rm-bar rm-bar--backlog">
+							<a href="#dev-nutricao-out"><span class="rm-bar-num">01</span> Nutrição Out · personalização automática</a>
+							<i style="width:0%"></i><em>—</em>
+						</div>
+						<p class="rm-bar-desc">Pensar numa forma de a cadência de leads outbound em Nutrição ser personalizada automaticamente para cada lead.</p>
+					</div>
+					<div class="rm-bar-block rm-bar-block--backlog" id="rm-backlog-02">
+						<div class="rm-bar rm-bar--backlog">
+							<a href="#dev-inbound-sem-contato"><span class="rm-bar-num">02</span> Inbound ICP · sem contato</a>
+							<i style="width:0%"></i><em>—</em>
+						</div>
+						<p class="rm-bar-desc">Desenhar o fluxo do lead que vem do inbound, é ICP, mas ainda sem contato.</p>
+					</div>
+					<div class="rm-bar-block rm-bar-block--backlog" id="rm-backlog-03">
+						<div class="rm-bar rm-bar--backlog">
+							<a href="#dev-inbound-contato-sem-timing"><span class="rm-bar-num">03</span> Inbound ICP · com contato · sem timing</a>
+							<i style="width:0%"></i><em>—</em>
+						</div>
+						<p class="rm-bar-desc">Desenhar o fluxo do lead inbound ICP com contato, mas que ainda não está em momento de compra.</p>
+					</div>
+					<div class="rm-bar-block rm-bar-block--backlog" id="rm-backlog-04">
+						<div class="rm-bar rm-bar--backlog">
+							<a href="#dev-inbound-pos-reuniao"><span class="rm-bar-num">04</span> Inbound ICP · pós-reunião · sem timing</a>
+							<i style="width:0%"></i><em>—</em>
+						</div>
+						<p class="rm-bar-desc">Desenhar o fluxo do lead inbound ICP que fez reunião, mas não está em momento de compra.</p>
+					</div>
+					<div class="rm-bar-block rm-bar-block--backlog" id="rm-backlog-05">
+						<div class="rm-bar rm-bar--backlog">
+							<a href="#dev-copiloto-vinicius"><span class="rm-bar-num">05</span> Copiloto Vinícius · nestes momentos</a>
+							<i style="width:0%"></i><em>—</em>
+						</div>
+						<p class="rm-bar-desc">Incluir o copiloto do Vinícius nos fluxos acima. Ver <a href="#entrega-bdr-copilot">BDR Copilot</a>.</p>
+					</div>
+				</div>
+			</div>
+
+			<!-- PAINEL: ATA -->
+			<div class="rm-desk-panel" data-rm-desk-panel="ata" id="rm-ata" hidden>
+				<div class="rm-panel-head">
+					<div>
+						<span class="rm-panel-kicker">Arquivo · 30/07/2026</span>
+						<h3>Ata Melvin · checklist</h3>
+						<p>Conteúdo histórico da ata. Não use esta aba para pedidos novos — use o Backlog.</p>
+					</div>
+				</div>
+				<div class="rm-ata-wrap" id="ops-pendencias-root">
+				<div class="ops-pend-tabs" role="tablist" aria-label="Pendências da ata">
+				                <button type="button" class="ops-pend-tab ops-pend-tab--ata is-active" role="tab" aria-selected="true" data-ops-pend-tab="ata">
+				                    <strong>Ata</strong>
+				                    <span>Resumo da reunião</span>
+				                </button>
+				                <button type="button" class="ops-pend-stat ops-pend-stat--fazer" role="tab" aria-selected="false" data-ops-pend-tab="fazer">
+				                    <strong>15</strong>
+				                    <span>Fazer agora</span>
+				                </button>
+				                <button type="button" class="ops-pend-stat ops-pend-stat--ok" role="tab" aria-selected="false" data-ops-pend-tab="resposta">
+				                    <strong>11</strong>
+				                    <span>Já tem resposta</span>
+				                </button>
+				                <button type="button" class="ops-pend-stat ops-pend-stat--dev" role="tab" aria-selected="false" data-ops-pend-tab="dev">
+				                    <strong>12</strong>
+				                    <span>Desenvolver</span>
+				                </button>
+				            </div>
+				
+				            <!-- ABA: ATA -->
+				            <div class="ops-pend-panel is-active" data-ops-pend-panel="ata" role="tabpanel">
+				                <div class="ops-pend-priority">
+				                    <strong>Arquivo da Ata 30/07</strong>
+				                    <p>Checklist histórico da reunião Melvin. <strong>Pedidos novos</strong> entram só no <a href="#roadmap-backlog" data-rm-desk-goto="backlog">Backlog do Roadmap</a> (com página de espera e prazo).</p>
+				                </div>
+				
+				                <div class="ops-pend-block">
+				                    <div class="ops-pend-block-head">
+				                        <span class="ops-section-chip">RESUMO</span>
+				                        <h3 class="ops-section-title">Reunião · RevOps Book</h3>
+				                        <p class="ops-section-desc">Convidados: Jailson Martins · Igor Silveira. Fonte: transcrição Gemini (revisada).</p>
+				                    </div>
+				
+				                    <div class="ops-pend-resumo-grid">
+				                        <article class="ops-pend-card">
+				                            <h4>Gestão e metas financeiras</h4>
+				                            <p>Documentos centralizados na intranet / Book. Meta de recuperação de <strong>R$ 38.000/mês</strong> nos próximos <strong>90 dias</strong> (Inspeção Noturna: perda estimada ~R$ 130 mil/mês). Infraestrutura de dados unificada para controle gerencial. Resultados esperados rumo a janeiro via reestruturação comercial.</p>
+				                        </article>
+				                        <article class="ops-pend-card">
+				                            <h4>Refinamento das operações comerciais</h4>
+				                            <p>Rigor no CRM (Lost com motivo) e automatização via IA priorizados para otimizar leads. Fluxo de vendas ajustado para conversão. Cadência preferida <strong>D1–D35</strong>. Tom: dor do cliente, sem linguagem “de vendedor”. Latência alta fora do horário → IA no 1º contato + qualificação (ex.: CNPJ).</p>
+				                        </article>
+				                        <article class="ops-pend-card">
+				                            <h4>Contratação estratégica</h4>
+				                            <p>Decisão: <strong>contratar BDR externo</strong> — não treinar membros internos (ex.: Gabi). Mitiga dependência técnica &gt;50% (Gabi / Fabrício). Testes de atividade com Vinícius começam imediatamente enquanto o processo seletivo anda.</p>
+				                        </article>
+				                    </div>
+				
+				                    <div class="ops-pend-resumo-more">
+				                        <details class="ops-pend-details" open>
+				                            <summary>Detalhes da ata (pontos discutidos)</summary>
+				                            <ul class="ops-pend-bullets">
+				                                <li><strong>Menu oculto:</strong> 5 cliques no © do rodapé · Hub Ops com plano de ação, JD e cronograma (atualizar ≥1×/semana).</li>
+				                                <li><strong>Identidade visual:</strong> logo do projeto desatualizada — usar pasta <em>Identidade Visual</em> no Google Drive. Falta diretriz formal de Tom de Voz (comercial + marketing).</li>
+				                                <li><strong>Propriedade / GitHub:</strong> códigos no GitHub (Jailson). Docs são da Melvin → destino futuro: intranet Melvin Gestão (acessos/permissões).</li>
+				                                <li><strong>Outbound:</strong> revisão da esteira com Vinícius; metodologia dele mais direta/assertiva que abordagens “spam”.</li>
+				                                <li><strong>Lead scoring:</strong> pesos por função, indústria, nº de PCM · classificação A/B · funil pré-SDR conforme volume. Igor envia a planilha.</li>
+				                                <li><strong>Produtos:</strong> alinhar hierarquia software / hardware / módulos com Fabrício (Bitrix).</li>
+				                                <li><strong>Concorrência incompleta:</strong> SW Tractian + Fracttal · HW Dynamox, Tractian, TEBE, BBX — mapeados no Book.</li>
+				                                <li><strong>CS:</strong> fluxo com TI · registro no Bitrix já configurado para Fabrício. Entrevistas de sucesso a cada 15 dias (como Pedro fazia).</li>
+				                                <li><strong>Mensagens:</strong> revisar templates com Jonatas, Fabrício e Heimar · testes A/B · evitar frases corporativas.</li>
+				                                <li><strong>CX weekend:</strong> nutrir leads com conteúdo educativo (blog/notícia) no fim de semana até a reunião de segunda.</li>
+				                                <li><strong>Indicadores:</strong> Igor desenvolve plataforma zoom out / zoom in (operacional · tático · gerencial).</li>
+				                                <li><strong>Metodologia:</strong> “Inspeção Noturna” / Bridge Mapping inspirados em Neemias — inspecionar fissuras + conversar + plano de ação.</li>
+				                            </ul>
+				                        </details>
+				                        <details class="ops-pend-details">
+				                            <summary>Próximas etapas (como saíram do Gemini)</summary>
+				                            <ul class="ops-pend-bullets">
+				                                <li>[Jailson] Atualizar Cronograma ≥1×/semana</li>
+				                                <li>[Jailson] Finalizar Outbound — reunião com Vinícius</li>
+				                                <li>[Jailson] Revisar Calculadora de Soberania</li>
+				                                <li>[Jailson] Ajustar Personas (supervisor · gerente · planejador)</li>
+				                                <li>[Jailson] Alinhar hierarquia de produtos com Fabrício (Bitrix)</li>
+				                                <li>[Jailson] Entrevistas de sucesso a cada 15 dias</li>
+				                                <li>[Jailson] Revisar mensagens da cadência (evitar repulsão)</li>
+				                                <li>[Igor] Enviar arquivo da planilha (lead scoring)</li>
+				                                <li>[Jailson, Jonatas, Fabrício, Heimar] Revisar templates Outbound</li>
+				                                <li>[Jailson, Vinícius] Testar nova metodologia de prospecção</li>
+				                            </ul>
+				                        </details>
+				                    </div>
+				                </div>
+				
+				                <div class="ops-pend-footer-grid">
+				                    <article class="ops-pend-card">
+				                        <h4>Ordem sugerida de ataque</h4>
+				                        <p><strong>Sprint A — rápido:</strong> logo · personas · concorrentes · cronograma · mensagens (com time)</p>
+				                        <p><strong>Sprint B — alinhamento:</strong> Outbound com Vinícius · hierarquia com Fabrício · planilha Igor · processo BDR</p>
+				                        <p><strong>Sprint C — construir:</strong> calculadora · tom de voz · IA latência · nutrição weekend · SOPs · análise competitiva completa</p>
+				                    </article>
+				                    <article class="ops-pend-card">
+				                        <h4>Dependências fora do seu controle</h4>
+				                        <p><strong>Igor:</strong> planilha lead scoring · plataforma de indicadores · pasta Identidade Visual · intranet Melvin Gestão</p>
+				                        <p><strong>Vinícius:</strong> revisão + testes Outbound · apoio na contratação BDR</p>
+				                        <p><strong>Fabrício:</strong> Bitrix (produtos) + CS · templates</p>
+				                        <p><strong>Jonatas / Heimar:</strong> revisão coletiva dos modelos de mensagem</p>
+				                    </article>
+				                </div>
+				
+				                <p class="ops-pend-note">Nota: o resumo automático do Gemini acertou o grosso (meta 38k, BDR externo, Outbound, CRM, IA), mas omitiu logo/identidade, concorrentes, personas Supervisor/Gerente/Planejador, entrevistas a cada 15 dias e a Calculadora de Soberania — por isso esta página usa a ata completa, não só o resumo.</p>
+				            </div>
+				
+				            <!-- ABA: FAZER -->
+				            <div class="ops-pend-panel" data-ops-pend-panel="fazer" role="tabpanel" hidden>
+				                <div class="ops-pend-block" id="opsPendFazer">
+				                    <div class="ops-pend-block-head">
+				                        <span class="ops-section-chip ops-section-chip--live">1 · FAZER AGORA</span>
+				                        <h3 class="ops-section-title">O que você tem que fazer</h3>
+				                        <p class="ops-section-desc">Marque conforme avançar — o estado fica salvo neste browser.</p>
+				                    </div>
+				                    <div class="ops-pend-list" data-ops-pend-list="fazer">
+				                        <label class="ops-pend-item" draggable="true" data-pend-item="t01"><span class="ops-pend-handle" title="Arrastar para reordenar" aria-hidden="true">⋮⋮</span><input type="checkbox" data-pend-id="t01"><span class="ops-pend-tag">Cronograma</span><span class="ops-pend-body"><strong>Atualizar o Cronograma ≥ 1× por semana</strong><small>✅ Atualização 31/07: Cronograma + Plano alinhados (semana Book fechada · ops rolam). Ritual: ≥1×/semana marcar status real. · prazo <b>31/07/2026</b></small><span class="ops-pend-done-at" hidden></span></span></label>
+				                        <label class="ops-pend-item" draggable="true" data-pend-item="t02"><span class="ops-pend-handle" title="Arrastar para reordenar" aria-hidden="true">⋮⋮</span><input type="checkbox" data-pend-id="t02"><span class="ops-pend-tag">Outbound</span><span class="ops-pend-body"><strong>Agendar / realizar reunião de revisão da esteira Outbound</strong><small>Marcar call com Vinícius; levar o que já funciona na esteira Out + gaps do Book; sair com lista do que formalizar vs. o que testar. · prazo <b>31/07/2026</b></small><span class="ops-pend-done-at" hidden></span></span></label>
+				                        <label class="ops-pend-item" draggable="true" data-pend-item="t03"><span class="ops-pend-handle" title="Arrastar para reordenar" aria-hidden="true">⋮⋮</span><input type="checkbox" data-pend-id="t03"><span class="ops-pend-tag">Outbound</span><span class="ops-pend-body"><strong>Testar a nova metodologia de prospecção</strong><small>Piloto da abordagem direta (estilo Vinícius) em contas reais; comparar resposta vs. cadência convencional; documentar o que escalar. Roda em paralelo ao seletivo do BDR. · prazo <b>31/07/2026</b></small><span class="ops-pend-done-at" hidden></span></span></label>
+				                        <label class="ops-pend-item" draggable="true" data-pend-item="t04"><span class="ops-pend-handle" title="Arrastar para reordenar" aria-hidden="true">⋮⋮</span><input type="checkbox" data-pend-id="t04"><span class="ops-pend-tag">Mensagens</span><span class="ops-pend-body"><strong>Revisar templates Outbound em grupo</strong><small>Workshop com Jonatas, Fabrício e Heimar: revisar templates e-mail/WA/LinkedIn; cortar tom de vendedor; abrir pela dor do interlocutor (rotina de manutenção). · prazo <b>31/07/2026</b></small><span class="ops-pend-done-at" hidden></span></span></label>
+				                        <label class="ops-pend-item" draggable="true" data-pend-item="t05"><span class="ops-pend-handle" title="Arrastar para reordenar" aria-hidden="true">⋮⋮</span><input type="checkbox" data-pend-id="t05"><span class="ops-pend-tag">Mensagens</span><span class="ops-pend-body"><strong>Refinar textos / comentários da cadência comercial</strong><small>Varredura nos pitches da cadência no Book; remover frases que geram repulsa; linguagem que reconheça chão de fábrica e rotina corrida. · prazo <b>31/07/2026</b></small><span class="ops-pend-done-at" hidden></span></span></label>
+				                        <label class="ops-pend-item" draggable="true" data-pend-item="t06"><span class="ops-pend-handle" title="Arrastar para reordenar" aria-hidden="true">⋮⋮</span><input type="checkbox" data-pend-id="t06"><span class="ops-pend-tag">Identidade</span><span class="ops-pend-body"><strong>Trocar logo pela versão da pasta Identidade Visual (Drive)</strong><small>Usar arquivos oficiais da pasta Identidade Visual (Drive do Igor); substituir logo desatualizada no Book/site e validar o lockup final. · prazo <b>31/07/2026</b></small><span class="ops-pend-done-at" hidden></span></span></label>
+				                        <label class="ops-pend-item" draggable="true" data-pend-item="t07"><span class="ops-pend-handle" title="Arrastar para reordenar" aria-hidden="true">⋮⋮</span><input type="checkbox" data-pend-id="t07"><span class="ops-pend-tag">Personas</span><span class="ops-pend-body"><strong>Atualizar lista de personas no material</strong><small>Espelhar no Book/Personas: Supervisor · Gerente · Planejador (estrutura da ata). Remover personas desatualizadas do material comercial. · prazo <b>31/07/2026</b></small><span class="ops-pend-done-at" hidden></span></span></label>
+				                        <label class="ops-pend-item" draggable="true" data-pend-item="t08"><span class="ops-pend-handle" title="Arrastar para reordenar" aria-hidden="true">⋮⋮</span><input type="checkbox" data-pend-id="t08"><span class="ops-pend-tag">Produtos</span><span class="ops-pend-body"><strong>Validar hierarquia de produtos/módulos no Bitrix</strong><small>Alinhar com Fabrício o cadastro no Bitrix (software / hardware / módulos); anotar a hierarquia real para documentar depois no Book (item Desenvolver). · prazo <b>31/07/2026</b></small><span class="ops-pend-done-at" hidden></span></span></label>
+				                        <label class="ops-pend-item" draggable="true" data-pend-item="t09"><span class="ops-pend-handle" title="Arrastar para reordenar" aria-hidden="true">⋮⋮</span><input type="checkbox" data-pend-id="t09"><span class="ops-pend-tag">Calculadora</span><span class="ops-pend-body"><strong>Revisar lógica da Calculadora de Soberania</strong><small>Abrir a Calculadora de Soberania; listar métricas de conversão erradas citadas na reunião; corrigir o que for rápido ou abrir a reescrita completa (Desenvolver). · prazo <b>31/07/2026</b></small><span class="ops-pend-done-at" hidden></span></span></label>
+				                        <label class="ops-pend-item" draggable="true" data-pend-item="t10"><span class="ops-pend-handle" title="Arrastar para reordenar" aria-hidden="true">⋮⋮</span><input type="checkbox" data-pend-id="t10"><span class="ops-pend-tag">Concorrência</span><span class="ops-pend-body"><strong>Completar análise competitiva no Book</strong><small>✅ Book fechado 31/07: Concorrentes v2 (SW/HW/M&amp;A + Radar) · Tractian/Fracttal/Dynamox/TEBE/BBX. Restante: revisar Lost no CRM (ops). · prazo original <b>31/07/2026</b></small><span class="ops-pend-done-at" hidden></span></span></label>
+				                        <label class="ops-pend-item" draggable="true" data-pend-item="t11"><span class="ops-pend-handle" title="Arrastar para reordenar" aria-hidden="true">⋮⋮</span><input type="checkbox" data-pend-id="t11"><span class="ops-pend-tag">CS</span><span class="ops-pend-body"><strong>Entrevista de caso de sucesso a cada 15 dias</strong><small>Agendar entrevista de caso de sucesso a cada 15 dias (modelo que Pedro fazia); extrair dores reais e alimentar SPN / mensagens. · prazo <b>31/07/2026</b></small><span class="ops-pend-done-at" hidden></span></span></label>
+				                        <label class="ops-pend-item" draggable="true" data-pend-item="t12"><span class="ops-pend-handle" title="Arrastar para reordenar" aria-hidden="true">⋮⋮</span><input type="checkbox" data-pend-id="t12"><span class="ops-pend-tag">Processos</span><span class="ops-pend-body"><strong>Procedimentar conhecimento crítico (Gabi / Fabrício)</strong><small>Mapear o que só Gabi/Fabrício sabem operar; rascunhar SOPs mínimos. Risco &gt;50% de dependência — alimenta os playbooks (Desenvolver). · prazo <b>31/07/2026</b></small><span class="ops-pend-done-at" hidden></span></span></label>
+				                        <label class="ops-pend-item" draggable="true" data-pend-item="t13"><span class="ops-pend-handle" title="Arrastar para reordenar" aria-hidden="true">⋮⋮</span><input type="checkbox" data-pend-id="t13"><span class="ops-pend-tag">CRM</span><span class="ops-pend-body"><strong>Reforçar rigor de preenchimento no CRM (Lost com motivo)</strong><small>Exigir motivo de Lost no CRM; incluir essa regra no onboarding do BDR novo. Sem motivo não há análise de funil. · prazo <b>31/07/2026</b></small><span class="ops-pend-done-at" hidden></span></span></label>
+				                        <label class="ops-pend-item" draggable="true" data-pend-item="t14"><span class="ops-pend-handle" title="Arrastar para reordenar" aria-hidden="true">⋮⋮</span><input type="checkbox" data-pend-id="t14"><span class="ops-pend-tag">Lead scoring</span><span class="ops-pend-body"><strong>Receber planilha de lead scoring do Igor</strong><small>Cobrar/receber a planilha do Igor (pesos A/B: função, indústria, nº de PCM); confrontar com a aba Lead Scoring do Book e amarrar ao funil pré-SDR. · prazo <b>31/07/2026</b></small><span class="ops-pend-done-at" hidden></span></span></label>
+				                        <label class="ops-pend-item" draggable="true" data-pend-item="t15"><span class="ops-pend-handle" title="Arrastar para reordenar" aria-hidden="true">⋮⋮</span><input type="checkbox" data-pend-id="t15"><span class="ops-pend-tag">Contratação</span><span class="ops-pend-body"><strong>Seguir processo seletivo do BDR (já decidido)</strong><small>Manter seletivo de BDR externo (decisão: não treinar Gabi). Testes de atividade da nova metodologia já podem rodar em paralelo. · prazo <b>31/07/2026</b></small><span class="ops-pend-done-at" hidden></span></span></label>
+				                    </div>
+				                </div>
+				            </div>
+				
+				            <!-- ABA: JÁ TEM RESPOSTA -->
+				            <div class="ops-pend-panel" data-ops-pend-panel="resposta" role="tabpanel" hidden>
+				                <div class="ops-pend-block" id="opsPendResposta">
+				                    <div class="ops-pend-block-head">
+				                        <span class="ops-section-chip ops-section-chip--ok">2 · JÁ TEM RESPOSTA</span>
+				                        <h3 class="ops-section-title">O que a própria reunião já fechou</h3>
+				                        <p class="ops-section-desc">Não reinventar — use como referência ao executar os itens de “Fazer agora”.</p>
+				                    </div>
+				                    <div class="ops-pend-answers">
+				                        <article class="ops-pend-answer"><span class="ops-pend-tag">Contratação</span><strong>BDR externo, não capacitação interna da Gabi</strong><p>Confirmado Jailson + Igor. Mitiga dependência e acelera Outbound.</p></article>
+				                        <article class="ops-pend-answer"><span class="ops-pend-tag">Financeiro</span><strong>Meta: R$ 38 mil/mês em até 90 dias</strong><p>Inspeção Noturna: perda estimada ~R$ 130 mil/mês. Reestruturação comercial rumo a janeiro.</p></article>
+				                        <article class="ops-pend-answer"><span class="ops-pend-tag">Personas</span><strong>Supervisor · Gerente · Planejador</strong><p>Estrutura correta citada na ata — falta só aplicar no Book.</p></article>
+				                        <article class="ops-pend-answer"><span class="ops-pend-tag">Concorrência</span><strong>Lista explícita a incluir</strong><p>SW: Tractian (=Traction), Fracttal (=Fractal) · HW: Dynamox, Tractian, TEBE (=TEB), BBX. Já no Book.</p></article>
+				                        <article class="ops-pend-answer"><span class="ops-pend-tag">Cadência</span><strong>Preferência D1–D35</strong><p>Fases densas e espaçadas para a reunião não esfriar.</p></article>
+				                        <article class="ops-pend-answer"><span class="ops-pend-tag">Tom</span><strong>Dor do cliente &gt; linguagem corporativa</strong><p>Critério claro para revisão de pitches e templates.</p></article>
+				                        <article class="ops-pend-answer"><span class="ops-pend-tag">Lead scoring</span><strong>Lógica A/B verbalizada</strong><p>Pesos: função, indústria, nº de PCM · funil pré-SDR conforme volume.</p></article>
+				                        <article class="ops-pend-answer"><span class="ops-pend-tag">Identidade</span><strong>Logo certa = pasta Identidade Visual (Drive)</strong><p>Não inventar asset — usar arquivo oficial indicado pelo Igor.</p></article>
+				                        <article class="ops-pend-answer"><span class="ops-pend-tag">Metodologia</span><strong>Inspeção Noturna / Bridge Mapping = Neemias</strong><p>Inspecionar fissuras + conversar com envolvidos + plano de ação.</p></article>
+				                        <article class="ops-pend-answer"><span class="ops-pend-tag">CS</span><strong>Fluxo CS + Bitrix já configurado p/ Fabrício</strong><p>Necessidade do cliente com TI; registro no Bitrix é o ponto de acompanhamento.</p></article>
+				                        <article class="ops-pend-answer"><span class="ops-pend-tag">Ops</span><strong>Menu oculto (5 cliques) + Hub Ops já apresentado</strong><p>Ferramenta de gestão interna já existe no site.</p></article>
+				                    </div>
+				                </div>
+				            </div>
+				
+				            <!-- ABA: DESENVOLVER -->
+				            <div class="ops-pend-panel" data-ops-pend-panel="dev" role="tabpanel" hidden>
+				                <div class="ops-pend-block" id="opsPendDev">
+				                    <div class="ops-pend-block-head">
+				                        <span class="ops-section-chip ops-section-chip--vault">3 · DESENVOLVER</span>
+				                        <h3 class="ops-section-title">O que ainda precisa ser construído</h3>
+				                        <p class="ops-section-desc">Entregas novas ou incompletas. Alguns são seus; outros dependem da Melvin (Igor / intranet).</p>
+				                    </div>
+				                    <div class="ops-pend-list" data-ops-pend-list="dev">
+				                        <label class="ops-pend-item" draggable="true" data-pend-item="d01"><span class="ops-pend-handle" title="Arrastar para reordenar" aria-hidden="true">⋮⋮</span><input type="checkbox" data-pend-id="d01"><span class="ops-pend-tag">IA / Latência</span><span class="ops-pend-body"><strong>Contato inicial com IA fora do horário comercial</strong><small>Problema: latência alta pós-expediente/fds. Desenhar: lead fora do horário → IA faz 1º contato + qualifica com dados públicos (ex.: CNPJ) → handoff humano. · prazo <b>07/08/2026</b></small><span class="ops-pend-done-at" hidden></span></span></label>
+				                        <label class="ops-pend-item" draggable="true" data-pend-item="d02"><span class="ops-pend-handle" title="Arrastar para reordenar" aria-hidden="true">⋮⋮</span><input type="checkbox" data-pend-id="d02"><span class="ops-pend-tag">CX</span><span class="ops-pend-body"><strong>Nutrição de fim de semana com conteúdo educativo</strong><small>Cadência sáb/dom com blog/notícia útil até a reunião de segunda — manter o lead quente sem parecer spam. · prazo <b>07/08/2026</b></small><span class="ops-pend-done-at" hidden></span></span></label>
+				                        <label class="ops-pend-item" draggable="true" data-pend-item="d03"><span class="ops-pend-handle" title="Arrastar para reordenar" aria-hidden="true">⋮⋮</span><input type="checkbox" data-pend-id="d03"><span class="ops-pend-tag">Tom de voz</span><span class="ops-pend-body"><strong>Diretrizes formais de Tom de Voz (comercial + marketing)</strong><small>Documento formal de Tom de Voz (comercial + marketing) no Book. Hoje só há orientação verbal do Igor. · prazo <b>07/08/2026</b></small><span class="ops-pend-done-at" hidden></span></span></label>
+				                        <label class="ops-pend-item" draggable="true" data-pend-item="d04"><span class="ops-pend-handle" title="Arrastar para reordenar" aria-hidden="true">⋮⋮</span><input type="checkbox" data-pend-id="d04"><span class="ops-pend-tag">Calculadora</span><span class="ops-pend-body"><strong>Corrigir / reescrever métricas da Calculadora de Soberania</strong><small>Reescrever a lógica de conversão da Calculadora de Soberania e republicar no Book (além do review rápido do “Fazer agora”). · prazo <b>07/08/2026</b></small><span class="ops-pend-done-at" hidden></span></span></label>
+				                        <label class="ops-pend-item" draggable="true" data-pend-item="d05"><span class="ops-pend-handle" title="Arrastar para reordenar" aria-hidden="true">⋮⋮</span><input type="checkbox" data-pend-id="d05"><span class="ops-pend-tag">Concorrência</span><span class="ops-pend-body"><strong>Página/seção de análise competitiva completa</strong><small>✅ Entregue no Book 31/07 (#gim-concorrentes · abas SW/HW/M&amp;A/Radar). Manter marcado quando validar Lost no CRM + eventual ajuste fino pós-feedback Igor. · prazo <b>07/08/2026</b></small><span class="ops-pend-done-at" hidden></span></span></label>
+				                        <label class="ops-pend-item" draggable="true" data-pend-item="d06"><span class="ops-pend-handle" title="Arrastar para reordenar" aria-hidden="true">⋮⋮</span><input type="checkbox" data-pend-id="d06"><span class="ops-pend-tag">Mensagens</span><span class="ops-pend-body"><strong>Bateria de testes A/B das mensagens Outbound</strong><small>Plano A/B de mensagens Out com Fabrício, Jonatas/Jonathan e Heimar; medir conversão e incorporar o vencedor nos templates. · prazo <b>07/08/2026</b></small><span class="ops-pend-done-at" hidden></span></span></label>
+				                        <label class="ops-pend-item" draggable="true" data-pend-item="d07"><span class="ops-pend-handle" title="Arrastar para reordenar" aria-hidden="true">⋮⋮</span><input type="checkbox" data-pend-id="d07"><span class="ops-pend-tag">Playbooks</span><span class="ops-pend-body"><strong>SOPs dos processos críticos (anti-dependência)</strong><small>Transformar o conhecimento táito de Gabi/Fabrício em SOPs/playbooks no Book (e depois intranet). · prazo <b>07/08/2026</b></small><span class="ops-pend-done-at" hidden></span></span></label>
+				                        <label class="ops-pend-item" draggable="true" data-pend-item="d08"><span class="ops-pend-handle" title="Arrastar para reordenar" aria-hidden="true">⋮⋮</span><input type="checkbox" data-pend-id="d08"><span class="ops-pend-tag">Lead scoring</span><span class="ops-pend-body"><strong>Integrar lead scoring A/B no fluxo / documentação</strong><small>Após receber a planilha (t14): documentar pesos A–D + amarrar ao funil pré-SDR conforme volume. · prazo <b>07/08/2026</b></small><span class="ops-pend-done-at" hidden></span></span></label>
+				                        <label class="ops-pend-item" draggable="true" data-pend-item="d09"><span class="ops-pend-handle" title="Arrastar para reordenar" aria-hidden="true">⋮⋮</span><input type="checkbox" data-pend-id="d09"><span class="ops-pend-tag">Produtos</span><span class="ops-pend-body"><strong>Documentar hierarquia real de produtos no Book</strong><small>Base no Book já existe (abas Melvin vs Manutenção em Ação). Fechar após validar Bitrix com Fabrício (t08) e espelhar hierarquia real software/hardware/módulos. · prazo <b>07/08/2026</b></small><span class="ops-pend-done-at" hidden></span></span></label>
+				                        <label class="ops-pend-item" draggable="true" data-pend-item="d10"><span class="ops-pend-handle" title="Arrastar para reordenar" aria-hidden="true">⋮⋮</span><input type="checkbox" data-pend-id="d10"><span class="ops-pend-tag">Plataforma</span><span class="ops-pend-body"><strong>Plataforma de indicadores (zoom out / zoom in) — Igor</strong><small>Acompanhar a plataforma de indicadores do Igor (zoom operacional / tático / gerencial). Não é entrega sua do Book — integração futura. · prazo <b>07/08/2026</b></small><span class="ops-pend-done-at" hidden></span></span></label>
+				                        <label class="ops-pend-item" draggable="true" data-pend-item="d11"><span class="ops-pend-handle" title="Arrastar para reordenar" aria-hidden="true">⋮⋮</span><input type="checkbox" data-pend-id="d11"><span class="ops-pend-tag">Intranet</span><span class="ops-pend-body"><strong>Mover documentos do projeto para intranet Melvin Gestão</strong><small>Planejar migração GitHub + Book → intranet Melvin Gestão com acessos/permissões (docs são da Melvin). · prazo <b>07/08/2026</b></small><span class="ops-pend-done-at" hidden></span></span></label>
+				                        <label class="ops-pend-item" draggable="true" data-pend-item="d12"><span class="ops-pend-handle" title="Arrastar para reordenar" aria-hidden="true">⋮⋮</span><input type="checkbox" data-pend-id="d12"><span class="ops-pend-tag">Automação</span><span class="ops-pend-body"><strong>Avaliar automação de mensagens utilitárias (WA / Meta)</strong><small>Fechar o que é mensagem UTILITY automatizada (WA/Meta) vs. humano no fluxo e-mail + call + WhatsApp. · prazo <b>07/08/2026</b></small><span class="ops-pend-done-at" hidden></span></span></label>
+				                    </div>
+				                </div>
+				            </div>
+				</div>
+			</div>
+
+			<!-- PAINEL: ÍNDICE -->
+			<div class="rm-desk-panel" data-rm-desk-panel="indice" id="rm-indice" hidden>
+				<div class="rm-panel-head">
+					<div>
+						<span class="rm-panel-kicker">Navegação</span>
+						<h3>Índice · entregas no Book</h3>
+						<p>Atalhos por fase e resumo do sprint inicial de julho.</p>
+					</div>
+				</div>
+				<div class="rm-bottom rm-bottom--flat">
+					<details class="rm-archive" open>
+						<summary>Histórico jul/2026 · 22 entregas do sprint inicial</summary>
+						<p class="rm-archive-note">Ata completa na aba <button type="button" class="rm-inline-link" data-rm-desk-goto="ata">Ata 30/07</button></p>
+						<ul class="rm-archive-list">
+							<li><strong>S1 · 20–24/07</strong> — Infra, SWOT, ICP, Roadmap, Dores, Objeções, Pipelines <em>(7)</em></li>
+							<li><strong>S2 · 25–27/07</strong> — Funis, Filtros, Cadências Out, Réguas, Manuais <em>(5)</em></li>
+							<li><strong>27/07</strong> — Objeções Presales, Battlecards, Fluxos PDF, Funil UX, Rebrand <em>(5)</em></li>
+							<li><strong>28–31/07</strong> — Concorrentes, ABM, Produtos, Lead Scoring, Ops UX <em>(5)</em></li>
+						</ul>
+					</details>
+
+					<details class="rm-index rm-index--accordion" open aria-label="Índice de entregas">
+						<summary>
+							<span class="rm-index-head">
+								<strong>Índice · entregas no Book</strong>
+								<span class="rm-index-note">Atalhos por fase — clique para expandir</span>
+							</span>
+						</summary>
+						<div class="rm-index-body">
+							<details class="rm-index-acc">
+								<summary>Book + Sprint · 31/07</summary>
+								<ul>
+									<li><a href="#entrega-home-dashboard">RevOps Book</a></li>
+									<li><a href="#entrega-transcricao-inspecao">Inspeção Noturna</a></li>
+									<li><a href="#entrega-gim-dores-ocultas">Dores · Inbound</a></li>
+									<li><a href="#entrega-gim-dores-sangrentas">Dores · Outbound</a></li>
+									<li><a href="#entrega-funil-vendas">Pipelines In + Out</a></li>
+								</ul>
+							</details>
+							<details class="rm-index-acc">
+								<summary>Out + Ata · 04/08</summary>
+								<ul>
+									<li><a href="#entrega-fluxo-comerc-outbound">Fluxo Comercial Out</a></li>
+									<li><a href="#entrega-wf-contato-nutricao-out">Cadência Out D1–D35</a></li>
+									<li><button type="button" class="rm-index-goto" data-rm-desk-goto="ata">Ata Melvin · checklist</button></li>
+								</ul>
+							</details>
+							<details class="rm-index-acc">
+								<summary>Bitrix In · 07/08</summary>
+								<ul>
+									<li><a href="#entrega-funil-inbound">Funil Inbound</a></li>
+									<li><a href="#entrega-wf-contato-nutricao-in">D1–D15 In</a></li>
+									<li><a href="#entrega-filtro-qualificacao-in">SPN / Qualificação</a></li>
+									<li><a href="#entrega-fluxo-comerc-inbound">Fluxo SDR Humano</a></li>
+									<li><a href="#entrega-fluxo-comerc-inbound-ia">Fluxo SDR IA</a></li>
+								</ul>
+							</details>
+							<details class="rm-index-acc">
+								<summary>Contratação · 28/08</summary>
+								<ul>
+									<li><a href="#entrega-job-bdr">Seletivo BDR · CVs</a></li>
+								</ul>
+							</details>
+							<details class="rm-index-acc">
+								<summary>Atuação BDR · 28/08</summary>
+								<ul>
+									<li><a href="#entrega-bdr-copilot">BDR Copilot</a></li>
+									<li><a href="#entrega-cadencia-multicanal">Cadência Multicanal</a></li>
+									<li><a href="#entrega-jornada-conta">Jornada da Conta</a></li>
+								</ul>
+							</details>
+							<details class="rm-index-acc">
+								<summary>Sprint Book · 28–31/07</summary>
+								<ul>
+									<li><a href="#entrega-gim-concorrentes">Concorrentes v2</a></li>
+									<li><a href="#entrega-abm-programa">ABM Programa</a></li>
+									<li><a href="#entrega-gim-produtos">Produtos Melvin</a></li>
+									<li><a href="#entrega-gim-lead-scoring">Lead Scoring A–D</a></li>
+								</ul>
+							</details>
+							<details class="rm-index-acc rm-index-acc--open">
+								<summary>Backlog · 7 tarefas</summary>
+								<ul>
+									<li><a href="#dev-cadencias-ma">06 · Cadências M&amp;A · e-mail + WA · 11/09</a></li>
+									<li><a href="#dev-planilha-bonificacao">07 · Planilha de bonificação · 03/10</a></li>
+									<li><a href="#dev-nutricao-out">01 · Nutrição Out personalizada</a></li>
+									<li><a href="#dev-inbound-sem-contato">02 · Inbound ICP sem contato</a></li>
+									<li><a href="#dev-inbound-contato-sem-timing">03 · ICP com contato · sem timing</a></li>
+									<li><a href="#dev-inbound-pos-reuniao">04 · ICP pós-reunião · sem timing</a></li>
+									<li><a href="#dev-copiloto-vinicius">05 · Copiloto Vinícius</a></li>
+								</ul>
+							</details>
+							<details class="rm-index-acc rm-index-acc--open">
+								<summary>Em aberto</summary>
+								<ul>
+									<li><a href="#onboarding-bdr">Onboarding BDR</a></li>
+									<li><a href="#relatorios-bitrix">Relatórios Bitrix24</a></li>
+									<li><a href="#historico-comercial-2026">Histórico 2026</a></li>
+									<li><button type="button" class="rm-index-goto" data-rm-desk-goto="backlog">Ver backlog no burn-up</button></li>
+								</ul>
+							</details>
+						</div>
+					</details>
+				</div>
 			</div>
 
 		</section>
+
 	<!--
 		<header class="main-header">
             <div class="title-area">
@@ -13479,8 +13547,8 @@ Um abraço!"
         </section>
 
 	</main>
-  <script src="app.js?v=matriz-62"></script>
-  <script src="hire-matrix.js?v=matriz-62"></script>
+  <script src="app.js?v=matriz-63"></script>
+  <script src="hire-matrix.js?v=matriz-63"></script>
 	
 </body>
 </html>
