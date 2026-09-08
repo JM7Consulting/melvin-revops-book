@@ -6,7 +6,7 @@
     <title>REBUILD 7 | MELVIN</title>
     
 	<link rel="icon" type="image/png" href="logo_simples_removebcg.png">
-  <link rel="stylesheet" href="styles.css?v=matriz-69">
+  <link rel="stylesheet" href="styles.css?v=matriz-70">
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sora:wght@600;700;800&family=Carlito:ital,wght@0,400;0,700;1,400&family=Libre+Baskerville:wght@400;700&display=swap" rel="stylesheet">
@@ -5868,7 +5868,7 @@ Quando puder, confirme o recebimento ou me diga se prefere ajustar prazo/horári
                 <div class="cx-hero-copy">
                     <p class="cx-kicker">Outbound · Cadência operacional</p>
                     <h2 class="cx-title">Cadências D1-D35 (Prospecção e Nutrição)</h2>
-                    <p class="cx-lead">Caminho único de <strong>4 toques (Probe)</strong> → <strong>Gate de sinais</strong> (Vendas Hardcore / Copilot) → trilho <strong>HOT</strong> ou <strong>COLD</strong> → <strong>Nutrição</strong> → nurturing 60–90d. Detalhe operacional na aba Régua. Princípios em <a href="#entrega-cadencia-multicanal">Cadência Multicanal</a> · metodologia em <a href="#entrega-bdr-copilot">BDR Copilot</a>.</p>
+                    <p class="cx-lead">Na <strong>Escuta</strong>, a idade do sinal no Copiloto define o trilho: ≤7 dias → <strong>Probe</strong>; 8–15 → <strong>HOT</strong> sem Probe; &gt;15 → <strong>COLD</strong>. Se falar com a <strong>PERSONA</strong> no Probe, vai à régua seguinte. O <strong>Gate</strong> confirma HOT, COLD ou saída. Detalhe operacional na aba Régua. Princípios em <a href="#cadencia-multicanal">Cadência Multicanal</a> · metodologia em <a href="#bdr-copilot">BDR Copilot</a>.</p>
                     <div class="cx-meta-strip">
                         <span class="cx-meta-pill cx-meta-pill--util">UTILITY</span>
                         <span class="cx-meta-pill cx-meta-pill--mkt">MARKETING</span>
@@ -5894,7 +5894,7 @@ Quando puder, confirme o recebimento ou me diga se prefere ajustar prazo/horári
             <div class="out-cad-panel is-active" data-outcad-panel="fluxo" role="tabpanel">
 
             <div class="out-sig-intro">
-                <p><strong>Ideia operacional:</strong> ninguém entra direto em HOT ou COLD. Toda conta aprovada no ICP passa pelo mesmo <em>Probe</em> (3–5 toques). No Gate, cruzamos <strong>sinais de mercado</strong> (Copilot · Vendas Hardcore) com <strong>sinais de engajamento</strong> (resposta aos toques). Só então intensificamos HOT, densificamos COLD ou mandamos pra Nutrição / nurturing.</p>
+                <p><strong>Ideia operacional:</strong> nem toda conta passa pelo Probe. Na Escuta, o Copiloto manda: sinal <strong>≤7 dias</strong> entra no Probe; <strong>8–15</strong> vai HOT sem Probe (sem comentar os assuntos iniciais); <strong>&gt;15</strong> vai COLD. No Probe, se falarmos com a <strong>PERSONA</strong>, não avançamos o próximo toque — vamos à régua seguinte. O Gate só confirma o trilho ou uma saída (SQL, Nutrição, kill).</p>
                 <p class="out-sig-hint">Clique em <strong>Escuta / Probe / Gate</strong> para abrir o que fazer. Clique em <strong>HOT · COLD · Nutrição</strong> para ir direto à cadência na aba Régua (Fase Quente · Frio · Nutrição).</p>
             </div>
 
@@ -5902,14 +5902,14 @@ Quando puder, confirme o recebimento ou me diga se prefere ajustar prazo/horári
                 <button type="button" class="out-sig-node out-sig-node--listen" data-sig-stage="listen" aria-pressed="false">
                     <span class="out-sig-step">0</span>
                     <strong>Escuta</strong>
-                    <small>Copilot · encaixe + intenção</small>
+                    <small>idade do sinal · Copiloto</small>
                     <span class="out-sig-click">Detalhe →</span>
                 </button>
                 <span class="out-sig-arrow" aria-hidden="true">→</span>
                 <button type="button" class="out-sig-node out-sig-node--probe" data-sig-stage="probe" aria-pressed="false">
                     <span class="out-sig-step">1</span>
                     <strong>Probe</strong>
-                    <small>4 toques · D1–D10 · caminho único</small>
+                    <small>se sinal ≤7d · D1–D10</small>
                     <span class="out-sig-click">Detalhe →</span>
                 </button>
                 <span class="out-sig-arrow" aria-hidden="true">→</span>
@@ -5917,7 +5917,7 @@ Quando puder, confirme o recebimento ou me diga se prefere ajustar prazo/horári
                     <span class="out-sig-diamond-inner">
                         <span class="out-sig-step">2</span>
                         <strong>Gate</strong>
-                        <small>Sinais</small>
+                        <small>HOT · COLD · saídas</small>
                         <span class="out-sig-click">Detalhe →</span>
                     </span>
                 </button>
@@ -5926,13 +5926,13 @@ Quando puder, confirme o recebimento ou me diga se prefere ajustar prazo/horári
                     <button type="button" class="out-sig-node out-sig-node--hot" data-sig-go="regua" data-sig-anchor="out-fase-quente" aria-pressed="false">
                         <span class="out-sig-step">🔥</span>
                         <strong>HOT</strong>
-                        <small>Fase 1 · Trilho Quente</small>
+                        <small>8–15d · falou com persona</small>
                         <span class="out-sig-click">Régua →</span>
                     </button>
                     <button type="button" class="out-sig-node out-sig-node--cold" data-sig-go="regua" data-sig-anchor="out-fase-frio" aria-pressed="false">
                         <span class="out-sig-step">🧊</span>
                         <strong>COLD</strong>
-                        <small>Fase 2 · Trilho Frio</small>
+                        <small>&gt;15d · Probe sem fala</small>
                         <span class="out-sig-click">Régua →</span>
                     </button>
                 </div>
@@ -6024,38 +6024,39 @@ Quando puder, confirme o recebimento ou me diga se prefere ajustar prazo/horári
                         <button type="button" class="out-sig-dock-close" data-sig-detail-close aria-label="Fechar">×</button>
                     </header>
                     <div class="out-sig-detail-body">
-                        <p class="out-sig-dock-lead">Ponto de decisão (após T3/T4 ou na 1ª resposta). Cruza <strong>sinal de mercado</strong> + <strong>engajamento</strong> → HOT, COLD, Nutrição, SQL ou Kill.</p>
+                        <p class="out-sig-dock-do">DIRECIONE PELO SINAL NO COPILOTO E PELO QUE ACONTECEU NO PROBE:</p>
                         <div class="out-sig-dock-cols out-sig-dock-cols--3">
                             <div>
                                 <h4>🔥 → HOT</h4>
                                 <ul>
-                                    <li>Copilot ≥6 <em>ou</em> sinal peso 3–4 vivo</li>
-                                    <li>Reply / pergunta / “fale com X”</li>
-                                    <li>WA/LI engajado (conversa)</li>
-                                    <li>Vaga PCM, nova planta, TPM, parada…</li>
+                                    <li>Sinal com <strong>8–15 dias</strong> → régua HOT <strong>sem Probe</strong> (não comentar os assuntos iniciais da Probe)</li>
+                                    <li>Fast-lane Escuta: <strong>≥6 + sinal confirmado</strong> → HOT direto</li>
+                                    <li>No Probe, se falou com a <strong>PERSONA</strong> em qualquer dia → não vai ao próximo toque; vai à <strong>régua HOT</strong></li>
                                 </ul>
                                 <button type="button" class="out-sig-dock-action out-sig-dock-action--hot" data-outcad-goto="regua" data-outcad-anchor="out-fase-quente">Ir à Régua · Fase 1 Quente →</button>
                             </div>
                             <div>
                                 <h4>🧊 → COLD</h4>
                                 <ul>
-                                    <li>Fit alto + nota 3–5 · sem sinal forte</li>
-                                    <li>Silêncio / aceite LI sem diálogo</li>
-                                    <li>Dor clara, intenção velada</li>
+                                    <li>Sinal <strong>&gt; 15 dias</strong> → COLD direto (não entra Probe nem HOT)</li>
+                                    <li>Terminou o Probe <strong>sem falar com a PERSONA</strong> (silêncio / aceite de LI sem diálogo)</li>
+                                    <li>Fit baixo para Probe ou HOT</li>
                                 </ul>
                                 <button type="button" class="out-sig-dock-action out-sig-dock-action--cold" data-outcad-goto="regua" data-outcad-anchor="out-fase-frio">Ir à Régua · Fase 2 Frio →</button>
                             </div>
                             <div>
                                 <h4>🌡️ / ✕ Saídas</h4>
                                 <ul>
-                                    <li>Resposta + → Filtro 2 / SPN → SQL</li>
+                                    <li>Resposta + / pedido de reunião → Filtro 2 / SPN → SQL</li>
                                     <li>“Não agora” → Nurturing 60–90d</li>
                                     <li>Red flag → kill / mão</li>
                                     <li>MT esgotado → Nutrição</li>
                                 </ul>
+                                <h4>Material de Apoio</h4>
                                 <div class="out-sig-dock-links">
                                     <a href="#filtro-qualificacao-out">✅ Qualificação Out / SPN</a>
-                                    <a href="#entrega-bdr-copilot">🤖 Régua de nota Copilot</a>
+                                    <a href="#bdr-copilot">🤖 BDR Copilot</a>
+                                    <a href="#cadencia-multicanal">📡 Cadência Multicanal</a>
                                     <button type="button" class="out-sig-dock-action out-sig-dock-action--warm" data-outcad-goto="regua" data-outcad-anchor="out-fase-nutricao">Ir à Régua · Fase 3 Nutrição →</button>
                                 </div>
                             </div>
@@ -6067,11 +6068,11 @@ Quando puder, confirme o recebimento ou me diga se prefere ajustar prazo/horári
             <div class="cx-connect" style="margin-top:22px;">
                 <strong>Alinhado a</strong>
                 <p>
-                    <a href="#entrega-bdr-copilot">BDR Copilot · Sinais</a>
-                    <a href="#entrega-cadencia-multicanal">Cadência Multicanal</a>
-                    <a href="#entrega-jornada-conta">Jornada da Conta</a>
+                    <a href="#bdr-copilot">BDR Copilot · Sinais</a>
+                    <a href="#cadencia-multicanal">Cadência Multicanal</a>
+                    <a href="#jornada-conta">Jornada da Conta</a>
                     <a href="#funil-outbound">Funil Sniper</a>
-                    <a href="#entrega-bdr-copilot">BDR Copilot</a>
+                    <a href="#filtro-qualificacao-out">Qualificação Out</a>
                 </p>
             </div>
             </div>
@@ -13464,7 +13465,7 @@ Um abraço!"
         </section>
 
 	</main>
-  <script src="app.js?v=matriz-69"></script>
+  <script src="app.js?v=matriz-70"></script>
   <script src="hire-matrix.js?v=matriz-66"></script>
   <script src="bonus-pve.js?v=matriz-66"></script>
 	
