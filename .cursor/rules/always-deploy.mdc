@@ -1,0 +1,15 @@
+---
+description: Always commit and deploy RevOps Book changes to GitHub Pages without asking
+alwaysApply: true
+---
+
+# Melvin · always deploy
+
+After any change that should appear on the live Book, **commit and push immediately**. Do not ask. This project rule overrides “commit/push only when asked”.
+
+- Repo: `https://github.com/JM7Consulting/melvin-revops-book.git` · branch `main` · GitHub Pages at `https://jm7consulting.github.io/melvin-revops-book/`
+- Git: `C:\Users\DELL\tools\PortableGit\bin\git.exe` · identity for commits: `JM7 Deploy <deploy@jm7.local>` via one-shot `-c` (never edit git config)
+- Stage only the files of this change (`index.html`, `app.js`, `styles.css`, assets, `.cursor/rules`, etc.). Never add `.tools/`, `_abm-src/`, or unrelated dirty files
+- Bump `?v=` cache query on `styles.css` / `app.js` in `index.html` when those files change
+- `git push origin main`, then confirm Pages is serving the new `?v=` / copy (wait and refetch if still old)
+- Tell the user the live URL when done
