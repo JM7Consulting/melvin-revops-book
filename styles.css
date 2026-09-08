@@ -10150,7 +10150,15 @@ body.light-mode .out-sig-touches > div:hover {
   color: var(--sig-ink);
   margin: 2px 0;
 }
-.out-sig-touches small { font-size: 0.8rem; color: var(--sig-muted); }
+.out-sig-touches small {
+  display: block;
+  font-size: 0.8rem;
+  line-height: 1.45;
+  color: var(--sig-muted);
+}
+.out-sig-touches small + small { margin-top: 4px; }
+.out-sig-touches small strong { color: var(--sig-ink, #f8fafc); }
+body.light-mode .out-sig-touches small strong { color: #0f172a; }
 .out-sig-note {
   margin-top: 12px !important;
   padding: 10px 12px;
