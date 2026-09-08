@@ -489,13 +489,13 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
 
+        window.melvinActivateOutCadTab = activate;
+
         const hash = (location.hash || '').slice(1);
         if (hash === 'out-fase-quente' || hash === 'out-fase-frio' || hash === 'out-fase-nutricao') {
             activate('regua', hash);
         } else {
-            let savedTab = 'fluxo';
-            try { savedTab = localStorage.getItem(TAB_KEY) || 'fluxo'; } catch (e) {}
-            if (savedTab === 'regua' || savedTab === 'fluxo') activate(savedTab);
+            activate('fluxo');
         }
     })();
 
@@ -1713,6 +1713,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (pageHash === '#job-bdr' && typeof window.melvinRestoreHireTabs === 'function') {
             const saved = readSavedView();
             window.melvinRestoreHireTabs(saved);
+        }
+        if (hash === '#wf-contato-nutricao-out' && typeof window.melvinActivateOutCadTab === 'function') {
+            window.melvinActivateOutCadTab('fluxo');
         }
         closeMobileSidebar();
         return true;
