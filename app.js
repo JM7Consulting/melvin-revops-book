@@ -352,7 +352,7 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => restoreHireTabs(), 80);
     })();
 
-    // D1–D35 Outbound · Fluxo Sinais / Régua tabs
+    // D1–D47 Outbound · Fluxo Sinais / Régua tabs
     (function initOutCadTabs() {
         const root = document.getElementById('wf-contato-nutricao-out');
         if (!root) return;
@@ -366,6 +366,14 @@ document.addEventListener('DOMContentLoaded', () => {
             'out-fase-nutricao': { btn: 'toggleOutFase3Btn', box: 'outFase3Container' }
         };
 
+        function phaseForDay(id) {
+            if (!id) return null;
+            if (id.indexOf('out-hot-') === 0) return 'out-fase-quente';
+            if (id.indexOf('out-cold-') === 0) return 'out-fase-frio';
+            if (id.indexOf('out-nut-') === 0) return 'out-fase-nutricao';
+            return null;
+        }
+
         function expandPhase(anchorId) {
             const map = phaseMap[anchorId];
             if (!map) return;
@@ -375,6 +383,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 box.style.display = 'block';
                 if (btn) btn.textContent = 'Recolher';
             }
+        }
+
+        function gotoDay(id) {
+            const phaseId = phaseForDay(id);
+            activate('regua');
+            if (phaseId) expandPhase(phaseId);
+            const el = document.getElementById(id);
+            if (!el) return;
+            requestAnimationFrame(() => {
+                setTimeout(() => {
+                    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    el.classList.add('is-jump-target');
+                    setTimeout(() => el.classList.remove('is-jump-target'), 1600);
+                }, 80);
+            });
         }
 
         function closeDetails() {
@@ -490,10 +513,13 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         window.melvinActivateOutCadTab = activate;
+        window.melvinGotoOutCadDay = gotoDay;
 
         const hash = (location.hash || '').slice(1);
         if (hash === 'out-fase-quente' || hash === 'out-fase-frio' || hash === 'out-fase-nutricao') {
             activate('regua', hash);
+        } else if (phaseForDay(hash)) {
+            activate('regua');
         } else {
             activate('fluxo');
         }
@@ -1651,6 +1677,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const pageHash = targetSection.id ? `#${targetSection.id}` : hash;
         const restoreY = typeof options.restoreScrollY === 'number' ? options.restoreScrollY : null;
         const skipScroll = options.skipScroll === true;
+        const cadDayId = (hash || '').replace(/^#/, '');
+        const isOutCadDay = /^(out-hot-|out-cold-|out-nut-)/.test(cadDayId);
 
         if (typeof window.melvinRmIndiceRestore === 'function' && pageHash !== '#agenda-entregas') {
             window.melvinRmIndiceRestore();
@@ -1693,6 +1721,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     window.scrollTo({ top: restoreY, behavior: 'auto' });
                     saveView(hash, restoreY);
                 });
+            } else if (isOutCadDay) {
+                saveView(hash);
             } else if (targetEl !== targetSection) {
                 requestAnimationFrame(() => {
                     targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -1716,6 +1746,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         if (hash === '#wf-contato-nutricao-out' && typeof window.melvinActivateOutCadTab === 'function') {
             window.melvinActivateOutCadTab('fluxo');
+        }
+        if (isOutCadDay && typeof window.melvinGotoOutCadDay === 'function') {
+            window.melvinGotoOutCadDay(cadDayId);
         }
         closeMobileSidebar();
         return true;
