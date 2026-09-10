@@ -153,7 +153,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    setupSectionToggle(document.getElementById('toggleMatrixBtn'), document.getElementById('matrixContainer'));
     setupSectionToggle(document.getElementById('toggleParteABtn'), document.getElementById('parteAContainer'));
     setupSectionToggle(document.getElementById('toggleParteBBtn'), document.getElementById('parteBContainer'));
     setupSectionToggle(document.getElementById('toggleOutFase1Btn'), document.getElementById('outFase1Container'));
