@@ -1615,6 +1615,7 @@ body.light-mode .mb-gim { background: rgba(99, 102, 241, 0.12) !important; color
         .pitch-meta-chip {
             display: inline-flex;
             align-items: center;
+            flex-wrap: wrap;
             gap: 4px;
             font-size: 0.62rem;
             font-weight: 800;
@@ -1627,6 +1628,14 @@ body.light-mode .mb-gim { background: rgba(99, 102, 241, 0.12) !important; color
             border-radius: 999px;
             margin-left: 6px;
             vertical-align: middle;
+            max-width: 100%;
+            line-height: 1.35;
+        }
+        .pitch-meta-tpl {
+            text-transform: none;
+            letter-spacing: 0;
+            font-weight: 800;
+            font-family: ui-monospace, "Cascadia Mono", Consolas, monospace;
         }
         .pitch-meta-vars {
             display: block;
