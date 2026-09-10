@@ -365,6 +365,25 @@ document.addEventListener('DOMContentLoaded', () => {
             'out-fase-frio': { btn: 'toggleOutFase2Btn', box: 'outFase2Container' },
             'out-fase-nutricao': { btn: 'toggleOutFase3Btn', box: 'outFase3Container' }
         };
+        const cadBlocks = [
+            { btn: 'toggleOutRegua1Btn', box: 'outRegua1Container' },
+            { btn: 'toggleOutRegua2Btn', box: 'outRegua2Container' },
+            { btn: 'toggleOutRegua3Btn', box: 'outRegua3Container' },
+            { btn: 'toggleOutFase1Btn', box: 'outFase1Container' },
+            { btn: 'toggleOutFase2Btn', box: 'outFase2Container' },
+            { btn: 'toggleOutFase3Btn', box: 'outFase3Container' }
+        ];
+
+        function setCadBlock(boxId, btnId, open) {
+            const box = document.getElementById(boxId);
+            const btn = document.getElementById(btnId);
+            if (box) box.style.display = open ? 'block' : 'none';
+            if (btn) btn.textContent = open ? 'Recolher' : 'Expandir';
+        }
+
+        function collapseAllCadenceBlocks() {
+            cadBlocks.forEach((item) => setCadBlock(item.box, item.btn, false));
+        }
 
         function phaseForDay(id) {
             if (!id) return null;
@@ -377,12 +396,7 @@ document.addEventListener('DOMContentLoaded', () => {
         function expandPhase(anchorId) {
             const map = phaseMap[anchorId];
             if (!map) return;
-            const box = document.getElementById(map.box);
-            const btn = document.getElementById(map.btn);
-            if (box && box.style.display === 'none') {
-                box.style.display = 'block';
-                if (btn) btn.textContent = 'Recolher';
-            }
+            setCadBlock(map.box, map.btn, true);
         }
 
         function gotoDay(id) {
@@ -514,6 +528,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         window.melvinActivateOutCadTab = activate;
         window.melvinGotoOutCadDay = gotoDay;
+        window.melvinCollapseOutCadBlocks = collapseAllCadenceBlocks;
 
         const hash = (location.hash || '').slice(1);
         if (hash === 'out-fase-quente' || hash === 'out-fase-frio' || hash === 'out-fase-nutricao') {
@@ -1743,6 +1758,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (pageHash === '#job-bdr' && typeof window.melvinRestoreHireTabs === 'function') {
             const saved = readSavedView();
             window.melvinRestoreHireTabs(saved);
+        }
+        if (hash === '#wf-contato-nutricao-out' && typeof window.melvinCollapseOutCadBlocks === 'function') {
+            window.melvinCollapseOutCadBlocks();
         }
         if (hash === '#wf-contato-nutricao-out' && typeof window.melvinActivateOutCadTab === 'function') {
             window.melvinActivateOutCadTab('fluxo');
