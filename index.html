@@ -6,7 +6,7 @@
     <title>REBUILD 7 | MELVIN</title>
     
 	<link rel="icon" type="image/png" href="logo_simples_removebcg.png">
-  <link rel="stylesheet" href="styles.css?v=matriz-84">
+  <link rel="stylesheet" href="styles.css?v=matriz-85">
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sora:wght@600;700;800&family=Carlito:ital,wght@0,400;0,700;1,400&family=Libre+Baskerville:wght@400;700&display=swap" rel="stylesheet">
@@ -1915,15 +1915,16 @@
             <div class="crono-tabs ma-cad-tabs" role="tablist" aria-label="Visões Cadência M&amp;A">
                 <button type="button" class="crono-tab is-active" role="tab" aria-selected="true" data-macad-tab="fluxo">Fluxo</button>
                 <button type="button" class="crono-tab" role="tab" aria-selected="false" data-macad-tab="nutricao">Nutrição</button>
+                <button type="button" class="crono-tab" role="tab" aria-selected="false" data-macad-tab="recuperacao">Recuperação</button>
             </div>
 
             <div class="ma-cad-panel is-active" data-macad-panel="fluxo" role="tabpanel">
-                <p class="ma-cad-hint">Clique apenas nos blocos verdes — <strong>Cadência de Nutrição</strong> e <strong>Cadência de Recuperação</strong> — para abrir a aba Nutrição.</p>
+                <p class="ma-cad-hint">Clique nos blocos verdes: <strong>Cadência de Nutrição</strong> → aba Nutrição · <strong>Cadência de Recuperação</strong> → aba Recuperação.</p>
 
                 <div class="ma-flow-shot" aria-label="Cadencia M&A email + WA">
                     <img
                         class="ma-flow-img"
-                        src="assets/cadencia-ma-fluxo.png?v=matriz-83"
+                        src="assets/cadencia-ma-fluxo.png?v=matriz-85"
                         alt="Fluxo Cadencia M&A: trafego, captura, vendas, checkout e decisao"
                         width="1280"
                         height="664"
@@ -1934,6 +1935,7 @@
                         class="ma-flow-hotspot"
                         style="left:27%;top:70%;width:17%;height:10%;"
                         data-macad-goto="ma-cad-nutricao"
+                        data-macad-tab-goto="nutricao"
                         title="Abrir Cadência de Nutrição"
                         aria-label="Cadência de Nutrição"
                     ></button>
@@ -1942,6 +1944,7 @@
                         class="ma-flow-hotspot"
                         style="left:68%;top:21%;width:14%;height:8%;"
                         data-macad-goto="ma-cad-recuperacao"
+                        data-macad-tab-goto="recuperacao"
                         title="Abrir Cadência de Recuperação"
                         aria-label="Cadência de Recuperação"
                     ></button>
@@ -1949,7 +1952,7 @@
             </div>
 
             <div class="ma-cad-panel" data-macad-panel="nutricao" role="tabpanel" hidden>
-                <p class="ma-cad-hint">Cadências acionadas pelo funil. Conteúdo técnico entra aqui na sequência.</p>
+                <p class="ma-cad-hint">Cadência acionada pela Página de Captura. Conteúdo técnico entra aqui na sequência.</p>
 
                 <article class="ma-cad-block" id="ma-cad-nutricao">
                     <div class="ma-cad-block-head">
@@ -1962,6 +1965,10 @@
                         <span>Roteiros, SLAs e templates Meta serão detalhados nesta seção.</span>
                     </div>
                 </article>
+            </div>
+
+            <div class="ma-cad-panel" data-macad-panel="recuperacao" role="tabpanel" hidden>
+                <p class="ma-cad-hint">Cadência acionada quando o lead chega ao checkout e não compra. Conteúdo técnico entra aqui na sequência.</p>
 
                 <article class="ma-cad-block" id="ma-cad-recuperacao">
                     <div class="ma-cad-block-head">
@@ -13590,7 +13597,7 @@ Um abraço!"
         </section>
 
 	</main>
-  <script src="app.js?v=matriz-84"></script>
+  <script src="app.js?v=matriz-85"></script>
   <script src="hire-matrix.js?v=matriz-66"></script>
   <script src="bonus-pve.js?v=matriz-66"></script>
 	

@@ -3302,15 +3302,17 @@ document.querySelectorAll('.obj-kit-page').forEach(initObjKit);
     });
 })();
 
-    // Cadência M&A · Fluxo / Nutrição tabs
+    // Cadência M&A · Fluxo / Nutrição / Recuperação tabs
     (function initMaCadTabs() {
         const root = document.getElementById('cadencia-ma');
         if (!root) return;
         const tabs = root.querySelectorAll('[data-macad-tab]');
         const panels = root.querySelectorAll('[data-macad-panel]');
         const TAB_KEY = 'melvinMaCadTab.v1';
+        const TAB_IDS = { fluxo: true, nutricao: true, recuperacao: true };
 
         function activate(id, anchorId) {
+            if (!TAB_IDS[id]) id = 'fluxo';
             tabs.forEach((t) => {
                 const on = t.getAttribute('data-macad-tab') === id;
                 t.classList.toggle('is-active', on);
@@ -3344,10 +3346,11 @@ document.querySelectorAll('.obj-kit-page').forEach(initObjKit);
             const jump = e.target.closest('[data-macad-goto]');
             if (!jump) return;
             e.preventDefault();
-            activate('nutricao', jump.getAttribute('data-macad-goto'));
+            const tabId = jump.getAttribute('data-macad-tab-goto') || 'nutricao';
+            activate(tabId, jump.getAttribute('data-macad-goto'));
         });
 
         let saved = null;
         try { saved = localStorage.getItem(TAB_KEY); } catch (e) {}
-        if (saved === 'nutricao' || saved === 'fluxo') activate(saved);
+        if (saved && TAB_IDS[saved]) activate(saved);
     })();
