@@ -13481,6 +13481,103 @@ body.light-mode .pve-sheet .is-on td { background: #d1fae5; }
   font-size: 0.92rem;
   line-height: 1.5;
 }
+
+/* Jump dias · contraste dark (texto solto sem .cx-jump-body) */
+.ma-cad-page .cx-jump {
+  grid-template-columns: repeat(auto-fill, minmax(88px, 1fr));
+  gap: 10px;
+  margin: 0 0 18px;
+}
+.ma-cad-page .cx-jump-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 12px 10px;
+  font-family: "Sora", Manrope, sans-serif;
+  font-size: 0.95rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: #ecfdf5 !important;
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid rgba(52, 211, 153, 0.45);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+.ma-cad-page .cx-jump-item--warm:hover,
+.ma-cad-page .cx-jump-item--warm:focus-visible {
+  color: #042f2e !important;
+  background: #6ee7b7;
+  border-color: #34d399;
+  outline: none;
+}
+
+/* Régua / badges legíveis no dark */
+.ma-cad-page .cx-regua-title,
+.ma-cad-page .matrix-title {
+  color: #f8fafc;
+}
+.ma-cad-page .cx-regua .matrix-table th,
+.ma-cad-page .cx-regua .matrix-table .row-title {
+  color: #e2e8f0;
+}
+.ma-cad-page .cx-regua-jump {
+  color: #e2e8f0;
+}
+.ma-cad-page .m-badge {
+  font-weight: 800;
+}
+.ma-cad-page .mb-wa {
+  background: rgba(74, 222, 128, 0.18);
+  color: #bbf7d0;
+  border-color: rgba(74, 222, 128, 0.4);
+}
+.ma-cad-page .mb-mail {
+  background: rgba(192, 132, 252, 0.18);
+  color: #e9d5ff;
+  border-color: rgba(192, 132, 252, 0.4);
+}
+.ma-cad-page .mb-out {
+  background: rgba(251, 146, 60, 0.18);
+  color: #fed7aa;
+  border-color: rgba(251, 146, 60, 0.42);
+}
+.ma-cad-page .mb-sys {
+  background: rgba(248, 113, 113, 0.18);
+  color: #fecaca;
+  border-color: rgba(248, 113, 113, 0.42);
+}
+.ma-cad-page .cadence-table-modern th {
+  color: #f8fafc;
+}
+.ma-cad-page .cadence-table-modern td {
+  color: #e2e8f0;
+}
+.ma-cad-page .pitch-modern {
+  color: #cbd5e1;
+  background: rgba(15, 23, 42, 0.55);
+  border-left-color: #34d399;
+}
+.ma-cad-page .pitch-title {
+  color: #f1f5f9;
+}
+.ma-cad-page .ma-cad-block-lead,
+.ma-cad-page .ma-cad-hint {
+  color: #94a3b8;
+}
+.ma-cad-page .ma-cad-block-head h3 {
+  color: #f8fafc;
+}
+
+body.light-mode .ma-cad-page .cx-jump-item {
+  color: #065f46 !important;
+  background: #ecfdf5;
+  border-color: rgba(16, 185, 129, 0.45);
+}
+body.light-mode .ma-cad-page .cx-jump-item--warm:hover,
+body.light-mode .ma-cad-page .cx-jump-item--warm:focus-visible {
+  color: #042f2e !important;
+  background: #a7f3d0;
+}
 .ma-flow {
   background: #0b1220;
   border: 1px solid rgba(148,163,184,0.18);
