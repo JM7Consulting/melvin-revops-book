@@ -6,7 +6,7 @@
     <title>REBUILD 7 | MELVIN</title>
     
 	<link rel="icon" type="image/png" href="logo_simples_removebcg.png">
-  <link rel="stylesheet" href="styles.css?v=matriz-82">
+  <link rel="stylesheet" href="styles.css?v=matriz-83">
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sora:wght@600;700;800&family=Carlito:ital,wght@0,400;0,700;1,400&family=Libre+Baskerville:wght@400;700&display=swap" rel="stylesheet">
@@ -1918,71 +1918,33 @@
             </div>
 
             <div class="ma-cad-panel is-active" data-macad-panel="fluxo" role="tabpanel">
-                <p class="ma-cad-hint">Clique em <strong>Cadência de Nutrição</strong> ou <strong>Cadência de Recuperação</strong> (verde) para ir à aba Nutrição.</p>
+                <p class="ma-cad-hint">Clique apenas nos blocos verdes — <strong>Cadência de Nutrição</strong> e <strong>Cadência de Recuperação</strong> — para abrir a aba Nutrição.</p>
 
-                <div class="ma-flow" aria-label="Cadência M&amp;A — e-mail + WA">
-                    <div class="ma-flow-loop" aria-hidden="true">não comprou → remarketing / recuperação</div>
-                    <div class="ma-flow-grid">
-                        <div class="ma-flow-lane">
-                            <div class="ma-flow-lane-head">01 - TRÁFEGO</div>
-                            <div class="ma-flow-lane-body">
-                                <div class="ma-node ma-node--src">▶ SHORTS</div>
-                                <div class="ma-node ma-node--src">▶ REELS</div>
-                                <div class="ma-node ma-node--diamond"><span>AUTOMAÇÃO<br>COMENTÁRIO</span></div>
-                                <div class="ma-node ma-node--src">▶ ANÚNCIO</div>
-                                <div class="ma-node ma-node--src">▶ VÍDEO LONGO</div>
-                                <div class="ma-node ma-node--src">▶ LIVE</div>
-                            </div>
-                        </div>
-
-                        <div class="ma-flow-lane">
-                            <div class="ma-flow-lane-head">02 - CAPTURA</div>
-                            <div class="ma-flow-lane-body">
-                                <div class="ma-node ma-node--box">FORMULÁRIO<br>DE CAPTURA</div>
-                                <div class="ma-node ma-node--box ma-node--lg">PÁGINA DE CAPTURA<br><small>isca digital</small></div>
-                                <div class="ma-flow-arrow ma-flow-arrow--green" aria-hidden="true">↓</div>
-                                <button type="button" class="ma-node ma-node--cad" data-macad-goto="ma-cad-nutricao" title="Abrir Cadência de Nutrição">
-                                    CADÊNCIA DE NUTRIÇÃO
-                                    <span class="ma-node-go">Abrir →</span>
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="ma-flow-lane">
-                            <div class="ma-flow-lane-head">03 - VENDAS</div>
-                            <div class="ma-flow-lane-body">
-                                <div class="ma-node ma-node--src ma-node--remark">▶ ANÚNCIO REMARKETING</div>
-                                <div class="ma-flow-arrow" aria-hidden="true">↓</div>
-                                <div class="ma-node ma-node--box ma-node--lg">PÁGINA DE VENDAS</div>
-                                <div class="ma-flow-note">← nutricao + captura + form</div>
-                            </div>
-                        </div>
-
-                        <div class="ma-flow-lane">
-                            <div class="ma-flow-lane-head">04 - CHECKOUT</div>
-                            <div class="ma-flow-lane-body">
-                                <div class="ma-node ma-node--box">FORMULÁRIO<br>PRÉ-CHECKOUT</div>
-                                <button type="button" class="ma-node ma-node--cad" data-macad-goto="ma-cad-recuperacao" title="Abrir Cadência de Recuperação">
-                                    CADÊNCIA DE RECUPERAÇÃO
-                                    <span class="ma-node-go">Abrir →</span>
-                                </button>
-                                <div class="ma-flow-arrow ma-flow-arrow--green" aria-hidden="true">↓</div>
-                                <div class="ma-node ma-node--box ma-node--lg">CHECKOUT</div>
-                            </div>
-                        </div>
-
-                        <div class="ma-flow-lane">
-                            <div class="ma-flow-lane-head">05 - DECISÃO</div>
-                            <div class="ma-flow-lane-body">
-                                <div class="ma-node ma-node--diamond"><span>COMPROU?</span></div>
-                                <div class="ma-flow-branch">
-                                    <span class="ma-flow-yes">SIM ↓</span>
-                                    <span class="ma-flow-no">não → remarketing / recuperação</span>
-                                </div>
-                                <div class="ma-node ma-node--client">CLIENTE</div>
-                            </div>
-                        </div>
-                    </div>
+                <div class="ma-flow-shot" aria-label="Cadencia M&A email + WA">
+                    <img
+                        class="ma-flow-img"
+                        src="assets/cadencia-ma-fluxo.png?v=matriz-83"
+                        alt="Fluxo Cadencia M&A: trafego, captura, vendas, checkout e decisao"
+                        width="1280"
+                        height="664"
+                        decoding="async"
+                    >
+                    <button
+                        type="button"
+                        class="ma-flow-hotspot"
+                        style="left:27%;top:70%;width:17%;height:10%;"
+                        data-macad-goto="ma-cad-nutricao"
+                        title="Abrir Cadência de Nutrição"
+                        aria-label="Cadência de Nutrição"
+                    ></button>
+                    <button
+                        type="button"
+                        class="ma-flow-hotspot"
+                        style="left:68%;top:21%;width:14%;height:8%;"
+                        data-macad-goto="ma-cad-recuperacao"
+                        title="Abrir Cadência de Recuperação"
+                        aria-label="Cadência de Recuperação"
+                    ></button>
                 </div>
             </div>
 
@@ -13628,7 +13590,7 @@ Um abraço!"
         </section>
 
 	</main>
-  <script src="app.js?v=matriz-82"></script>
+  <script src="app.js?v=matriz-83"></script>
   <script src="hire-matrix.js?v=matriz-66"></script>
   <script src="bonus-pve.js?v=matriz-66"></script>
 	

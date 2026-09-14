@@ -13759,3 +13759,40 @@ body.light-mode .ma-cad-chip--green {
 }
 .ma-flow-yes { color: #94a3b8; }
 .ma-flow-no { color: #fbbf24; text-align: center; max-width: 16ch; }
+
+/* Cadência M&A · imagem oficial + hotspots verdes */
+.ma-flow-shot {
+  position: relative;
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid rgba(148,163,184,0.2);
+  background: #0b1220;
+}
+.ma-flow-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  vertical-align: top;
+  user-select: none;
+  pointer-events: none;
+}
+.ma-flow-hotspot {
+  position: absolute;
+  z-index: 2;
+  padding: 0;
+  margin: 0;
+  border: 1.5px solid transparent;
+  border-radius: 8px;
+  background: transparent;
+  cursor: pointer;
+}
+.ma-flow-hotspot:hover,
+.ma-flow-hotspot:focus-visible {
+  border-color: rgba(52, 211, 153, 0.85);
+  background: rgba(52, 211, 153, 0.12);
+  box-shadow: 0 0 0 3px rgba(52, 211, 153, 0.2);
+  outline: none;
+}
