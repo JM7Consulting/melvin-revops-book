@@ -1700,6 +1700,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const skipScroll = options.skipScroll === true;
         const cadDayId = (hash || '').replace(/^#/, '');
         const isOutCadDay = /^(out-hot-|out-cold-|out-nut-)/.test(cadDayId);
+        const isMaNutDay = /^ma-nut-/.test(cadDayId);
 
         document.querySelectorAll('.nav-container a').forEach((l) => l.classList.remove('active'));
         const activeMenuLink =
@@ -1740,6 +1741,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             } else if (isOutCadDay) {
                 saveView(hash);
+            } else if (isMaNutDay) {
+                saveView(hash);
             } else if (targetEl !== targetSection) {
                 requestAnimationFrame(() => {
                     targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -1769,6 +1772,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         if (isOutCadDay && typeof window.melvinGotoOutCadDay === 'function') {
             window.melvinGotoOutCadDay(cadDayId);
+        }
+        if (isMaNutDay && typeof window.melvinActivateMaCadTab === 'function') {
+            window.melvinActivateMaCadTab('nutricao', cadDayId);
         }
         closeMobileSidebar();
         return true;
@@ -3337,6 +3343,7 @@ document.querySelectorAll('.obj-kit-page').forEach(initObjKit);
                 });
             }
         }
+        window.melvinActivateMaCadTab = activate;
 
         tabs.forEach((tab) => {
             tab.addEventListener('click', () => activate(tab.getAttribute('data-macad-tab')));
@@ -3344,13 +3351,24 @@ document.querySelectorAll('.obj-kit-page').forEach(initObjKit);
 
         root.addEventListener('click', (e) => {
             const jump = e.target.closest('[data-macad-goto]');
-            if (!jump) return;
-            e.preventDefault();
-            const tabId = jump.getAttribute('data-macad-tab-goto') || 'nutricao';
-            activate(tabId, jump.getAttribute('data-macad-goto'));
+            if (jump) {
+                e.preventDefault();
+                const tabId = jump.getAttribute('data-macad-tab-goto') || 'nutricao';
+                activate(tabId, jump.getAttribute('data-macad-goto'));
+                return;
+            }
+            const dayLink = e.target.closest('a[href^="#ma-nut-"]');
+            if (dayLink) {
+                e.preventDefault();
+                const id = (dayLink.getAttribute('href') || '').replace(/^#/, '');
+                activate('nutricao', id);
+                history.pushState(null, '', '#' + id);
+            }
         });
 
         let saved = null;
         try { saved = localStorage.getItem(TAB_KEY); } catch (e) {}
         if (saved && TAB_IDS[saved]) activate(saved);
+        const bootHash = (window.location.hash || '').replace(/^#/, '');
+        if (/^ma-nut-/.test(bootHash)) activate('nutricao', bootHash);
     })();
