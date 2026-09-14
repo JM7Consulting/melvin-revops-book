@@ -3298,3 +3298,53 @@ document.querySelectorAll('.obj-kit-page').forEach(initObjKit);
         btn.textContent = slim ? 'Mostrar etapas sugeridas' : 'Ocultar etapas sugeridas';
     });
 })();
+
+    // Cadência M&A · Fluxo / Nutrição tabs
+    (function initMaCadTabs() {
+        const root = document.getElementById('cadencia-ma');
+        if (!root) return;
+        const tabs = root.querySelectorAll('[data-macad-tab]');
+        const panels = root.querySelectorAll('[data-macad-panel]');
+        const TAB_KEY = 'melvinMaCadTab.v1';
+
+        function activate(id, anchorId) {
+            tabs.forEach((t) => {
+                const on = t.getAttribute('data-macad-tab') === id;
+                t.classList.toggle('is-active', on);
+                t.setAttribute('aria-selected', on ? 'true' : 'false');
+            });
+            panels.forEach((panel) => {
+                const on = panel.getAttribute('data-macad-panel') === id;
+                panel.classList.toggle('is-active', on);
+                if (on) panel.removeAttribute('hidden');
+                else panel.setAttribute('hidden', '');
+            });
+            try { localStorage.setItem(TAB_KEY, id); } catch (e) {}
+            if (anchorId) {
+                const el = document.getElementById(anchorId);
+                if (!el) return;
+                requestAnimationFrame(() => {
+                    setTimeout(() => {
+                        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        el.classList.add('is-jump-target');
+                        setTimeout(() => el.classList.remove('is-jump-target'), 1600);
+                    }, 60);
+                });
+            }
+        }
+
+        tabs.forEach((tab) => {
+            tab.addEventListener('click', () => activate(tab.getAttribute('data-macad-tab')));
+        });
+
+        root.addEventListener('click', (e) => {
+            const jump = e.target.closest('[data-macad-goto]');
+            if (!jump) return;
+            e.preventDefault();
+            activate('nutricao', jump.getAttribute('data-macad-goto'));
+        });
+
+        let saved = null;
+        try { saved = localStorage.getItem(TAB_KEY); } catch (e) {}
+        if (saved === 'nutricao' || saved === 'fluxo') activate(saved);
+    })();

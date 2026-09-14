@@ -6,7 +6,7 @@
     <title>REBUILD 7 | MELVIN</title>
     
 	<link rel="icon" type="image/png" href="logo_simples_removebcg.png">
-  <link rel="stylesheet" href="styles.css?v=matriz-80">
+  <link rel="stylesheet" href="styles.css?v=matriz-81">
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sora:wght@600;700;800&family=Carlito:ital,wght@0,400;0,700;1,400&family=Libre+Baskerville:wght@400;700&display=swap" rel="stylesheet">
@@ -101,6 +101,7 @@
                         <a href="#gim-personas"><span style="display:flex; gap:10px;"><span>👥</span> Personas</span><span class="dot dot-active"></span></a>
                         <a href="#gim-lead-scoring"><span style="display:flex; gap:10px;"><span>🎯</span> Lead Scoring A–D</span><span class="dot dot-active"></span></a>
                         <a href="#gim-produtos"><span style="display:flex; gap:10px;"><span>📦</span> Produtos & Soluções</span><span class="dot dot-active"></span></a>
+                        <a href="#cadencia-ma"><span style="display:flex; gap:10px;"><span>📬</span> Cadência M&amp;A · e-mail + WA</span><span class="dot dot-active"></span></a>
                         <div class="submenu-label">Inteligência Comercial</div>
                         <a href="#gim-dores-ocultas"><span style="display:flex; gap:10px;"><span>👁️‍🗨️</span> Dores Ocultas</span><span class="dot dot-active"></span></a>
                         <a href="#gim-dores-sangrentas"><span style="display:flex; gap:10px;"><span>💢</span> Dores Sangrentas</span><span class="dot dot-active"></span></a>
@@ -385,7 +386,7 @@
                             <strong>Roadmap RevOps</strong>
                             <small>Visão geral · sequência operacional</small>
                         </a>
-                        <a class="ops-card ops-card--live" href="#dev-cadencias-ma">
+                        <a class="ops-card ops-card--live" href="#cadencia-ma">
                             <span class="ops-card-ico">06</span>
                             <strong>Cadências M&amp;A · e-mail + WA</strong>
                             <small>Agora · prazo 18/09</small>
@@ -1859,17 +1860,152 @@
             </div>
         </section>
 
-        <section id="dev-cadencias-ma" class="blueprint-page dev-page" style="padding: 40px; border-radius: 16px;" data-hidden-nav="true">
-            <div class="waiting-page">
+        <section id="dev-cadencias-ma" class="blueprint-page done-page" style="padding: 40px; border-radius: 16px;" data-hidden-nav="true">
+            <div class="waiting-page waiting-page--done">
                 <div class="waiting-badge"><span class="pulse"></span> Em desenvolvimento</div>
                 <h2>06 · Cadências e-mail + WhatsApp · Manutenção em Ação</h2>
-                <p>Pedido MKT: reativação de vendas dos produtos Manutenção em Ação. Criar cadências de e-mail e WhatsApp para <strong>venda</strong> e <strong>recuperação de venda</strong>. Jailson será adicionado ao projeto.</p>
+                <p>Pedido MKT: reativação de vendas. Fluxo + abas de Nutrição/Recuperação já no Book — conteúdo técnico das cadências em evolução.</p>
                 <div class="dev-eta">
                     <span class="dev-eta-label">Entrega estimada</span>
                     <strong>18/09/2026</strong>
                     <span class="dev-eta-note">Roadmap · Agora · MKT</span>
                 </div>
-                <p class="waiting-meta"><a href="#agenda-entregas">← Voltar ao Roadmap RevOps</a> </p>
+                <a class="done-cta" href="#cadencia-ma">Abrir Cadência M&amp;A →</a>
+                <p class="waiting-meta"><a href="#agenda-entregas">← Voltar ao Roadmap RevOps</a></p>
+            </div>
+        </section>
+
+        <section id="cadencia-ma" class="blueprint-page ma-cad-page" style="padding: 40px; border-radius: 16px;">
+            <header class="cx-hero">
+                <div class="cx-hero-copy">
+                    <p class="cx-kicker">M&amp;A · Cadência comercial</p>
+                    <h2 class="cx-title">Cadência M&amp;A · e-mail + WA</h2>
+                    <p class="cx-lead">Funil de tráfego → captura → vendas → checkout para produtos <strong>Manutenção em Ação</strong>. Os blocos verdes abrem as cadências na aba Nutrição.</p>
+                    <div class="cx-meta-strip">
+                        <span class="cx-meta-pill cx-meta-pill--util">UTILITY</span>
+                        <span class="cx-meta-pill cx-meta-pill--mkt">MARKETING</span>
+                        <span class="cx-meta-note">Prazo Roadmap · 18/09</span>
+                    </div>
+                </div>
+                <div class="cx-hero-gauge" aria-hidden="true">
+                    <div class="cx-gauge-ring">
+                        <span class="cx-gauge-from">01</span>
+                        <span class="cx-gauge-mid">FUNIL</span>
+                        <span class="cx-gauge-to">05</span>
+                    </div>
+                    <p class="cx-gauge-cap">Tráfego → Cliente</p>
+                </div>
+            </header>
+
+            <div class="crono-tabs ma-cad-tabs" role="tablist" aria-label="Visões Cadência M&amp;A">
+                <button type="button" class="crono-tab is-active" role="tab" aria-selected="true" data-macad-tab="fluxo">Fluxo</button>
+                <button type="button" class="crono-tab" role="tab" aria-selected="false" data-macad-tab="nutricao">Nutrição</button>
+            </div>
+
+            <div class="ma-cad-panel is-active" data-macad-panel="fluxo" role="tabpanel">
+                <p class="ma-cad-hint">Clique em <strong>Cadência de Nutrição</strong> ou <strong>Cadência de Recuperação</strong> (verde) para ir à aba Nutrição.</p>
+
+                <div class="ma-flow" aria-label="Cadência M&amp;A — e-mail + WA">
+                    <div class="ma-flow-loop" aria-hidden="true">não comprou → remarketing / recuperação</div>
+                    <div class="ma-flow-grid">
+                        <div class="ma-flow-lane">
+                            <div class="ma-flow-lane-head">01 - TRÁFEGO</div>
+                            <div class="ma-flow-lane-body">
+                                <div class="ma-node ma-node--src">▶ SHORTS</div>
+                                <div class="ma-node ma-node--src">▶ REELS</div>
+                                <div class="ma-node ma-node--diamond"><span>AUTOMAÇÃO<br>COMENTÁRIO</span></div>
+                                <div class="ma-node ma-node--src">▶ ANÚNCIO</div>
+                                <div class="ma-node ma-node--src">▶ VÍDEO LONGO</div>
+                                <div class="ma-node ma-node--src">▶ LIVE</div>
+                            </div>
+                        </div>
+
+                        <div class="ma-flow-lane">
+                            <div class="ma-flow-lane-head">02 - CAPTURA</div>
+                            <div class="ma-flow-lane-body">
+                                <div class="ma-node ma-node--box">FORMULÁRIO<br>DE CAPTURA</div>
+                                <div class="ma-node ma-node--box ma-node--lg">PÁGINA DE CAPTURA<br><small>isca digital</small></div>
+                                <div class="ma-flow-arrow ma-flow-arrow--green" aria-hidden="true">↓</div>
+                                <button type="button" class="ma-node ma-node--cad" data-macad-goto="ma-cad-nutricao" title="Abrir Cadência de Nutrição">
+                                    CADÊNCIA DE NUTRIÇÃO
+                                    <span class="ma-node-go">Abrir →</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="ma-flow-lane">
+                            <div class="ma-flow-lane-head">03 - VENDAS</div>
+                            <div class="ma-flow-lane-body">
+                                <div class="ma-node ma-node--src ma-node--remark">▶ ANÚNCIO REMARKETING</div>
+                                <div class="ma-flow-arrow" aria-hidden="true">↓</div>
+                                <div class="ma-node ma-node--box ma-node--lg">PÁGINA DE VENDAS</div>
+                                <div class="ma-flow-note">← nutricao + captura + form</div>
+                            </div>
+                        </div>
+
+                        <div class="ma-flow-lane">
+                            <div class="ma-flow-lane-head">04 - CHECKOUT</div>
+                            <div class="ma-flow-lane-body">
+                                <div class="ma-node ma-node--box">FORMULÁRIO<br>PRÉ-CHECKOUT</div>
+                                <button type="button" class="ma-node ma-node--cad" data-macad-goto="ma-cad-recuperacao" title="Abrir Cadência de Recuperação">
+                                    CADÊNCIA DE RECUPERAÇÃO
+                                    <span class="ma-node-go">Abrir →</span>
+                                </button>
+                                <div class="ma-flow-arrow ma-flow-arrow--green" aria-hidden="true">↓</div>
+                                <div class="ma-node ma-node--box ma-node--lg">CHECKOUT</div>
+                            </div>
+                        </div>
+
+                        <div class="ma-flow-lane">
+                            <div class="ma-flow-lane-head">05 - DECISÃO</div>
+                            <div class="ma-flow-lane-body">
+                                <div class="ma-node ma-node--diamond"><span>COMPROU?</span></div>
+                                <div class="ma-flow-branch">
+                                    <span class="ma-flow-yes">SIM ↓</span>
+                                    <span class="ma-flow-no">não → remarketing / recuperação</span>
+                                </div>
+                                <div class="ma-node ma-node--client">CLIENTE</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ma-cad-panel" data-macad-panel="nutricao" role="tabpanel" hidden>
+                <p class="ma-cad-hint">Cadências acionadas pelo funil. Conteúdo técnico entra aqui na sequência.</p>
+
+                <article class="ma-cad-block" id="ma-cad-nutricao">
+                    <div class="ma-cad-block-head">
+                        <span class="ma-cad-chip ma-cad-chip--green">Cadência</span>
+                        <h3>Cadência de Nutrição</h3>
+                    </div>
+                    <p class="ma-cad-block-lead">Gatilho: lead na <strong>Página de Captura</strong> (isca digital) que ainda não avançou para a Página de Vendas. Canal: e-mail + WhatsApp.</p>
+                    <div class="ma-cad-placeholder">
+                        <strong>Em construção</strong>
+                        <span>Roteiros, SLAs e templates Meta serão detalhados nesta seção.</span>
+                    </div>
+                </article>
+
+                <article class="ma-cad-block" id="ma-cad-recuperacao">
+                    <div class="ma-cad-block-head">
+                        <span class="ma-cad-chip ma-cad-chip--green">Cadência</span>
+                        <h3>Cadência de Recuperação</h3>
+                    </div>
+                    <p class="ma-cad-block-lead">Gatilho: chegou ao checkout e <strong>não comprou</strong>. Loop de remarketing + recuperação por e-mail/WhatsApp até conversão ou arquivo.</p>
+                    <div class="ma-cad-placeholder">
+                        <strong>Em construção</strong>
+                        <span>Roteiros, SLAs e templates Meta serão detalhados nesta seção.</span>
+                    </div>
+                </article>
+            </div>
+
+            <div class="cx-connect" style="margin-top:28px;">
+                <strong>Módulos RevOps conectados</strong>
+                <p>
+                    <a href="#gim-produtos">Produtos &amp; Soluções</a>
+                    <a href="#agenda-entregas">Roadmap RevOps</a>
+                    <a href="#wf-contato-nutricao-in">Cadência Inbound</a>
+                </p>
             </div>
         </section>
 
@@ -1952,7 +2088,7 @@
 							<div class="rm-bar"><a href="#entrega-job-bdr">Contratação</a><i style="width:100%"></i><em>28/08</em></div>
 							<div class="rm-bar"><a href="#entrega-bdr-copilot">Atuação BDR</a><i style="width:100%"></i><em>28/08</em></div>
 							<div class="rm-bar"><a href="#onboarding-bdr">Onboarding</a><i style="width:100%"></i><em>11/09</em></div>
-							<div class="rm-bar rm-bar--now"><a href="#dev-cadencias-ma">Cadências M&amp;A</a><i style="width:20%"></i><em>18/09</em></div>
+							<div class="rm-bar rm-bar--now"><a href="#cadencia-ma">Cadências M&amp;A</a><i style="width:20%"></i><em>18/09</em></div>
 							<div class="rm-bar rm-bar--next"><a href="#relatorios-bitrix">Bitrix relat.</a><i style="width:0%"></i><em>02/10</em></div>
 							<div class="rm-bar rm-bar--next"><a href="#historico-comercial-2026">Histórico 2026</a><i style="width:0%"></i><em>02/10</em></div>
 						</div>
@@ -1967,7 +2103,7 @@
 					<a href="#entrega-job-bdr" class="rm-stepper-item rm-stepper-item--done" title="Contratação · 28/08"><span></span><small>Contratação</small></a>
 					<a href="#entrega-bdr-copilot" class="rm-stepper-item rm-stepper-item--done" title="Atuação · 28/08"><span></span><small>Atuação</small></a>
 					<a href="#onboarding-bdr" class="rm-stepper-item rm-stepper-item--done" title="Onboarding · 11/09"><span></span><small>Onboarding</small></a>
-					<a href="#dev-cadencias-ma" class="rm-stepper-item rm-stepper-item--now" title="Cadências M&A · 18/09"><span></span><small>M&amp;A</small></a>
+					<a href="#cadencia-ma" class="rm-stepper-item rm-stepper-item--now" title="Cadências M&A · 18/09"><span></span><small>M&amp;A</small></a>
 					<a href="#relatorios-bitrix" class="rm-stepper-item rm-stepper-item--next" title="Relatórios · 02/10 · depende de terceiros"><span></span><small>Relatórios</small></a>
 					<button type="button" class="rm-stepper-item rm-stepper-item--backlog" data-rm-desk-goto="backlog" title="Backlog · 2 tarefas"><span></span><small>Backlog</small></button>
 				</nav>
@@ -1979,7 +2115,7 @@
 					<strong>Cadências M&amp;A · e-mail + WA</strong>
 					<p>Prazo 18/09 · venda + recuperação · pedido MKT</p>
 					<div class="rm-focus-links">
-						<a href="#dev-cadencias-ma">Abrir entrega</a>
+						<a href="#cadencia-ma">Abrir entrega</a>
 					</div>
 				</article>
 				<article class="rm-focus-card rm-focus-card--next">
@@ -1997,7 +2133,7 @@
 			</div>
 
 			<div class="rm-due-strip" aria-label="Prazos próximos do backlog">
-				<a class="rm-due-card rm-due-card--hot" href="#dev-cadencias-ma">
+				<a class="rm-due-card rm-due-card--hot" href="#cadencia-ma">
 					<span class="rm-due-when">18/09</span>
 					<strong>Cadências M&amp;A · e-mail + WA</strong>
 					<small>Venda + recuperação · pedido MKT</small>
@@ -2027,7 +2163,7 @@
 				<div class="rm-bars-backlog rm-bars-backlog--desk">
 					<div class="rm-bar-block rm-bar-block--backlog rm-bar-block--due" id="rm-backlog-06">
 						<div class="rm-bar rm-bar--backlog">
-							<a href="#dev-cadencias-ma"><span class="rm-bar-num">06</span> Cadências e-mail + WhatsApp · Manutenção em Ação</a>
+							<a href="#cadencia-ma"><span class="rm-bar-num">06</span> Cadências e-mail + WhatsApp · Manutenção em Ação</a>
 							<i style="width:0%"></i><em>18/09</em>
 						</div>
 						<p class="rm-bar-desc">Pedido MKT: reativação de vendas. Criar cadências de e-mail e WhatsApp para <strong>venda</strong> e <strong>recuperação de venda</strong>. Jailson no projeto. · prazo <strong>18/09/2026</strong></p>
@@ -2247,7 +2383,7 @@
 				<div class="rm-indice-layout">
 					<nav class="rm-cat-nav" id="rmCatNav" aria-label="Fila e entregas">
 						<p class="rm-cat-label">Fila · páginas prontas</p>
-						<a href="#dev-cadencias-ma"><span class="rm-cat-ico">06</span><span class="rm-cat-copy"><strong>Cadências M&amp;A · e-mail + WA</strong><em>18/09</em></span></a>
+						<a href="#cadencia-ma"><span class="rm-cat-ico">06</span><span class="rm-cat-copy"><strong>Cadências M&amp;A · e-mail + WA</strong><em>18/09</em></span></a>
 						<a href="#relatorios-bitrix"><span class="rm-cat-ico">📊</span><span class="rm-cat-copy"><strong>Relatórios Bitrix24</strong><em>02/10</em></span></a>
 						<a href="#historico-comercial-2026"><span class="rm-cat-ico">📈</span><span class="rm-cat-copy"><strong>Histórico 2026 Comercial</strong><em>02/10</em></span></a>
 						<a href="#dev-nutricao-out"><span class="rm-cat-ico">01</span><span class="rm-cat-copy"><strong>Nutrição Out personalizada</strong><em>31/10</em></span></a>
@@ -13477,7 +13613,7 @@ Um abraço!"
         </section>
 
 	</main>
-  <script src="app.js?v=matriz-80"></script>
+  <script src="app.js?v=matriz-81"></script>
   <script src="hire-matrix.js?v=matriz-66"></script>
   <script src="bonus-pve.js?v=matriz-66"></script>
 	
