@@ -1714,7 +1714,7 @@ document.addEventListener('DOMContentLoaded', () => {
             expandMenuForHash('#agenda-entregas');
         }
 
-        allSections.forEach((sec) => {
+        document.querySelectorAll('main section').forEach((sec) => {
             sec.style.display = 'none';
             sec.classList.remove('page-active');
         });

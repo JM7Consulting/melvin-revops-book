@@ -743,8 +743,9 @@
         }
 
         /* --- LÓGICA DE PÁGINAS INDEPENDENTES --- */
-        /* !important: impede painéis internos (.is-active) de “furarem” section escondida */
-        main > section {
+        /* Esconde TODAS as sections (inclui aninhadas por HTML quebrado).
+           Só .page-active (e preview do Índice) volta a aparecer. */
+        section {
             display: none !important;
             background: var(--melvin-bg-card);
             border: 1px solid var(--border);
@@ -753,13 +754,10 @@
             margin-bottom: 30px;
         }
 
-        main > section.page-active {
-            display: block !important;
-            animation: fadeIn 0.2s ease-in-out;
-        }
-
+        main > section.page-active,
         section.rm-indice-hosted.page-active {
             display: block !important;
+            animation: fadeIn 0.2s ease-in-out;
         }
 
         @keyframes fadeIn {
