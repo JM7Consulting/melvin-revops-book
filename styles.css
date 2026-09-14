@@ -272,6 +272,7 @@
         }
         .nav-lane--cmd { --lane-accent: #64FCD8; }
         .nav-lane--strategy { --lane-accent: #60a5fa; }
+        .nav-lane--mkt { --lane-accent: #fb923c; }
         .nav-lane--in { --lane-accent: #34d399; }
         .nav-lane--out { --lane-accent: #a78bfa; }
         .nav-lane--abm { --lane-accent: #fb7185; }
