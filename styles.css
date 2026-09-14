@@ -742,9 +742,10 @@
             margin-top: 2px;
         }
 
-        /* --- L?GICA DE P?GINAS INDEPENDENTES --- */
-        section {
-            display: none; /* Oculta todas por padr?o */
+        /* --- LÓGICA DE PÁGINAS INDEPENDENTES --- */
+        /* !important: impede painéis internos (.is-active) de “furarem” section escondida */
+        main > section {
+            display: none !important;
             background: var(--melvin-bg-card);
             border: 1px solid var(--border);
             border-radius: 14px;
@@ -752,9 +753,13 @@
             margin-bottom: 30px;
         }
 
-        section.page-active {
-            display: block; /* Exibe apenas a p?gina ativa selecionada */
+        main > section.page-active {
+            display: block !important;
             animation: fadeIn 0.2s ease-in-out;
+        }
+
+        section.rm-indice-hosted.page-active {
+            display: block !important;
         }
 
         @keyframes fadeIn {
@@ -13469,8 +13474,9 @@ body.light-mode .pve-sheet .is-on td { background: #d1fae5; }
 
 /* ===== Cadência M&A · e-mail + WA ===== */
 .ma-cad-tabs { margin: 8px 0 18px; }
+.ma-cad-panel { display: none !important; }
+.ma-cad-panel.is-active { display: block !important; }
 .ma-cad-panel[hidden] { display: none !important; }
-.ma-cad-panel.is-active { display: block; }
 .ma-cad-hint {
   margin: 0 0 16px;
   color: var(--text-muted);
