@@ -1682,6 +1682,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const targetEl = document.querySelector(hash);
         if (!targetEl) return false;
 
+        // If Índice hosted this page in the preview pane, put it back in <main>
+        // BEFORE resolving the parent section — otherwise closest('main > section')
+        // wrongly becomes #agenda-entregas and the menu opens the Roadmap Índice.
+        if (typeof window.melvinRmIndiceRestore === 'function') {
+            window.melvinRmIndiceRestore();
+        }
+
         // Anchors inside a page (ex.: #obj-out-01) must keep the parent section visible
         const targetSection = targetEl.matches('main > section')
             ? targetEl
@@ -1693,10 +1700,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const skipScroll = options.skipScroll === true;
         const cadDayId = (hash || '').replace(/^#/, '');
         const isOutCadDay = /^(out-hot-|out-cold-|out-nut-)/.test(cadDayId);
-
-        if (typeof window.melvinRmIndiceRestore === 'function' && pageHash !== '#agenda-entregas') {
-            window.melvinRmIndiceRestore();
-        }
 
         document.querySelectorAll('.nav-container a').forEach((l) => l.classList.remove('active'));
         const activeMenuLink =
