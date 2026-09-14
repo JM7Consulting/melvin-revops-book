@@ -1701,6 +1701,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const cadDayId = (hash || '').replace(/^#/, '');
         const isOutCadDay = /^(out-hot-|out-cold-|out-nut-)/.test(cadDayId);
         const isMaNutDay = /^ma-nut-/.test(cadDayId);
+        const isMaRecDay = /^ma-rec-/.test(cadDayId);
 
         document.querySelectorAll('.nav-container a').forEach((l) => l.classList.remove('active'));
         const activeMenuLink =
@@ -1741,7 +1742,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             } else if (isOutCadDay) {
                 saveView(hash);
-            } else if (isMaNutDay) {
+            } else if (isMaNutDay || isMaRecDay) {
                 saveView(hash);
             } else if (targetEl !== targetSection) {
                 requestAnimationFrame(() => {
@@ -1775,6 +1776,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         if (isMaNutDay && typeof window.melvinActivateMaCadTab === 'function') {
             window.melvinActivateMaCadTab('nutricao', cadDayId);
+        }
+        if (isMaRecDay && typeof window.melvinActivateMaCadTab === 'function') {
+            window.melvinActivateMaCadTab('recuperacao', cadDayId);
         }
         closeMobileSidebar();
         return true;
@@ -3357,11 +3361,12 @@ document.querySelectorAll('.obj-kit-page').forEach(initObjKit);
                 activate(tabId, jump.getAttribute('data-macad-goto'));
                 return;
             }
-            const dayLink = e.target.closest('a[href^="#ma-nut-"]');
+            const dayLink = e.target.closest('a[href^="#ma-nut-"], a[href^="#ma-rec-"]');
             if (dayLink) {
                 e.preventDefault();
                 const id = (dayLink.getAttribute('href') || '').replace(/^#/, '');
-                activate('nutricao', id);
+                const tab = /^ma-rec-/.test(id) ? 'recuperacao' : 'nutricao';
+                activate(tab, id);
                 history.pushState(null, '', '#' + id);
             }
         });
@@ -3371,4 +3376,5 @@ document.querySelectorAll('.obj-kit-page').forEach(initObjKit);
         if (saved && TAB_IDS[saved]) activate(saved);
         const bootHash = (window.location.hash || '').replace(/^#/, '');
         if (/^ma-nut-/.test(bootHash)) activate('nutricao', bootHash);
+        if (/^ma-rec-/.test(bootHash)) activate('recuperacao', bootHash);
     })();
