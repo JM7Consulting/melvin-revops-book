@@ -1244,6 +1244,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const nav = document.getElementById('rmCatNav');
         const preview = document.getElementById('rmIndicePreview');
         const titleEl = document.getElementById('rmIndiceTitle');
+        const dateEl = document.getElementById('rmIndiceDate');
         const openBtn = document.getElementById('rmIndiceOpen');
         if (!nav || !preview || !titleEl || !openBtn) return;
 
@@ -1251,6 +1252,19 @@ document.addEventListener('DOMContentLoaded', () => {
         let parkingSpot = null;
         let currentOpen = null; // { hash, desk }
         let selectedLink = null;
+
+        function setPreviewDate(link) {
+            if (!dateEl) return;
+            const raw = ((link && link.querySelector('.rm-cat-copy em')) || {}).textContent || '';
+            const date = String(raw).replace(/\s+/g, ' ').trim();
+            if (!date) {
+                dateEl.hidden = true;
+                dateEl.textContent = '';
+                return;
+            }
+            dateEl.hidden = false;
+            dateEl.textContent = date;
+        }
 
         function restoreParked() {
             if (!parkedSection || !parkingSpot) return;
@@ -1273,6 +1287,7 @@ document.addEventListener('DOMContentLoaded', () => {
             restoreParked();
             clearPreviewShell();
             titleEl.textContent = 'Selecione um item à esquerda';
+            setPreviewDate(null);
             openBtn.hidden = true;
             currentOpen = null;
             preview.innerHTML = '<p class="rm-indice-empty">Clique numa entrega ou página da fila para ver aqui. Use <strong>Abrir em tela cheia</strong> quando quiser o formato grande.</p>';
@@ -1311,30 +1326,25 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             const live = link.getAttribute('data-rm-live');
             const href = link.getAttribute('href') || '';
-            let hash = live || href;
-            if (hash === '#rm-ata') hash = '#agenda-entregas';
-            let section = hash ? document.querySelector(hash) : null;
-            if (!section && href) section = document.querySelector(href);
-            if (section && section.classList.contains('done-page') && !live) {
-                const cta = section.querySelector('a.done-cta[href^="#"]');
+            const coverHash = href === '#rm-ata' ? '#agenda-entregas' : href;
+            const coverSection = coverHash ? document.querySelector(coverHash) : null;
+            if (!coverSection) return { mode: 'missing' };
+
+            let openHash = live || coverHash;
+            let openDesk = null;
+            if (!live) {
+                const cta = coverSection.querySelector('a.done-cta[href^="#"]');
                 if (cta) {
-                    const liveSec = document.querySelector(cta.getAttribute('href'));
-                    if (liveSec) {
-                        return {
-                            mode: 'host',
-                            section: liveSec,
-                            openHash: cta.getAttribute('href'),
-                            openDesk: cta.getAttribute('data-rm-desk-goto') || null
-                        };
-                    }
+                    openHash = cta.getAttribute('href') || openHash;
+                    openDesk = cta.getAttribute('data-rm-desk-goto') || null;
                 }
             }
-            if (!section) return { mode: 'missing' };
+
             return {
                 mode: 'host',
-                section,
-                openHash: '#' + section.id,
-                openDesk: null
+                section: coverSection,
+                openHash,
+                openDesk
             };
         }
 
@@ -1345,10 +1355,12 @@ document.addEventListener('DOMContentLoaded', () => {
             selectedLink = link;
             const label = (link.querySelector('.rm-cat-copy strong') || link).textContent.replace(/\s+/g, ' ').trim();
             titleEl.textContent = label;
+            setPreviewDate(link);
             const resolved = resolveSource(link);
             if (resolved.mode === 'missing') {
                 emptyState();
                 titleEl.textContent = label;
+                setPreviewDate(link);
                 preview.innerHTML = '<p class="rm-indice-empty">Conteúdo não encontrado.</p>';
                 return;
             }

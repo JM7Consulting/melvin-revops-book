@@ -6702,6 +6702,28 @@ button.rm-stepper-item:hover > small { color: #fdba74; }
   font-size: 0.95rem;
   line-height: 1.3;
 }
+.rm-indice-stage-title-row {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  flex-wrap: wrap;
+  min-width: 0;
+}
+.rm-indice-stage-date {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--melvin-cyan);
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+.rm-indice-stage-date::before {
+  content: 'Entrega · ';
+  font-weight: 600;
+  color: var(--text-muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-size: 0.68rem;
+}
 .rm-indice-open {
   appearance: none;
   border: 1px solid rgba(100, 252, 216, 0.45);
