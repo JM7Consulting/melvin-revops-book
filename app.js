@@ -1326,25 +1326,16 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             const live = link.getAttribute('data-rm-live');
             const href = link.getAttribute('href') || '';
-            const coverHash = href === '#rm-ata' ? '#agenda-entregas' : href;
-            const coverSection = coverHash ? document.querySelector(coverHash) : null;
-            if (!coverSection) return { mode: 'missing' };
-
-            let openHash = live || coverHash;
-            let openDesk = null;
-            if (!live) {
-                const cta = coverSection.querySelector('a.done-cta[href^="#"]');
-                if (cta) {
-                    openHash = cta.getAttribute('href') || openHash;
-                    openDesk = cta.getAttribute('data-rm-desk-goto') || null;
-                }
-            }
-
+            let hash = live || href;
+            if (hash === '#rm-ata') hash = '#agenda-entregas';
+            const section = hash ? document.querySelector(hash) : null;
+            if (!section) return { mode: 'missing' };
+            // Igual Planilha: a página do link aparece no preview; tela cheia abre a mesma.
             return {
                 mode: 'host',
-                section: coverSection,
-                openHash,
-                openDesk
+                section,
+                openHash: '#' + section.id,
+                openDesk: null
             };
         }
 
