@@ -1,5 +1,5 @@
 /**
- * AR · Análises de Resultados — 17 slides (Melvin)
+ * AR · Análises de Resultados — Melvin
  * Renders into #arDeckViewport and drives deck navigation.
  */
 (function () {
@@ -55,6 +55,25 @@
         ['REUNIÕES REALIZADAS (70%)', '30', '34', '24', '14 [1+13]'],
         ['QUALIDADE DAS REUNIÕES', '90%', '47,1%', '16,6%', '53,8%'],
         ['VENDAS GERADAS (20%)', '5', '0', '0', '3']
+      ]
+    },
+    {
+      type: 'chart',
+      chart: 'sla',
+      title: 'Dashboard RevOps: SLA e Tendência Mensal de Atividades (Usuária: Gabriely Silva)',
+      legends: [
+        { cls: 'ar-leg--trend', label: 'Tendência (Volume Total)' },
+        { cls: 'ar-leg--ok', label: 'Concluído no Prazo' },
+        { cls: 'ar-leg--late', label: 'Concluído em Atraso' }
+      ]
+    },
+    {
+      type: 'chart',
+      chart: 'top15',
+      title: 'Raio-X de Oportunidades: Top 15 Contas de Maior Esforço (Usuária: Gabriely Silva)',
+      footLegends: [
+        { cls: 'ar-leg--deal', label: 'DEAL' },
+        { cls: 'ar-leg--contact', label: 'CONTACT' }
       ]
     },
     {
@@ -182,13 +201,6 @@
       pills: ['100% COMPROMISSO', 'VITÓRIA'],
       quote: 'O ano só acaba quando termina.',
       author: 'Jailson Martins'
-    },
-    {
-      type: 'credits',
-      title: 'Acompanhamento Estratégico',
-      producedBy: 'Jailson Martins',
-      role: 'Especialista em Estratégias Comerciais',
-      forWho: 'Melvin'
     },
     {
       type: 'sign',
@@ -374,25 +386,305 @@
     );
   }
 
-  function renderCredits(s) {
+  function renderChart(s) {
+    var frameId = s.chart === 'top15' ? 'arChartTop15' : 'arChartSla';
+    var legends = (s.legends || [])
+      .map(function (l) {
+        return (
+          '<span class="ar-leg ' +
+          esc(l.cls) +
+          '"><i></i> ' +
+          esc(l.label) +
+          '</span>'
+        );
+      })
+      .join('');
+    var foot = '';
+    if (s.footLegends && s.footLegends.length) {
+      foot =
+        '<div class="ar-chart-legend ar-chart-legend--foot" aria-hidden="true">' +
+        '<span class="ar-leg-title">Tipo de Entidade</span>' +
+        s.footLegends
+          .map(function (l) {
+            return (
+              '<span class="ar-leg ' +
+              esc(l.cls) +
+              '"><i></i> ' +
+              esc(l.label) +
+              '</span>'
+            );
+          })
+          .join('') +
+        '</div>';
+    }
     return (
-      '<div class="ar-slide-canvas ar-slide-canvas--credits">' +
-      '<h3 class="ar-credits-title">' +
+      '<div class="ar-slide-canvas ar-slide-canvas--chart">' +
+      '<h3 class="ar-chart-title">' +
       esc(s.title) +
       '</h3>' +
-      '<p class="ar-credits-by">Produzido por</p>' +
-      '<p class="ar-credits-name">' +
-      esc(s.producedBy) +
-      '</p>' +
-      '<p class="ar-credits-role">' +
-      esc(s.role) +
-      '</p>' +
-      '<div class="ar-credits-rule" aria-hidden="true"></div>' +
-      '<p class="ar-credits-for">Para ' +
-      esc(s.forWho) +
-      '</p>' +
+      (legends
+        ? '<div class="ar-chart-legend" aria-hidden="true">' + legends + '</div>'
+        : '') +
+      '<div class="ar-chart-frame" id="' +
+      frameId +
+      '"></div>' +
+      foot +
       '</div>'
     );
+  }
+
+  function paintSlaChart(host) {
+    if (!host || host.dataset.ready === '1') return;
+    var months = ['Mar/2026', 'Abr/2026', 'Mai/2026', 'Jun/2026', 'Jul/2026', 'Ago/2026'];
+    var rows = [
+      { ok: 52, late: 0, total: 52 },
+      { ok: 998, late: 108, total: 1106 },
+      { ok: 783, late: 252, total: 1035 },
+      { ok: 1481, late: 134, total: 1615 },
+      { ok: 896, late: 256, total: 1152 },
+      { ok: 1078, late: 375, total: 1453 }
+    ];
+    var W = 1000;
+    var H = 520;
+    var pad = { l: 78, r: 28, t: 28, b: 52 };
+    var plotW = W - pad.l - pad.r;
+    var plotH = H - pad.t - pad.b;
+    var yMax = 1750;
+    function y(v) {
+      return pad.t + plotH - (v / yMax) * plotH;
+    }
+    var groupW = plotW / rows.length;
+    var barW = Math.min(34, groupW * 0.28);
+    var grid = '';
+    for (var v = 0; v <= yMax; v += 250) {
+      var yy = y(v);
+      grid +=
+        '<line x1="' +
+        pad.l +
+        '" y1="' +
+        yy +
+        '" x2="' +
+        (W - pad.r) +
+        '" y2="' +
+        yy +
+        '" stroke="#d1d5db" stroke-width="1" stroke-dasharray="3 4"/>';
+      grid +=
+        '<text x="' +
+        (pad.l - 10) +
+        '" y="' +
+        (yy + 4) +
+        '" text-anchor="end" font-size="12" fill="#6b7280" font-family="Manrope,Segoe UI,sans-serif">' +
+        v +
+        '</text>';
+    }
+    var bars = '';
+    var linePts = [];
+    rows.forEach(function (r, i) {
+      var cx = pad.l + groupW * (i + 0.5);
+      var xOk = cx - barW - 2;
+      var xLate = cx + 2;
+      var hOk = (r.ok / yMax) * plotH;
+      var hLate = (r.late / yMax) * plotH;
+      if (r.ok > 0) {
+        bars +=
+          '<rect x="' +
+          xOk +
+          '" y="' +
+          y(r.ok) +
+          '" width="' +
+          barW +
+          '" height="' +
+          hOk +
+          '" fill="#22c55e"/>';
+        bars +=
+          '<text x="' +
+          (xOk + barW / 2) +
+          '" y="' +
+          (y(r.ok) - 6) +
+          '" text-anchor="middle" font-size="12" font-weight="700" fill="#166534" font-family="Manrope,Segoe UI,sans-serif">' +
+          r.ok +
+          '</text>';
+      }
+      if (r.late > 0) {
+        bars +=
+          '<rect x="' +
+          xLate +
+          '" y="' +
+          y(r.late) +
+          '" width="' +
+          barW +
+          '" height="' +
+          hLate +
+          '" fill="#ef4444"/>';
+        bars +=
+          '<text x="' +
+          (xLate + barW / 2) +
+          '" y="' +
+          (y(r.late) - 6) +
+          '" text-anchor="middle" font-size="12" font-weight="700" fill="#b91c1c" font-family="Manrope,Segoe UI,sans-serif">' +
+          r.late +
+          '</text>';
+      }
+      var ty = y(r.total);
+      linePts.push([cx, ty]);
+      bars +=
+        '<text x="' +
+        cx +
+        '" y="' +
+        (ty - 14) +
+        '" text-anchor="middle" font-size="13" font-weight="700" fill="#1d4ed8" font-family="Manrope,Segoe UI,sans-serif">' +
+        r.total +
+        '</text>';
+      bars +=
+        '<text x="' +
+        cx +
+        '" y="' +
+        (H - 18) +
+        '" text-anchor="middle" font-size="13" fill="#374151" font-family="Manrope,Segoe UI,sans-serif">' +
+        months[i] +
+        '</text>';
+    });
+    var poly = linePts
+      .map(function (p) {
+        return p.join(',');
+      })
+      .join(' ');
+    var dots = linePts
+      .map(function (p) {
+        return (
+          '<circle cx="' +
+          p[0] +
+          '" cy="' +
+          p[1] +
+          '" r="5.5" fill="#fff" stroke="#2563eb" stroke-width="2.5"/>'
+        );
+      })
+      .join('');
+    host.innerHTML =
+      '<svg viewBox="0 0 ' +
+      W +
+      ' ' +
+      H +
+      '" role="img" aria-label="SLA e tendência mensal de atividades">' +
+      grid +
+      '<text transform="translate(18 ' +
+      (pad.t + pad.t + plotH) / 2 +
+      ') rotate(-90)" text-anchor="middle" font-size="13" fill="#4b5563" font-family="Manrope,Segoe UI,sans-serif">Volume de Atividades</text>' +
+      bars +
+      '<polyline points="' +
+      poly +
+      '" fill="none" stroke="#2563eb" stroke-width="2.5"/>' +
+      dots +
+      '</svg>';
+    host.dataset.ready = '1';
+  }
+
+  function paintTop15Chart(host) {
+    if (!host || host.dataset.ready === '1') return;
+    var items = [
+      { name: 'Lubrin Lubrificação Industrial', v: 32, type: 'deal' },
+      { name: 'Energold Drilling Brasil', v: 28, type: 'deal' },
+      { name: 'tsm', v: 26, type: 'deal' },
+      { name: '[IA] Produflex ind. Borracha ltda', v: 23, type: 'deal' },
+      { name: 'Jirau Energia S.a.', v: 23, type: 'deal' },
+      { name: 'IRMAOS GONCALVES COMERCIO E INDUSTRIA LTDA', v: 23, type: 'deal' },
+      { name: '[IA] Bianchini SA', v: 22, type: 'deal' },
+      { name: 'Essencis MG', v: 20, type: 'deal' },
+      { name: 'Contato (ID 37)', v: 19, type: 'contact' },
+      { name: '[IA] ecolab', v: 19, type: 'deal' },
+      { name: '[IA] Alimentos Zaeli', v: 19, type: 'deal' },
+      { name: 'DESTACA ENGENHARIA DE FUNDACOES E INFRA ESTRUTURAS...', v: 18, type: 'deal' },
+      { name: '[IA] kaefer', v: 18, type: 'deal' },
+      { name: 'Agro Paraná', v: 18, type: 'deal' },
+      { name: '[IA] FPT', v: 18, type: 'deal' }
+    ];
+    var W = 1000;
+    var H = 520;
+    var pad = { l: 310, r: 48, t: 18, b: 42 };
+    var plotW = W - pad.l - pad.r;
+    var plotH = H - pad.t - pad.b;
+    var xMax = 35;
+    var rowH = plotH / items.length;
+    var barH = Math.min(18, rowH * 0.62);
+    function x(v) {
+      return pad.l + (v / xMax) * plotW;
+    }
+    var grid = '';
+    for (var v = 0; v <= xMax; v += 5) {
+      var xx = x(v);
+      grid +=
+        '<line x1="' +
+        xx +
+        '" y1="' +
+        pad.t +
+        '" x2="' +
+        xx +
+        '" y2="' +
+        (H - pad.b) +
+        '" stroke="#d1d5db" stroke-width="1" stroke-dasharray="2 4"/>';
+      grid +=
+        '<text x="' +
+        xx +
+        '" y="' +
+        (H - 16) +
+        '" text-anchor="middle" font-size="12" fill="#6b7280" font-family="Manrope,Segoe UI,sans-serif">' +
+        v +
+        '</text>';
+    }
+    var bars = '';
+    items.forEach(function (it, i) {
+      var cy = pad.t + rowH * (i + 0.5);
+      var w = (it.v / xMax) * plotW;
+      var color = it.type === 'contact' ? '#16a34a' : '#1e3a8a';
+      var label = it.name.length > 42 ? it.name.slice(0, 41) + '…' : it.name;
+      bars +=
+        '<text x="' +
+        (pad.l - 10) +
+        '" y="' +
+        (cy + 4) +
+        '" text-anchor="end" font-size="11.5" fill="#1f2937" font-family="Manrope,Segoe UI,sans-serif">' +
+        esc(label) +
+        '</text>';
+      bars +=
+        '<rect x="' +
+        pad.l +
+        '" y="' +
+        (cy - barH / 2) +
+        '" width="' +
+        w +
+        '" height="' +
+        barH +
+        '" fill="' +
+        color +
+        '"/>';
+      bars +=
+        '<text x="' +
+        (pad.l + w + 6) +
+        '" y="' +
+        (cy + 4) +
+        '" font-size="12" font-weight="700" fill="#111827" font-family="Manrope,Segoe UI,sans-serif">' +
+        it.v +
+        '</text>';
+    });
+    host.innerHTML =
+      '<svg viewBox="0 0 ' +
+      W +
+      ' ' +
+      H +
+      '" role="img" aria-label="Top 15 contas de maior esforço">' +
+      grid +
+      bars +
+      '<text x="' +
+      (pad.l + plotW / 2) +
+      '" y="' +
+      (H - 2) +
+      '" text-anchor="middle" font-size="12" fill="#4b5563" font-family="Manrope,Segoe UI,sans-serif">Volume Total de Atividades</text></svg>';
+    host.dataset.ready = '1';
+  }
+
+  function ensureArCharts() {
+    paintSlaChart(document.getElementById('arChartSla'));
+    paintTop15Chart(document.getElementById('arChartTop15'));
   }
 
   function renderSign(s) {
@@ -442,8 +734,8 @@
       case 'cta':
         inner = renderCta(s);
         break;
-      case 'credits':
-        inner = renderCredits(s);
+      case 'chart':
+        inner = renderChart(s);
         break;
       case 'sign':
         inner = renderSign(s);
@@ -561,6 +853,7 @@
     }
     document.addEventListener('keydown', onKey);
 
+    ensureArCharts();
     go(0);
     try {
       root.focus({ preventScroll: true });
