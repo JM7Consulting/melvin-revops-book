@@ -270,6 +270,7 @@
             background: var(--lane-accent, rgba(148, 163, 184, 0.4));
             box-shadow: 0 0 12px color-mix(in srgb, var(--lane-accent) 45%, transparent);
         }
+        .nav-lane--ar { --lane-accent: #2dd4bf; }
         .nav-lane--cmd { --lane-accent: #64FCD8; }
         .nav-lane--strategy { --lane-accent: #60a5fa; }
         .nav-lane--mkt { --lane-accent: #fb923c; }
