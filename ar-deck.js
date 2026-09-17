@@ -1,6 +1,9 @@
 /**
  * AR · Análises de Resultados — Melvin
  * Renders into #arDeckViewport and drives deck navigation.
+ *
+ * Período do relatório: sempre o ano vigente, de janeiro até o mês
+ * anterior ao mês atual (ex.: em set/2026 → "2026 (janeiro a agosto)").
  */
 (function () {
   'use strict';
@@ -13,23 +16,113 @@
       .replace(/"/g, '&quot;');
   }
 
+  var MONTHS_PT = [
+    'janeiro',
+    'fevereiro',
+    'março',
+    'abril',
+    'maio',
+    'junho',
+    'julho',
+    'agosto',
+    'setembro',
+    'outubro',
+    'novembro',
+    'dezembro'
+  ];
+  var MONTHS_TITLE = [
+    'Janeiro',
+    'Fevereiro',
+    'Março',
+    'Abril',
+    'Maio',
+    'Junho',
+    'Julho',
+    'Agosto',
+    'Setembro',
+    'Outubro',
+    'Novembro',
+    'Dezembro'
+  ];
+  var MONTHS_SHORT = [
+    'Jan',
+    'Fev',
+    'Mar',
+    'Abr',
+    'Mai',
+    'Jun',
+    'Jul',
+    'Ago',
+    'Set',
+    'Out',
+    'Nov',
+    'Dez'
+  ];
+
+  function getArPeriod(now) {
+    var d = now || new Date();
+    var y = d.getFullYear();
+    var m = d.getMonth(); // 0 = jan
+    var year;
+    var endIdx;
+    if (m === 0) {
+      year = y - 1;
+      endIdx = 11;
+    } else {
+      year = y;
+      endIdx = m - 1;
+    }
+    var endName = MONTHS_PT[endIdx];
+    return {
+      year: year,
+      endIdx: endIdx,
+      endTitle: MONTHS_TITLE[endIdx],
+      label: year + ' (janeiro a ' + endName + ')',
+      shortLabel: year + ' · jan–' + MONTHS_SHORT[endIdx].toLowerCase(),
+      performanceLine: 'Performance comercial · ' + year + ' (janeiro a ' + endName + ')',
+      last3: (function () {
+        var out = [];
+        for (var i = Math.max(0, endIdx - 2); i <= endIdx; i++) out.push(i);
+        while (out.length < 3) out.unshift(out[0] || 0);
+        return out.slice(-3);
+      })(),
+      chartMonths: (function () {
+        var out = [];
+        var start = Math.max(0, endIdx - 5);
+        for (var i = start; i <= endIdx; i++) {
+          out.push(MONTHS_SHORT[i] + '/' + year);
+        }
+        return out;
+      })()
+    };
+  }
+
+  var AR_PERIOD = getArPeriod();
+  window.AR_PERIOD = AR_PERIOD;
+
+  var m3 = AR_PERIOD.last3;
+  var colM1 = MONTHS_TITLE[m3[0]];
+  var colM2 = MONTHS_TITLE[m3[1]];
+  var colM3 = MONTHS_TITLE[m3[2]];
+  var metaCol = 'META ' + AR_PERIOD.endTitle;
+
   window.AR_DECK_SLIDES = [
     {
       type: 'cover',
       kicker: 'RevOps · Direção Melvin',
       title: 'Análises de Resultados',
-      subtitle: 'Performance comercial · Trimestre SET–NOV 2025',
+      subtitle: AR_PERIOD.performanceLine,
       bg: 'assets/ar/cover-maintenance.jpg'
     },
     {
       type: 'objectives',
       kicker: 'Rota da sessão',
       title: 'Objetivos',
-      lead: 'O que esta análise responde para a direção.',
+      lead: 'O que esta análise responde para a direção · ' + AR_PERIOD.label + '.',
       bg: 'assets/ar/cover-maintenance.jpg',
       items: [
         { n: '01', label: 'Analisar a evolução da produção' },
-        { n: '02', label: 'Avaliar crescimento trimensal' },
+        { n: '02', label: 'Avaliar o crescimento no ano' },
         { n: '03', label: 'Identificar gargalos' },
         { n: '04', label: 'Planificar melhorias' },
         { n: '05', label: 'Definir papéis' }
@@ -40,7 +133,7 @@
       num: '01',
       kicker: 'Bloco',
       title: 'Produtividade',
-      subtitle: 'SET · OUT · NOV · 2025',
+      subtitle: AR_PERIOD.label,
       theme: 'prod',
       bg: 'assets/ar/cover-maintenance.jpg'
     },
@@ -50,10 +143,10 @@
       badge: 'GABRIELY',
       columns: [
         'INDICADOR',
-        'META Novembro',
-        'Setembro (22 dias)',
-        'Outubro (23 dias)',
-        'Novembro (19 dias)'
+        metaCol,
+        colM1,
+        colM2,
+        colM3
       ],
       rows: [
         ['ATIVIDADES CONCLUÍDAS', '1520', '3277', '2554', '954'],
@@ -68,7 +161,10 @@
     {
       type: 'chart',
       chart: 'sla',
-      title: 'Dashboard RevOps: SLA e Tendência Mensal de Atividades (Usuária: Gabriely Silva)',
+      title:
+        'Dashboard RevOps: SLA e Tendência Mensal de Atividades · ' +
+        AR_PERIOD.label +
+        ' (Usuária: Gabriely Silva)',
       legends: [
         { cls: 'ar-leg--trend', label: 'Tendência (Volume Total)' },
         { cls: 'ar-leg--ok', label: 'Concluído no Prazo' },
@@ -78,7 +174,10 @@
     {
       type: 'chart',
       chart: 'top15',
-      title: 'Raio-X de Oportunidades: Top 15 Contas de Maior Esforço (Usuária: Gabriely Silva)',
+      title:
+        'Raio-X de Oportunidades: Top 15 Contas de Maior Esforço · ' +
+        AR_PERIOD.label +
+        ' (Usuária: Gabriely Silva)',
       footLegends: [
         { cls: 'ar-leg--deal', label: 'DEAL' },
         { cls: 'ar-leg--contact', label: 'CONTACT' }
@@ -89,7 +188,7 @@
       num: '02',
       kicker: 'Bloco',
       title: 'Estatísticas',
-      subtitle: 'Visão consolidada da operação',
+      subtitle: 'Visão consolidada · ' + AR_PERIOD.label,
       theme: 'stats',
       bg: 'assets/ar/cover-maintenance.jpg'
     },
@@ -99,10 +198,10 @@
       badge: 'TOTAL',
       columns: [
         'INDICADOR',
-        'META Novembro',
-        'Setembro (22 dias)',
-        'Outubro (23 dias)',
-        'Novembro (19 dias)'
+        metaCol,
+        colM1,
+        colM2,
+        colM3
       ],
       rows: [
         ['ATIVIDADES CONCLUÍDAS', '1520', '2343', '3301', '954'],
@@ -118,7 +217,7 @@
       type: 'table',
       title: 'Taxa de Conversão',
       badge: 'INBOUND',
-      columns: ['INDICADOR', 'Setembro', 'Outubro', 'Novembro', 'MELVIN'],
+      columns: ['INDICADOR', colM1, colM2, colM3, 'MELVIN'],
       rows: [
         ['Etapa 1 » Etapa 2', '68,9%', '50,8%', '58,7%', '70%'],
         ['Etapa 2 » Nutrição', '12,8%', '11,7%', '17,4%', '55%'],
@@ -132,7 +231,7 @@
       type: 'table',
       title: 'Taxa de Conversão',
       badge: 'OUTBOUND',
-      columns: ['INDICADOR', 'Setembro', 'Outubro', 'Novembro', 'BENCH'],
+      columns: ['INDICADOR', colM1, colM2, colM3, 'BENCH'],
       rows: [
         ['Etapa 1 » Etapa 2', '—', '52,1%', '61,1%', '70%'],
         ['Etapa 2 » Nutrição', '—', '14,2%', '72,7%', '50%'],
@@ -147,7 +246,7 @@
       num: '03',
       kicker: 'Bloco',
       title: 'Gargalos',
-      subtitle: 'Onde a máquina trava — e por quê',
+      subtitle: 'Onde a máquina trava — e por quê · ' + AR_PERIOD.label,
       theme: 'gap',
       bg: 'assets/ar/cover-maintenance.jpg'
     },
@@ -162,7 +261,7 @@
         'Queda substancial de atividades concluídas',
         'Queda SUBSTANCIAL no número de ligações geradas e atendidas',
         'Leve queda no número de agendamentos',
-        '60% no último trimestre.'
+        '60% no período ' + AR_PERIOD.label + '.'
       ]
     },
     {
@@ -170,7 +269,7 @@
       num: '04',
       kicker: 'Bloco',
       title: 'Melhorias',
-      subtitle: 'Plano de ação com donos e próximos passos',
+      subtitle: 'Plano de ação com donos e próximos passos · ' + AR_PERIOD.label,
       theme: 'improve',
       bg: 'assets/ar/cover-maintenance.jpg'
     },
@@ -197,16 +296,16 @@
       type: 'section',
       num: '05',
       kicker: 'Bloco',
-      title: 'Sprint Dezembro',
-      subtitle: 'Reta final · metas e ritmo diário',
+      title: 'Metas e ritmo',
+      subtitle: 'Próximos passos com base em ' + AR_PERIOD.label,
       theme: 'sprint',
       bg: 'assets/ar/cover-maintenance.jpg'
     },
     {
       type: 'table',
-      title: 'Metas Dezembro',
+      title: 'Metas',
       badge: 'GABRIELY (full time)',
-      note: 'Tempo: 19 dias úteis · Análise dos dados: 01/01/2026',
+      note: 'Referência: ' + AR_PERIOD.label + ' · metas do ciclo seguinte',
       columns: ['INDICADOR', 'TOTAL MÊS', 'MÉDIAS'],
       rows: [
         ['ATIVIDADES CONCLUÍDAS', '1520', '80/dia'],
@@ -220,7 +319,7 @@
     },
     {
       type: 'cta',
-      title: 'Reta Final 2025',
+      title: 'Foco ' + AR_PERIOD.year,
       lines: [
         'O ano não acabou.',
         'A sua melhor venda começa agora.',
@@ -236,7 +335,7 @@
       lead: 'Relatório elaborado por',
       name: 'Jailson Martins',
       role: 'Engenheiro de Receita · JM7',
-      meta: 'Melvin · RevOps Book'
+      meta: 'Melvin · RevOps Book · ' + AR_PERIOD.label
     }
   ];
 
@@ -532,7 +631,10 @@
 
   function paintSlaChart(host) {
     if (!host || host.dataset.ready === '1') return;
-    var months = ['Mar/2026', 'Abr/2026', 'Mai/2026', 'Jun/2026', 'Jul/2026', 'Ago/2026'];
+    var months =
+      (window.AR_PERIOD && window.AR_PERIOD.chartMonths && window.AR_PERIOD.chartMonths.length
+        ? window.AR_PERIOD.chartMonths
+        : ['Mar/2026', 'Abr/2026', 'Mai/2026', 'Jun/2026', 'Jul/2026', 'Ago/2026']);
     var rows = [
       { ok: 52, late: 0, total: 52 },
       { ok: 998, late: 108, total: 1106 },
@@ -541,6 +643,8 @@
       { ok: 896, late: 256, total: 1152 },
       { ok: 1078, late: 375, total: 1453 }
     ];
+    if (months.length < rows.length) rows = rows.slice(rows.length - months.length);
+    if (months.length > rows.length) months = months.slice(months.length - rows.length);
     var W = 1000;
     var H = 520;
     var pad = { l: 78, r: 28, t: 28, b: 52 };
