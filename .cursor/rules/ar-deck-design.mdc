@@ -1,0 +1,42 @@
+---
+description: AR deck Melvin — design system cinematográfico permanente (capas, painéis, período)
+globs: ar-deck.js,styles.css,index.html
+alwaysApply: false
+---
+
+# Melvin · AR deck design system
+
+Sempre reutilizar este visual ao alterar slides, dados ou novos tipos no deck `#ar-atual`.
+
+## Período (obrigatório)
+
+- Sempre o **ano corrente**, de **janeiro até o mês anterior ao mês atual**.
+- Ex.: em set/2026 → `2026 (janeiro a agosto)`.
+- Fonte única: `getArPeriod()` / `window.AR_PERIOD` em `ar-deck.js`.
+- Proibido: trimestres, SET–OUT–NOV, “Dezembro 2025”, datas soltas fora desse padrão.
+- Sem Exact / Spotter — só Melvin.
+
+## Tipos de slide
+
+| Tipo | Uso | Visual |
+|------|-----|--------|
+| `cover` | Capa | `ar-hero` + foto `AR_HERO_BG` desfocada |
+| `objectives` | Objetivos | Hero + lista 01–05 em glass |
+| `section` | Contracapa de bloco | Hero + número outline + tema (`prod/stats/gap/improve/sprint`) |
+| `table` / `chart` / `split` / `plan` | Dados | `ar-panel` via `arPanelShell()` — fundo industrial + card branco |
+| `cta` / `sign` | Capas finais | Mesmo `ar-hero` cinematográfico |
+
+## Tokens
+
+- Fundo hero: `assets/ar/cover-maintenance.jpg` (`AR_HERO_BG`)
+- Tipografia display: **Sora**; corpo: **Manrope**
+- Accent Melvin: `#64FCD8` / teal `#0f766e` (light content)
+- Widescreen 16:9 · classes `ar-hero-*`, `ar-panel-*`
+
+## Ao editar dados
+
+1. Mude só `window.AR_DECK_SLIDES` (rows/columns/textos).
+2. Não remova o shell `ar-panel` / `ar-hero`.
+3. Novos slides de dados → `arPanelShell(kind, s, innerHtml)`.
+4. Novas capas/contracapas → padrão hero (bg + veil + grain + tipografia Sora).
+5. Bump `?v=matriz-N` em `index.html` e publique.

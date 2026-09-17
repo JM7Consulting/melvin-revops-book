@@ -14630,7 +14630,7 @@ body.light-mode .ar-deck:-webkit-full-screen {
   }
 }
 
-/* ── AR deck · slide types (bullets / section / table / split / plan / cta / credits) ── */
+/* ── AR deck · content panels (table / chart / split / plan) ── */
 .ar-slide-heading {
   margin: 0 0 clamp(8px, 1.6cqh, 16px);
   font-size: clamp(1.05rem, 2.8cqw, 1.55rem);
@@ -14639,62 +14639,113 @@ body.light-mode .ar-deck:-webkit-full-screen {
   color: #0f172a;
   line-height: 1.2;
 }
-.ar-slide-canvas--table,
-.ar-slide-canvas--split,
-.ar-slide-canvas--plan {
-  background:
-    linear-gradient(180deg, #ffffff 0%, #f4faf9 100%);
-  color: #0f172a;
-  justify-content: flex-start;
-}
-.ar-slide-canvas--table::before,
-.ar-slide-canvas--split::before,
-.ar-slide-canvas--plan::before {
-  content: '';
-  position: absolute;
-  inset: 0 0 auto 0;
-  height: 4px;
-  background: linear-gradient(90deg, #14b8a6, #2dd4bf 45%, #38bdf8);
-  opacity: 0.95;
-}
 
-/* Table */
-.ar-table-head {
+.ar-panel {
+  padding: 0 !important;
+  background: #071018;
+  color: #0f172a;
+  border: 0;
+  overflow: hidden;
+}
+.ar-panel-bg {
+  position: absolute;
+  inset: -6%;
+  background-size: cover;
+  background-position: center 42%;
+  filter: blur(16px) saturate(0.9) brightness(0.45);
+  transform: scale(1.1);
+  z-index: 0;
+}
+.ar-panel-veil {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    linear-gradient(145deg, rgba(4, 10, 16, 0.88) 0%, rgba(7, 16, 26, 0.72) 45%, rgba(8, 22, 30, 0.8) 100%),
+    radial-gradient(ellipse 60% 50% at 80% 20%, rgba(45, 212, 191, 0.16), transparent 60%);
+  pointer-events: none;
+}
+.ar-panel-body {
+  position: relative;
+  z-index: 2;
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  gap: clamp(8px, 1.4cqh, 12px);
+  width: 100%;
+  height: 100%;
+  padding: clamp(14px, 2.4cqw, 26px) clamp(16px, 2.8cqw, 30px) clamp(12px, 2cqw, 20px);
+  box-sizing: border-box;
+}
+.ar-panel-head {
+  display: flex;
+  align-items: flex-start;
   justify-content: space-between;
   gap: 12px;
   flex-wrap: wrap;
-  margin-bottom: 4px;
 }
-.ar-table-head .ar-slide-heading {
-  margin-bottom: 0;
+.ar-panel-kicker {
+  margin: 0 0 4px;
+  font-family: Sora, Manrope, sans-serif;
+  font-size: clamp(0.58rem, 1.25cqw, 0.72rem);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #64FCD8;
 }
-.ar-table-badge {
+.ar-panel-title {
+  margin: 0;
+  font-family: Sora, Manrope, sans-serif;
+  font-size: clamp(1.05rem, 2.7cqw, 1.55rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #f8fafc;
+  line-height: 1.15;
+}
+.ar-panel-note {
+  margin: 4px 0 0;
+  font-size: clamp(0.64rem, 1.35cqw, 0.8rem);
+  color: rgba(248, 250, 252, 0.62);
+  font-weight: 500;
+  max-width: 72ch;
+  line-height: 1.35;
+}
+.ar-panel-badge {
   display: inline-flex;
   align-items: center;
-  font-size: clamp(0.62rem, 1.35cqw, 0.78rem);
+  font-size: clamp(0.58rem, 1.25cqw, 0.72rem);
   font-weight: 800;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #0f766e;
-  background: rgba(20, 184, 166, 0.14);
-  border: 1px solid rgba(20, 184, 166, 0.35);
-  border-radius: 8px;
-  padding: 5px 10px;
+  color: #042f2e;
+  background: linear-gradient(135deg, #64FCD8, #2dd4bf);
+  border-radius: 999px;
+  padding: 7px 12px;
   white-space: nowrap;
+  box-shadow: 0 8px 24px rgba(45, 212, 191, 0.25);
 }
-.ar-table-note {
-  margin: 0 0 8px;
-  font-size: clamp(0.68rem, 1.4cqw, 0.82rem);
-  color: #64748b;
-  font-weight: 600;
+.ar-panel-content {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  background: rgba(255, 255, 255, 0.96);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  padding: clamp(10px, 1.6cqw, 16px);
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.28);
+  backdrop-filter: blur(8px);
 }
+
+/* legacy aliases */
+.ar-table-badge { /* kept for safety */ }
+.ar-table-note { margin: 0; }
+
+/* Table */
 .ar-table-wrap {
   flex: 1;
   min-height: 0;
   overflow: auto;
-  border-radius: 10px;
+  border-radius: 12px;
   border: 1px solid rgba(15, 23, 42, 0.08);
 }
 .ar-data-table {
@@ -14744,6 +14795,17 @@ body.light-mode .ar-deck:-webkit-full-screen {
   text-align: center;
 }
 
+/* Chart inside panel */
+.ar-slide-canvas--chart.ar-panel .ar-chart-title { display: none; }
+.ar-panel-content .ar-chart-legend {
+  color: #334155;
+  margin-bottom: 4px;
+}
+.ar-panel-content .ar-chart-frame {
+  flex: 1;
+  min-height: 0;
+}
+
 /* Split +/− */
 .ar-split-grid {
   display: grid;
@@ -14753,7 +14815,7 @@ body.light-mode .ar-deck:-webkit-full-screen {
   min-height: 0;
 }
 .ar-split-col {
-  border-radius: 12px;
+  border-radius: 14px;
   padding: clamp(12px, 2cqw, 18px);
   display: flex;
   flex-direction: column;
@@ -14762,15 +14824,16 @@ body.light-mode .ar-deck:-webkit-full-screen {
   overflow: auto;
 }
 .ar-split-col--pos {
-  background: rgba(16, 185, 129, 0.08);
-  border: 1px solid rgba(16, 185, 129, 0.28);
+  background: linear-gradient(180deg, rgba(16, 185, 129, 0.12), rgba(16, 185, 129, 0.05));
+  border: 1px solid rgba(16, 185, 129, 0.3);
 }
 .ar-split-col--neg {
-  background: rgba(239, 68, 68, 0.06);
-  border: 1px solid rgba(239, 68, 68, 0.22);
+  background: linear-gradient(180deg, rgba(239, 68, 68, 0.1), rgba(239, 68, 68, 0.04));
+  border: 1px solid rgba(239, 68, 68, 0.24);
 }
 .ar-split-label {
   margin: 0;
+  font-family: Sora, Manrope, sans-serif;
   font-size: clamp(0.68rem, 1.4cqw, 0.8rem);
   font-weight: 800;
   letter-spacing: 0.08em;
@@ -14825,14 +14888,29 @@ body.light-mode .ar-deck:-webkit-full-screen {
   align-content: start;
 }
 .ar-plan-card {
-  background: rgba(15, 23, 42, 0.03);
-  border: 1px solid rgba(15, 23, 42, 0.08);
-  border-radius: 14px;
+  position: relative;
+  background: linear-gradient(165deg, #ffffff 0%, #f0fdfa 100%);
+  border: 1px solid rgba(20, 184, 166, 0.22);
+  border-radius: 16px;
   padding: clamp(14px, 2.2cqw, 22px);
-  border-top: 3px solid #14b8a6;
+  padding-top: clamp(28px, 4cqh, 36px);
+  box-shadow: 0 10px 28px rgba(15, 23, 42, 0.06);
+  overflow: hidden;
+}
+.ar-plan-card-num {
+  position: absolute;
+  top: 10px;
+  right: 14px;
+  font-family: Sora, Manrope, sans-serif;
+  font-size: clamp(1.4rem, 3.5cqw, 2rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  color: rgba(20, 184, 166, 0.22);
+  line-height: 1;
 }
 .ar-plan-card h4 {
   margin: 0 0 12px;
+  font-family: Sora, Manrope, sans-serif;
   font-size: clamp(0.9rem, 2cqw, 1.15rem);
   font-weight: 800;
   color: #0f172a;
@@ -14855,24 +14933,33 @@ body.light-mode .ar-deck:-webkit-full-screen {
   letter-spacing: 0.04em;
 }
 
-/* CTA */
-.ar-slide-canvas--cta {
+/* CTA · closing hero */
+.ar-slide-canvas--cta.ar-hero {
   align-items: center;
   justify-content: center;
   text-align: center;
-  gap: clamp(12px, 2.2cqh, 20px);
-  background:
-    radial-gradient(ellipse 75% 55% at 50% 30%, rgba(45, 212, 191, 0.22), transparent 62%),
-    radial-gradient(ellipse 50% 40% at 15% 85%, rgba(14, 165, 233, 0.14), transparent 70%),
-    linear-gradient(160deg, #061018 0%, #0c1a28 55%, #08141f 100%);
-  color: #f8fafc;
+  padding: 0 !important;
+}
+.ar-cta-inner {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(10px, 1.8cqh, 16px);
+  padding: clamp(28px, 5cqw, 56px);
+  width: 100%;
+  animation: arHeroIn 0.7s ease both;
 }
 .ar-cta-title {
   margin: 0;
-  font-size: clamp(1.8rem, 5.5cqw, 3.2rem);
+  font-family: Sora, Manrope, sans-serif;
+  font-size: clamp(2.4rem, 7cqw, 4.4rem);
   font-weight: 800;
-  letter-spacing: -0.03em;
-  color: #fff;
+  letter-spacing: -0.04em;
+  color: #ffffff;
+  text-shadow: 0 6px 36px rgba(0, 0, 0, 0.4);
+  line-height: 1;
 }
 .ar-cta-lines {
   display: flex;
@@ -14881,7 +14968,7 @@ body.light-mode .ar-deck:-webkit-full-screen {
 }
 .ar-cta-line {
   margin: 0;
-  font-size: clamp(0.95rem, 2.4cqw, 1.35rem);
+  font-size: clamp(0.95rem, 2.2cqw, 1.3rem);
   font-weight: 600;
   color: rgba(248, 250, 252, 0.88);
 }
@@ -14893,116 +14980,114 @@ body.light-mode .ar-deck:-webkit-full-screen {
   margin-top: 4px;
 }
 .ar-cta-pill {
-  font-size: clamp(0.65rem, 1.4cqw, 0.8rem);
+  font-family: Sora, Manrope, sans-serif;
+  font-size: clamp(0.68rem, 1.45cqw, 0.82rem);
   font-weight: 800;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: #042f2e;
-  background: linear-gradient(135deg, #64FCD8, #2dd4bf);
+  background: linear-gradient(135deg, #64FCD8, #a78bfa);
   border-radius: 999px;
-  padding: 8px 16px;
+  padding: 9px 16px;
+  box-shadow: 0 10px 28px rgba(100, 252, 216, 0.25);
 }
 .ar-cta-quote {
-  margin: clamp(8px, 1.8cqh, 16px) 0 0;
-  max-width: 36ch;
+  margin: clamp(8px, 1.8cqh, 14px) 0 0;
+  max-width: 42ch;
   padding: 0;
   border: 0;
 }
 .ar-cta-quote p {
   margin: 0 0 6px;
-  font-size: clamp(0.85rem, 1.9cqw, 1.1rem);
+  font-size: clamp(0.9rem, 2cqw, 1.15rem);
   font-style: italic;
-  color: rgba(248, 250, 252, 0.75);
+  color: rgba(248, 250, 252, 0.82);
+  line-height: 1.4;
 }
 .ar-cta-quote cite {
   font-style: normal;
-  font-size: clamp(0.7rem, 1.4cqw, 0.85rem);
+  font-size: clamp(0.72rem, 1.5cqw, 0.88rem);
   font-weight: 700;
-  color: #64FCD8;
+  color: #c4b5fd;
+  letter-spacing: 0.04em;
 }
 
-/* Credits */
+/* Sign · closing hero */
+.ar-slide-canvas--sign.ar-hero {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0 !important;
+}
+.ar-sign-inner {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(8px, 1.4cqh, 12px);
+  padding: clamp(28px, 5cqw, 56px);
+  width: 100%;
+  animation: arHeroIn 0.7s ease both;
+}
+.ar-sign-kicker {
+  margin: 0;
+  font-family: Sora, Manrope, sans-serif;
+  font-size: clamp(0.68rem, 1.55cqw, 0.86rem);
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #64FCD8;
+}
+.ar-sign-lead {
+  margin: clamp(4px, 1.2cqh, 10px) 0 0;
+  color: rgba(248, 250, 252, 0.72);
+  font-size: clamp(0.86rem, 1.9cqw, 1.05rem);
+}
+.ar-sign-name {
+  margin: 0;
+  font-family: Sora, Manrope, sans-serif;
+  font-size: clamp(1.85rem, 5.2cqw, 3.1rem);
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: -0.03em;
+  text-shadow: 0 4px 28px rgba(0, 0, 0, 0.35);
+}
+.ar-sign-role,
+.ar-sign-meta {
+  margin: 0;
+  color: rgba(248, 250, 252, 0.78);
+  font-size: clamp(0.82rem, 1.85cqw, 1.08rem);
+  font-weight: 500;
+}
+.ar-sign-rule {
+  width: min(38%, 240px);
+  height: 2px;
+  margin: clamp(8px, 1.6cqh, 14px) auto;
+  background: linear-gradient(90deg, transparent, #64FCD8, transparent);
+}
+
+/* Credits (legacy) */
 .ar-slide-canvas--credits {
   align-items: center;
   justify-content: center;
   text-align: center;
-  gap: clamp(6px, 1.2cqh, 12px);
+  gap: clamp(8px, 1.5cqh, 14px);
   background:
-    radial-gradient(ellipse 70% 50% at 50% 35%, rgba(45, 212, 191, 0.16), transparent 65%),
-    linear-gradient(155deg, #071018 0%, #0f1c2e 48%, #0a1420 100%);
+    radial-gradient(ellipse 70% 55% at 50% 40%, rgba(45, 212, 191, 0.2), transparent 65%),
+    linear-gradient(155deg, #071018 0%, #0f1c2e 50%, #0a1420 100%);
   color: #f8fafc;
 }
-.ar-credits-title {
-  margin: 0 0 clamp(8px, 2cqh, 18px);
-  font-size: clamp(1.35rem, 3.8cqw, 2.2rem);
-  font-weight: 800;
-  color: #fff;
-  letter-spacing: -0.02em;
-}
-.ar-credits-by {
-  margin: 0;
-  font-size: clamp(0.72rem, 1.5cqw, 0.88rem);
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: #64FCD8;
-}
-.ar-credits-name {
-  margin: 0;
-  font-size: clamp(1.5rem, 4.2cqw, 2.5rem);
-  font-weight: 800;
-  color: #fff;
-}
+.ar-credits-title { margin: 0; font-family: Sora, Manrope, sans-serif; font-size: clamp(1.4rem, 3.8cqw, 2.2rem); font-weight: 800; }
+.ar-credits-by { margin: 0; color: #64FCD8; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; font-size: 0.75rem; }
+.ar-credits-name { margin: 0; font-size: clamp(1.5rem, 4.2cqw, 2.5rem); font-weight: 800; color: #fff; }
 .ar-credits-role,
-.ar-credits-for {
-  margin: 0;
-  font-size: clamp(0.82rem, 1.8cqw, 1.05rem);
-  color: rgba(248, 250, 252, 0.72);
-}
-.ar-credits-rule {
-  width: min(36%, 220px);
-  height: 2px;
-  margin: clamp(8px, 1.8cqh, 14px) auto;
-  background: linear-gradient(90deg, transparent, #64FCD8, transparent);
-}
+.ar-credits-for { margin: 0; font-size: clamp(0.82rem, 1.8cqw, 1.05rem); color: rgba(248, 250, 252, 0.72); }
+.ar-credits-rule { width: min(36%, 220px); height: 2px; margin: clamp(8px, 1.8cqh, 14px) auto; background: linear-gradient(90deg, transparent, #64FCD8, transparent); }
 
-/* Light mode overrides for new types */
-body.light-mode .ar-slide-canvas--cta,
-body.light-mode .ar-slide-canvas--credits {
-  background:
-    radial-gradient(ellipse 70% 55% at 50% 36%, rgba(20, 184, 166, 0.18), transparent 65%),
-    radial-gradient(ellipse 45% 40% at 85% 80%, rgba(14, 165, 233, 0.1), transparent 70%),
-    linear-gradient(155deg, #f8fafc 0%, #eef7f5 45%, #f1f5f9 100%);
-  color: #0f172a;
-  border-color: rgba(15, 23, 42, 0.08);
-}
-body.light-mode .ar-credits-by,
-body.light-mode .ar-cta-quote cite {
-  color: #0f766e;
-}
-body.light-mode .ar-cta-title,
-body.light-mode .ar-credits-title,
-body.light-mode .ar-credits-name {
-  color: #0f172a;
-}
-body.light-mode .ar-cta-line,
-body.light-mode .ar-credits-role,
-body.light-mode .ar-credits-for,
-body.light-mode .ar-cta-quote p {
-  color: #475569;
-}
-body.light-mode .ar-cta-pill {
-  color: #042f2e;
-}
-body.light-mode .ar-credits-rule {
-  background: linear-gradient(90deg, transparent, #0f766e, transparent);
-}
-body.light-mode .ar-slide-canvas--bullets,
-body.light-mode .ar-slide-canvas--table,
-body.light-mode .ar-slide-canvas--split,
-body.light-mode .ar-slide-canvas--plan {
-  background: linear-gradient(180deg, #ffffff 0%, #f1f5f9 100%);
-  border-color: rgba(15, 23, 42, 0.08);
+/* Light mode: keep panels cinematic; only polish white content surface */
+body.light-mode .ar-panel-content {
+  background: rgba(255, 255, 255, 0.98);
 }
 body.light-mode .ar-data-table thead th {
   background: linear-gradient(180deg, #0f766e 0%, #0d9488 100%);
@@ -15017,4 +15102,15 @@ body.light-mode .ar-data-table thead th {
     white-space: normal;
     max-width: 16ch;
   }
+}
+
+/* Light mode: content slides use panel system — do not flatten heroes */
+body.light-mode .ar-slide-canvas--cta.ar-hero,
+body.light-mode .ar-slide-canvas--sign.ar-hero,
+body.light-mode .ar-panel {
+  /* keep cinematic dark treatment */
+  color: inherit;
+}
+body.light-mode .ar-panel-content {
+  background: rgba(255, 255, 255, 0.98);
 }

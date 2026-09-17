@@ -99,6 +99,8 @@
 
   var AR_PERIOD = getArPeriod();
   window.AR_PERIOD = AR_PERIOD;
+  var AR_HERO_BG = 'assets/ar/cover-maintenance.jpg';
+  window.AR_HERO_BG = AR_HERO_BG;
 
   var m3 = AR_PERIOD.last3;
   var colM1 = MONTHS_TITLE[m3[0]];
@@ -112,14 +114,14 @@
       kicker: 'RevOps · Direção Melvin',
       title: 'Análises de Resultados',
       subtitle: AR_PERIOD.performanceLine,
-      bg: 'assets/ar/cover-maintenance.jpg'
+      bg: AR_HERO_BG
     },
     {
       type: 'objectives',
       kicker: 'Rota da sessão',
       title: 'Objetivos',
       lead: 'O que esta análise responde para a direção · ' + AR_PERIOD.label + '.',
-      bg: 'assets/ar/cover-maintenance.jpg',
+      bg: AR_HERO_BG,
       items: [
         { n: '01', label: 'Analisar a evolução da produção' },
         { n: '02', label: 'Avaliar o crescimento no ano' },
@@ -135,7 +137,7 @@
       title: 'Produtividade',
       subtitle: AR_PERIOD.label,
       theme: 'prod',
-      bg: 'assets/ar/cover-maintenance.jpg'
+      bg: AR_HERO_BG
     },
     {
       type: 'table',
@@ -190,7 +192,7 @@
       title: 'Estatísticas',
       subtitle: 'Visão consolidada · ' + AR_PERIOD.label,
       theme: 'stats',
-      bg: 'assets/ar/cover-maintenance.jpg'
+      bg: AR_HERO_BG
     },
     {
       type: 'table',
@@ -248,7 +250,7 @@
       title: 'Gargalos',
       subtitle: 'Onde a máquina trava — e por quê · ' + AR_PERIOD.label,
       theme: 'gap',
-      bg: 'assets/ar/cover-maintenance.jpg'
+      bg: AR_HERO_BG
     },
     {
       type: 'split',
@@ -271,7 +273,7 @@
       title: 'Melhorias',
       subtitle: 'Plano de ação com donos e próximos passos · ' + AR_PERIOD.label,
       theme: 'improve',
-      bg: 'assets/ar/cover-maintenance.jpg'
+      bg: AR_HERO_BG
     },
     {
       type: 'plan',
@@ -299,7 +301,7 @@
       title: 'Metas e ritmo',
       subtitle: 'Próximos passos com base em ' + AR_PERIOD.label,
       theme: 'sprint',
-      bg: 'assets/ar/cover-maintenance.jpg'
+      bg: AR_HERO_BG
     },
     {
       type: 'table',
@@ -319,6 +321,7 @@
     },
     {
       type: 'cta',
+      kicker: 'Encerramento · Direção Melvin',
       title: 'Foco ' + AR_PERIOD.year,
       lines: [
         'O ano não acabou.',
@@ -327,7 +330,8 @@
       ],
       pills: ['100% COMPROMISSO', 'VITÓRIA'],
       quote: 'O ano só acaba quando termina.',
-      author: 'Jailson Martins'
+      author: 'Jailson Martins',
+      bg: AR_HERO_BG
     },
     {
       type: 'sign',
@@ -335,12 +339,52 @@
       lead: 'Relatório elaborado por',
       name: 'Jailson Martins',
       role: 'Engenheiro de Receita · JM7',
-      meta: 'Melvin · RevOps Book · ' + AR_PERIOD.label
+      meta: 'Melvin · RevOps Book · ' + AR_PERIOD.label,
+      bg: AR_HERO_BG
     }
   ];
 
+
+  function periodLabel() {
+    return (window.AR_PERIOD && window.AR_PERIOD.label) || '';
+  }
+
+  function arPanelShell(kind, s, innerHtml) {
+    var bg = esc(s.bg || AR_HERO_BG);
+    var period = periodLabel();
+    return (
+      '<div class="ar-slide-canvas ar-slide-canvas--' +
+      kind +
+      ' ar-panel">' +
+      '<div class="ar-panel-bg" style="background-image:url(\'' +
+      bg +
+      '\')" aria-hidden="true"></div>' +
+      '<div class="ar-panel-veil" aria-hidden="true"></div>' +
+      '<div class="ar-panel-body">' +
+      '<header class="ar-panel-head">' +
+      '<div class="ar-panel-head-text">' +
+      '<p class="ar-panel-kicker">Melvin · AR' +
+      (period ? ' · ' + esc(period) : '') +
+      '</p>' +
+      '<h3 class="ar-panel-title">' +
+      esc(s.title) +
+      '</h3>' +
+      (s.note
+        ? '<p class="ar-panel-note">' + esc(s.note) + '</p>'
+        : s.lead
+          ? '<p class="ar-panel-note">' + esc(s.lead) + '</p>'
+          : '') +
+      '</div>' +
+      (s.badge ? '<span class="ar-panel-badge">' + esc(s.badge) + '</span>' : '') +
+      '</header>' +
+      '<div class="ar-panel-content">' +
+      innerHtml +
+      '</div></div></div>'
+    );
+  }
+
   function renderCover(s) {
-    var bg = s.bg ? esc(s.bg) : 'assets/ar/cover-maintenance.jpg';
+    var bg = s.bg ? esc(s.bg) : AR_HERO_BG;
     return (
       '<div class="ar-slide-canvas ar-slide-canvas--cover ar-hero">' +
       '<div class="ar-hero-bg" style="background-image:url(\'' +
@@ -363,7 +407,7 @@
   }
 
   function renderObjectives(s) {
-    var bg = s.bg ? esc(s.bg) : 'assets/ar/cover-maintenance.jpg';
+    var bg = s.bg ? esc(s.bg) : AR_HERO_BG;
     var items = (s.items || [])
       .map(function (it, i) {
         var n = it && it.n != null ? it.n : String(i + 1).padStart(2, '0');
@@ -417,7 +461,7 @@
   }
 
   function renderSection(s) {
-    var bg = s.bg ? esc(s.bg) : 'assets/ar/cover-maintenance.jpg';
+    var bg = s.bg ? esc(s.bg) : AR_HERO_BG;
     var theme = s.theme ? ' ar-section--' + esc(s.theme) : '';
     return (
       '<div class="ar-slide-canvas ar-slide-canvas--section ar-hero' +
@@ -474,21 +518,12 @@
         })
         .join('') +
       '</tbody>';
-    return (
-      '<div class="ar-slide-canvas ar-slide-canvas--table">' +
-      '<div class="ar-table-head">' +
-      '<h3 class="ar-slide-heading">' +
-      esc(s.title) +
-      '</h3>' +
-      (s.badge ? '<span class="ar-table-badge">' + esc(s.badge) + '</span>' : '') +
-      '</div>' +
-      (s.note ? '<p class="ar-table-note">' + esc(s.note) + '</p>' : '') +
+    var inner =
       '<div class="ar-table-wrap"><table class="ar-data-table">' +
       thead +
       tbody +
-      '</table></div>' +
-      '</div>'
-    );
+      '</table></div>';
+    return arPanelShell('table', s, inner);
   }
 
   function renderSplit(s) {
@@ -502,11 +537,7 @@
         return '<li>' + esc(it) + '</li>';
       })
       .join('');
-    return (
-      '<div class="ar-slide-canvas ar-slide-canvas--split">' +
-      '<h3 class="ar-slide-heading">' +
-      esc(s.title) +
-      '</h3>' +
+    var inner =
       '<div class="ar-split-grid">' +
       '<div class="ar-split-col ar-split-col--pos">' +
       '<p class="ar-split-label">Pontos positivos</p>' +
@@ -517,20 +548,24 @@
       '<p class="ar-split-label">Pontos de atenção</p>' +
       '<ul>' +
       neg +
-      '</ul></div>' +
-      '</div></div>'
-    );
+      '</ul></div></div>';
+    return arPanelShell('split', s, inner);
   }
 
   function renderPlan(s) {
     var cards = (s.cards || [])
-      .map(function (c) {
+      .map(function (c, i) {
         var meta = [];
         if (c.owner) meta.push('<span><em>Resp.</em> ' + esc(c.owner) + '</span>');
         if (c.support) meta.push('<span><em>Apoio</em> ' + esc(c.support) + '</span>');
         if (c.action) meta.push('<span><em>Ação</em> ' + esc(c.action) + '</span>');
         return (
-          '<article class="ar-plan-card">' +
+          '<article class="ar-plan-card" style="--i:' +
+          i +
+          '">' +
+          '<span class="ar-plan-card-num" aria-hidden="true">' +
+          String(i + 1).padStart(2, '0') +
+          '</span>' +
           '<h4>' +
           esc(c.title) +
           '</h4>' +
@@ -539,19 +574,16 @@
         );
       })
       .join('');
-    return (
-      '<div class="ar-slide-canvas ar-slide-canvas--plan">' +
-      '<h3 class="ar-slide-heading">' +
-      esc(s.title) +
-      '</h3>' +
+    var inner =
       (s.intro ? '<p class="ar-plan-intro">' + esc(s.intro) + '</p>' : '') +
       '<div class="ar-plan-grid">' +
       cards +
-      '</div></div>'
-    );
+      '</div>';
+    return arPanelShell('plan', s, inner);
   }
 
   function renderCta(s) {
+    var bg = esc(s.bg || AR_HERO_BG);
     var lines = (s.lines || [])
       .map(function (l) {
         return '<p class="ar-cta-line">' + esc(l) + '</p>';
@@ -563,10 +595,18 @@
       })
       .join('');
     return (
-      '<div class="ar-slide-canvas ar-slide-canvas--cta">' +
+      '<div class="ar-slide-canvas ar-slide-canvas--cta ar-hero ar-section--sprint">' +
+      '<div class="ar-hero-bg" style="background-image:url(\'' +
+      bg +
+      '\')" aria-hidden="true"></div>' +
+      '<div class="ar-hero-veil ar-hero-veil--section" aria-hidden="true"></div>' +
+      '<div class="ar-hero-grain" aria-hidden="true"></div>' +
+      '<div class="ar-cta-inner">' +
+      (s.kicker ? '<p class="ar-cover-kicker">' + esc(s.kicker) + '</p>' : '') +
       '<h3 class="ar-cta-title">' +
       esc(s.title) +
       '</h3>' +
+      '<div class="ar-hero-rule" aria-hidden="true"></div>' +
       '<div class="ar-cta-lines">' +
       lines +
       '</div>' +
@@ -578,7 +618,7 @@
           (s.author ? '<cite>— ' + esc(s.author) + '</cite>' : '') +
           '</blockquote>'
         : '') +
-      '</div>'
+      '</div></div>'
     );
   }
 
@@ -613,19 +653,29 @@
           .join('') +
         '</div>';
     }
-    return (
-      '<div class="ar-slide-canvas ar-slide-canvas--chart">' +
-      '<h3 class="ar-chart-title">' +
-      esc(s.title) +
-      '</h3>' +
+    var chartTitle =
+      s.chart === 'sla'
+        ? 'SLA e tendência mensal'
+        : s.chart === 'top15'
+          ? 'Top 15 contas de maior esforço'
+          : s.title;
+    var inner =
       (legends
         ? '<div class="ar-chart-legend" aria-hidden="true">' + legends + '</div>'
         : '') +
       '<div class="ar-chart-frame" id="' +
       frameId +
       '"></div>' +
-      foot +
-      '</div>'
+      foot;
+    return arPanelShell(
+      'chart',
+      {
+        title: chartTitle,
+        badge: s.badge || (s.chart === 'sla' ? 'ATIVIDADES' : 'ESFORÇO'),
+        note: s.title,
+        bg: s.bg
+      },
+      inner
     );
   }
 
@@ -889,8 +939,16 @@
   }
 
   function renderSign(s) {
+    var bg = esc(s.bg || AR_HERO_BG);
     return (
-      '<div class="ar-slide-canvas ar-slide-canvas--sign">' +
+      '<div class="ar-slide-canvas ar-slide-canvas--sign ar-hero">' +
+      '<div class="ar-hero-bg ar-hero-bg--soft" style="background-image:url(\'' +
+      bg +
+      '\')" aria-hidden="true"></div>' +
+      '<div class="ar-hero-veil" aria-hidden="true"></div>' +
+      '<div class="ar-hero-grain" aria-hidden="true"></div>' +
+      '<div class="ar-sign-inner">' +
+      '<span class="melvin-logo-lockup ar-cover-logo" role="img" aria-label="Melvin"></span>' +
       '<p class="ar-sign-kicker">' +
       esc(s.kicker || 'AR · Análise de resultado') +
       '</p>' +
@@ -903,11 +961,11 @@
       '<p class="ar-sign-role">' +
       esc(s.role) +
       '</p>' +
-      '<div class="ar-sign-rule" aria-hidden="true"></div>' +
+      '<div class="ar-hero-rule" aria-hidden="true"></div>' +
       '<p class="ar-sign-meta">' +
       esc(s.meta) +
       '</p>' +
-      '</div>'
+      '</div></div>'
     );
   }
 
