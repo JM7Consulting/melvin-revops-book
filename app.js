@@ -3381,3 +3381,181 @@ document.querySelectorAll('.obj-kit-page').forEach(initObjKit);
         if (/^ma-nut-/.test(bootHash)) activate('nutricao', bootHash);
         if (/^ma-rec-/.test(bootHash)) activate('recuperacao', bootHash);
     })();
+
+    // AR atual · apresentação tipo PowerPoint + gráficos
+    (function initArDeck() {
+        const root = document.getElementById('arDeck');
+        if (!root) return;
+        const slides = Array.from(root.querySelectorAll('[data-ar-slide]'));
+        const counter = document.getElementById('arDeckCounter');
+        const prevBtn = document.getElementById('arDeckPrev');
+        const nextBtn = document.getElementById('arDeckNext');
+        const fsBtn = document.getElementById('arDeckFs');
+        let index = 0;
+
+        function renderSlaChart(host) {
+            if (!host || host.dataset.ready === '1') return;
+            const months = ['Mar/2026', 'Abr/2026', 'Mai/2026', 'Jun/2026', 'Jul/2026', 'Ago/2026'];
+            const rows = [
+                { ok: 52, late: 0, total: 52 },
+                { ok: 998, late: 108, total: 1106 },
+                { ok: 783, late: 252, total: 1035 },
+                { ok: 1481, late: 134, total: 1615 },
+                { ok: 896, late: 256, total: 1152 },
+                { ok: 1078, late: 375, total: 1453 }
+            ];
+            const W = 1000, H = 520;
+            const pad = { l: 78, r: 28, t: 28, b: 52 };
+            const plotW = W - pad.l - pad.r;
+            const plotH = H - pad.t - pad.b;
+            const yMax = 1750;
+            const y = (v) => pad.t + plotH - (v / yMax) * plotH;
+            const groupW = plotW / rows.length;
+            const barW = Math.min(34, groupW * 0.28);
+            let grid = '';
+            for (let v = 0; v <= yMax; v += 250) {
+                const yy = y(v);
+                grid += `<line x1="${pad.l}" y1="${yy}" x2="${W - pad.r}" y2="${yy}" stroke="#d1d5db" stroke-width="1" stroke-dasharray="3 4"/>`;
+                grid += `<text x="${pad.l - 10}" y="${yy + 4}" text-anchor="end" font-size="12" fill="#6b7280" font-family="Manrope,Segoe UI,sans-serif">${v}</text>`;
+            }
+            let bars = '';
+            let linePts = [];
+            rows.forEach((r, i) => {
+                const cx = pad.l + groupW * (i + 0.5);
+                const xOk = cx - barW - 2;
+                const xLate = cx + 2;
+                const hOk = (r.ok / yMax) * plotH;
+                const hLate = (r.late / yMax) * plotH;
+                if (r.ok > 0) {
+                    bars += `<rect x="${xOk}" y="${y(r.ok)}" width="${barW}" height="${hOk}" fill="#22c55e"/>`;
+                    bars += `<text x="${xOk + barW / 2}" y="${y(r.ok) - 6}" text-anchor="middle" font-size="12" font-weight="700" fill="#166534" font-family="Manrope,Segoe UI,sans-serif">${r.ok}</text>`;
+                }
+                if (r.late > 0) {
+                    bars += `<rect x="${xLate}" y="${y(r.late)}" width="${barW}" height="${hLate}" fill="#ef4444"/>`;
+                    bars += `<text x="${xLate + barW / 2}" y="${y(r.late) - 6}" text-anchor="middle" font-size="12" font-weight="700" fill="#b91c1c" font-family="Manrope,Segoe UI,sans-serif">${r.late}</text>`;
+                }
+                const ty = y(r.total);
+                linePts.push([cx, ty]);
+                bars += `<text x="${cx}" y="${ty - 14}" text-anchor="middle" font-size="13" font-weight="700" fill="#1d4ed8" font-family="Manrope,Segoe UI,sans-serif">${r.total}</text>`;
+                bars += `<text x="${cx}" y="${H - 18}" text-anchor="middle" font-size="13" fill="#374151" font-family="Manrope,Segoe UI,sans-serif">${months[i]}</text>`;
+            });
+            const poly = linePts.map((p) => p.join(',')).join(' ');
+            const dots = linePts.map(([x, yy]) => `<circle cx="${x}" cy="${yy}" r="5.5" fill="#fff" stroke="#2563eb" stroke-width="2.5"/>`).join('');
+            host.innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="SLA e tendência mensal de atividades">${grid}
+                <text transform="translate(18 ${(pad.t + pad.t + plotH) / 2}) rotate(-90)" text-anchor="middle" font-size="13" fill="#4b5563" font-family="Manrope,Segoe UI,sans-serif">Volume de Atividades</text>
+                ${bars}
+                <polyline points="${poly}" fill="none" stroke="#2563eb" stroke-width="2.5"/>
+                ${dots}
+            </svg>`;
+            host.dataset.ready = '1';
+        }
+
+        function renderTop15Chart(host) {
+            if (!host || host.dataset.ready === '1') return;
+            const items = [
+                { name: 'Lubrin Lubrificação Industrial', v: 32, type: 'deal' },
+                { name: 'Energold Drilling Brasil', v: 28, type: 'deal' },
+                { name: 'tsm', v: 26, type: 'deal' },
+                { name: '[IA] Produflex ind. Borracha ltda', v: 23, type: 'deal' },
+                { name: 'Jirau Energia S.a.', v: 23, type: 'deal' },
+                { name: 'IRMAOS GONCALVES COMERCIO E INDUSTRIA LTDA', v: 23, type: 'deal' },
+                { name: '[IA] Bianchini SA', v: 22, type: 'deal' },
+                { name: 'Essencis MG', v: 20, type: 'deal' },
+                { name: 'Contato (ID 37)', v: 19, type: 'contact' },
+                { name: '[IA] ecolab', v: 19, type: 'deal' },
+                { name: '[IA] Alimentos Zaeli', v: 19, type: 'deal' },
+                { name: 'DESTACA ENGENHARIA DE FUNDACOES E INFRA ESTRUTURAS...', v: 18, type: 'deal' },
+                { name: '[IA] kaefer', v: 18, type: 'deal' },
+                { name: 'Agro Paraná', v: 18, type: 'deal' },
+                { name: '[IA] FPT', v: 18, type: 'deal' }
+            ];
+            const W = 1000, H = 520;
+            const pad = { l: 310, r: 48, t: 18, b: 42 };
+            const plotW = W - pad.l - pad.r;
+            const plotH = H - pad.t - pad.b;
+            const xMax = 35;
+            const rowH = plotH / items.length;
+            const barH = Math.min(18, rowH * 0.62);
+            const x = (v) => pad.l + (v / xMax) * plotW;
+            let grid = '';
+            for (let v = 0; v <= xMax; v += 5) {
+                const xx = x(v);
+                grid += `<line x1="${xx}" y1="${pad.t}" x2="${xx}" y2="${H - pad.b}" stroke="#d1d5db" stroke-width="1" stroke-dasharray="2 4"/>`;
+                grid += `<text x="${xx}" y="${H - 16}" text-anchor="middle" font-size="12" fill="#6b7280" font-family="Manrope,Segoe UI,sans-serif">${v}</text>`;
+            }
+            let bars = '';
+            items.forEach((it, i) => {
+                const cy = pad.t + rowH * (i + 0.5);
+                const w = (it.v / xMax) * plotW;
+                const color = it.type === 'contact' ? '#16a34a' : '#1e3a8a';
+                const label = it.name.length > 42 ? it.name.slice(0, 41) + '…' : it.name;
+                bars += `<text x="${pad.l - 10}" y="${cy + 4}" text-anchor="end" font-size="11.5" fill="#1f2937" font-family="Manrope,Segoe UI,sans-serif">${label}</text>`;
+                bars += `<rect x="${pad.l}" y="${cy - barH / 2}" width="${w}" height="${barH}" fill="${color}"/>`;
+                bars += `<text x="${pad.l + w + 6}" y="${cy + 4}" font-size="12" font-weight="700" fill="#111827" font-family="Manrope,Segoe UI,sans-serif">${it.v}</text>`;
+            });
+            host.innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Top 15 contas de maior esforço">${grid}${bars}
+                <text x="${pad.l + plotW / 2}" y="${H - 2}" text-anchor="middle" font-size="12" fill="#4b5563" font-family="Manrope,Segoe UI,sans-serif">Volume Total de Atividades</text>
+            </svg>`;
+            host.dataset.ready = '1';
+        }
+
+        function ensureCharts() {
+            renderSlaChart(document.getElementById('arChartSla'));
+            renderTop15Chart(document.getElementById('arChartTop15'));
+        }
+
+        function go(to) {
+            if (!slides.length) return;
+            index = Math.max(0, Math.min(slides.length - 1, to));
+            slides.forEach((slide, i) => {
+                const on = i === index;
+                slide.classList.toggle('is-active', on);
+                if (on) slide.removeAttribute('hidden');
+                else slide.setAttribute('hidden', '');
+            });
+            if (counter) counter.textContent = (index + 1) + ' / ' + slides.length;
+            if (prevBtn) prevBtn.disabled = index === 0;
+            if (nextBtn) nextBtn.disabled = index === slides.length - 1;
+        }
+
+        function syncFsUi() {
+            const fs = !!(document.fullscreenElement === root || document.webkitFullscreenElement === root);
+            root.classList.toggle('is-fs', fs);
+            if (fsBtn) fsBtn.textContent = fs ? '⛶ Sair da tela cheia' : '⛶ Tela cheia';
+        }
+
+        async function toggleFs() {
+            try {
+                if (document.fullscreenElement === root || document.webkitFullscreenElement === root) {
+                    if (document.exitFullscreen) await document.exitFullscreen();
+                    else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+                } else if (root.requestFullscreen) {
+                    await root.requestFullscreen();
+                } else if (root.webkitRequestFullscreen) {
+                    root.webkitRequestFullscreen();
+                }
+            } catch (e) {}
+            syncFsUi();
+        }
+
+        if (prevBtn) prevBtn.addEventListener('click', () => go(index - 1));
+        if (nextBtn) nextBtn.addEventListener('click', () => go(index + 1));
+        if (fsBtn) fsBtn.addEventListener('click', toggleFs);
+        document.addEventListener('fullscreenchange', syncFsUi);
+        document.addEventListener('webkitfullscreenchange', syncFsUi);
+
+        function onKey(e) {
+            const section = document.getElementById('ar-atual');
+            const active = section && section.classList.contains('page-active');
+            const fs = document.fullscreenElement === root || document.webkitFullscreenElement === root;
+            if (!active && !fs) return;
+            if (e.key === 'ArrowRight') { go(index + 1); e.preventDefault(); }
+            else if (e.key === 'ArrowLeft') { go(index - 1); e.preventDefault(); }
+            else if (e.key === 'f' || e.key === 'F') { toggleFs(); e.preventDefault(); }
+        }
+        document.addEventListener('keydown', onKey);
+
+        ensureCharts();
+        go(0);
+        try { root.focus({ preventScroll: true }); } catch (e) {}
+    })();

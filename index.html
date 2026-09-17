@@ -6,7 +6,7 @@
     <title>REBUILD 7 | MELVIN</title>
     
 	<link rel="icon" type="image/png" href="logo_simples_removebcg.png">
-  <link rel="stylesheet" href="styles.css?v=matriz-96">
+  <link rel="stylesheet" href="styles.css?v=matriz-97">
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sora:wght@600;700;800&family=Carlito:ital,wght@0,400;0,700;1,400&family=Libre+Baskerville:wght@400;700&display=swap" rel="stylesheet">
@@ -64,7 +64,7 @@
                         <span class="arrow">▼</span>
                     </div>
                     <div class="submenu">
-                        <a href="#ar-atual"><span style="display:flex; gap:10px;"><span>📊</span> AR atual</span><span class="dot"></span></a>
+                        <a href="#ar-atual"><span style="display:flex; gap:10px;"><span>📊</span> AR atual</span><span class="dot dot-active"></span></a>
                     </div>
                 </div>
                 </div>
@@ -364,17 +364,56 @@
         </section>
 
         <!-- AR · Análise de resultado -->
-        <section id="ar-atual" class="blueprint-page dev-page" style="padding: 40px; border-radius: 16px;">
-            <div class="waiting-page">
-                <div class="waiting-badge"><span class="pulse"></span> Aguardando dados</div>
-                <h2>📊 AR atual</h2>
-                <p>Análise de resultado — página pronta para receber os dados. Conteúdo entra nos próximos envios.</p>
-                <div class="dev-eta">
-                    <span class="dev-eta-label">Status</span>
-                    <strong>Em espera</strong>
-                    <span class="dev-eta-note">AR · Análise de resultado</span>
+        <section id="ar-atual" class="blueprint-page ar-page" style="padding: 24px; border-radius: 16px;">
+            <div class="ar-deck" id="arDeck" tabindex="0" aria-label="Apresentação AR atual">
+                <header class="ar-deck-head">
+                    <div>
+                        <p class="ar-deck-kicker">AR · Análise de resultado</p>
+                        <h2 class="ar-deck-title">AR atual</h2>
+                    </div>
+                    <div class="ar-deck-actions">
+                        <button type="button" class="ar-deck-btn" id="arDeckFs" title="Tela cheia (F)">⛶ Tela cheia</button>
+                    </div>
+                </header>
+
+                <div class="ar-deck-body">
+                    <button type="button" class="ar-deck-nav ar-deck-nav--prev" id="arDeckPrev" aria-label="Slide anterior">‹</button>
+
+                    <div class="ar-deck-viewport" id="arDeckViewport">
+                        <!-- Slide 1 · SLA mensal -->
+                        <article class="ar-slide is-active" data-ar-slide="1" aria-label="Slide 1">
+                            <div class="ar-slide-canvas ar-slide-canvas--chart">
+                                <h3 class="ar-chart-title">Dashboard RevOps: SLA e Tendência Mensal de Atividades (Usuária: Gabriely Silva)</h3>
+                                <div class="ar-chart-legend" aria-hidden="true">
+                                    <span class="ar-leg ar-leg--trend"><i></i> Tendência (Volume Total)</span>
+                                    <span class="ar-leg ar-leg--ok"><i></i> Concluído no Prazo</span>
+                                    <span class="ar-leg ar-leg--late"><i></i> Concluído em Atraso</span>
+                                </div>
+                                <div class="ar-chart-frame" id="arChartSla"></div>
+                            </div>
+                        </article>
+
+                        <!-- Slide 2 · Top 15 contas -->
+                        <article class="ar-slide" data-ar-slide="2" hidden aria-label="Slide 2">
+                            <div class="ar-slide-canvas ar-slide-canvas--chart">
+                                <h3 class="ar-chart-title">Raio-X de Oportunidades: Top 15 Contas de Maior Esforço (Usuária: Gabriely Silva)</h3>
+                                <div class="ar-chart-frame" id="arChartTop15"></div>
+                                <div class="ar-chart-legend ar-chart-legend--foot" aria-hidden="true">
+                                    <span class="ar-leg-title">Tipo de Entidade</span>
+                                    <span class="ar-leg ar-leg--deal"><i></i> DEAL</span>
+                                    <span class="ar-leg ar-leg--contact"><i></i> CONTACT</span>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+
+                    <button type="button" class="ar-deck-nav ar-deck-nav--next" id="arDeckNext" aria-label="Próximo slide">›</button>
                 </div>
-                <p class="waiting-meta"><a href="#home-dashboard">← Voltar ao início</a></p>
+
+                <footer class="ar-deck-foot">
+                    <span class="ar-deck-hint">← → navegar · F tela cheia · Esc sair</span>
+                    <span class="ar-deck-counter" id="arDeckCounter">1 / 2</span>
+                </footer>
             </div>
         </section>
 
@@ -14198,7 +14237,7 @@ Um abraço!"
         </section>
 
 	</main>
-  <script src="app.js?v=matriz-96"></script>
+  <script src="app.js?v=matriz-97"></script>
   <script src="hire-matrix.js?v=matriz-66"></script>
   <script src="bonus-pve.js?v=matriz-66"></script>
 	
