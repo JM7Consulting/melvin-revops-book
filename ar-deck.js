@@ -1,5 +1,5 @@
 /**
- * AR · Análises de Resultados — 17 slides (Exact Sales & Melvin)
+ * AR · Análises de Resultados — 17 slides (Melvin)
  * Renders into #arDeckViewport and drives deck navigation.
  */
 (function () {
@@ -17,7 +17,7 @@
     {
       type: 'cover',
       title: 'Análises de Resultados',
-      subtitle: 'AR · Exact Sales & Melvin'
+      subtitle: 'AR · Melvin'
     },
     {
       type: 'bullets',
@@ -54,8 +54,7 @@
         ['AGENDAMENTOS [Out/Inb]', '44', '47', '36', '19 [2+17]'],
         ['REUNIÕES REALIZADAS (70%)', '30', '34', '24', '14 [1+13]'],
         ['QUALIDADE DAS REUNIÕES', '90%', '47,1%', '16,6%', '53,8%'],
-        ['VENDAS GERADAS (20%)', '5', '0', '0', '3'],
-        ['EXACT CLUB (pts)', '560', '630', '640', '600']
+        ['VENDAS GERADAS (20%)', '5', '0', '0', '3']
       ]
     },
     {
@@ -80,8 +79,7 @@
         ['AGENDAMENTOS', '44', '53', '39', '32'],
         ['REUNIÕES REALIZADAS (70%)', '30', '34', '38', '23'],
         ['QUALIDADE DAS REUNIÕES', '90%', '74,2%', '42,1%', '43,4%'],
-        ['VENDAS (Inb+Out+CS) (20%)', '5', '2', '0', '4 [3+0+1]'],
-        ['EXACT CLUB (pts)', '560', '2635', '2185', '1440']
+        ['VENDAS (Inb+Out+CS) (20%)', '5', '2', '0', '4 [3+0+1]']
       ]
     },
     {
@@ -124,7 +122,6 @@
         '2 vendas da pré-venda e 1 do CS.'
       ],
       negatives: [
-        'Queda na participação no Exact Club — Melvin é case!',
         'Queda substancial de atividades concluídas',
         'Queda SUBSTANCIAL no número de ligações geradas e atendidas',
         'Leve queda no número de agendamentos',
@@ -171,8 +168,7 @@
         ['AGENDAMENTOS', '28', '1,5/dia'],
         ['REUNIÕES REALIZADAS (70%)', '19', '1,1/dia'],
         ['QUALIDADE DAS REUNIÕES', '90%', '90%'],
-        ['VENDAS GERADAS (20%)', '3', '0,2/dia'],
-        ['EXACT CLUB (pts)', '560', '30/dia']
+        ['VENDAS GERADAS (20%)', '3', '0,2/dia']
       ]
     },
     {
@@ -192,7 +188,7 @@
       title: 'Acompanhamento Estratégico',
       producedBy: 'Jailson Martins',
       role: 'Especialista em Estratégias Comerciais',
-      forWho: 'Exact Sales & Melvin'
+      forWho: 'Melvin'
     },
     {
       type: 'sign',
