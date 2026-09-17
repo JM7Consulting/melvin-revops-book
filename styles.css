@@ -14117,6 +14117,62 @@ body.light-mode .ma-cad-chip--green {
   height: 100%;
   display: block;
 }
+.ar-slide-canvas--cover,
+.ar-slide-canvas--sign {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: clamp(8px, 1.4cqw, 16px);
+  background:
+    radial-gradient(ellipse 70% 55% at 50% 38%, rgba(100, 252, 216, 0.12), transparent 70%),
+    linear-gradient(160deg, #0b1220 0%, #122033 55%, #0b1220 100%);
+  color: #f8fafc;
+}
+.ar-cover-logo {
+  width: min(42%, 280px);
+  height: clamp(56px, 12cqh, 96px);
+  margin: 0 auto clamp(8px, 2cqh, 18px);
+}
+.ar-cover-kicker,
+.ar-sign-kicker {
+  margin: 0;
+  font-size: clamp(0.7rem, 1.8cqw, 0.9rem);
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #64FCD8;
+}
+.ar-cover-title {
+  margin: 0;
+  font-size: clamp(1.6rem, 5.2cqw, 3rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #fff;
+}
+.ar-cover-sub,
+.ar-sign-lead,
+.ar-sign-role,
+.ar-sign-meta {
+  margin: 0;
+  color: rgba(248, 250, 252, 0.78);
+  font-size: clamp(0.78rem, 2cqw, 1.05rem);
+}
+.ar-sign-lead {
+  margin-top: clamp(6px, 2cqh, 14px);
+}
+.ar-sign-name {
+  margin: 0;
+  font-size: clamp(1.5rem, 4.6cqw, 2.6rem);
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -0.02em;
+}
+.ar-sign-rule {
+  width: min(42%, 220px);
+  height: 2px;
+  margin: clamp(8px, 2cqh, 16px) auto;
+  background: linear-gradient(90deg, transparent, #64FCD8, transparent);
+}
 .ar-deck-foot {
   display: flex;
   align-items: center;
