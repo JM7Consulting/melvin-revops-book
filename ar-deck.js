@@ -16,25 +16,33 @@
   window.AR_DECK_SLIDES = [
     {
       type: 'cover',
+      kicker: 'RevOps · Direção Melvin',
       title: 'Análises de Resultados',
-      subtitle: 'AR · Melvin'
+      subtitle: 'Performance comercial · Trimestre SET–NOV 2025',
+      bg: 'assets/ar/cover-maintenance.jpg'
     },
     {
-      type: 'bullets',
+      type: 'objectives',
+      kicker: 'Rota da sessão',
       title: 'Objetivos',
+      lead: 'O que esta análise responde para a direção.',
+      bg: 'assets/ar/cover-maintenance.jpg',
       items: [
-        'Analisar a evolução da produção',
-        'Avaliar crescimento trimensal',
-        'Identificar gargalos',
-        'Planificar melhorias',
-        'Definir papéis'
+        { n: '01', label: 'Analisar a evolução da produção' },
+        { n: '02', label: 'Avaliar crescimento trimensal' },
+        { n: '03', label: 'Identificar gargalos' },
+        { n: '04', label: 'Planificar melhorias' },
+        { n: '05', label: 'Definir papéis' }
       ]
     },
     {
       type: 'section',
-      kicker: 'Trimestre',
+      num: '01',
+      kicker: 'Bloco',
       title: 'Produtividade',
-      subtitle: 'SET · OUT · NOV · 2025'
+      subtitle: 'SET · OUT · NOV · 2025',
+      theme: 'prod',
+      bg: 'assets/ar/cover-maintenance.jpg'
     },
     {
       type: 'table',
@@ -78,7 +86,12 @@
     },
     {
       type: 'section',
-      title: 'Estatísticas'
+      num: '02',
+      kicker: 'Bloco',
+      title: 'Estatísticas',
+      subtitle: 'Visão consolidada da operação',
+      theme: 'stats',
+      bg: 'assets/ar/cover-maintenance.jpg'
     },
     {
       type: 'table',
@@ -131,7 +144,12 @@
     },
     {
       type: 'section',
-      title: 'Gargalos'
+      num: '03',
+      kicker: 'Bloco',
+      title: 'Gargalos',
+      subtitle: 'Onde a máquina trava — e por quê',
+      theme: 'gap',
+      bg: 'assets/ar/cover-maintenance.jpg'
     },
     {
       type: 'split',
@@ -149,7 +167,12 @@
     },
     {
       type: 'section',
-      title: 'Melhorias'
+      num: '04',
+      kicker: 'Bloco',
+      title: 'Melhorias',
+      subtitle: 'Plano de ação com donos e próximos passos',
+      theme: 'improve',
+      bg: 'assets/ar/cover-maintenance.jpg'
     },
     {
       type: 'plan',
@@ -172,7 +195,12 @@
     },
     {
       type: 'section',
-      title: 'Sprint Dezembro'
+      num: '05',
+      kicker: 'Bloco',
+      title: 'Sprint Dezembro',
+      subtitle: 'Reta final · metas e ritmo diário',
+      theme: 'sprint',
+      bg: 'assets/ar/cover-maintenance.jpg'
     },
     {
       type: 'table',
@@ -213,36 +241,105 @@
   ];
 
   function renderCover(s) {
+    var bg = s.bg ? esc(s.bg) : 'assets/ar/cover-maintenance.jpg';
     return (
-      '<div class="ar-slide-canvas ar-slide-canvas--cover">' +
+      '<div class="ar-slide-canvas ar-slide-canvas--cover ar-hero">' +
+      '<div class="ar-hero-bg" style="background-image:url(\'' +
+      bg +
+      '\')" aria-hidden="true"></div>' +
+      '<div class="ar-hero-veil" aria-hidden="true"></div>' +
+      '<div class="ar-hero-grain" aria-hidden="true"></div>' +
+      '<div class="ar-cover-inner">' +
       '<span class="melvin-logo-lockup ar-cover-logo" role="img" aria-label="Melvin"></span>' +
-      '<h3 class="ar-cover-title">' + esc(s.title) + '</h3>' +
-      '<p class="ar-cover-sub">' + esc(s.subtitle) + '</p>' +
-      '</div>'
+      (s.kicker ? '<p class="ar-cover-kicker">' + esc(s.kicker) + '</p>' : '') +
+      '<h3 class="ar-cover-title">' +
+      esc(s.title) +
+      '</h3>' +
+      '<div class="ar-hero-rule" aria-hidden="true"></div>' +
+      '<p class="ar-cover-sub">' +
+      esc(s.subtitle) +
+      '</p>' +
+      '</div></div>'
+    );
+  }
+
+  function renderObjectives(s) {
+    var bg = s.bg ? esc(s.bg) : 'assets/ar/cover-maintenance.jpg';
+    var items = (s.items || [])
+      .map(function (it, i) {
+        var n = it && it.n != null ? it.n : String(i + 1).padStart(2, '0');
+        var label = it && it.label != null ? it.label : it;
+        return (
+          '<li class="ar-obj-item" style="--i:' +
+          i +
+          '">' +
+          '<span class="ar-obj-num">' +
+          esc(n) +
+          '</span>' +
+          '<span class="ar-obj-label">' +
+          esc(label) +
+          '</span>' +
+          '</li>'
+        );
+      })
+      .join('');
+    return (
+      '<div class="ar-slide-canvas ar-slide-canvas--objectives ar-hero">' +
+      '<div class="ar-hero-bg ar-hero-bg--soft" style="background-image:url(\'' +
+      bg +
+      '\')" aria-hidden="true"></div>' +
+      '<div class="ar-hero-veil ar-hero-veil--obj" aria-hidden="true"></div>' +
+      '<div class="ar-obj-layout">' +
+      '<div class="ar-obj-copy">' +
+      (s.kicker ? '<p class="ar-cover-kicker">' + esc(s.kicker) + '</p>' : '') +
+      '<h3 class="ar-obj-title">' +
+      esc(s.title) +
+      '</h3>' +
+      (s.lead ? '<p class="ar-obj-lead">' + esc(s.lead) + '</p>' : '') +
+      '<div class="ar-hero-rule ar-hero-rule--left" aria-hidden="true"></div>' +
+      '</div>' +
+      '<ol class="ar-obj-list">' +
+      items +
+      '</ol>' +
+      '</div></div>'
     );
   }
 
   function renderBullets(s) {
-    var items = (s.items || [])
-      .map(function (it) {
-        return '<li>' + esc(it) + '</li>';
+    return renderObjectives({
+      kicker: s.kicker || 'Rota da sessão',
+      title: s.title,
+      lead: s.lead,
+      bg: s.bg,
+      items: (s.items || []).map(function (label, i) {
+        return { n: String(i + 1).padStart(2, '0'), label: label };
       })
-      .join('');
-    return (
-      '<div class="ar-slide-canvas ar-slide-canvas--bullets">' +
-      '<h3 class="ar-slide-heading">' + esc(s.title) + '</h3>' +
-      '<ul class="ar-bullets">' + items + '</ul>' +
-      '</div>'
-    );
+    });
   }
 
   function renderSection(s) {
+    var bg = s.bg ? esc(s.bg) : 'assets/ar/cover-maintenance.jpg';
+    var theme = s.theme ? ' ar-section--' + esc(s.theme) : '';
     return (
-      '<div class="ar-slide-canvas ar-slide-canvas--section">' +
+      '<div class="ar-slide-canvas ar-slide-canvas--section ar-hero' +
+      theme +
+      '">' +
+      '<div class="ar-hero-bg" style="background-image:url(\'' +
+      bg +
+      '\')" aria-hidden="true"></div>' +
+      '<div class="ar-hero-veil ar-hero-veil--section" aria-hidden="true"></div>' +
+      '<div class="ar-section-frame">' +
+      (s.num
+        ? '<span class="ar-section-num" aria-hidden="true">' + esc(s.num) + '</span>'
+        : '') +
+      '<div class="ar-section-copy">' +
       (s.kicker ? '<p class="ar-section-kicker">' + esc(s.kicker) + '</p>' : '') +
-      '<h3 class="ar-section-title">' + esc(s.title) + '</h3>' +
+      '<h3 class="ar-section-title">' +
+      esc(s.title) +
+      '</h3>' +
       (s.subtitle ? '<p class="ar-section-sub">' + esc(s.subtitle) + '</p>' : '') +
-      '</div>'
+      '<div class="ar-hero-rule ar-hero-rule--left" aria-hidden="true"></div>' +
+      '</div></div></div>'
     );
   }
 
@@ -715,6 +812,9 @@
     switch (s.type) {
       case 'cover':
         inner = renderCover(s);
+        break;
+      case 'objectives':
+        inner = renderObjectives(s);
         break;
       case 'bullets':
         inner = renderBullets(s);
