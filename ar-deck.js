@@ -482,6 +482,17 @@
     {
       type: 'matrix',
       title: 'PRODUTIVIDADE MENSAL',
+      person: 'Poliana Sampaio',
+      note: AR_PERIOD.label + ' · dados em atualização',
+      dailyAvg: true,
+      columns: MX_MONTHS.slice(),
+      rows: mxProdRows({
+        vendas: { label: 'Vendas geradas' }
+      })
+    },
+    {
+      type: 'matrix',
+      title: 'PRODUTIVIDADE MENSAL',
       person: 'Fabrício Luiz',
       note: AR_PERIOD.label,
       dailyAvg: true,
@@ -529,15 +540,34 @@
       ]
     },
     {
-      type: 'matrix',
+      type: 'viz',
       title: 'PRODUTIVIDADE MENSAL',
-      person: 'Poliana Sampaio',
-      note: AR_PERIOD.label + ' · dados em atualização',
-      dailyAvg: true,
-      columns: MX_MONTHS.slice(),
-      rows: mxProdRows({
-        vendas: { label: 'Vendas geradas' }
-      })
+      midKicker: 'ANÁLISE DE REUNIÕES',
+      indicator: 'Conversão e Qualidade das Reuniões',
+      person: 'Fabrício Luiz',
+      note: 'Agendadas · Realizadas · No-Show · Termômetro · ' + AR_PERIOD.label,
+      viz: 'convThermo',
+      convThermo: {
+        barsTitle: 'Conversão de Reuniões (Fabrício Luiz)',
+        donutTitle: 'Qualidade das Reuniões (Termômetro)',
+        bars: [
+          { label: 'Agendadas', v: 141, color: '#1e3a8a' },
+          { label: 'Realizadas', v: 133, color: '#10b981' },
+          { label: 'No-Show', v: 8, color: '#93c5fd' }
+        ],
+        yMax: 140,
+        slices: [
+          { label: 'Fria', pct: 54.2, color: '#3b82f6' },
+          { label: 'Morna', pct: 27.5, color: '#f97316' },
+          { label: 'Cemitério', pct: 12.5, color: '#475569' },
+          { label: 'Quente', pct: 5.8, color: '#ef4444' }
+        ]
+      },
+      insights: [
+        'Show-up alto: 133/141 realizadas (~94%) — só 8 no-shows.',
+        'Termômetro frio: 54,2% Frias vs 5,8% Quentes.',
+        'Alerta: Frias + Cemitério = 66,7% — priorizar aquecimento do discurso.'
+      ]
     },
     {
       type: 'chart',
@@ -1314,6 +1344,193 @@ function renderHeatmapViz(opts) {
     return 'R$ ' + Math.round(n);
   }
 
+  
+  function renderConvThermoViz(cfg) {
+    cfg = cfg || {};
+    var bars = cfg.bars || [];
+    var slices = cfg.slices || [];
+    var yMax = cfg.yMax || 140;
+    var W = 420;
+    var H = 300;
+    var pad = { t: 28, r: 16, b: 36, l: 36 };
+    var plotW = W - pad.l - pad.r;
+    var plotH = H - pad.t - pad.b;
+    var n = Math.max(bars.length, 1);
+    var gap = plotW / n;
+    var barW = Math.min(56, gap * 0.55);
+
+    function yPos(v) {
+      return pad.t + plotH - (Math.max(0, v) / yMax) * plotH;
+    }
+
+    var grid = '';
+    for (var t = 0; t <= yMax; t += 20) {
+      var y = yPos(t);
+      grid +=
+        '<line class="ar-ct-grid" x1="' +
+        pad.l +
+        '" y1="' +
+        y +
+        '" x2="' +
+        (W - pad.r) +
+        '" y2="' +
+        y +
+        '"/>';
+      grid +=
+        '<text class="ar-ct-tick" x="' +
+        (pad.l - 6) +
+        '" y="' +
+        (y + 3) +
+        '" text-anchor="end">' +
+        t +
+        '</text>';
+    }
+
+    var barsHtml = '';
+    bars.forEach(function (b, i) {
+      var cx = pad.l + gap * i + gap / 2;
+      var y1 = yPos(b.v);
+      var bh = Math.max(2, pad.t + plotH - y1);
+      barsHtml +=
+        '<rect class="ar-ct-bar" style="--i:' +
+        i +
+        '" x="' +
+        (cx - barW / 2) +
+        '" y="' +
+        y1 +
+        '" width="' +
+        barW +
+        '" height="' +
+        bh +
+        '" rx="4" fill="' +
+        esc(b.color) +
+        '"/>';
+      barsHtml +=
+        '<text class="ar-ct-val" style="--i:' +
+        i +
+        '" x="' +
+        cx +
+        '" y="' +
+        (y1 - 8) +
+        '" text-anchor="middle">' +
+        b.v +
+        '</text>';
+      barsHtml +=
+        '<text class="ar-ct-xlabel" x="' +
+        cx +
+        '" y="' +
+        (H - 12) +
+        '" text-anchor="middle">' +
+        esc(b.label) +
+        '</text>';
+    });
+
+    var barsSvg =
+      '<div class="ar-ct-pane ar-ct-pane--bars">' +
+      '<p class="ar-ct-pane-title">' +
+      esc(cfg.barsTitle || 'Conversão de Reuniões') +
+      '</p>' +
+      '<svg class="ar-ct-bars-svg" viewBox="0 0 ' +
+      W +
+      ' ' +
+      H +
+      '" role="img" aria-label="Conversão de reuniões">' +
+      grid +
+      '<line class="ar-ct-axis" x1="' +
+      pad.l +
+      '" y1="' +
+      (pad.t + plotH) +
+      '" x2="' +
+      (W - pad.r) +
+      '" y2="' +
+      (pad.t + plotH) +
+      '"/>' +
+      barsHtml +
+      '</svg></div>';
+
+    /* Donut with % inside segments + external labels */
+    var R = 78;
+    var cx = 150;
+    var cy = 130;
+    var circ = 2 * Math.PI * R;
+    var offset = 0;
+    var arcs = '';
+    var labels = '';
+    var angle = -Math.PI / 2;
+    slices.forEach(function (s, i) {
+      var len = (s.pct / 100) * circ;
+      var sweep = (s.pct / 100) * 2 * Math.PI;
+      var mid = angle + sweep / 2;
+      arcs +=
+        '<circle class="ar-ct-seg" style="--si:' +
+        i +
+        '" cx="' +
+        cx +
+        '" cy="' +
+        cy +
+        '" r="' +
+        R +
+        '" fill="none" stroke="' +
+        esc(s.color) +
+        '" stroke-width="34" stroke-dasharray="' +
+        len +
+        ' ' +
+        (circ - len) +
+        '" stroke-dashoffset="' +
+        -offset +
+        '" transform="rotate(-90 ' +
+        cx +
+        ' ' +
+        cy +
+        ')"/>';
+      var px = cx + Math.cos(mid) * R;
+      var py = cy + Math.sin(mid) * R;
+      arcs +=
+        '<text class="ar-ct-pct" style="--si:' +
+        i +
+        '" x="' +
+        px +
+        '" y="' +
+        (py + 4) +
+        '" text-anchor="middle">' +
+        esc(String(s.pct).replace('.', ',')) +
+        '%</text>';
+      var lx = cx + Math.cos(mid) * (R + 48);
+      var ly = cy + Math.sin(mid) * (R + 48);
+      labels +=
+        '<text class="ar-ct-slice-label" style="--si:' +
+        i +
+        '" x="' +
+        lx +
+        '" y="' +
+        (ly + 4) +
+        '" text-anchor="middle">' +
+        esc(s.label) +
+        '</text>';
+      offset += len;
+      angle += sweep;
+    });
+
+    var donutSvg =
+      '<div class="ar-ct-pane ar-ct-pane--donut">' +
+      '<p class="ar-ct-pane-title">' +
+      esc(cfg.donutTitle || 'Qualidade das Reuniões (Termômetro)') +
+      '</p>' +
+      '<svg class="ar-ct-donut-svg" viewBox="0 0 300 270" role="img" aria-label="Termômetro de reuniões">' +
+      '<g class="ar-ct-donut-spin">' +
+      arcs +
+      '</g>' +
+      labels +
+      '</svg></div>';
+
+    return (
+      '<div class="ar-ct ar-ct--live">' +
+      barsSvg +
+      donutSvg +
+      '</div>'
+    );
+  }
+
   function renderDualSalesViz(d) {
     d = d || {};
     var months = d.months || [];
@@ -2024,6 +2241,7 @@ function renderHeatmapViz(opts) {
     else if (s.viz === 'bars') vizHtml = renderBarsViz(s.items);
     else if (s.viz === 'cluster') vizHtml = renderClusterBarsViz(s);
     else if (s.viz === 'dual') vizHtml = renderDualSalesViz(s.dual);
+    else if (s.viz === 'convThermo') vizHtml = renderConvThermoViz(s.convThermo);
     else if (s.viz === 'hist') vizHtml = renderHistViz(s.hist);
     else if (s.viz === 'season') vizHtml = renderSeasonViz(s.season);
     else if (s.viz === 'donut') vizHtml = renderDonutViz(s.slices, s.centerLabel, s.centerSub);
