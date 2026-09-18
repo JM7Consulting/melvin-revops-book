@@ -511,6 +511,19 @@
       })
     },
     {
+      type: 'matrix',
+      title: 'PRODUTIVIDADE MENSAL',
+      person: 'Fabrício Luiz',
+      note: AR_PERIOD.label,
+      dailyAvg: true,
+      columns: MX_MONTHS.slice(),
+      rows: mxProdRows({
+        vendas: {
+          values: ['10', '48', '683', '173', '147', '213', '95']
+        }
+      })
+    },
+    {
       type: 'viz',
       title: 'PRODUTIVIDADE MENSAL',
       midKicker: 'ANÁLISE DE REUNIÕES',
@@ -539,19 +552,6 @@
         'Termômetro frio: 54,2% Frias vs 5,8% Quentes.',
         'Alerta: Frias + Cemitério = 66,7% — priorizar aquecimento do discurso.'
       ]
-    },
-    {
-      type: 'matrix',
-      title: 'PRODUTIVIDADE MENSAL',
-      person: 'Fabrício Luiz',
-      note: AR_PERIOD.label,
-      dailyAvg: true,
-      columns: MX_MONTHS.slice(),
-      rows: mxProdRows({
-        vendas: {
-          values: ['10', '48', '683', '173', '147', '213', '95']
-        }
-      })
     },
     {
       type: 'chart',
