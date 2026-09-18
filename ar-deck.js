@@ -326,20 +326,23 @@
       bg: AR_HERO_BG
     },
     {
-      type: 'table',
+      type: 'matrix',
       title: 'Metas',
       badge: 'GABRIELY (full time)',
-      note: 'Referência: ' + AR_PERIOD.label + ' · metas do ciclo seguinte',
-      columns: ['INDICADOR', 'TOTAL MÊS', 'MÉDIAS'],
-      rows: [
-        ['ATIVIDADES CONCLUÍDAS', '1520', '80/dia'],
-        ['ATIV. CONC. COM ATRASO', '40%', '40%'],
-        ['LIGAÇÕES ATENDIDAS', '380', '20/dia'],
-        ['AGENDAMENTOS', '28', '1,5/dia'],
-        ['REUNIÕES REALIZADAS (70%)', '19', '1,1/dia'],
-        ['QUALIDADE DAS REUNIÕES', '90%', '90%'],
-        ['VENDAS GERADAS (20%)', '3', '0,2/dia']
-      ]
+      note: 'Referência: ' + AR_PERIOD.label + ' · metas do ciclo seguinte · dados em atualização',
+      columns: ['TOTAL MÊS', 'MÉDIAS'],
+      rows: mxRows(
+        [
+          'Atividades concluídas',
+          'Atividades com atraso (percentual)',
+          'Ligações atendidas',
+          'Agendamentos',
+          'Reuniões realizadas (70%)',
+          'Qualidade das reuniões',
+          'Vendas geradas (20%)'
+        ],
+        2
+      )
     },
     {
       type: 'cta',
