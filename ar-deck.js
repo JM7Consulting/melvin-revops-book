@@ -152,7 +152,7 @@
     },
     {
       type: 'matrix',
-      title: 'Resumo de SLA por Mês',
+      title: 'PRODUTIVIDADE MENSAL',
       badge: 'GABRIELY',
       note: 'Usuária: Gabriely Silva · ' + AR_PERIOD.label,
       columns: ['Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto'],
@@ -212,7 +212,7 @@
     },
     {
       type: 'matrix',
-      title: 'Produtividade Mês',
+      title: 'PRODUTIVIDADE MENSAL',
       badge: 'TOTAL',
       note: 'Equipe · ' + AR_PERIOD.label + ' · dados em atualização',
       columns: MX_MONTHS.slice(),
