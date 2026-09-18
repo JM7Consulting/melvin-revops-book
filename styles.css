@@ -14676,27 +14676,43 @@ body.light-mode .ar-deck:-webkit-full-screen {
   padding: clamp(14px, 2.4cqw, 26px) clamp(16px, 2.8cqw, 30px) clamp(12px, 2cqw, 20px);
   box-sizing: border-box;
 }
+.ar-panel--person .ar-panel-body {
+  gap: clamp(6px, 1cqh, 10px);
+  padding: clamp(10px, 1.8cqw, 18px) clamp(14px, 2.4cqw, 24px) clamp(10px, 1.6cqw, 16px);
+}
 .ar-panel-head {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
   gap: 12px;
   flex-wrap: wrap;
 }
 .ar-panel-head--person {
-  justify-content: center;
-  text-align: center;
+  flex-wrap: nowrap;
+  align-items: center;
   width: 100%;
+  gap: clamp(12px, 2.5cqw, 28px);
 }
 .ar-panel-head--person .ar-panel-head-text {
-  width: 100%;
+  flex: 1 1 auto;
+  min-width: 0;
+  text-align: left;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
+  gap: 2px;
+}
+.ar-panel-head-person {
+  flex: 0 1 auto;
+  max-width: min(48%, 420px);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: right;
   gap: 2px;
 }
 .ar-panel-kicker {
-  margin: 0 0 4px;
+  margin: 0;
   font-family: Sora, Manrope, sans-serif;
   font-size: clamp(0.58rem, 1.25cqw, 0.72rem);
   font-weight: 700;
@@ -14714,29 +14730,31 @@ body.light-mode .ar-deck:-webkit-full-screen {
   line-height: 1.15;
 }
 .ar-panel-person {
-  margin: clamp(4px, 1cqh, 8px) 0 0;
+  margin: 0;
   font-family: Sora, Manrope, sans-serif;
-  font-size: clamp(1.35rem, 3.8cqw, 2.35rem);
+  font-size: clamp(1.15rem, 3.2cqw, 1.95rem);
   font-weight: 800;
   letter-spacing: -0.03em;
   line-height: 1.1;
   color: #ffffff;
   text-shadow: 0 4px 28px rgba(100, 252, 216, 0.28);
-  background: linear-gradient(90deg, transparent, rgba(100, 252, 216, 0.12), transparent);
-  padding: 4px 22px;
+  background: linear-gradient(135deg, rgba(100, 252, 216, 0.16), rgba(45, 212, 191, 0.06));
+  border: 1px solid rgba(100, 252, 216, 0.28);
+  padding: 6px 16px;
   border-radius: 999px;
+  white-space: nowrap;
 }
 .ar-panel-note {
-  margin: 4px 0 0;
-  font-size: clamp(0.64rem, 1.35cqw, 0.8rem);
+  margin: 2px 0 0;
+  font-size: clamp(0.62rem, 1.3cqw, 0.78rem);
   color: rgba(248, 250, 252, 0.62);
   font-weight: 500;
   max-width: 72ch;
-  line-height: 1.35;
+  line-height: 1.3;
 }
 .ar-panel-head--person .ar-panel-note {
-  margin-top: 2px;
-  text-align: center;
+  margin-top: 0;
+  text-align: right;
 }
 .ar-panel-badge {
   display: inline-flex;
@@ -14751,6 +14769,25 @@ body.light-mode .ar-deck:-webkit-full-screen {
   padding: 7px 12px;
   white-space: nowrap;
   box-shadow: 0 8px 24px rgba(45, 212, 191, 0.25);
+}
+.ar-panel--person .ar-panel-content {
+  padding: clamp(8px, 1.2cqw, 12px);
+}
+@media (max-width: 720px) {
+  .ar-panel-head--person {
+    flex-wrap: wrap;
+  }
+  .ar-panel-head-person {
+    max-width: 100%;
+    align-items: flex-start;
+    text-align: left;
+  }
+  .ar-panel-head--person .ar-panel-note {
+    text-align: left;
+  }
+  .ar-panel-person {
+    white-space: normal;
+  }
 }
 .ar-panel-content {
   flex: 1;

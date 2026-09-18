@@ -409,10 +409,36 @@
     var bg = esc(s.bg || AR_HERO_BG);
     var period = periodLabel();
     var headCls = 'ar-panel-head' + (s.person ? ' ar-panel-head--person' : '');
+    var leftBlock =
+      '<div class="ar-panel-head-text">' +
+      '<p class="ar-panel-kicker">Melvin · AR' +
+      (period ? ' · ' + esc(period) : '') +
+      '</p>' +
+      '<h3 class="ar-panel-title">' +
+      esc(s.title) +
+      '</h3>' +
+      (s.note && !s.person
+        ? '<p class="ar-panel-note">' + esc(s.note) + '</p>'
+        : !s.person && s.lead
+          ? '<p class="ar-panel-note">' + esc(s.lead) + '</p>'
+          : '') +
+      '</div>';
+    var rightBlock = s.person
+      ? '<div class="ar-panel-head-person">' +
+        '<p class="ar-panel-person">' +
+        esc(s.person) +
+        '</p>' +
+        (s.note ? '<p class="ar-panel-note">' + esc(s.note) + '</p>' : '') +
+        '</div>'
+      : s.badge
+        ? '<span class="ar-panel-badge">' + esc(s.badge) + '</span>'
+        : '';
     return (
       '<div class="ar-slide-canvas ar-slide-canvas--' +
       kind +
-      ' ar-panel">' +
+      ' ar-panel' +
+      (s.person ? ' ar-panel--person' : '') +
+      '">' +
       '<div class="ar-panel-bg" style="background-image:url(\'' +
       bg +
       '\')" aria-hidden="true"></div>' +
@@ -421,25 +447,8 @@
       '<header class="' +
       headCls +
       '">' +
-      '<div class="ar-panel-head-text">' +
-      '<p class="ar-panel-kicker">Melvin · AR' +
-      (period ? ' · ' + esc(period) : '') +
-      '</p>' +
-      '<h3 class="ar-panel-title">' +
-      esc(s.title) +
-      '</h3>' +
-      (s.person
-        ? '<p class="ar-panel-person">' + esc(s.person) + '</p>'
-        : '') +
-      (s.note
-        ? '<p class="ar-panel-note">' + esc(s.note) + '</p>'
-        : !s.person && s.lead
-          ? '<p class="ar-panel-note">' + esc(s.lead) + '</p>'
-          : '') +
-      '</div>' +
-      (!s.person && s.badge
-        ? '<span class="ar-panel-badge">' + esc(s.badge) + '</span>'
-        : '') +
+      leftBlock +
+      rightBlock +
       '</header>' +
       '<div class="ar-panel-content">' +
       innerHtml +
