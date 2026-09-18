@@ -107,6 +107,17 @@
   var colM2 = MONTHS_TITLE[m3[1]];
   var colM3 = MONTHS_TITLE[m3[2]];
   var metaCol = 'META ' + AR_PERIOD.endTitle;
+  var MX_MONTHS = ['Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto'];
+  function mxEmpty(n) {
+    var out = [];
+    for (var i = 0; i < n; i++) out.push('');
+    return out;
+  }
+  function mxRows(labels, cols) {
+    return labels.map(function (label) {
+      return { label: label, values: mxEmpty(cols) };
+    });
+  }
 
   window.AR_DECK_SLIDES = [
     {
@@ -200,53 +211,59 @@
       bg: AR_HERO_BG
     },
     {
-      type: 'table',
+      type: 'matrix',
       title: 'Produtividade Mês',
       badge: 'TOTAL',
-      columns: [
-        'INDICADOR',
-        metaCol,
-        colM1,
-        colM2,
-        colM3
-      ],
-      rows: [
-        ['ATIVIDADES CONCLUÍDAS', '1520', '2343', '3301', '954'],
-        ['ATIV. CONCLUÍDAS COM ATRASO', '40%', '24,5%', '22,1%', '26,3%'],
-        ['LIGAÇÕES ATENDIDAS', '380', '1728 [3177]', '731 [2100]', '79 [510 · 15,5%]'],
-        ['AGENDAMENTOS', '44', '53', '39', '32'],
-        ['REUNIÕES REALIZADAS (70%)', '30', '34', '38', '23'],
-        ['QUALIDADE DAS REUNIÕES', '90%', '74,2%', '42,1%', '43,4%'],
-        ['VENDAS (Inb+Out+CS) (20%)', '5', '2', '0', '4 [3+0+1]']
-      ]
+      note: 'Equipe · ' + AR_PERIOD.label + ' · dados em atualização',
+      columns: MX_MONTHS.slice(),
+      rows: mxRows(
+        [
+          'Atividades concluídas',
+          'Atividades com atraso (percentual)',
+          'Ligações atendidas',
+          'Agendamentos',
+          'Reuniões realizadas (70%)',
+          'Qualidade das reuniões',
+          'Vendas (Inb+Out+CS) (20%)'
+        ],
+        MX_MONTHS.length
+      )
     },
     {
-      type: 'table',
+      type: 'matrix',
       title: 'Taxa de Conversão',
       badge: 'INBOUND',
-      columns: ['INDICADOR', colM1, colM2, colM3, 'MELVIN'],
-      rows: [
-        ['Etapa 1 » Etapa 2', '68,9%', '50,8%', '58,7%', '70%'],
-        ['Etapa 2 » Nutrição', '12,8%', '11,7%', '17,4%', '55%'],
-        ['Nutrição » Reunião Agendada', '92,7%', '81,8%', '85,0%', '50%'],
-        ['Reunião Agendada » Reunião Realizada', '74,5%', '69,4%', '76,5%', '70%'],
-        ['Reunião Realizada » Venda', '0%', '0%', '15,4%', '20%'],
-        ['Cadastrados » DESCARTADOS', '129%', '85,2%', '145%', '50%']
-      ]
+      note: 'Funil inbound · ' + AR_PERIOD.label + ' · dados em atualização',
+      columns: MX_MONTHS.slice(),
+      rows: mxRows(
+        [
+          'Etapa 1 » Etapa 2',
+          'Etapa 2 » Nutrição',
+          'Nutrição » Reunião Agendada',
+          'Reunião Agendada » Reunião Realizada',
+          'Reunião Realizada » Venda',
+          'Cadastrados » DESCARTADOS'
+        ],
+        MX_MONTHS.length
+      )
     },
     {
-      type: 'table',
+      type: 'matrix',
       title: 'Taxa de Conversão',
       badge: 'OUTBOUND',
-      columns: ['INDICADOR', colM1, colM2, colM3, 'BENCH'],
-      rows: [
-        ['Etapa 1 » Etapa 2', '—', '52,1%', '61,1%', '70%'],
-        ['Etapa 2 » Nutrição', '—', '14,2%', '72,7%', '50%'],
-        ['Nutrição » Reunião Agendada', '—', '0%', '25,0%', '20%'],
-        ['Reunião Agendada » Reunião Realizada', '—', '0%', '50%', '70%'],
-        ['Reunião Realizada » Venda', '—', '0%', '0%', '10%'],
-        ['Cadastrados » DESCARTADOS', '—', '34,1%', '72,2%', '50%']
-      ]
+      note: 'Funil outbound · ' + AR_PERIOD.label + ' · dados em atualização',
+      columns: MX_MONTHS.slice(),
+      rows: mxRows(
+        [
+          'Etapa 1 » Etapa 2',
+          'Etapa 2 » Nutrição',
+          'Nutrição » Reunião Agendada',
+          'Reunião Agendada » Reunião Realizada',
+          'Reunião Realizada » Venda',
+          'Cadastrados » DESCARTADOS'
+        ],
+        MX_MONTHS.length
+      )
     },
     {
       type: 'section',
