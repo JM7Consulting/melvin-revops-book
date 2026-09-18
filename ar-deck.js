@@ -186,6 +186,10 @@
       { key: 'reuniao', label: 'Reuniões realizadas' },
       { key: 'cancel', label: 'Cancelamentos' },
       { key: 'noshow', label: 'No Show' },
+      { key: 'fria', label: 'Reunião Fria' },
+      { key: 'morna', label: 'Reunião Morna' },
+      { key: 'quente', label: 'Reunião Quente' },
+      { key: 'cemiterio', label: 'Reunião Cemitério' },
       { key: 'vendas', label: 'Vendas' }
     ];
     var map = valuesMap || {};
@@ -267,6 +271,18 @@
         },
         noshow: {
           values: ['', '', '0', '0', '0', '1', '0']
+        },
+        fria: {
+          values: ['', '', '9', '13', '11', '15', '10']
+        },
+        morna: {
+          values: ['', '', '3', '12', '4', '5', '8']
+        },
+        quente: {
+          values: ['', '', '14', '6', '0', '2', '2']
+        },
+        cemiterio: {
+          values: ['', '', '4', '1', '4', '4', '0']
         }
       })
     },
