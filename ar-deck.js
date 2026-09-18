@@ -1063,6 +1063,9 @@
       case 'table':
         inner = renderTable(s);
         break;
+      case 'matrix':
+        inner = renderMatrix(s);
+        break;
       case 'split':
         inner = renderSplit(s);
         break;

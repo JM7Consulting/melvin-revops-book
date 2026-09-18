@@ -14795,6 +14795,167 @@ body.light-mode .ar-deck:-webkit-full-screen {
   text-align: center;
 }
 
+/* KPI Matrix · runway visual */
+.ar-slide-canvas--matrix.ar-panel .ar-panel-content {
+  padding: clamp(8px, 1.2cqw, 12px);
+  background:
+    linear-gradient(180deg, rgba(248, 250, 252, 0.98) 0%, rgba(241, 245, 249, 0.96) 100%);
+}
+.ar-mx {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+  min-height: 0;
+  height: 100%;
+}
+.ar-mx-head,
+.ar-mx-row {
+  display: grid;
+  grid-template-columns: minmax(150px, 1.35fr) repeat(var(--cols, 6), minmax(0, 1fr));
+  gap: 6px;
+  align-items: stretch;
+}
+.ar-mx-corner {
+  display: flex;
+  align-items: flex-end;
+  padding: 0 8px 8px;
+  font-family: Sora, Manrope, sans-serif;
+  font-size: clamp(0.58rem, 1.2cqw, 0.7rem);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #64748b;
+}
+.ar-mx-month {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 8px 4px;
+  border-radius: 12px;
+  background: linear-gradient(165deg, #0f766e 0%, #115e59 55%, #0f172a 140%);
+  color: #ecfdf5;
+  box-shadow: 0 10px 24px rgba(15, 118, 110, 0.28);
+  animation: arMxIn 0.45s ease both;
+  animation-delay: calc(0.04s * var(--i, 0));
+}
+.ar-mx-month-abbr {
+  font-family: Sora, Manrope, sans-serif;
+  font-size: clamp(0.72rem, 1.7cqw, 0.95rem);
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  line-height: 1;
+}
+.ar-mx-month-name {
+  font-size: clamp(0.52rem, 1.1cqw, 0.65rem);
+  font-weight: 600;
+  opacity: 0.78;
+  letter-spacing: 0.02em;
+}
+.ar-mx-body {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+}
+.ar-mx-row {
+  animation: arMxIn 0.4s ease both;
+  animation-delay: calc(0.03s * var(--r, 0));
+}
+.ar-mx-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 8px;
+  min-height: 100%;
+  border-radius: 10px;
+  background: rgba(15, 23, 42, 0.04);
+  border: 1px solid rgba(15, 23, 42, 0.06);
+}
+.ar-mx-idx {
+  flex-shrink: 0;
+  font-family: Sora, Manrope, sans-serif;
+  font-size: clamp(0.62rem, 1.3cqw, 0.75rem);
+  font-weight: 800;
+  color: #14b8a6;
+  letter-spacing: 0.04em;
+}
+.ar-mx-label-text {
+  font-size: clamp(0.62rem, 1.35cqw, 0.8rem);
+  font-weight: 700;
+  color: #0f172a;
+  line-height: 1.2;
+}
+.ar-mx-cell {
+  display: grid;
+  place-items: center;
+  min-height: clamp(28px, 4.2cqh, 38px);
+  border-radius: 10px;
+  font-family: Sora, Manrope, sans-serif;
+  font-size: clamp(0.68rem, 1.55cqw, 0.92rem);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.ar-mx-cell.is-filled {
+  background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+  border: 1px solid rgba(15, 23, 42, 0.1);
+  color: #0f172a;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.06);
+}
+.ar-mx-cell.is-filled:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.1);
+}
+.ar-mx-cell.is-empty {
+  background:
+    repeating-linear-gradient(
+      -45deg,
+      rgba(148, 163, 184, 0.08) 0 6px,
+      rgba(148, 163, 184, 0.02) 6px 12px
+    );
+  border: 1px dashed rgba(148, 163, 184, 0.45);
+}
+.ar-mx-ghost {
+  width: 28%;
+  height: 2px;
+  border-radius: 2px;
+  background: rgba(148, 163, 184, 0.45);
+}
+.ar-mx-cell.is-ok {
+  background: linear-gradient(180deg, #ecfdf5 0%, #d1fae5 100%);
+  border-color: rgba(16, 185, 129, 0.45);
+  color: #047857;
+}
+.ar-mx-cell.is-bad {
+  background: linear-gradient(180deg, #fef2f2 0%, #fee2e2 100%);
+  border-color: rgba(239, 68, 68, 0.4);
+  color: #b91c1c;
+}
+.ar-mx-cell.is-warn {
+  background: linear-gradient(180deg, #fffbeb 0%, #fef3c7 100%);
+  border-color: rgba(245, 158, 11, 0.45);
+  color: #b45309;
+}
+@keyframes arMxIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 720px) {
+  .ar-mx-head,
+  .ar-mx-row {
+    grid-template-columns: minmax(110px, 1.2fr) repeat(var(--cols, 6), minmax(48px, 1fr));
+  }
+  .ar-mx-month-name { display: none; }
+  .ar-mx-label-text { font-size: 0.62rem; }
+}
+
 /* Chart inside panel */
 .ar-slide-canvas--chart.ar-panel .ar-chart-title { display: none; }
 .ar-panel-content .ar-chart-legend {
