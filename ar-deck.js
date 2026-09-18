@@ -297,6 +297,20 @@
       }, MX_MONTHS_PEOPLE.length)
     },
     {
+      type: 'chart',
+      chart: 'sla',
+      title: 'PRODUTIVIDADE MENSAL',
+      midKicker: 'Análise de Tarefas',
+      indicator: 'SLA e Tendência Mensal de Atividades',
+      person: 'Gabriely Silva',
+      note: 'Dashboard RevOps · ' + AR_PERIOD.label,
+      legends: [
+        { cls: 'ar-leg--trend', label: 'Tendência (Volume Total)' },
+        { cls: 'ar-leg--ok', label: 'Concluído no Prazo' },
+        { cls: 'ar-leg--late', label: 'Concluído em Atraso' }
+      ]
+    },
+    {
       type: 'viz',
       title: 'PRODUTIVIDADE MENSAL',
       indicator: 'Mapa de Calor de Produtividade',
@@ -571,20 +585,6 @@
         'Show-up alto: 133/141 realizadas (~94%) — só 8 no-shows.',
         'Termômetro frio: 54,2% Frias vs 5,8% Quentes.',
         'Alerta: Frias + Cemitério = 66,7% — priorizar aquecimento do discurso.'
-      ]
-    },
-    {
-      type: 'chart',
-      chart: 'sla',
-      title: 'PRODUTIVIDADE MENSAL',
-      midKicker: 'ANÁLISE DE ATIVIDADES',
-      indicator: 'SLA e Tendência Mensal de Atividades',
-      person: 'Fabrício Luiz',
-      note: 'Dashboard RevOps · ' + AR_PERIOD.label,
-      legends: [
-        { cls: 'ar-leg--trend', label: 'Tendência (Volume Total)' },
-        { cls: 'ar-leg--ok', label: 'Concluído no Prazo' },
-        { cls: 'ar-leg--late', label: 'Concluído em Atraso' }
       ]
     },
 
