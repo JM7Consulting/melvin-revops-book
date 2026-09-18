@@ -109,6 +109,8 @@
   var metaCol = 'META ' + AR_PERIOD.endTitle;
   var MX_MONTHS = ['Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro'];
   var MX_MONTH_IDX = [2, 3, 4, 5, 6, 7, 8]; // Mar–Set (0-based)
+  var MX_MONTHS_PEOPLE = MX_MONTHS.slice(2); // Mai–Set
+  var MX_MONTH_IDX_PEOPLE = MX_MONTH_IDX.slice(2);
 
   function countBusinessDays(year, monthIdx) {
     var n = 0;
@@ -122,6 +124,9 @@
   }
 
   var MX_BDAYS = MX_MONTH_IDX.map(function (mi) {
+    return countBusinessDays(AR_PERIOD.year, mi);
+  });
+  var MX_BDAYS_PEOPLE = MX_MONTH_IDX_PEOPLE.map(function (mi) {
     return countBusinessDays(AR_PERIOD.year, mi);
   });
 
@@ -167,15 +172,15 @@
     return fixed.toFixed(1).replace('.', ',');
   }
 
-  function mxDailyAvg(raw, monthIndex) {
+  function mxDailyAvg(raw, monthIndex, bdaysList) {
     var total = parseBrNumber(raw);
-    var days = MX_BDAYS[monthIndex];
+    var days = (bdaysList || MX_BDAYS)[monthIndex];
     if (total == null || !days) return '';
     return formatBrAvg(total / days);
   }
 
-  function mxProdRows(valuesMap) {
-    var blanks = mxEmpty(MX_MONTHS.length);
+  function mxProdRows(valuesMap, colCount) {
+    var blanks = mxEmpty(colCount != null ? colCount : MX_MONTHS.length);
     var defs = [
       { key: 'concluidas', label: 'Atividades concluídas' },
       { key: 'atraso', label: 'Atividades com atraso (percentual)', pctTones: true },
@@ -244,51 +249,52 @@
       person: 'Gabriely Silva',
       note: AR_PERIOD.label,
       dailyAvg: true,
-      columns: MX_MONTHS.slice(),
+      columns: MX_MONTHS_PEOPLE.slice(),
+      bdays: MX_BDAYS_PEOPLE,
       rows: mxProdRows({
         concluidas: {
-          values: ['52', '1.106', '1.035', '1.615', '1.152', '1.453', '']
+          values: ['1.035', '1.615', '1.152', '1.453', '']
         },
         atraso: {
-          values: ['0,0%', '9,8%', '24,3%', '8,3%', '22,2%', '25,8%', '']
+          values: ['24,3%', '8,3%', '22,2%', '25,8%', '']
         },
         ligIni: {
-          values: ['0', '2', '0', '0', '0', '0', '288']
+          values: ['0', '0', '0', '0', '288']
         },
         ligAte: {
-          values: ['0', '2', '0', '0', '0', '0', '105']
+          values: ['0', '0', '0', '0', '105']
         },
         lig30: {
-          values: ['0', '2', '0', '0', '0', '0', '6']
+          values: ['0', '0', '0', '0', '6']
         },
         agenda: {
-          values: ['', '', '30', '35', '49', '42', '41']
+          values: ['30', '35', '49', '42', '41']
         },
         reuniao: {
-          values: ['', '', '30', '35', '46', '39', '39']
+          values: ['30', '35', '46', '39', '39']
         },
         cancel: {
-          values: ['', '', '0', '0', '3', '2', '2']
+          values: ['0', '0', '3', '2', '2']
         },
         noshow: {
-          values: ['', '', '0', '0', '0', '1', '0']
+          values: ['0', '0', '0', '1', '0']
         },
         fria: {
-          values: ['', '', '9', '13', '11', '15', '10']
+          values: ['9', '13', '11', '15', '10']
         },
         morna: {
-          values: ['', '', '3', '12', '4', '5', '8']
+          values: ['3', '12', '4', '5', '8']
         },
         quente: {
-          values: ['', '', '14', '6', '0', '2', '2']
+          values: ['14', '6', '0', '2', '2']
         },
         cemiterio: {
-          values: ['', '', '4', '1', '4', '4', '0']
+          values: ['4', '1', '4', '4', '0']
         },
         vendas: {
           label: 'Vendas geradas'
         }
-      })
+      }, MX_MONTHS_PEOPLE.length)
     },
     {
       type: 'viz',
@@ -517,10 +523,11 @@
       person: 'Poliana Sampaio',
       note: AR_PERIOD.label + ' · dados em atualização',
       dailyAvg: true,
-      columns: MX_MONTHS.slice(),
+      columns: MX_MONTHS_PEOPLE.slice(),
+      bdays: MX_BDAYS_PEOPLE,
       rows: mxProdRows({
         vendas: { label: 'Vendas geradas' }
-      })
+      }, MX_MONTHS_PEOPLE.length)
     },
     {
       type: 'matrix',
@@ -528,12 +535,13 @@
       person: 'Fabrício Luiz',
       note: AR_PERIOD.label,
       dailyAvg: true,
-      columns: MX_MONTHS.slice(),
+      columns: MX_MONTHS_PEOPLE.slice(),
+      bdays: MX_BDAYS_PEOPLE,
       rows: mxProdRows({
         vendas: {
-          values: ['10', '48', '683', '173', '147', '213', '95']
+          values: ['683', '173', '147', '213', '95']
         }
-      })
+      }, MX_MONTHS_PEOPLE.length)
     },
     {
       type: 'viz',
@@ -989,6 +997,7 @@
     var cols = s.columns || [];
     var colCount = cols.length;
     var withAvg = !!s.dailyAvg;
+    var bdaysList = s.bdays || MX_BDAYS;
     var head =
       '<div class="ar-mx-head' +
       (withAvg ? ' ar-mx-head--avg' : '') +
@@ -998,7 +1007,7 @@
       '<div class="ar-mx-corner"><span>Indicador</span></div>' +
       cols
         .map(function (c, i) {
-          var bdays = withAvg && MX_BDAYS[i] ? MX_BDAYS[i] + ' úteis' : '';
+          var bdays = withAvg && bdaysList[i] ? bdaysList[i] + ' úteis' : '';
           var monthCore =
             '<div class="ar-mx-month" style="--i:' +
             i +
@@ -1043,7 +1052,7 @@
               '</div>';
             continue;
           }
-          var avg = mxDailyAvg(v, ci);
+          var avg = mxDailyAvg(v, ci, bdaysList);
           cells +=
             '<div class="ar-mx-pair">' +
             renderMxCell(v, tone, 'ar-mx-cell--total') +
