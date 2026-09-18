@@ -140,24 +140,29 @@
       bg: AR_HERO_BG
     },
     {
-      type: 'table',
-      title: 'Produtividade Mês',
+      type: 'matrix',
+      title: 'Resumo de SLA por Mês',
       badge: 'GABRIELY',
-      columns: [
-        'INDICADOR',
-        metaCol,
-        colM1,
-        colM2,
-        colM3
-      ],
+      note: 'Usuária: Gabriely Silva · ' + AR_PERIOD.label,
+      columns: ['Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto'],
       rows: [
-        ['ATIVIDADES CONCLUÍDAS', '1520', '3277', '2554', '954'],
-        ['ATIV. CONCLUÍDAS COM ATRASO', '40%', '22,2%', '22,4%', '26,3%'],
-        ['LIGAÇÕES ATENDIDAS', '380', '637 [1895 · 33,6%]', '237 [1330 · 17,8%]', '79 [510 · 15,5%]'],
-        ['AGENDAMENTOS [Out/Inb]', '44', '47', '36', '19 [2+17]'],
-        ['REUNIÕES REALIZADAS (70%)', '30', '34', '24', '14 [1+13]'],
-        ['QUALIDADE DAS REUNIÕES', '90%', '47,1%', '16,6%', '53,8%'],
-        ['VENDAS GERADAS (20%)', '5', '0', '0', '3']
+        {
+          label: 'Atividades concluídas',
+          values: ['52', '1.106', '1.035', '1.615', '1.152', '1.453']
+        },
+        {
+          label: 'Atividades com atraso (percentual)',
+          values: ['0,0%', '9,8%', '24,3%', '8,3%', '22,2%', '25,8%'],
+          tones: ['ok', 'ok', 'bad', 'ok', 'bad', 'bad']
+        },
+        { label: 'Ligações Iniciadas', values: ['', '', '', '', '', ''] },
+        { label: 'Ligações Atendidas', values: ['', '', '', '', '', ''] },
+        { label: 'Ligações — mais de 30 segundos', values: ['', '', '', '', '', ''] },
+        { label: 'Agendamentos Marcados', values: ['', '', '', '', '', ''] },
+        { label: 'Reuniões realizadas', values: ['', '', '', '', '', ''] },
+        { label: 'Cancelamentos', values: ['', '', '', '', '', ''] },
+        { label: 'No Show', values: ['', '', '', '', '', ''] },
+        { label: 'Vendas', values: ['', '', '', '', '', ''] }
       ]
     },
     {
@@ -524,6 +529,77 @@
       tbody +
       '</table></div>';
     return arPanelShell('table', s, inner);
+  }
+
+  function renderMatrix(s) {
+    var cols = s.columns || [];
+    var colCount = cols.length;
+    var head =
+      '<div class="ar-mx-head" style="--cols:' +
+      colCount +
+      '">' +
+      '<div class="ar-mx-corner"><span>Indicador</span></div>' +
+      cols
+        .map(function (c, i) {
+          return (
+            '<div class="ar-mx-month" style="--i:' +
+            i +
+            '"><span class="ar-mx-month-abbr">' +
+            esc(String(c).slice(0, 3).toUpperCase()) +
+            '</span><span class="ar-mx-month-name">' +
+            esc(c) +
+            '</span></div>'
+          );
+        })
+        .join('') +
+      '</div>';
+    var body = (s.rows || [])
+      .map(function (row, ri) {
+        var vals = row.values || [];
+        var tones = row.tones || [];
+        var cells = '';
+        for (var ci = 0; ci < colCount; ci++) {
+          var v = vals[ci] == null ? '' : String(vals[ci]);
+          var empty = !v.trim();
+          var tone = tones[ci] || '';
+          var cls =
+            'ar-mx-cell' +
+            (empty ? ' is-empty' : ' is-filled') +
+            (tone === 'ok' ? ' is-ok' : '') +
+            (tone === 'bad' ? ' is-bad' : '') +
+            (tone === 'warn' ? ' is-warn' : '');
+          cells +=
+            '<div class="' +
+            cls +
+            '" style="--i:' +
+            ci +
+            '">' +
+            (empty ? '<span class="ar-mx-ghost" aria-hidden="true"></span>' : esc(v)) +
+            '</div>';
+        }
+        return (
+          '<div class="ar-mx-row" style="--cols:' +
+          colCount +
+          ';--r:' +
+          ri +
+          '">' +
+          '<div class="ar-mx-label"><span class="ar-mx-idx">' +
+          String(ri + 1).padStart(2, '0') +
+          '</span><span class="ar-mx-label-text">' +
+          esc(row.label) +
+          '</span></div>' +
+          cells +
+          '</div>'
+        );
+      })
+      .join('');
+    var inner =
+      '<div class="ar-mx">' +
+      head +
+      '<div class="ar-mx-body">' +
+      body +
+      '</div></div>';
+    return arPanelShell('matrix', s, inner);
   }
 
   function renderSplit(s) {
