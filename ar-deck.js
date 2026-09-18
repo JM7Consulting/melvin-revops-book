@@ -119,6 +119,31 @@
     });
   }
 
+  function mxProdRows(valuesMap) {
+    var blanks = mxEmpty(MX_MONTHS.length);
+    var defs = [
+      { key: 'concluidas', label: 'Atividades concluídas' },
+      { key: 'atraso', label: 'Atividades com atraso (percentual)', tones: true },
+      { key: 'ligIni', label: 'Ligações Iniciadas' },
+      { key: 'ligAte', label: 'Ligações Atendidas' },
+      { key: 'lig30', label: 'Ligações — mais de 30 segundos' },
+      { key: 'agenda', label: 'Agendamentos Marcados' },
+      { key: 'reuniao', label: 'Reuniões realizadas' },
+      { key: 'cancel', label: 'Cancelamentos' },
+      { key: 'noshow', label: 'No Show' },
+      { key: 'vendas', label: 'Vendas' }
+    ];
+    var map = valuesMap || {};
+    return defs.map(function (d) {
+      var row = {
+        label: d.label,
+        values: map[d.key] && map[d.key].values ? map[d.key].values.slice() : blanks.slice()
+      };
+      if (map[d.key] && map[d.key].tones) row.tones = map[d.key].tones.slice();
+      return row;
+    });
+  }
+
   window.AR_DECK_SLIDES = [
     {
       type: 'cover',
@@ -153,28 +178,34 @@
     {
       type: 'matrix',
       title: 'PRODUTIVIDADE MENSAL',
-      badge: 'GABRIELY',
-      note: 'Usuária: Gabriely Silva · ' + AR_PERIOD.label,
-      columns: ['Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto'],
-      rows: [
-        {
-          label: 'Atividades concluídas',
+      person: 'Gabriely Silva',
+      note: AR_PERIOD.label,
+      columns: MX_MONTHS.slice(),
+      rows: mxProdRows({
+        concluidas: {
           values: ['52', '1.106', '1.035', '1.615', '1.152', '1.453']
         },
-        {
-          label: 'Atividades com atraso (percentual)',
+        atraso: {
           values: ['0,0%', '9,8%', '24,3%', '8,3%', '22,2%', '25,8%'],
           tones: ['ok', 'ok', 'bad', 'ok', 'bad', 'bad']
-        },
-        { label: 'Ligações Iniciadas', values: ['', '', '', '', '', ''] },
-        { label: 'Ligações Atendidas', values: ['', '', '', '', '', ''] },
-        { label: 'Ligações — mais de 30 segundos', values: ['', '', '', '', '', ''] },
-        { label: 'Agendamentos Marcados', values: ['', '', '', '', '', ''] },
-        { label: 'Reuniões realizadas', values: ['', '', '', '', '', ''] },
-        { label: 'Cancelamentos', values: ['', '', '', '', '', ''] },
-        { label: 'No Show', values: ['', '', '', '', '', ''] },
-        { label: 'Vendas', values: ['', '', '', '', '', ''] }
-      ]
+        }
+      })
+    },
+    {
+      type: 'matrix',
+      title: 'PRODUTIVIDADE MENSAL',
+      person: 'Fabrício Luiz',
+      note: AR_PERIOD.label + ' · dados em atualização',
+      columns: MX_MONTHS.slice(),
+      rows: mxProdRows()
+    },
+    {
+      type: 'matrix',
+      title: 'PRODUTIVIDADE MENSAL',
+      person: 'Poliana Sampaio',
+      note: AR_PERIOD.label + ' · dados em atualização',
+      columns: MX_MONTHS.slice(),
+      rows: mxProdRows()
     },
     {
       type: 'chart',
@@ -377,6 +408,7 @@
   function arPanelShell(kind, s, innerHtml) {
     var bg = esc(s.bg || AR_HERO_BG);
     var period = periodLabel();
+    var headCls = 'ar-panel-head' + (s.person ? ' ar-panel-head--person' : '');
     return (
       '<div class="ar-slide-canvas ar-slide-canvas--' +
       kind +
@@ -386,7 +418,9 @@
       '\')" aria-hidden="true"></div>' +
       '<div class="ar-panel-veil" aria-hidden="true"></div>' +
       '<div class="ar-panel-body">' +
-      '<header class="ar-panel-head">' +
+      '<header class="' +
+      headCls +
+      '">' +
       '<div class="ar-panel-head-text">' +
       '<p class="ar-panel-kicker">Melvin · AR' +
       (period ? ' · ' + esc(period) : '') +
@@ -394,13 +428,18 @@
       '<h3 class="ar-panel-title">' +
       esc(s.title) +
       '</h3>' +
+      (s.person
+        ? '<p class="ar-panel-person">' + esc(s.person) + '</p>'
+        : '') +
       (s.note
         ? '<p class="ar-panel-note">' + esc(s.note) + '</p>'
-        : s.lead
+        : !s.person && s.lead
           ? '<p class="ar-panel-note">' + esc(s.lead) + '</p>'
           : '') +
       '</div>' +
-      (s.badge ? '<span class="ar-panel-badge">' + esc(s.badge) + '</span>' : '') +
+      (!s.person && s.badge
+        ? '<span class="ar-panel-badge">' + esc(s.badge) + '</span>'
+        : '') +
       '</header>' +
       '<div class="ar-panel-content">' +
       innerHtml +
