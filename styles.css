@@ -16955,3 +16955,88 @@ body.light-mode .ar-deck .ar-data-table tr td:first-child {
     animation: none !important;
   }
 }
+
+/* AR deck jump shortcuts */
+.ar-deck-jump-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  max-width: min(72vw, 920px);
+  margin-left: auto;
+}
+.ar-deck-jump {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  max-width: 100%;
+  padding: 2px 2px 4px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(20, 184, 166, 0.45) transparent;
+}
+.ar-deck-jump::-webkit-scrollbar { height: 4px; }
+.ar-deck-jump::-webkit-scrollbar-thumb {
+  background: rgba(20, 184, 166, 0.45);
+  border-radius: 999px;
+}
+.ar-deck-jump-btn {
+  flex: 0 0 auto;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  background: rgba(255, 255, 255, 0.72);
+  color: #475569;
+  font-family: Manrope, system-ui, sans-serif;
+  font-size: 0.68rem;
+  font-weight: 750;
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+.ar-deck-jump-btn:hover {
+  border-color: rgba(15, 118, 110, 0.45);
+  color: #0f766e;
+  background: #ecfeff;
+}
+.ar-deck-jump-btn.is-active {
+  background: linear-gradient(160deg, #0f766e, #134e4a);
+  border-color: #0f766e;
+  color: #ecfeff;
+  box-shadow: 0 0 0 2px rgba(100, 252, 216, 0.35);
+}
+.ar-deck-jump-btn:focus-visible {
+  outline: 2px solid #64fcd8;
+  outline-offset: 2px;
+}
+body.light-mode .ar-deck-jump-btn {
+  background: #fff;
+  border-color: rgba(15, 23, 42, 0.1);
+}
+.ar-deck:fullscreen .ar-deck-jump-btn,
+.ar-deck:-webkit-full-screen .ar-deck-jump-btn {
+  background: rgba(15, 23, 42, 0.55);
+  border-color: rgba(148, 163, 184, 0.28);
+  color: #cbd5e1;
+}
+.ar-deck:fullscreen .ar-deck-jump-btn.is-active,
+.ar-deck:-webkit-full-screen .ar-deck-jump-btn.is-active {
+  background: linear-gradient(160deg, #14b8a6, #0f766e);
+  color: #042f2e;
+  border-color: #64fcd8;
+}
+@media (max-width: 720px) {
+  .ar-deck-jump-wrap {
+    max-width: 100%;
+    width: 100%;
+    order: 3;
+  }
+  .ar-deck-foot {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}

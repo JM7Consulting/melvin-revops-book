@@ -2823,18 +2823,64 @@ function renderHeatmapViz(opts) {
 
   window.renderArDeckSlides = renderArDeckSlides;
 
+  function arSlideJumpLabel(s, i) {
+    if (!s) return 'Slide ' + (i + 1);
+    if (s.type === 'cover') return 'Capa';
+    if (s.type === 'objectives') return 'Objetivos';
+    if (s.type === 'section') return (s.num ? s.num + ' · ' : '') + (s.title || 'Bloco');
+    if (s.type === 'cta') return s.title || 'Encerramento';
+    if (s.type === 'sign') return 'Assinatura';
+    if (s.person) {
+      var who = String(s.person).split(' ')[0];
+      return who + (s.indicator ? ' · ' + s.indicator : s.midKicker ? ' · ' + s.midKicker : s.badge ? ' · ' + s.badge : '');
+    }
+    if (s.badge) return s.badge + (s.title ? ' · ' + s.title : '');
+    if (s.indicator) return s.indicator;
+    if (s.midKicker) return s.midKicker;
+    return s.title || 'Slide ' + (i + 1);
+  }
+
   window.initArDeckFromData = function initArDeckFromData() {
     var root = document.getElementById('arDeck');
     if (!root) return;
     var viewport = document.getElementById('arDeckViewport');
-    renderArDeckSlides(viewport, window.AR_DECK_SLIDES);
+    var data = window.AR_DECK_SLIDES || [];
+    renderArDeckSlides(viewport, data);
 
     var slides = Array.from(root.querySelectorAll('[data-ar-slide]'));
     var counter = document.getElementById('arDeckCounter');
+    var jumpHost = document.getElementById('arDeckJump');
     var prevBtn = document.getElementById('arDeckPrev');
     var nextBtn = document.getElementById('arDeckNext');
     var fsBtn = document.getElementById('arDeckFs');
     var index = 0;
+    var jumpBtns = [];
+
+    if (jumpHost) {
+      jumpHost.innerHTML = slides
+        .map(function (_, i) {
+          var tip = arSlideJumpLabel(data[i], i);
+          return (
+            '<button type="button" class="ar-deck-jump-btn" data-ar-jump="' +
+            i +
+            '" title="' +
+            esc(tip) +
+            '" aria-label="' +
+            esc('Ir para slide ' + (i + 1) + ' · ' + tip) +
+            '">' +
+            (i + 1) +
+            '</button>'
+          );
+        })
+        .join('');
+      jumpBtns = Array.from(jumpHost.querySelectorAll('[data-ar-jump]'));
+      jumpHost.addEventListener('click', function (e) {
+        var btn = e.target.closest('[data-ar-jump]');
+        if (!btn || !jumpHost.contains(btn)) return;
+        var to = parseInt(btn.getAttribute('data-ar-jump'), 10);
+        if (!isNaN(to)) go(to);
+      });
+    }
 
     function go(to) {
       if (!slides.length) return;
@@ -2848,6 +2894,16 @@ function renderHeatmapViz(opts) {
       if (counter) counter.textContent = index + 1 + ' / ' + slides.length;
       if (prevBtn) prevBtn.disabled = index === 0;
       if (nextBtn) nextBtn.disabled = index === slides.length - 1;
+      jumpBtns.forEach(function (btn, i) {
+        var on = i === index;
+        btn.classList.toggle('is-active', on);
+        btn.setAttribute('aria-current', on ? 'true' : 'false');
+      });
+      if (jumpBtns[index] && jumpBtns[index].scrollIntoView) {
+        try {
+          jumpBtns[index].scrollIntoView({ block: 'nearest', inline: 'center', behavior: 'smooth' });
+        } catch (e) {}
+      }
     }
 
     function syncFsUi() {
