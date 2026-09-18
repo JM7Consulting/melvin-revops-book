@@ -491,34 +491,6 @@
       })
     },
     {
-      type: 'matrix',
-      title: 'PRODUTIVIDADE MENSAL',
-      person: 'Fabrício Luiz',
-      note: AR_PERIOD.label,
-      dailyAvg: true,
-      columns: MX_MONTHS.slice(),
-      rows: mxProdRows({
-        vendas: {
-          values: ['10', '48', '683', '173', '147', '213', '95']
-        }
-      })
-    },
-    {
-      type: 'viz',
-      title: 'PRODUTIVIDADE MENSAL',
-      midKicker: 'ANÁLISE DE VENDAS',
-      indicator: 'Mapa de Calor de Vendas: Quais dias do mês mais fechamos negócios?',
-      person: 'Gabriely Silva',
-      note: 'Dia do mês (1–31) × mês · volume de fechamentos · ' + AR_PERIOD.label,
-      viz: 'heatmap',
-      heat: 'sales',
-      insights: [
-        'Pico absoluto: 10/Mai com 376 fechamentos (e 156 no dia 9).',
-        'Fora de maio o volume diário fica baixo (0–22) — Ago é o mês mais espalhado.',
-        'Alerta: concentração extrema em 2 dias de maio — revisar campanha/lote daquele pico.'
-      ]
-    },
-    {
       type: 'viz',
       title: 'PRODUTIVIDADE MENSAL',
       midKicker: 'ANÁLISE DE VENDAS',
@@ -570,12 +542,26 @@
       ]
     },
     {
+      type: 'matrix',
+      title: 'PRODUTIVIDADE MENSAL',
+      person: 'Fabrício Luiz',
+      note: AR_PERIOD.label,
+      dailyAvg: true,
+      columns: MX_MONTHS.slice(),
+      rows: mxProdRows({
+        vendas: {
+          values: ['10', '48', '683', '173', '147', '213', '95']
+        }
+      })
+    },
+    {
       type: 'chart',
       chart: 'sla',
-      title:
-        'Dashboard RevOps: SLA e Tendência Mensal de Atividades · ' +
-        AR_PERIOD.label +
-        ' (Usuária: Gabriely Silva)',
+      title: 'PRODUTIVIDADE MENSAL',
+      midKicker: 'ANÁLISE DE ATIVIDADES',
+      indicator: 'SLA e Tendência Mensal de Atividades',
+      person: 'Fabrício Luiz',
+      note: 'Dashboard RevOps · ' + AR_PERIOD.label,
       legends: [
         { cls: 'ar-leg--trend', label: 'Tendência (Volume Total)' },
         { cls: 'ar-leg--ok', label: 'Concluído no Prazo' },
@@ -585,10 +571,11 @@
     {
       type: 'chart',
       chart: 'top15',
-      title:
-        'Raio-X de Oportunidades: Top 15 Contas de Maior Esforço · ' +
-        AR_PERIOD.label +
-        ' (Usuária: Gabriely Silva)',
+      title: 'PRODUTIVIDADE MENSAL',
+      midKicker: 'ANÁLISE DE OPORTUNIDADES',
+      indicator: 'Top 15 Contas de Maior Esforço',
+      person: 'Fabrício Luiz',
+      note: 'Raio-X de oportunidades · ' + AR_PERIOD.label,
       footLegends: [
         { cls: 'ar-leg--deal', label: 'DEAL' },
         { cls: 'ar-leg--contact', label: 'CONTACT' }
@@ -792,7 +779,7 @@
       '</div>';
     var midBlock = s.indicator
       ? '<div class="ar-panel-head-mid">' +
-        (kind === 'viz'
+        (kind === 'viz' || kind === 'chart'
           ? '<p class="ar-panel-mid-kicker">' +
             esc(s.midKicker || 'ANÁLISE DE ATIVIDADES') +
             '</p>'
@@ -2388,12 +2375,6 @@ function renderHeatmapViz(opts) {
           .join('') +
         '</div>';
     }
-    var chartTitle =
-      s.chart === 'sla'
-        ? 'SLA e tendência mensal'
-        : s.chart === 'top15'
-          ? 'Top 15 contas de maior esforço'
-          : s.title;
     var inner =
       (legends
         ? '<div class="ar-chart-legend" aria-hidden="true">' + legends + '</div>'
@@ -2402,6 +2383,26 @@ function renderHeatmapViz(opts) {
       frameId +
       '"></div>' +
       foot;
+    if (s.person && s.indicator) {
+      return arPanelShell(
+        'chart',
+        {
+          title: s.title || 'PRODUTIVIDADE MENSAL',
+          midKicker: s.midKicker,
+          indicator: s.indicator,
+          person: s.person,
+          note: s.note,
+          bg: s.bg
+        },
+        inner
+      );
+    }
+    var chartTitle =
+      s.chart === 'sla'
+        ? 'SLA e tendência mensal'
+        : s.chart === 'top15'
+          ? 'Top 15 contas de maior esforço'
+          : s.title;
     return arPanelShell(
       'chart',
       {
