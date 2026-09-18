@@ -431,7 +431,14 @@
         yLabel: 'Volume de Reuniões',
         mean: 4.2,
         median: 3.1,
-        values: [30, 18, 12, 10, 8, 6, 5, 4, 3, 3, 2, 2, 2, 1, 1, 1, 1, 1, 0, 1, 1]
+        xMax: 35,
+        yMax: 30,
+        values: [
+          30, 18, 12, 10, 8, 6, 5, 4, 3, 3,
+          2, 2, 2, 1, 1, 2, 1, 1, 0, 1,
+          0, 0, 1, 0, 0, 0, 0, 0, 0, 0,
+          0, 0, 0, 1, 0, 0
+        ]
       },
       insights: [
         'Mediana 3,1 dias · média 4,2 dias até a reunião.',
@@ -476,10 +483,50 @@
       type: 'matrix',
       title: 'PRODUTIVIDADE MENSAL',
       person: 'Fabrício Luiz',
-      note: AR_PERIOD.label + ' · dados em atualização',
+      note: AR_PERIOD.label,
       dailyAvg: true,
       columns: MX_MONTHS.slice(),
-      rows: mxProdRows()
+      rows: mxProdRows({
+        vendas: {
+          values: ['10', '48', '683', '173', '147', '213', '95']
+        }
+      })
+    },
+    {
+      type: 'viz',
+      title: 'PRODUTIVIDADE MENSAL',
+      midKicker: 'ANÁLISE DE VENDAS',
+      indicator: 'Mapa de Calor de Vendas: Quais dias do mês mais fechamos negócios?',
+      person: 'Gabriely Silva',
+      note: 'Dia do mês (1–31) × mês · volume de fechamentos · ' + AR_PERIOD.label,
+      viz: 'heatmap',
+      heat: 'sales',
+      insights: [
+        'Pico absoluto: 10/Mai com 376 fechamentos (e 156 no dia 9).',
+        'Fora de maio o volume diário fica baixo (0–22) — Ago é o mês mais espalhado.',
+        'Alerta: concentração extrema em 2 dias de maio — revisar campanha/lote daquele pico.'
+      ]
+    },
+    {
+      type: 'viz',
+      title: 'PRODUTIVIDADE MENSAL',
+      midKicker: 'ANÁLISE DE VENDAS',
+      indicator: 'Evolução de Vendas Mensal (Volume × Faturamento)',
+      person: 'Gabriely Silva',
+      note: 'Quantidade de vendas × faturamento realizado · ' + AR_PERIOD.label,
+      viz: 'dual',
+      dual: {
+        months: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set'],
+        volume: [8, 13, 10, 48, 683, 173, 147, 213, 95],
+        revenue: [8354.8, 104912.26, 30137.84, 14397, 22062.28, 17653.49, 16082.1, 39814.3, 1720],
+        volMax: 700,
+        revMax: 110000
+      },
+      insights: [
+        'Volume explode em Mai (683), mas o maior faturamento é Fev (R$ 105k) com só 13 vendas.',
+        'Ago entrega o 2º melhor faturamento (R$ 40k) com 213 vendas — melhor equilíbrio recente.',
+        'Alerta: Set com 95 vendas e só R$ 1,7k — ticket médio muito baixo.'
+      ]
     },
     {
       type: 'matrix',
@@ -1080,6 +1127,39 @@
   }
 
   
+  
+  function gabySalesHeatData() {
+    var days = [];
+    for (var d = 1; d <= 31; d++) days.push(d);
+    var months = [
+      'Jan/2026', 'Fev/2026', 'Mar/2026', 'Abr/2026', 'Mai/2026',
+      'Jun/2026', 'Jul/2026', 'Ago/2026', 'Set/2026'
+    ];
+    var grid = [
+      [3, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0],
+      [3, 3, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 0, 1, 0, 0, 0, 0],
+      [4, 0, 0, 1, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [5, 0, 0, 0, 0, 0, 0, 1, 2, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 3, 0, 0, 1, 4, 0, 0, 4, 12, 5, 9, 0],
+      [6, 0, 0, 5, 8, 4, 14, 8, 156, 376, 6, 10, 6, 8, 10, 0, 0, 3, 5, 9, 6, 8, 0, 0, 10, 8, 12, 5, 0, 0, 0],
+      [11, 2, 13, 0, 6, 0, 0, 5, 8, 6, 10, 7, 5, 0, 3, 10, 6, 5, 9, 2, 0, 7, 12, 9, 15, 9, 0, 0, 7, 6, 0],
+      [12, 6, 2, 2, 0, 4, 5, 5, 3, 4, 1, 0, 5, 12, 6, 13, 4, 0, 0, 2, 7, 4, 9, 6, 1, 0, 10, 14, 2, 7, 1],
+      [5, 0, 13, 9, 10, 6, 6, 4, 0, 0, 10, 13, 22, 15, 2, 0, 5, 6, 15, 5, 9, 0, 0, 3, 7, 14, 9, 17, 4, 0, 4],
+      [4, 14, 3, 5, 2, 0, 0, 5, 6, 5, 18, 7, 0, 11, 3, 7, 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    ];
+    return {
+      hours: days,
+      days: months,
+      grid: grid,
+      max: 376,
+      scaleMax: '350+',
+      palette: 'sales',
+      xUnit: '',
+      scaleLabel: 'Volume de Fechamentos',
+      yAxisLabel: 'Mês',
+      xAxisLabel: 'Dia do Mês (1 a 31)'
+    };
+  }
+
   function gabyMeetHeatData() {
     var hours = [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19];
     var days = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'];
@@ -1097,17 +1177,36 @@ function renderHeatmapViz(opts) {
       ? gabyVoipHeatData()
       : opts && opts.heat === 'meet'
         ? gabyMeetHeatData()
-        : gabyHeatData();
-    var colorFn = d.palette === 'voip' ? heatColorVoip : heatColor;
+        : opts && opts.heat === 'sales'
+          ? gabySalesHeatData()
+          : gabyHeatData();
+    var isSales = d.palette === 'sales';
+    var isVoip = d.palette === 'voip';
+    var colorFn = isVoip || isSales ? heatColorVoip : heatColor;
+    var xUnit = d.xUnit != null ? d.xUnit : 'h';
     var cells = '';
     d.grid.forEach(function (row, ri) {
       cells += '<div class="ar-heat-label">' + esc(d.days[ri]) + '</div>';
       row.forEach(function (v, ci) {
         var t = Math.max(0, Math.min(1, v / d.max));
-        var fg = d.palette === 'voip' ? (v > 18 ? '#f8fafc' : '#0f172a') : v > 180 ? '#f8fafc' : '#0f172a';
+        var fg = isVoip
+          ? v > 18
+            ? '#f8fafc'
+            : '#0f172a'
+          : isSales
+            ? v > 80
+              ? '#f8fafc'
+              : '#0f172a'
+            : v > 180
+              ? '#f8fafc'
+              : '#0f172a';
         var heatCls =
           'ar-heat-cell' +
           (t >= 0.55 ? ' is-hot' : t >= 0.25 ? ' is-warm' : ' is-cool');
+        var tip =
+          isSales
+            ? d.days[ri] + ' · dia ' + d.hours[ci] + ': ' + v
+            : d.days[ri] + ' ' + d.hours[ci] + 'h: ' + v;
         cells +=
           '<div class="' +
           heatCls +
@@ -1122,9 +1221,9 @@ function renderHeatmapViz(opts) {
           ';color:' +
           fg +
           '" title="' +
-          esc(d.days[ri] + ' ' + d.hours[ci] + 'h: ' + v) +
+          esc(tip) +
           '">' +
-          v +
+          (isSales && v === 0 ? '' : v) +
           '</div>';
       });
     });
@@ -1132,13 +1231,35 @@ function renderHeatmapViz(opts) {
       '<div class="ar-heat-corner"></div>' +
       d.hours
         .map(function (h) {
-          return '<div class="ar-heat-hour">' + h + 'h</div>';
+          return '<div class="ar-heat-hour">' + h + xUnit + '</div>';
         })
         .join('');
-    var scaleCls = 'ar-heat-scale' + (d.palette === 'voip' ? ' ar-heat-scale--voip' : '');
+    var scaleCls =
+      'ar-heat-scale' +
+      (isVoip || isSales ? ' ar-heat-scale--voip' : '') +
+      (isSales ? ' ar-heat-scale--sales' : '');
+    var wrapCls =
+      'ar-heat ar-heat--live' +
+      (isVoip ? ' ar-heat--voip' : '') +
+      (isSales ? ' ar-heat--sales ar-heat--voip' : '');
+    var scaleHtml =
+      '<div class="' +
+      scaleCls +
+      '">' +
+      (d.scaleLabel ? '<em class="ar-heat-scale-label">' + esc(d.scaleLabel) + '</em>' : '') +
+      '<span>0</span><i></i><span>' +
+      esc(d.scaleMax) +
+      '</span></div>';
+    var axisHtml = isSales
+      ? '<div class="ar-heat-axes"><span class="ar-heat-y-title">' +
+        esc(d.yAxisLabel || 'Mês') +
+        '</span><span class="ar-heat-x-title">' +
+        esc(d.xAxisLabel || 'Dia do Mês') +
+        '</span></div>'
+      : '';
     return (
-      '<div class="ar-heat ar-heat--live' +
-      (d.palette === 'voip' ? ' ar-heat--voip' : '') +
+      '<div class="' +
+      wrapCls +
       '" aria-label="Mapa de calor animado">' +
       '<div class="ar-heat-grid" style="--cols:' +
       d.hours.length +
@@ -1146,11 +1267,8 @@ function renderHeatmapViz(opts) {
       hourHead +
       cells +
       '</div>' +
-      '<div class="' +
-      scaleCls +
-      '"><span>0</span><i></i><span>' +
-      esc(d.scaleMax) +
-      '</span></div>' +
+      axisHtml +
+      scaleHtml +
       '</div>'
     );
   }
@@ -1185,6 +1303,209 @@ function renderHeatmapViz(opts) {
       })
       .join('');
     return '<div class="ar-bars ar-bars--live">' + rows + '</div>';
+  }
+
+  
+  function formatRevShort(n) {
+    if (n >= 1000) {
+      var k = Math.round(n / 1000);
+      return 'R$ ' + k + 'k';
+    }
+    return 'R$ ' + Math.round(n);
+  }
+
+  function renderDualSalesViz(d) {
+    d = d || {};
+    var months = d.months || [];
+    var volume = d.volume || [];
+    var revenue = d.revenue || [];
+    var volMax = d.volMax || 700;
+    var revMax = d.revMax || 110000;
+    var W = 920;
+    var H = 340;
+    var pad = { t: 36, r: 56, b: 48, l: 52 };
+    var plotW = W - pad.l - pad.r;
+    var plotH = H - pad.t - pad.b;
+    var n = months.length || 1;
+    var gap = plotW / n;
+    var barW = Math.min(42, gap * 0.48);
+
+    function yVol(v) {
+      return pad.t + plotH - (v / volMax) * plotH;
+    }
+    function yRev(v) {
+      return pad.t + plotH - (v / revMax) * plotH;
+    }
+
+    var grid = '';
+    var volTicks = [0, 100, 200, 300, 400, 500, 600, 700];
+    volTicks.forEach(function (t) {
+      var y = yVol(t);
+      grid +=
+        '<line class="ar-dual-grid" x1="' +
+        pad.l +
+        '" y1="' +
+        y +
+        '" x2="' +
+        (W - pad.r) +
+        '" y2="' +
+        y +
+        '"/>';
+      grid +=
+        '<text class="ar-dual-tick ar-dual-tick--l" x="' +
+        (pad.l - 8) +
+        '" y="' +
+        (y + 3) +
+        '" text-anchor="end">' +
+        t +
+        '</text>';
+    });
+    var revTicks = [0, 20000, 40000, 60000, 80000, 100000];
+    revTicks.forEach(function (t) {
+      var y = yRev(t);
+      grid +=
+        '<text class="ar-dual-tick ar-dual-tick--r" x="' +
+        (W - pad.r + 8) +
+        '" y="' +
+        (y + 3) +
+        '" text-anchor="start">' +
+        (t === 0 ? '0' : t / 1000 + 'k') +
+        '</text>';
+    });
+
+    var bars = '';
+    var linePts = [];
+    months.forEach(function (m, i) {
+      var cx = pad.l + gap * i + gap / 2;
+      var v = volume[i] || 0;
+      var r = revenue[i] || 0;
+      var y0 = pad.t + plotH;
+      var y1 = yVol(v);
+      var bh = Math.max(0, y0 - y1);
+      bars +=
+        '<rect class="ar-dual-bar" style="--i:' +
+        i +
+        '" x="' +
+        (cx - barW / 2) +
+        '" y="' +
+        y1 +
+        '" width="' +
+        barW +
+        '" height="' +
+        bh +
+        '" rx="3"/>';
+      if (v > 0) {
+        bars +=
+          '<text class="ar-dual-bar-label" style="--i:' +
+          i +
+          '" x="' +
+          cx +
+          '" y="' +
+          (y1 - 6) +
+          '" text-anchor="middle">' +
+          v +
+          '</text>';
+      }
+      bars +=
+        '<text class="ar-dual-m" x="' +
+        cx +
+        '" y="' +
+        (H - 18) +
+        '" text-anchor="middle">' +
+        esc(m) +
+        '</text>';
+      var ry = yRev(r);
+      linePts.push(cx + ',' + ry);
+      bars +=
+        '<circle class="ar-dual-dot" style="--i:' +
+        i +
+        '" cx="' +
+        cx +
+        '" cy="' +
+        ry +
+        '" r="5"/>';
+      bars +=
+        '<text class="ar-dual-rev-label" style="--i:' +
+        i +
+        '" x="' +
+        cx +
+        '" y="' +
+        (ry - 12) +
+        '" text-anchor="middle">' +
+        esc(formatRevShort(r)) +
+        '</text>';
+    });
+
+    var poly = linePts
+      .map(function (p, i) {
+        return (i === 0 ? 'M' : 'L') + p.replace(',', ' ');
+      })
+      .join(' ');
+
+    return (
+      '<div class="ar-dual ar-dual--live">' +
+      '<ul class="ar-dual-legend">' +
+      '<li><i class="ar-dual-leg--vol"></i><span>Quantidade de Vendas</span></li>' +
+      '<li><i class="ar-dual-leg--rev"></i><span>Faturamento (R$)</span></li>' +
+      '</ul>' +
+      '<svg class="ar-dual-svg" viewBox="0 0 ' +
+      W +
+      ' ' +
+      H +
+      '" role="img" aria-label="Volume e faturamento mensal">' +
+      grid +
+      '<line class="ar-dual-axis" x1="' +
+      pad.l +
+      '" y1="' +
+      (pad.t + plotH) +
+      '" x2="' +
+      (W - pad.r) +
+      '" y2="' +
+      (pad.t + plotH) +
+      '"/>' +
+      '<line class="ar-dual-axis" x1="' +
+      pad.l +
+      '" y1="' +
+      pad.t +
+      '" x2="' +
+      pad.l +
+      '" y2="' +
+      (pad.t + plotH) +
+      '"/>' +
+      '<line class="ar-dual-axis ar-dual-axis--r" x1="' +
+      (W - pad.r) +
+      '" y1="' +
+      pad.t +
+      '" x2="' +
+      (W - pad.r) +
+      '" y2="' +
+      (pad.t + plotH) +
+      '"/>' +
+      bars +
+      '<path class="ar-dual-line" d="' +
+      poly +
+      '" fill="none"/>' +
+      '<text class="ar-dual-axis-title ar-dual-axis-title--l" x="14" y="' +
+      (pad.t + plotH / 2) +
+      '" text-anchor="middle" transform="rotate(-90 14 ' +
+      (pad.t + plotH / 2) +
+      ')">Quantidade de Vendas</text>' +
+      '<text class="ar-dual-axis-title ar-dual-axis-title--r" x="' +
+      (W - 12) +
+      '" y="' +
+      (pad.t + plotH / 2) +
+      '" text-anchor="middle" transform="rotate(90 ' +
+      (W - 12) +
+      ' ' +
+      (pad.t + plotH / 2) +
+      ')">Faturamento (R$)</text>' +
+      '<text class="ar-dual-axis-title" x="' +
+      (pad.l + plotW / 2) +
+      '" y="' +
+      (H - 2) +
+      '" text-anchor="middle">Mês de Fechamento</text>' +
+      '</svg></div>'
+    );
   }
 
   function renderClusterBarsViz(s) {
@@ -1339,28 +1660,143 @@ function renderHeatmapViz(opts) {
   function renderHistViz(cfg) {
     var c = cfg || {};
     var values = c.values || [];
-    var max = 1;
-    values.forEach(function (v) { if (v > max) max = v; });
+    var xMax = c.xMax != null ? c.xMax : Math.max(values.length - 1, 1);
+    var yMax = c.yMax != null ? c.yMax : 30;
     var mean = c.mean != null ? c.mean : null;
     var median = c.median != null ? c.median : null;
-    var xMax = Math.max(values.length - 1, 1);
+    var W = 640;
+    var H = 320;
+    var pad = { t: 18, r: 18, b: 42, l: 48 };
+    var plotW = W - pad.l - pad.r;
+    var plotH = H - pad.t - pad.b;
+    var n = Math.max(values.length, xMax + 1);
+    var barW = plotW / n;
+
+    function xPos(day) {
+      return pad.l + (day / xMax) * plotW;
+    }
+    function yPos(v) {
+      return pad.t + plotH - (Math.max(0, v) / yMax) * plotH;
+    }
+
+    var grid = '';
+    var yTicks = [];
+    for (var yt = 0; yt <= yMax; yt += 5) yTicks.push(yt);
+    yTicks.forEach(function (t) {
+      var y = yPos(t);
+      grid +=
+        '<line class="ar-svg-grid" x1="' +
+        pad.l +
+        '" y1="' +
+        y +
+        '" x2="' +
+        (W - pad.r) +
+        '" y2="' +
+        y +
+        '"/>';
+      grid +=
+        '<text class="ar-svg-tick" x="' +
+        (pad.l - 8) +
+        '" y="' +
+        (y + 3) +
+        '" text-anchor="end">' +
+        t +
+        '</text>';
+    });
+
+    var xTicks = '';
+    for (var xt = 0; xt <= xMax; xt += 5) {
+      var x = xPos(xt);
+      xTicks +=
+        '<text class="ar-svg-tick" x="' +
+        x +
+        '" y="' +
+        (H - 14) +
+        '" text-anchor="middle">' +
+        xt +
+        '</text>';
+    }
+
     var bars = values
       .map(function (v, i) {
-        var h = max ? (v / max) * 100 : 0;
+        if (!v) return '';
+        var h = (v / yMax) * plotH;
+        var x = pad.l + i * barW + barW * 0.12;
+        var y = yPos(v);
         return (
-          '<div class="ar-hist-bar" style="--h:' +
-          h +
-          '%;--i:' +
+          '<rect class="ar-hist-svg-bar" style="--i:' +
           i +
-          '"><i></i></div>'
+          '" x="' +
+          x.toFixed(2) +
+          '" y="' +
+          y.toFixed(2) +
+          '" width="' +
+          (barW * 0.76).toFixed(2) +
+          '" height="' +
+          h.toFixed(2) +
+          '" rx="2"/>'
         );
       })
       .join('');
-    var meanPct = mean != null ? (mean / xMax) * 100 : null;
-    var medPct = median != null ? (median / xMax) * 100 : null;
+
+    // smooth density curve (moving average of hist)
+    var dens = [];
+    for (var i = 0; i < values.length; i++) {
+      var s = 0;
+      var w = 0;
+      for (var k = -2; k <= 2; k++) {
+        var j = i + k;
+        if (j >= 0 && j < values.length) {
+          var ww = 3 - Math.abs(k);
+          s += values[j] * ww;
+          w += ww;
+        }
+      }
+      dens.push(s / w);
+    }
+    var dMax = 1;
+    dens.forEach(function (v) {
+      if (v > dMax) dMax = v;
+    });
+    // scale density to sit nicely over bars (peak ~ yMax * 0.95)
+    var scale = (yMax * 0.95) / dMax;
+    var curve = dens
+      .map(function (v, i) {
+        return xPos(i).toFixed(2) + ',' + yPos(v * scale).toFixed(2);
+      })
+      .join(' ');
+
+    var guides = '';
+    if (median != null) {
+      var mx = xPos(median);
+      guides +=
+        '<line class="ar-hist-guide ar-hist-guide--med" x1="' +
+        mx +
+        '" y1="' +
+        pad.t +
+        '" x2="' +
+        mx +
+        '" y2="' +
+        (pad.t + plotH) +
+        '"/>';
+    }
+    if (mean != null) {
+      var nx = xPos(mean);
+      guides +=
+        '<line class="ar-hist-guide ar-hist-guide--mean" x1="' +
+        nx +
+        '" y1="' +
+        pad.t +
+        '" x2="' +
+        nx +
+        '" y2="' +
+        (pad.t + plotH) +
+        '"/>';
+    }
+
     return (
-      '<div class="ar-hist ar-hist--live">' +
-      '<div class="ar-hist-legend">' +
+      '<div class="ar-svgchart ar-hist ar-hist--live">' +
+      '<div class="ar-svgchart-legend">' +
       (mean != null
         ? '<span class="ar-hist-leg ar-hist-leg--mean">Média (' +
           String(mean).replace('.', ',') +
@@ -1372,84 +1808,213 @@ function renderHeatmapViz(opts) {
           ' dias)</span>'
         : '') +
       '</div>' +
-      '<div class="ar-hist-chart">' +
-      '<div class="ar-hist-y"><span>' +
-      max +
-      '</span><span>0</span></div>' +
-      '<div class="ar-hist-plot">' +
-      '<div class="ar-hist-bars">' +
+      '<svg viewBox="0 0 ' +
+      W +
+      ' ' +
+      H +
+      '" role="img" aria-label="Time-to-Meeting">' +
+      '<text class="ar-svg-axis-title" transform="translate(14 ' +
+      (pad.t + plotH / 2) +
+      ') rotate(-90)" text-anchor="middle">' +
+      esc(c.yLabel || 'Volume') +
+      '</text>' +
+      grid +
       bars +
-      '</div>' +
-      (medPct != null
-        ? '<div class="ar-hist-vline ar-hist-vline--med" style="left:' +
-          medPct +
-          '%"></div>'
-        : '') +
-      (meanPct != null
-        ? '<div class="ar-hist-vline ar-hist-vline--mean" style="left:' +
-          meanPct +
-          '%"></div>'
-        : '') +
-      '</div></div>' +
-      '<p class="ar-hist-xlabel">' +
+      '<polyline class="ar-hist-kde" fill="none" points="' +
+      curve +
+      '"/>' +
+      guides +
+      '<line class="ar-svg-axis" x1="' +
+      pad.l +
+      '" y1="' +
+      (pad.t + plotH) +
+      '" x2="' +
+      (W - pad.r) +
+      '" y2="' +
+      (pad.t + plotH) +
+      '"/>' +
+      '<line class="ar-svg-axis" x1="' +
+      pad.l +
+      '" y1="' +
+      pad.t +
+      '" x2="' +
+      pad.l +
+      '" y2="' +
+      (pad.t + plotH) +
+      '"/>' +
+      xTicks +
+      '<text class="ar-svg-axis-title" x="' +
+      (pad.l + plotW / 2) +
+      '" y="' +
+      (H - 2) +
+      '" text-anchor="middle">' +
       esc(c.xLabel || 'Dias') +
-      '</p></div>'
+      '</text>' +
+      '</svg></div>'
     );
   }
 
   function renderSeasonViz(cfg) {
     var values = (cfg && cfg.values) || [];
-    var max = 1;
-    values.forEach(function (v) { if (v > max) max = v; });
+    var yMax = 10;
+    var max = yMax;
     var ma = values.map(function (v, i) {
       var a = values[i - 1];
       var b = v;
       var c = values[i + 1];
       var n = 1;
       var s = b;
-      if (a != null) { s += a; n++; }
-      if (c != null) { s += c; n++; }
+      if (a != null) {
+        s += a;
+        n++;
+      }
+      if (c != null) {
+        s += c;
+        n++;
+      }
       return s / n;
     });
+    var W = 720;
+    var H = 320;
+    var pad = { t: 22, r: 16, b: 42, l: 44 };
+    var plotW = W - pad.l - pad.r;
+    var plotH = H - pad.t - pad.b;
+    var n = values.length;
+    var gap = 0.22;
+    var slot = plotW / n;
+    var barW = slot * (1 - gap);
+
+    function xCenter(i) {
+      return pad.l + i * slot + slot / 2;
+    }
+    function yPos(v) {
+      return pad.t + plotH - (Math.max(0, v) / max) * plotH;
+    }
+
+    var grid = '';
+    for (var yt = 0; yt <= max; yt += 2) {
+      var y = yPos(yt);
+      grid +=
+        '<line class="ar-svg-grid" x1="' +
+        pad.l +
+        '" y1="' +
+        y +
+        '" x2="' +
+        (W - pad.r) +
+        '" y2="' +
+        y +
+        '"/>';
+      grid +=
+        '<text class="ar-svg-tick" x="' +
+        (pad.l - 8) +
+        '" y="' +
+        (y + 3) +
+        '" text-anchor="end">' +
+        yt +
+        '</text>';
+    }
+
     var bars = values
       .map(function (v, i) {
-        var h = max ? (v / max) * 100 : 0;
+        var h = (v / max) * plotH;
+        var x = pad.l + i * slot + (slot - barW) / 2;
+        var y = yPos(v);
+        var label =
+          v > 0
+            ? '<text class="ar-season-svg-val" x="' +
+              xCenter(i).toFixed(1) +
+              '" y="' +
+              (y - 4).toFixed(1) +
+              '" text-anchor="middle">' +
+              v +
+              '</text>'
+            : '';
         return (
-          '<div class="ar-season-col" style="--i:' +
+          '<rect class="ar-season-svg-bar" style="--i:' +
           i +
-          '"><div class="ar-season-bar" style="--h:' +
-          h +
-          '%"><i></i>' +
-          (v > 0 ? '<span>' + v + '</span>' : '') +
-          '</div><em>' +
+          '" x="' +
+          x.toFixed(2) +
+          '" y="' +
+          y.toFixed(2) +
+          '" width="' +
+          barW.toFixed(2) +
+          '" height="' +
+          Math.max(h, 0).toFixed(2) +
+          '" rx="2"/>' +
+          label +
+          '<text class="ar-svg-tick ar-season-day" x="' +
+          xCenter(i).toFixed(1) +
+          '" y="' +
+          (H - 16) +
+          '" text-anchor="middle">' +
           (i + 1) +
-          '</em></div>'
+          '</text>'
         );
       })
       .join('');
+
     var poly = ma
       .map(function (v, i) {
-        var x = ((i + 0.5) / values.length) * 100;
-        var y = 100 - (max ? (v / max) * 100 : 0);
-        return x.toFixed(2) + ',' + y.toFixed(2);
+        return xCenter(i).toFixed(2) + ',' + yPos(v).toFixed(2);
       })
       .join(' ');
+    var dots = ma
+      .map(function (v, i) {
+        return (
+          '<circle class="ar-season-dot" style="--i:' +
+          i +
+          '" cx="' +
+          xCenter(i).toFixed(2) +
+          '" cy="' +
+          yPos(v).toFixed(2) +
+          '" r="2.6"/>'
+        );
+      })
+      .join('');
+
     return (
-      '<div class="ar-season ar-season--live">' +
-      '<div class="ar-season-legend"><i></i><span>Média Móvel (3 dias)</span></div>' +
-      '<div class="ar-season-chart">' +
-      '<div class="ar-season-y"><span>' +
-      max +
-      '</span><span>0</span></div>' +
-      '<div class="ar-season-plot">' +
-      '<div class="ar-season-cols">' +
-      bars +
+      '<div class="ar-svgchart ar-season ar-season--live">' +
+      '<div class="ar-svgchart-legend">' +
+      '<span class="ar-season-leg"><i></i>Média Móvel (3 dias)</span>' +
       '</div>' +
-      '<svg class="ar-season-line" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">' +
-      '<polyline fill="none" stroke="#e24a33" stroke-width="1.8" points="' +
+      '<svg viewBox="0 0 ' +
+      W +
+      ' ' +
+      H +
+      '" role="img" aria-label="Sazonalidade do Agendamento">' +
+      '<text class="ar-svg-axis-title" transform="translate(14 ' +
+      (pad.t + plotH / 2) +
+      ') rotate(-90)" text-anchor="middle">Quantidade de Reuniões</text>' +
+      grid +
+      bars +
+      '<polyline class="ar-season-poly" fill="none" points="' +
       poly +
-      '"/></svg></div></div>' +
-      '<p class="ar-season-xlabel">Dias do Mês</p></div>'
+      '"/>' +
+      dots +
+      '<line class="ar-svg-axis" x1="' +
+      pad.l +
+      '" y1="' +
+      (pad.t + plotH) +
+      '" x2="' +
+      (W - pad.r) +
+      '" y2="' +
+      (pad.t + plotH) +
+      '"/>' +
+      '<line class="ar-svg-axis" x1="' +
+      pad.l +
+      '" y1="' +
+      pad.t +
+      '" x2="' +
+      pad.l +
+      '" y2="' +
+      (pad.t + plotH) +
+      '"/>' +
+      '<text class="ar-svg-axis-title" x="' +
+      (pad.l + plotW / 2) +
+      '" y="' +
+      (H - 2) +
+      '" text-anchor="middle">Dias do Mês</text>' +
+      '</svg></div>'
     );
   }
 
@@ -1458,6 +2023,7 @@ function renderHeatmapViz(opts) {
     if (s.viz === 'heatmap') vizHtml = renderHeatmapViz(s);
     else if (s.viz === 'bars') vizHtml = renderBarsViz(s.items);
     else if (s.viz === 'cluster') vizHtml = renderClusterBarsViz(s);
+    else if (s.viz === 'dual') vizHtml = renderDualSalesViz(s.dual);
     else if (s.viz === 'hist') vizHtml = renderHistViz(s.hist);
     else if (s.viz === 'season') vizHtml = renderSeasonViz(s.season);
     else if (s.viz === 'donut') vizHtml = renderDonutViz(s.slices, s.centerLabel, s.centerSub);
