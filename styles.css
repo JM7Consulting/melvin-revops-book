@@ -14731,6 +14731,17 @@ body.light-mode .ar-deck:-webkit-full-screen {
   text-align: center;
   min-width: 0;
   padding: 0 8px;
+  gap: 4px;
+}
+.ar-panel-mid-kicker {
+  margin: 0;
+  font-family: Sora, Manrope, sans-serif;
+  font-size: clamp(0.72rem, 1.55cqw, 0.92rem);
+  font-weight: 750;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #ffffff;
+  line-height: 1.2;
 }
 .ar-panel-indicator {
   margin: 0;
@@ -15749,6 +15760,9 @@ body.light-mode .ar-deck .ar-credits-name {
 }
 body.light-mode .ar-deck .ar-panel-indicator {
   color: #64FCD8 !important;
+}
+body.light-mode .ar-deck .ar-panel-mid-kicker {
+  color: #ffffff !important;
 }
 body.light-mode .ar-deck .ar-plan-card h4 {
   color: #0f172a !important;

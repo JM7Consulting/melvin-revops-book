@@ -557,7 +557,11 @@
           : '') +
       '</div>';
     var midBlock = s.indicator
-      ? '<div class="ar-panel-head-mid"><p class="ar-panel-indicator">' +
+      ? '<div class="ar-panel-head-mid">' +
+        (s.type === 'viz' || kind === 'viz'
+          ? '<p class="ar-panel-mid-kicker">ANÁLISE DE ATIVIDADES</p>'
+          : '') +
+        '<p class="ar-panel-indicator">' +
         esc(s.indicator) +
         '</p></div>'
       : '';
