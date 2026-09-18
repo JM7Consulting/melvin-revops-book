@@ -893,9 +893,21 @@
     d.grid.forEach(function (row, ri) {
       cells += '<div class="ar-heat-label">' + esc(d.days[ri]) + '</div>';
       row.forEach(function (v, ci) {
+        var t = Math.max(0, Math.min(1, v / d.max));
         var fg = v > 180 ? '#f8fafc' : '#0f172a';
+        var heatCls =
+          'ar-heat-cell' +
+          (t >= 0.55 ? ' is-hot' : t >= 0.25 ? ' is-warm' : ' is-cool');
         cells +=
-          '<div class="ar-heat-cell" style="background:' +
+          '<div class="' +
+          heatCls +
+          '" style="--t:' +
+          t.toFixed(3) +
+          ';--ci:' +
+          ci +
+          ';--ri:' +
+          ri +
+          ';background:' +
           heatColor(v, d.max) +
           ';color:' +
           fg +
@@ -914,7 +926,7 @@
         })
         .join('');
     return (
-      '<div class="ar-heat">' +
+      '<div class="ar-heat ar-heat--live" aria-label="Mapa de calor animado">' +
       '<div class="ar-heat-grid" style="--cols:' +
       d.hours.length +
       '">' +

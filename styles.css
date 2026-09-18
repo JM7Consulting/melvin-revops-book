@@ -15588,6 +15588,99 @@ body.light-mode .ar-panel-content {
   font-weight: 700;
   font-variant-numeric: tabular-nums;
   min-height: 0;
+  position: relative;
+  will-change: filter, box-shadow, transform;
+}
+.ar-heat--live .ar-heat-cell {
+  animation:
+    arHeatIn 0.55s cubic-bezier(0.22, 1, 0.36, 1) both,
+    arHeatWave 3.6s ease-in-out infinite;
+  animation-delay:
+    calc((var(--ri, 0) * 12 + var(--ci, 0)) * 22ms),
+    calc(var(--ci, 0) * 0.14s + var(--ri, 0) * 0.05s);
+}
+.ar-heat--live .ar-heat-cell.is-warm {
+  animation-name: arHeatIn, arHeatWaveWarm;
+}
+.ar-heat--live .ar-heat-cell.is-hot {
+  animation-name: arHeatIn, arHeatWaveHot;
+}
+@keyframes arHeatIn {
+  from {
+    opacity: 0;
+    transform: scale(0.72);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@keyframes arHeatWave {
+  0%,
+  100% {
+    filter: brightness(1) saturate(1);
+    transform: scale(1);
+    box-shadow: inset 0 0 0 0 transparent;
+  }
+  45% {
+    filter: brightness(calc(1 + var(--t, 0.2) * 0.22)) saturate(1.08);
+    transform: scale(1);
+  }
+  52% {
+    filter: brightness(calc(1 + var(--t, 0.2) * 0.08)) saturate(1);
+  }
+}
+@keyframes arHeatWaveWarm {
+  0%,
+  100% {
+    filter: brightness(1) saturate(1);
+    transform: scale(1);
+    box-shadow: 0 0 0 0 transparent;
+  }
+  42% {
+    filter: brightness(1.18) saturate(1.2);
+    transform: scale(1.03);
+    box-shadow: 0 0 10px rgba(20, 184, 166, 0.35);
+  }
+  58% {
+    filter: brightness(1.05) saturate(1.05);
+    transform: scale(1.01);
+    box-shadow: 0 0 4px rgba(20, 184, 166, 0.15);
+  }
+}
+@keyframes arHeatWaveHot {
+  0%,
+  100% {
+    filter: brightness(1) saturate(1);
+    transform: scale(1);
+    box-shadow: 0 0 0 0 transparent;
+  }
+  38% {
+    filter: brightness(1.28) saturate(1.25);
+    transform: scale(1.06);
+    box-shadow:
+      0 0 14px rgba(30, 64, 175, 0.55),
+      0 0 4px rgba(100, 252, 216, 0.35);
+  }
+  55% {
+    filter: brightness(1.1) saturate(1.1);
+    transform: scale(1.02);
+    box-shadow: 0 0 8px rgba(30, 64, 175, 0.28);
+  }
+}
+.ar-heat--live .ar-heat-scale i {
+  background-size: 200% 100%;
+  animation: arHeatScale 3.6s linear infinite;
+}
+@keyframes arHeatScale {
+  0% { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ar-heat--live .ar-heat-cell,
+  .ar-heat--live .ar-heat-scale i {
+    animation: none !important;
+  }
 }
 .ar-heat-scale {
   display: flex;
