@@ -527,10 +527,12 @@
   function arPanelShell(kind, s, innerHtml) {
     var bg = esc(s.bg || AR_HERO_BG);
     var period = periodLabel();
+    var isProd = !!(s.dailyAvg || (s.person && s.indicator));
     var headCls =
       'ar-panel-head' +
       (s.person ? ' ar-panel-head--person' : '') +
-      (s.dailyAvg ? ' ar-panel-head--prod' : '');
+      (isProd ? ' ar-panel-head--prod' : '') +
+      (s.indicator ? ' ar-panel-head--triple' : '');
     var leftBlock =
       '<div class="ar-panel-head-text">' +
       '<p class="ar-panel-kicker">Melvin · AR' +
@@ -545,6 +547,11 @@
           ? '<p class="ar-panel-note">' + esc(s.lead) + '</p>'
           : '') +
       '</div>';
+    var midBlock = s.indicator
+      ? '<div class="ar-panel-head-mid"><p class="ar-panel-indicator">' +
+        esc(s.indicator) +
+        '</p></div>'
+      : '';
     var rightBlock = s.person
       ? '<div class="ar-panel-head-person">' +
         '<p class="ar-panel-person">' +
@@ -560,7 +567,8 @@
       kind +
       ' ar-panel' +
       (s.person ? ' ar-panel--person' : '') +
-      (s.dailyAvg ? ' ar-panel--prod' : '') +
+      (isProd ? ' ar-panel--prod' : '') +
+      (kind === 'viz' ? ' ar-panel--viz' : '') +
       '">' +
       '<div class="ar-panel-bg" style="background-image:url(\'' +
       bg +
@@ -571,9 +579,12 @@
       headCls +
       '">' +
       leftBlock +
+      midBlock +
       rightBlock +
       '</header>' +
-      '<div class="ar-panel-content">' +
+      '<div class="ar-panel-content' +
+      (kind === 'viz' ? ' ar-viz-content' : '') +
+      '">' +
       innerHtml +
       '</div></div></div>'
     );
@@ -1006,33 +1017,7 @@
       (insights
         ? '<ul class="ar-viz-insights">' + insights + '</ul>'
         : '');
-    // Custom centered shell for viz slides
-    var bg = esc(s.bg || AR_HERO_BG);
-    var period = periodLabel();
-    return (
-      '<div class="ar-slide-canvas ar-slide-canvas--viz ar-panel ar-panel--viz">' +
-      '<div class="ar-panel-bg" style="background-image:url(\'' +
-      bg +
-      '\')" aria-hidden="true"></div>' +
-      '<div class="ar-panel-veil" aria-hidden="true"></div>' +
-      '<div class="ar-panel-body">' +
-      '<header class="ar-viz-head">' +
-      '<p class="ar-panel-kicker">Melvin · AR' +
-      (period ? ' · ' + esc(period) : '') +
-      (s.person ? ' · ' + esc(s.person) : '') +
-      '</p>' +
-      '<h3 class="ar-viz-title">' +
-      esc(s.title) +
-      '</h3>' +
-      '<p class="ar-viz-indicator">' +
-      esc(s.indicator || '') +
-      '</p>' +
-      (s.note ? '<p class="ar-panel-note">' + esc(s.note) + '</p>' : '') +
-      '</header>' +
-      '<div class="ar-panel-content ar-viz-content">' +
-      inner +
-      '</div></div></div>'
-    );
+    return arPanelShell('viz', s, inner);
   }
 
 
