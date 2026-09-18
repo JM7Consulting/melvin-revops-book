@@ -316,6 +316,53 @@
         'Alerta: 20,2% passam de 3 dias — leads difíceis ou fila administrativa.'
       ]
     },
+    {
+      type: 'viz',
+      title: 'PRODUTIVIDADE MENSAL',
+      midKicker: 'ANÁLISE DE LIGAÇÕES',
+      indicator: 'Evolução Mensal de Chamadas VoIP',
+      person: 'Gabriely Silva',
+      note: 'Iniciadas · Atendidas · +30s · ' + AR_PERIOD.label,
+      viz: 'cluster',
+      months: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set'],
+      series: [
+        {
+          label: 'Iniciadas (Total)',
+          color: '#3b82f6',
+          values: [0, 0, 0, 2, 0, 0, 0, 0, 288]
+        },
+        {
+          label: 'Atendidas (Sucesso)',
+          color: '#22c55e',
+          values: [0, 0, 0, 2, 0, 0, 0, 0, 105]
+        },
+        {
+          label: 'Mais de 30s (Qualificadas)',
+          color: '#f97316',
+          values: [0, 0, 0, 2, 0, 0, 0, 0, 6]
+        }
+      ],
+      insights: [
+        'Setembro explode: 288 iniciadas · 105 atendidas · 6 qualificadas (+30s).',
+        'Até ago o VoIP estava praticamente zerado (só Abr com 2/2/2).',
+        'Alerta: conversão iniciada→+30s em Set é baixa (6/288) — revisar script e timing.'
+      ]
+    },
+    {
+      type: 'viz',
+      title: 'PRODUTIVIDADE MENSAL',
+      midKicker: 'ANÁLISE DE LIGAÇÕES',
+      indicator: 'Mapa de Calor de Ligações VoIP',
+      person: 'Gabriely Silva',
+      note: 'Dias × horários · BRT · volume de ligações',
+      viz: 'heatmap',
+      heat: 'voip',
+      insights: [
+        'Picos de ligação: Ter 13h (31) e Qui 13h (29).',
+        'Blocos fortes: 12h–13h e 16h–18h em dias úteis.',
+        'Alerta: fim de semana zerado — janela comercial concentrada em Seg–Sex.'
+      ]
+    },
 
     {
       type: 'matrix',
@@ -558,8 +605,10 @@
       '</div>';
     var midBlock = s.indicator
       ? '<div class="ar-panel-head-mid">' +
-        (s.type === 'viz' || kind === 'viz'
-          ? '<p class="ar-panel-mid-kicker">ANÁLISE DE ATIVIDADES</p>'
+        (kind === 'viz'
+          ? '<p class="ar-panel-mid-kicker">' +
+            esc(s.midKicker || 'ANÁLISE DE ATIVIDADES') +
+            '</p>'
           : '') +
         '<p class="ar-panel-indicator">' +
         esc(s.indicator) +
@@ -860,7 +909,7 @@
 
   function heatColor(v, max) {
     var t = Math.max(0, Math.min(1, v / max));
-    // yellow -> teal -> deep blue (Melvin)
+    // yellow -> teal -> deep blue (Melvin atividades)
     if (t < 0.25) return 'rgb(254, 243, ' + Math.round(199 - t * 40) + ')';
     if (t < 0.55) {
       var u = (t - 0.25) / 0.3;
@@ -868,6 +917,24 @@
     }
     var u2 = (t - 0.55) / 0.45;
     return 'rgb(' + Math.round(30 - u2 * 20) + ',' + Math.round(80 - u2 * 50) + ',' + Math.round(160 + u2 * 40) + ')';
+  }
+
+  function heatColorVoip(v, max) {
+    var t = Math.max(0, Math.min(1, v / Math.max(max, 1)));
+    // cream -> gold -> orange -> deep red
+    if (t < 0.2) {
+      return 'rgb(254, ' + Math.round(249 - t * 40) + ', ' + Math.round(220 - t * 80) + ')';
+    }
+    if (t < 0.5) {
+      var u = (t - 0.2) / 0.3;
+      return 'rgb(253, ' + Math.round(224 - u * 80) + ', ' + Math.round(71 - u * 40) + ')';
+    }
+    if (t < 0.75) {
+      var u2 = (t - 0.5) / 0.25;
+      return 'rgb(' + Math.round(249 - u2 * 40) + ', ' + Math.round(115 - u2 * 70) + ', ' + Math.round(22 - u2 * 10) + ')';
+    }
+    var u3 = (t - 0.75) / 0.25;
+    return 'rgb(' + Math.round(185 - u3 * 50) + ', ' + Math.round(28 - u3 * 20) + ', ' + Math.round(28 - u3 * 10) + ')';
   }
 
   function gabyHeatData() {
@@ -884,17 +951,33 @@
       [0, 1, 5, 12, 25, 18, 8, 10, 43, 20, 8, 2],
       [0, 0, 2, 6, 10, 8, 3, 4, 8, 5, 2, 0]
     ];
-    return { hours: hours, days: days, grid: grid, max: 364 };
+    return { hours: hours, days: days, grid: grid, max: 364, scaleMax: '350+', palette: 'teal' };
   }
 
-  function renderHeatmapViz() {
-    var d = gabyHeatData();
+  function gabyVoipHeatData() {
+    var hours = [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20];
+    var days = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'];
+    var grid = [
+      [0, 0, 0, 0, 0, 9, 0, 0, 17, 8, 4, 0, 0],
+      [0, 0, 0, 0, 2, 31, 2, 0, 16, 17, 8, 0, 0],
+      [0, 0, 0, 0, 2, 9, 1, 0, 17, 21, 12, 0, 0],
+      [0, 0, 0, 0, 18, 29, 0, 0, 2, 6, 0, 0, 0],
+      [0, 0, 0, 0, 19, 24, 0, 0, 9, 7, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    ];
+    return { hours: hours, days: days, grid: grid, max: 31, scaleMax: '30+', palette: 'voip' };
+  }
+
+  function renderHeatmapViz(opts) {
+    var d = (opts && opts.heat === 'voip' ? gabyVoipHeatData() : gabyHeatData());
+    var colorFn = d.palette === 'voip' ? heatColorVoip : heatColor;
     var cells = '';
     d.grid.forEach(function (row, ri) {
       cells += '<div class="ar-heat-label">' + esc(d.days[ri]) + '</div>';
       row.forEach(function (v, ci) {
         var t = Math.max(0, Math.min(1, v / d.max));
-        var fg = v > 180 ? '#f8fafc' : '#0f172a';
+        var fg = d.palette === 'voip' ? (v > 18 ? '#f8fafc' : '#0f172a') : v > 180 ? '#f8fafc' : '#0f172a';
         var heatCls =
           'ar-heat-cell' +
           (t >= 0.55 ? ' is-hot' : t >= 0.25 ? ' is-warm' : ' is-cool');
@@ -908,7 +991,7 @@
           ';--ri:' +
           ri +
           ';background:' +
-          heatColor(v, d.max) +
+          colorFn(v, d.max) +
           ';color:' +
           fg +
           '" title="' +
@@ -925,15 +1008,22 @@
           return '<div class="ar-heat-hour">' + h + 'h</div>';
         })
         .join('');
+    var scaleCls = 'ar-heat-scale' + (d.palette === 'voip' ? ' ar-heat-scale--voip' : '');
     return (
-      '<div class="ar-heat ar-heat--live" aria-label="Mapa de calor animado">' +
+      '<div class="ar-heat ar-heat--live' +
+      (d.palette === 'voip' ? ' ar-heat--voip' : '') +
+      '" aria-label="Mapa de calor animado">' +
       '<div class="ar-heat-grid" style="--cols:' +
       d.hours.length +
       '">' +
       hourHead +
       cells +
       '</div>' +
-      '<div class="ar-heat-scale"><span>0</span><i></i><span>350+</span></div>' +
+      '<div class="' +
+      scaleCls +
+      '"><span>0</span><i></i><span>' +
+      esc(d.scaleMax) +
+      '</span></div>' +
       '</div>'
     );
   }
@@ -967,7 +1057,88 @@
         );
       })
       .join('');
-    return '<div class="ar-bars">' + rows + '</div>';
+    return '<div class="ar-bars ar-bars--live">' + rows + '</div>';
+  }
+
+  function renderClusterBarsViz(s) {
+    var months = s.months || [];
+    var series = s.series || [];
+    var max = 1;
+    series.forEach(function (ser) {
+      (ser.values || []).forEach(function (v) {
+        if (v > max) max = v;
+      });
+    });
+    // Nice Y ceiling near 300 for this chart
+    var yMax = Math.max(50, Math.ceil(max / 50) * 50);
+    var ticks = [];
+    for (var t = yMax; t >= 0; t -= yMax / 6) ticks.push(Math.round(t));
+    var legend = series
+      .map(function (ser) {
+        return (
+          '<li><i style="background:' +
+          esc(ser.color) +
+          '"></i><span>' +
+          esc(ser.label) +
+          '</span></li>'
+        );
+      })
+      .join('');
+    var cols = months
+      .map(function (m, mi) {
+        var bars = series
+          .map(function (ser, si) {
+            var v = (ser.values && ser.values[mi]) || 0;
+            var h = yMax ? (v / yMax) * 100 : 0;
+            return (
+              '<div class="ar-cluster-bar" style="--h:' +
+              h +
+              '%;--c:' +
+              esc(ser.color) +
+              ';--si:' +
+              si +
+              ';--mi:' +
+              mi +
+              '">' +
+              (v > 0
+                ? '<span class="ar-cluster-val">' + esc(String(v)) + '</span>'
+                : '') +
+              '<i style="background:' +
+              esc(ser.color) +
+              '"></i></div>'
+            );
+          })
+          .join('');
+        return (
+          '<div class="ar-cluster-month" style="--mi:' +
+          mi +
+          '"><div class="ar-cluster-cols">' +
+          bars +
+          '</div><span class="ar-cluster-m">' +
+          esc(m) +
+          '</span></div>'
+        );
+      })
+      .join('');
+    var yAxis = ticks
+      .map(function (n) {
+        return '<span>' + n + '</span>';
+      })
+      .join('');
+    return (
+      '<div class="ar-cluster ar-cluster--live">' +
+      '<ul class="ar-cluster-legend">' +
+      legend +
+      '</ul>' +
+      '<div class="ar-cluster-chart">' +
+      '<div class="ar-cluster-y" aria-hidden="true">' +
+      yAxis +
+      '</div>' +
+      '<div class="ar-cluster-plot"><div class="ar-cluster-grid" aria-hidden="true"></div><div class="ar-cluster-months">' +
+      cols +
+      '</div></div></div>' +
+      '<p class="ar-cluster-xlabel">Quantidade de Ligações</p></div>'
+    );
   }
 
   function renderDonutViz(slices, centerLabel, centerSub) {
@@ -977,11 +1148,13 @@
     var circ = 2 * Math.PI * r;
     var offset = 0;
     var arcs = list
-      .map(function (s) {
+      .map(function (s, i) {
         var len = (s.pct / 100) * circ;
         var dash = len + ' ' + (circ - len);
         var el =
-          '<circle class="ar-donut-seg" cx="' +
+          '<circle class="ar-donut-seg" style="--si:' +
+          i +
+          '" cx="' +
           c +
           '" cy="' +
           c +
@@ -1003,9 +1176,11 @@
       })
       .join('');
     var legend = list
-      .map(function (s) {
+      .map(function (s, i) {
         return (
-          '<li><i style="background:' +
+          '<li style="--si:' +
+          i +
+          '"><i style="background:' +
           esc(s.color) +
           '"></i><span>' +
           esc(s.label) +
@@ -1016,11 +1191,12 @@
       })
       .join('');
     return (
-      '<div class="ar-donut-wrap">' +
+      '<div class="ar-donut-wrap ar-donut--live">' +
       '<div class="ar-donut">' +
       '<svg viewBox="0 0 180 180" role="img" aria-label="Speed to Execution">' +
+      '<g class="ar-donut-spin">' +
       arcs +
-      '</svg>' +
+      '</g></svg>' +
       '<div class="ar-donut-center"><strong>' +
       esc(centerLabel || '') +
       '</strong><span>' +
@@ -1034,8 +1210,9 @@
 
   function renderViz(s) {
     var vizHtml = '';
-    if (s.viz === 'heatmap') vizHtml = renderHeatmapViz();
+    if (s.viz === 'heatmap') vizHtml = renderHeatmapViz(s);
     else if (s.viz === 'bars') vizHtml = renderBarsViz(s.items);
+    else if (s.viz === 'cluster') vizHtml = renderClusterBarsViz(s);
     else if (s.viz === 'donut') vizHtml = renderDonutViz(s.slices, s.centerLabel, s.centerSub);
     var insights = (s.insights || [])
       .map(function (t) {
