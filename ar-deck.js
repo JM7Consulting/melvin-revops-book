@@ -527,7 +527,10 @@
   function arPanelShell(kind, s, innerHtml) {
     var bg = esc(s.bg || AR_HERO_BG);
     var period = periodLabel();
-    var headCls = 'ar-panel-head' + (s.person ? ' ar-panel-head--person' : '');
+    var headCls =
+      'ar-panel-head' +
+      (s.person ? ' ar-panel-head--person' : '') +
+      (s.dailyAvg ? ' ar-panel-head--prod' : '');
     var leftBlock =
       '<div class="ar-panel-head-text">' +
       '<p class="ar-panel-kicker">Melvin · AR' +
@@ -557,6 +560,7 @@
       kind +
       ' ar-panel' +
       (s.person ? ' ar-panel--person' : '') +
+      (s.dailyAvg ? ' ar-panel--prod' : '') +
       '">' +
       '<div class="ar-panel-bg" style="background-image:url(\'' +
       bg +
@@ -755,9 +759,10 @@
             i +
             '"><span class="ar-mx-month-abbr">' +
             esc(String(c).slice(0, 3).toUpperCase()) +
-            '</span><span class="ar-mx-month-name">' +
-            esc(c) +
             '</span>' +
+            (withAvg
+              ? ''
+              : '<span class="ar-mx-month-name">' + esc(c) + '</span>') +
             (bdays
               ? '<span class="ar-mx-month-days">' + esc(bdays) + '</span>'
               : '') +
