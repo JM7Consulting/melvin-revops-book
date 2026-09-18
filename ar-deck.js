@@ -664,16 +664,12 @@
     {
       type: 'split',
       title: 'Gargalos atuais',
-      positives: [
-        'Voltamos a vender!',
-        '2 vendas da pré-venda e 1 do CS.'
-      ],
-      negatives: [
-        'Queda substancial de atividades concluídas',
-        'Queda SUBSTANCIAL no número de ligações geradas e atendidas',
-        'Leve queda no número de agendamentos',
-        '60% no período ' + AR_PERIOD.label + '.'
-      ]
+      lead: 'Diagnóstico operacional · o que anda × o que trava',
+      note: AR_PERIOD.label,
+      posSlots: 3,
+      negSlots: 4,
+      positives: [],
+      negatives: []
     },
     {
       type: 'section',
@@ -687,21 +683,10 @@
     {
       type: 'plan',
       title: 'Melhorias · Planificação',
-      intro: 'As melhorias sugeridas, os responsáveis e os prazos são importantes para que cada passo seja dado em conjunto.',
-      cards: [
-        {
-          title: 'Ajustes de estratégias de abordagem OUTBOUND',
-          owner: 'Gaby',
-          support: 'Jailson',
-          action: 'Roleplays / Ajustes de Abordagens'
-        },
-        {
-          title: 'Finalização e aplicação da SWOT para OUTBOUND',
-          owner: 'Jailson',
-          support: '',
-          action: ''
-        }
-      ]
+      intro: 'Trilhas de ação com dono, apoio e próximo passo — prontas para preencher.',
+      note: AR_PERIOD.label,
+      slots: 4,
+      cards: []
     },
     {
       type: 'section',
@@ -2253,58 +2238,113 @@ function renderHeatmapViz(opts) {
     return arPanelShell('viz', s, inner);
   }
 
+  function renderGapSlot(text, i, kind) {
+    var filled = !!(text && String(text).trim());
+    return (
+      '<li class="ar-gap-slot ar-gap-slot--' +
+      kind +
+      (filled ? ' is-filled' : ' is-empty') +
+      '" style="--i:' +
+      i +
+      '">' +
+      '<span class="ar-gap-slot-idx" aria-hidden="true">' +
+      String(i + 1).padStart(2, '0') +
+      '</span>' +
+      '<span class="ar-gap-slot-body">' +
+      (filled ? esc(String(text)) : '<em class="ar-gap-ghost">Aguardando dado</em>') +
+      '</span></li>'
+    );
+  }
+
   function renderSplit(s) {
-    var pos = (s.positives || [])
-      .map(function (it) {
-        return '<li>' + esc(it) + '</li>';
-      })
-      .join('');
-    var neg = (s.negatives || [])
-      .map(function (it) {
-        return '<li>' + esc(it) + '</li>';
-      })
-      .join('');
+    var posItems = s.positives || [];
+    var negItems = s.negatives || [];
+    var posN = Math.max(s.posSlots || 3, posItems.length);
+    var negN = Math.max(s.negSlots || 4, negItems.length);
+    var pos = '';
+    var neg = '';
+    var i;
+    for (i = 0; i < posN; i++) pos += renderGapSlot(posItems[i], i, 'pos');
+    for (i = 0; i < negN; i++) neg += renderGapSlot(negItems[i], i, 'neg');
     var inner =
-      '<div class="ar-split-grid">' +
-      '<div class="ar-split-col ar-split-col--pos">' +
-      '<p class="ar-split-label">Pontos positivos</p>' +
-      '<ul>' +
+      '<div class="ar-gap-board ar-gap-board--live">' +
+      '<div class="ar-gap-rail ar-gap-rail--pos">' +
+      '<header class="ar-gap-rail-head">' +
+      '<span class="ar-gap-rail-kicker">Sinal verde</span>' +
+      '<h4>O que anda</h4>' +
+      '<p>Pontos positivos do ciclo</p>' +
+      '</header>' +
+      '<ul class="ar-gap-slots">' +
       pos +
       '</ul></div>' +
-      '<div class="ar-split-col ar-split-col--neg">' +
-      '<p class="ar-split-label">Pontos de atenção</p>' +
-      '<ul>' +
+      '<div class="ar-gap-core" aria-hidden="true">' +
+      '<div class="ar-gap-core-ring"></div>' +
+      '<div class="ar-gap-core-ring ar-gap-core-ring--delay"></div>' +
+      '<div class="ar-gap-core-disk">' +
+      '<span class="ar-gap-core-label">Diagnóstico</span>' +
+      '<strong>Gargalos</strong>' +
+      '<span class="ar-gap-core-sub">anda × trava</span>' +
+      '</div></div>' +
+      '<div class="ar-gap-rail ar-gap-rail--neg">' +
+      '<header class="ar-gap-rail-head">' +
+      '<span class="ar-gap-rail-kicker">Sinal vermelho</span>' +
+      '<h4>O que trava</h4>' +
+      '<p>Pontos de atenção do ciclo</p>' +
+      '</header>' +
+      '<ul class="ar-gap-slots">' +
       neg +
       '</ul></div></div>';
     return arPanelShell('split', s, inner);
   }
 
+  function renderPlanField(label, value) {
+    var filled = !!(value && String(value).trim());
+    return (
+      '<div class="ar-run-field' +
+      (filled ? ' is-filled' : ' is-empty') +
+      '">' +
+      '<span class="ar-run-field-label">' +
+      esc(label) +
+      '</span>' +
+      '<span class="ar-run-field-value">' +
+      (filled ? esc(String(value)) : '—') +
+      '</span></div>'
+    );
+  }
+
   function renderPlan(s) {
-    var cards = (s.cards || [])
-      .map(function (c, i) {
-        var meta = [];
-        if (c.owner) meta.push('<span><em>Resp.</em> ' + esc(c.owner) + '</span>');
-        if (c.support) meta.push('<span><em>Apoio</em> ' + esc(c.support) + '</span>');
-        if (c.action) meta.push('<span><em>Ação</em> ' + esc(c.action) + '</span>');
-        return (
-          '<article class="ar-plan-card" style="--i:' +
-          i +
-          '">' +
-          '<span class="ar-plan-card-num" aria-hidden="true">' +
-          String(i + 1).padStart(2, '0') +
-          '</span>' +
-          '<h4>' +
-          esc(c.title) +
-          '</h4>' +
-          (meta.length ? '<div class="ar-plan-meta">' + meta.join('') + '</div>' : '') +
-          '</article>'
-        );
-      })
-      .join('');
+    var cards = s.cards || [];
+    var n = Math.max(s.slots || 4, cards.length, 4);
+    var rows = '';
+    for (var i = 0; i < n; i++) {
+      var c = cards[i] || {};
+      var hasTitle = !!(c.title && String(c.title).trim());
+      rows +=
+        '<article class="ar-run-row' +
+        (hasTitle ? ' is-filled' : ' is-empty') +
+        '" style="--i:' +
+        i +
+        '">' +
+        '<div class="ar-run-num" aria-hidden="true">' +
+        String(i + 1).padStart(2, '0') +
+        '</div>' +
+        '<div class="ar-run-main">' +
+        '<div class="ar-run-title">' +
+        (hasTitle
+          ? esc(c.title)
+          : '<em class="ar-gap-ghost">Melhoria a definir</em>') +
+        '</div>' +
+        '<div class="ar-run-fields">' +
+        renderPlanField('Resp.', c.owner) +
+        renderPlanField('Apoio', c.support) +
+        renderPlanField('Ação', c.action) +
+        '</div></div></article>';
+    }
     var inner =
-      (s.intro ? '<p class="ar-plan-intro">' + esc(s.intro) + '</p>' : '') +
-      '<div class="ar-plan-grid">' +
-      cards +
+      (s.intro ? '<p class="ar-plan-intro ar-run-intro">' + esc(s.intro) + '</p>' : '') +
+      '<div class="ar-runway ar-runway--live">' +
+      '<div class="ar-run-spine" aria-hidden="true"></div>' +
+      rows +
       '</div>';
     return arPanelShell('plan', s, inner);
   }
