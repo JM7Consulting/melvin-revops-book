@@ -25,6 +25,7 @@ Sempre reutilizar este visual ao alterar slides, dados ou novos tipos no deck `#
 | `section` | Contracapa de bloco | Hero + número outline + tema (`prod/stats/gap/improve/sprint`) |
 | `table` / `chart` / `split` / `plan` | Dados | `ar-panel` via `arPanelShell()` — fundo industrial + card branco |
 | `matrix` | KPI mensal (Mar–Ago etc.) | `ar-panel` + grid `ar-mx` (chips de mês, células heat ok/bad, vazias tracejadas) |
+| `viz` | Gráficos (heatmap / bars / donut) | `ar-panel--viz` + título centralizado + `indicator` + insights |
 | `cta` / `sign` | Capas finais | Mesmo `ar-hero` cinematográfico |
 
 ## Tokens

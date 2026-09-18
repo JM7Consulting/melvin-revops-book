@@ -192,6 +192,65 @@
       })
     },
     {
+      type: 'viz',
+      title: 'PRODUTIVIDADE MENSAL',
+      indicator: 'Mapa de Calor de Produtividade',
+      person: 'Gabriely Silva',
+      note: 'BRT · dias × horários de pico · ' + AR_PERIOD.label,
+      viz: 'heatmap',
+      insights: [
+        'Picos nobres: 12h e 17h (300+ atividades/hora).',
+        'Dias mais intensos: Segunda e Quarta.',
+        'Alerta: volume cai na Sexta e entre 14h–15h — evite cold call nos blocos azuis escuros.'
+      ]
+    },
+    {
+      type: 'viz',
+      title: 'PRODUTIVIDADE MENSAL',
+      indicator: 'Auditoria da Cadência Real',
+      person: 'Gabriely Silva',
+      note: 'Natureza real do esforço · assuntos Bitrix · ' + AR_PERIOD.label,
+      viz: 'bars',
+      items: [
+        { label: 'Contatar cliente', v: 2519 },
+        { label: 'Realizar Ligação', v: 1724 },
+        { label: 'Formulário CRM “Teste 14 dias gratuito” enviado', v: 937 },
+        { label: 'Mensagem SMS enviada', v: 366 },
+        { label: 'Descartar lead por tentativas esgotadas', v: 103 },
+        { label: 'E-mail', v: 74 },
+        { label: 'envio de e-mail', v: 66 },
+        { label: 'Ligação Ativa', v: 58 }
+      ],
+      insights: [
+        'Esforço concentrado em Contatar cliente (2.519) e Ligações (1.724).',
+        'Formulário 14 dias ~1.000× — etapa do funil rodando forte.',
+        'Alerta: só 103 descartes vs 1.700+ ligações — possível retenção de leads mortos.'
+      ]
+    },
+    {
+      type: 'viz',
+      title: 'PRODUTIVIDADE MENSAL',
+      indicator: 'Speed to Execution (Tempo de Resolução)',
+      person: 'Gabriely Silva',
+      note: 'Velocidade entre criação e conclusão · ' + AR_PERIOD.label,
+      viz: 'donut',
+      slices: [
+        { label: '< 1 hora', pct: 37.5, color: '#22c55e' },
+        { label: '1 a 4 horas', pct: 11.1, color: '#3b82f6' },
+        { label: 'Mesmo dia (4–24h)', pct: 16.2, color: '#eab308' },
+        { label: '1 a 3 dias', pct: 15.0, color: '#f97316' },
+        { label: 'Mais de 3 dias', pct: 20.2, color: '#ef4444' }
+      ],
+      centerLabel: '65%',
+      centerSub: 'mesmo dia',
+      insights: [
+        '~65% das tarefas resolvidas no mesmo dia (<1h + 1–4h + 4–24h).',
+        '37,5% em menos de 1 hora — padrão ouro para a equipe.',
+        'Alerta: 20,2% passam de 3 dias — leads difíceis ou fila administrativa.'
+      ]
+    },
+
+    {
       type: 'matrix',
       title: 'PRODUTIVIDADE MENSAL',
       person: 'Fabrício Luiz',
@@ -670,6 +729,215 @@
     return arPanelShell('matrix', s, inner);
   }
 
+  function heatColor(v, max) {
+    var t = Math.max(0, Math.min(1, v / max));
+    // yellow -> teal -> deep blue (Melvin)
+    if (t < 0.25) return 'rgb(254, 243, ' + Math.round(199 - t * 40) + ')';
+    if (t < 0.55) {
+      var u = (t - 0.25) / 0.3;
+      return 'rgb(' + Math.round(110 - u * 60) + ',' + Math.round(200 - u * 40) + ',' + Math.round(180 + u * 40) + ')';
+    }
+    var u2 = (t - 0.55) / 0.45;
+    return 'rgb(' + Math.round(30 - u2 * 20) + ',' + Math.round(80 - u2 * 50) + ',' + Math.round(160 + u2 * 40) + ')';
+  }
+
+  function gabyHeatData() {
+    // Compact operational window 8h–19h · BRT pattern from Gabriely heatmap
+    var hours = [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19];
+    var days = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'];
+    // rows = days, cols = hours — calibrated to print peaks (12h/17h)
+    var grid = [
+      [2, 8, 45, 120, 364, 180, 28, 35, 140, 269, 90, 25],
+      [1, 6, 40, 110, 280, 160, 30, 38, 130, 246, 85, 22],
+      [2, 7, 48, 130, 327, 175, 32, 40, 145, 255, 95, 28],
+      [1, 5, 35, 95, 220, 140, 25, 30, 110, 200, 70, 18],
+      [1, 4, 30, 80, 190, 100, 22, 28, 70, 81, 40, 12],
+      [0, 1, 5, 12, 25, 18, 8, 10, 43, 20, 8, 2],
+      [0, 0, 2, 6, 10, 8, 3, 4, 8, 5, 2, 0]
+    ];
+    return { hours: hours, days: days, grid: grid, max: 364 };
+  }
+
+  function renderHeatmapViz() {
+    var d = gabyHeatData();
+    var cells = '';
+    d.grid.forEach(function (row, ri) {
+      cells += '<div class="ar-heat-label">' + esc(d.days[ri]) + '</div>';
+      row.forEach(function (v, ci) {
+        var fg = v > 180 ? '#f8fafc' : '#0f172a';
+        cells +=
+          '<div class="ar-heat-cell" style="background:' +
+          heatColor(v, d.max) +
+          ';color:' +
+          fg +
+          '" title="' +
+          esc(d.days[ri] + ' ' + d.hours[ci] + 'h: ' + v) +
+          '">' +
+          v +
+          '</div>';
+      });
+    });
+    var hourHead =
+      '<div class="ar-heat-corner"></div>' +
+      d.hours
+        .map(function (h) {
+          return '<div class="ar-heat-hour">' + h + 'h</div>';
+        })
+        .join('');
+    return (
+      '<div class="ar-heat">' +
+      '<div class="ar-heat-grid" style="--cols:' +
+      d.hours.length +
+      '">' +
+      hourHead +
+      cells +
+      '</div>' +
+      '<div class="ar-heat-scale"><span>0</span><i></i><span>350+</span></div>' +
+      '</div>'
+    );
+  }
+
+  function renderBarsViz(items) {
+    var max = 1;
+    (items || []).forEach(function (it) {
+      if (it.v > max) max = it.v;
+    });
+    var rows = (items || [])
+      .map(function (it, i) {
+        var pct = Math.max(4, (it.v / max) * 100);
+        var hue = 270 - i * 28;
+        return (
+          '<div class="ar-bar-row" style="--i:' +
+          i +
+          '">' +
+          '<div class="ar-bar-label">' +
+          esc(it.label) +
+          '</div>' +
+          '<div class="ar-bar-track"><div class="ar-bar-fill" style="width:' +
+          pct +
+          '%;background:hsl(' +
+          hue +
+          ' 55% ' +
+          (28 + i * 4) +
+          '%)"></div></div>' +
+          '<div class="ar-bar-val">' +
+          esc(String(it.v).replace(/\B(?=(\d{3})+(?!\d))/g, '.')) +
+          '</div></div>'
+        );
+      })
+      .join('');
+    return '<div class="ar-bars">' + rows + '</div>';
+  }
+
+  function renderDonutViz(slices, centerLabel, centerSub) {
+    var list = slices || [];
+    var r = 72;
+    var c = 90;
+    var circ = 2 * Math.PI * r;
+    var offset = 0;
+    var arcs = list
+      .map(function (s) {
+        var len = (s.pct / 100) * circ;
+        var dash = len + ' ' + (circ - len);
+        var el =
+          '<circle class="ar-donut-seg" cx="' +
+          c +
+          '" cy="' +
+          c +
+          '" r="' +
+          r +
+          '" fill="none" stroke="' +
+          esc(s.color) +
+          '" stroke-width="28" stroke-dasharray="' +
+          dash +
+          '" stroke-dashoffset="' +
+          -offset +
+          '" transform="rotate(-90 ' +
+          c +
+          ' ' +
+          c +
+          ')"/>';
+        offset += len;
+        return el;
+      })
+      .join('');
+    var legend = list
+      .map(function (s) {
+        return (
+          '<li><i style="background:' +
+          esc(s.color) +
+          '"></i><span>' +
+          esc(s.label) +
+          '</span><strong>' +
+          esc(String(s.pct).replace('.', ',')) +
+          '%</strong></li>'
+        );
+      })
+      .join('');
+    return (
+      '<div class="ar-donut-wrap">' +
+      '<div class="ar-donut">' +
+      '<svg viewBox="0 0 180 180" role="img" aria-label="Speed to Execution">' +
+      arcs +
+      '</svg>' +
+      '<div class="ar-donut-center"><strong>' +
+      esc(centerLabel || '') +
+      '</strong><span>' +
+      esc(centerSub || '') +
+      '</span></div></div>' +
+      '<ul class="ar-donut-legend">' +
+      legend +
+      '</ul></div>'
+    );
+  }
+
+  function renderViz(s) {
+    var vizHtml = '';
+    if (s.viz === 'heatmap') vizHtml = renderHeatmapViz();
+    else if (s.viz === 'bars') vizHtml = renderBarsViz(s.items);
+    else if (s.viz === 'donut') vizHtml = renderDonutViz(s.slices, s.centerLabel, s.centerSub);
+    var insights = (s.insights || [])
+      .map(function (t) {
+        return '<li>' + esc(t) + '</li>';
+      })
+      .join('');
+    var inner =
+      '<div class="ar-viz-main">' +
+      vizHtml +
+      '</div>' +
+      (insights
+        ? '<ul class="ar-viz-insights">' + insights + '</ul>'
+        : '');
+    // Custom centered shell for viz slides
+    var bg = esc(s.bg || AR_HERO_BG);
+    var period = periodLabel();
+    return (
+      '<div class="ar-slide-canvas ar-slide-canvas--viz ar-panel ar-panel--viz">' +
+      '<div class="ar-panel-bg" style="background-image:url(\'' +
+      bg +
+      '\')" aria-hidden="true"></div>' +
+      '<div class="ar-panel-veil" aria-hidden="true"></div>' +
+      '<div class="ar-panel-body">' +
+      '<header class="ar-viz-head">' +
+      '<p class="ar-panel-kicker">Melvin · AR' +
+      (period ? ' · ' + esc(period) : '') +
+      (s.person ? ' · ' + esc(s.person) : '') +
+      '</p>' +
+      '<h3 class="ar-viz-title">' +
+      esc(s.title) +
+      '</h3>' +
+      '<p class="ar-viz-indicator">' +
+      esc(s.indicator || '') +
+      '</p>' +
+      (s.note ? '<p class="ar-panel-note">' + esc(s.note) + '</p>' : '') +
+      '</header>' +
+      '<div class="ar-panel-content ar-viz-content">' +
+      inner +
+      '</div></div></div>'
+    );
+  }
+
+
   function renderSplit(s) {
     var pos = (s.positives || [])
       .map(function (it) {
@@ -1133,6 +1401,9 @@
         break;
       case 'matrix':
         inner = renderMatrix(s);
+        break;
+      case 'viz':
+        inner = renderViz(s);
         break;
       case 'split':
         inner = renderSplit(s);
