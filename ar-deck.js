@@ -327,6 +327,19 @@
       ]
     },
     {
+      type: 'chart',
+      chart: 'top15',
+      title: 'PRODUTIVIDADE MENSAL',
+      midKicker: 'Análise de Tarefas',
+      indicator: 'Top 15 contas de maior esforço',
+      person: 'Gabriely Silva',
+      note: 'Raio-X de oportunidades · ' + AR_PERIOD.label,
+      footLegends: [
+        { cls: 'ar-leg--deal', label: 'DEAL' },
+        { cls: 'ar-leg--contact', label: 'CONTACT' }
+      ]
+    },
+    {
       type: 'viz',
       title: 'PRODUTIVIDADE MENSAL',
       indicator: 'Speed to Execution (Tempo de Resolução)',
@@ -395,7 +408,6 @@
         'Alerta: fim de semana zerado — janela comercial concentrada em Seg–Sex.'
       ]
     },
-
 
     {
       type: 'viz',
@@ -567,19 +579,7 @@
         { cls: 'ar-leg--late', label: 'Concluído em Atraso' }
       ]
     },
-    {
-      type: 'chart',
-      chart: 'top15',
-      title: 'PRODUTIVIDADE MENSAL',
-      midKicker: 'ANÁLISE DE OPORTUNIDADES',
-      indicator: 'Top 15 Contas de Maior Esforço',
-      person: 'Fabrício Luiz',
-      note: 'Raio-X de oportunidades · ' + AR_PERIOD.label,
-      footLegends: [
-        { cls: 'ar-leg--deal', label: 'DEAL' },
-        { cls: 'ar-leg--contact', label: 'CONTACT' }
-      ]
-    },
+
     {
       type: 'section',
       num: '02',
@@ -747,7 +747,6 @@
       bg: AR_HERO_BG
     }
   ];
-
 
   function periodLabel() {
     return (window.AR_PERIOD && window.AR_PERIOD.label) || '';
@@ -1859,7 +1858,6 @@ function renderHeatmapViz(opts) {
     );
   }
 
-
   function renderHistViz(cfg) {
     var c = cfg || {};
     var values = c.values || [];
@@ -2245,7 +2243,6 @@ function renderHeatmapViz(opts) {
         : '');
     return arPanelShell('viz', s, inner);
   }
-
 
   function renderSplit(s) {
     var pos = (s.positives || [])
