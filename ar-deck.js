@@ -107,8 +107,8 @@
   var colM2 = MONTHS_TITLE[m3[1]];
   var colM3 = MONTHS_TITLE[m3[2]];
   var metaCol = 'META ' + AR_PERIOD.endTitle;
-  var MX_MONTHS = ['Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto'];
-  var MX_MONTH_IDX = [2, 3, 4, 5, 6, 7]; // Mar–Ago (0-based)
+  var MX_MONTHS = ['Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro'];
+  var MX_MONTH_IDX = [2, 3, 4, 5, 6, 7, 8]; // Mar–Set (0-based)
 
   function countBusinessDays(year, monthIdx) {
     var n = 0;
@@ -242,10 +242,19 @@
       columns: MX_MONTHS.slice(),
       rows: mxProdRows({
         concluidas: {
-          values: ['52', '1.106', '1.035', '1.615', '1.152', '1.453']
+          values: ['52', '1.106', '1.035', '1.615', '1.152', '1.453', '']
         },
         atraso: {
-          values: ['0,0%', '9,8%', '24,3%', '8,3%', '22,2%', '25,8%']
+          values: ['0,0%', '9,8%', '24,3%', '8,3%', '22,2%', '25,8%', '']
+        },
+        ligIni: {
+          values: ['0', '2', '0', '0', '0', '0', '288']
+        },
+        ligAte: {
+          values: ['0', '2', '0', '0', '0', '0', '105']
+        },
+        lig30: {
+          values: ['0', '2', '0', '0', '0', '0', '6']
         }
       })
     },
@@ -802,7 +811,14 @@
             cells += renderMxCell(v, tone, '');
             continue;
           }
-          var avg = isPct ? '' : mxDailyAvg(v, ci);
+          if (isPct) {
+            cells +=
+              '<div class="ar-mx-pair ar-mx-pair--span">' +
+              renderMxCell(v, tone, 'ar-mx-cell--span') +
+              '</div>';
+            continue;
+          }
+          var avg = mxDailyAvg(v, ci);
           cells +=
             '<div class="ar-mx-pair">' +
             renderMxCell(v, tone, 'ar-mx-cell--total') +

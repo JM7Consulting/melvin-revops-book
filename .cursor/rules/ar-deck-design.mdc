@@ -40,7 +40,7 @@ Sempre reutilizar este visual ao alterar slides, dados ou novos tipos no deck `#
 1. Mude só `window.AR_DECK_SLIDES` (rows/columns/textos).
 2. Não remova o shell `ar-panel` / `ar-hero`.
 3. **Tabelas novas ou refatoradas → sempre `type: 'matrix'`** (visual runway `ar-mx`), nunca voltar ao `table` antigo para KPIs mensais.
-4. Meses padrão do relatório: `Março | Abril | Maio | Junho | Julho | Agosto` (`MX_MONTHS`), alinhado ao período YTD.
+4. Meses padrão do relatório: `Março | Abril | Maio | Junho | Julho | Agosto | Setembro` (`MX_MONTHS`), alinhado ao período YTD + mês corrente quando houver dado.
 5. Células sem dado: string vazia (`''`) — o visual mostra o tile tracejado.
 6. Novas capas/contracapas → padrão hero (bg + veil + grain + tipografia Sora).
 7. Bump `?v=matriz-N` em `index.html` e publique.

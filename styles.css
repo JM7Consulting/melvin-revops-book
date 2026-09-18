@@ -15054,6 +15054,12 @@ body.light-mode .ar-deck:-webkit-full-screen {
   gap: 3px;
   min-width: 0;
 }
+.ar-mx-pair--span {
+  grid-template-columns: 1fr;
+}
+.ar-mx-pair--span .ar-mx-cell--span {
+  width: 100%;
+}
 .ar-mx-body {
   display: flex;
   flex-direction: column;
