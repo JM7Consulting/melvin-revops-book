@@ -392,6 +392,82 @@
       ]
     },
 
+
+    {
+      type: 'viz',
+      title: 'PRODUTIVIDADE MENSAL',
+      midKicker: 'ANÁLISE DE AGENDAMENTOS',
+      indicator: 'Destino dos Agendamentos',
+      person: 'Gabriely Silva',
+      note: 'Status atual dos negócios agendados · ' + AR_PERIOD.label,
+      viz: 'donut',
+      slices: [
+        { label: 'Ganho', pct: 11.2, color: '#15B06D' },
+        { label: 'Em Andamento', pct: 42.6, color: '#F04444' },
+        { label: 'Perdido', pct: 46.2, color: '#F59E0B' }
+      ],
+      centerLabel: '197',
+      centerSub: 'agendamentos',
+      insights: [
+        '46,2% dos agendamentos terminam como Perdido.',
+        '42,6% ainda Em Andamento — pipeline vivo relevante.',
+        'Alerta: só 11,2% Ganho — converter o meio do funil é a alavanca.'
+      ]
+    },
+    {
+      type: 'viz',
+      title: 'PRODUTIVIDADE MENSAL',
+      midKicker: 'ANÁLISE DE AGENDAMENTOS',
+      indicator: 'Time-to-Meeting',
+      person: 'Gabriely Silva',
+      note: 'Dias corridos entre criação do lead e a reunião',
+      viz: 'hist',
+      hist: {
+        xLabel: 'Quantidade de Dias Corridos',
+        yLabel: 'Volume de Reuniões',
+        mean: 4.2,
+        median: 3.1,
+        values: [30, 18, 12, 10, 8, 6, 5, 4, 3, 3, 2, 2, 2, 1, 1, 1, 1, 1, 0, 1, 1]
+      },
+      insights: [
+        'Mediana 3,1 dias · média 4,2 dias até a reunião.',
+        'Pico forte no dia 0–1 — inbound respondendo rápido.',
+        'Alerta: cauda longa até 20+ dias — leads lentos diluem a média.'
+      ]
+    },
+    {
+      type: 'viz',
+      title: 'PRODUTIVIDADE MENSAL',
+      midKicker: 'ANÁLISE DE AGENDAMENTOS',
+      indicator: 'Sazonalidade do Agendamento',
+      person: 'Gabriely Silva',
+      note: 'Melhores dias do mês (1 ao 31) · média móvel 3 dias',
+      viz: 'season',
+      season: {
+        values: [5, 0, 0, 2, 2, 0, 3, 2, 4, 10, 4, 0, 2, 4, 8, 6, 8, 5, 0, 2, 4, 0, 1, 8, 0, 5, 2, 6, 5, 2, 4]
+      },
+      insights: [
+        'Dia 10 é o pico absoluto (10 reuniões).',
+        'Outros picos: 15, 17 e 24 (8 cada).',
+        'Alerta: início do mês (dias 2–3/6) quase zerado — planejar push nessas janelas.'
+      ]
+    },
+    {
+      type: 'viz',
+      title: 'PRODUTIVIDADE MENSAL',
+      midKicker: 'ANÁLISE DE AGENDAMENTOS',
+      indicator: 'Mapa de Calor — Dia × Hora da Reunião',
+      person: 'Gabriely Silva',
+      note: 'Horário do agendamento · BRT · volume de reuniões',
+      viz: 'heatmap',
+      heat: 'meet',
+      insights: [
+        'Maior volume: Sexta 19h (3) — fechamento de semana.',
+        'Blocos: Ter 13–14h, Qua/Qui 10h, Sex manhã e tarde.',
+        'Alerta: Segunda e fim de semana zerados — concentrar slots úteis.'
+      ]
+    },
+
     {
       type: 'matrix',
       title: 'PRODUTIVIDADE MENSAL',
@@ -997,8 +1073,25 @@
     return { hours: hours, days: days, grid: grid, max: 31, scaleMax: '30+', palette: 'voip' };
   }
 
-  function renderHeatmapViz(opts) {
-    var d = (opts && opts.heat === 'voip' ? gabyVoipHeatData() : gabyHeatData());
+  
+  function gabyMeetHeatData() {
+    var hours = [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19];
+    var days = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'];
+    var z = function () { return [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]; };
+    var grid = [z(), z(), z(), z(), z(), z(), z()];
+    grid[1][6] = 1; grid[1][7] = 2;
+    grid[2][3] = 2; grid[2][4] = 1;
+    grid[3][3] = 2; grid[3][8] = 2;
+    grid[4][1] = 1; grid[4][2] = 2; grid[4][7] = 1; grid[4][12] = 3;
+    return { hours: hours, days: days, grid: grid, max: 3, scaleMax: '3', palette: 'teal' };
+  }
+
+function renderHeatmapViz(opts) {
+    var d = opts && opts.heat === 'voip'
+      ? gabyVoipHeatData()
+      : opts && opts.heat === 'meet'
+        ? gabyMeetHeatData()
+        : gabyHeatData();
     var colorFn = d.palette === 'voip' ? heatColorVoip : heatColor;
     var cells = '';
     d.grid.forEach(function (row, ri) {
@@ -1236,11 +1329,131 @@
     );
   }
 
+
+  function renderHistViz(cfg) {
+    var c = cfg || {};
+    var values = c.values || [];
+    var max = 1;
+    values.forEach(function (v) { if (v > max) max = v; });
+    var mean = c.mean != null ? c.mean : null;
+    var median = c.median != null ? c.median : null;
+    var xMax = Math.max(values.length - 1, 1);
+    var bars = values
+      .map(function (v, i) {
+        var h = max ? (v / max) * 100 : 0;
+        return (
+          '<div class="ar-hist-bar" style="--h:' +
+          h +
+          '%;--i:' +
+          i +
+          '"><i></i></div>'
+        );
+      })
+      .join('');
+    var meanPct = mean != null ? (mean / xMax) * 100 : null;
+    var medPct = median != null ? (median / xMax) * 100 : null;
+    return (
+      '<div class="ar-hist ar-hist--live">' +
+      '<div class="ar-hist-legend">' +
+      (mean != null
+        ? '<span class="ar-hist-leg ar-hist-leg--mean">Média (' +
+          String(mean).replace('.', ',') +
+          ' dias)</span>'
+        : '') +
+      (median != null
+        ? '<span class="ar-hist-leg ar-hist-leg--med">Mediana (' +
+          String(median).replace('.', ',') +
+          ' dias)</span>'
+        : '') +
+      '</div>' +
+      '<div class="ar-hist-chart">' +
+      '<div class="ar-hist-y"><span>' +
+      max +
+      '</span><span>0</span></div>' +
+      '<div class="ar-hist-plot">' +
+      '<div class="ar-hist-bars">' +
+      bars +
+      '</div>' +
+      (medPct != null
+        ? '<div class="ar-hist-vline ar-hist-vline--med" style="left:' +
+          medPct +
+          '%"></div>'
+        : '') +
+      (meanPct != null
+        ? '<div class="ar-hist-vline ar-hist-vline--mean" style="left:' +
+          meanPct +
+          '%"></div>'
+        : '') +
+      '</div></div>' +
+      '<p class="ar-hist-xlabel">' +
+      esc(c.xLabel || 'Dias') +
+      '</p></div>'
+    );
+  }
+
+  function renderSeasonViz(cfg) {
+    var values = (cfg && cfg.values) || [];
+    var max = 1;
+    values.forEach(function (v) { if (v > max) max = v; });
+    var ma = values.map(function (v, i) {
+      var a = values[i - 1];
+      var b = v;
+      var c = values[i + 1];
+      var n = 1;
+      var s = b;
+      if (a != null) { s += a; n++; }
+      if (c != null) { s += c; n++; }
+      return s / n;
+    });
+    var bars = values
+      .map(function (v, i) {
+        var h = max ? (v / max) * 100 : 0;
+        return (
+          '<div class="ar-season-col" style="--i:' +
+          i +
+          '"><div class="ar-season-bar" style="--h:' +
+          h +
+          '%"><i></i>' +
+          (v > 0 ? '<span>' + v + '</span>' : '') +
+          '</div><em>' +
+          (i + 1) +
+          '</em></div>'
+        );
+      })
+      .join('');
+    var poly = ma
+      .map(function (v, i) {
+        var x = ((i + 0.5) / values.length) * 100;
+        var y = 100 - (max ? (v / max) * 100 : 0);
+        return x.toFixed(2) + ',' + y.toFixed(2);
+      })
+      .join(' ');
+    return (
+      '<div class="ar-season ar-season--live">' +
+      '<div class="ar-season-legend"><i></i><span>Média Móvel (3 dias)</span></div>' +
+      '<div class="ar-season-chart">' +
+      '<div class="ar-season-y"><span>' +
+      max +
+      '</span><span>0</span></div>' +
+      '<div class="ar-season-plot">' +
+      '<div class="ar-season-cols">' +
+      bars +
+      '</div>' +
+      '<svg class="ar-season-line" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">' +
+      '<polyline fill="none" stroke="#e24a33" stroke-width="1.8" points="' +
+      poly +
+      '"/></svg></div></div>' +
+      '<p class="ar-season-xlabel">Dias do Mês</p></div>'
+    );
+  }
+
   function renderViz(s) {
     var vizHtml = '';
     if (s.viz === 'heatmap') vizHtml = renderHeatmapViz(s);
     else if (s.viz === 'bars') vizHtml = renderBarsViz(s.items);
     else if (s.viz === 'cluster') vizHtml = renderClusterBarsViz(s);
+    else if (s.viz === 'hist') vizHtml = renderHistViz(s.hist);
+    else if (s.viz === 'season') vizHtml = renderSeasonViz(s.season);
     else if (s.viz === 'donut') vizHtml = renderDonutViz(s.slices, s.centerLabel, s.centerSub);
     var insights = (s.insights || [])
       .map(function (t) {
