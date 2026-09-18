@@ -108,6 +108,23 @@
   var colM3 = MONTHS_TITLE[m3[2]];
   var metaCol = 'META ' + AR_PERIOD.endTitle;
   var MX_MONTHS = ['Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto'];
+  var MX_MONTH_IDX = [2, 3, 4, 5, 6, 7]; // Mar–Ago (0-based)
+
+  function countBusinessDays(year, monthIdx) {
+    var n = 0;
+    var d = new Date(year, monthIdx, 1);
+    while (d.getMonth() === monthIdx) {
+      var w = d.getDay();
+      if (w >= 1 && w <= 5) n++;
+      d.setDate(d.getDate() + 1);
+    }
+    return n;
+  }
+
+  var MX_BDAYS = MX_MONTH_IDX.map(function (mi) {
+    return countBusinessDays(AR_PERIOD.year, mi);
+  });
+
   function mxEmpty(n) {
     var out = [];
     for (var i = 0; i < n; i++) out.push('');
@@ -119,11 +136,49 @@
     });
   }
 
+  function parsePctValue(raw) {
+    var t = String(raw == null ? '' : raw)
+      .replace('%', '')
+      .trim()
+      .replace(/\./g, '')
+      .replace(',', '.');
+    if (!t) return null;
+    var n = parseFloat(t);
+    return isNaN(n) ? null : n;
+  }
+
+  /** Linha 02 atraso: 0–40% verde; > 40,01% vermelho */
+  function atrasoTone(raw) {
+    var n = parsePctValue(raw);
+    if (n == null) return '';
+    return n > 40.01 ? 'bad' : 'ok';
+  }
+
+  function parseBrNumber(raw) {
+    var s = String(raw == null ? '' : raw).trim();
+    if (!s || s.indexOf('%') !== -1) return null;
+    var t = s.replace(/\./g, '').replace(',', '.');
+    var n = parseFloat(t);
+    return isNaN(n) ? null : n;
+  }
+
+  function formatBrAvg(n) {
+    var fixed = Math.round(n * 10) / 10;
+    return fixed.toFixed(1).replace('.', ',');
+  }
+
+  function mxDailyAvg(raw, monthIndex) {
+    var total = parseBrNumber(raw);
+    var days = MX_BDAYS[monthIndex];
+    if (total == null || !days) return '';
+    return formatBrAvg(total / days);
+  }
+
   function mxProdRows(valuesMap) {
     var blanks = mxEmpty(MX_MONTHS.length);
     var defs = [
       { key: 'concluidas', label: 'Atividades concluídas' },
-      { key: 'atraso', label: 'Atividades com atraso (percentual)', tones: true },
+      { key: 'atraso', label: 'Atividades com atraso (percentual)', pctTones: true },
       { key: 'ligIni', label: 'Ligações Iniciadas' },
       { key: 'ligAte', label: 'Ligações Atendidas' },
       { key: 'lig30', label: 'Ligações — mais de 30 segundos' },
@@ -139,7 +194,10 @@
         label: d.label,
         values: map[d.key] && map[d.key].values ? map[d.key].values.slice() : blanks.slice()
       };
-      if (map[d.key] && map[d.key].tones) row.tones = map[d.key].tones.slice();
+      if (d.pctTones) {
+        row.tones = row.values.map(atrasoTone);
+        row.isPct = true;
+      }
       return row;
     });
   }
@@ -180,14 +238,14 @@
       title: 'PRODUTIVIDADE MENSAL',
       person: 'Gabriely Silva',
       note: AR_PERIOD.label,
+      dailyAvg: true,
       columns: MX_MONTHS.slice(),
       rows: mxProdRows({
         concluidas: {
           values: ['52', '1.106', '1.035', '1.615', '1.152', '1.453']
         },
         atraso: {
-          values: ['0,0%', '9,8%', '24,3%', '8,3%', '22,2%', '25,8%'],
-          tones: ['ok', 'ok', 'bad', 'ok', 'bad', 'bad']
+          values: ['0,0%', '9,8%', '24,3%', '8,3%', '22,2%', '25,8%']
         }
       })
     },
@@ -255,6 +313,7 @@
       title: 'PRODUTIVIDADE MENSAL',
       person: 'Fabrício Luiz',
       note: AR_PERIOD.label + ' · dados em atualização',
+      dailyAvg: true,
       columns: MX_MONTHS.slice(),
       rows: mxProdRows()
     },
@@ -263,6 +322,7 @@
       title: 'PRODUTIVIDADE MENSAL',
       person: 'Poliana Sampaio',
       note: AR_PERIOD.label + ' · dados em atualização',
+      dailyAvg: true,
       columns: MX_MONTHS.slice(),
       rows: mxProdRows()
     },
@@ -658,24 +718,57 @@
     return arPanelShell('table', s, inner);
   }
 
+  function renderMxCell(v, tone, extraCls) {
+    var empty = !String(v == null ? '' : v).trim();
+    var cls =
+      'ar-mx-cell' +
+      (extraCls ? ' ' + extraCls : '') +
+      (empty ? ' is-empty' : ' is-filled') +
+      (tone === 'ok' ? ' is-ok' : '') +
+      (tone === 'bad' ? ' is-bad' : '') +
+      (tone === 'warn' ? ' is-warn' : '');
+    return (
+      '<div class="' +
+      cls +
+      '">' +
+      (empty ? '<span class="ar-mx-ghost" aria-hidden="true"></span>' : esc(String(v))) +
+      '</div>'
+    );
+  }
+
   function renderMatrix(s) {
     var cols = s.columns || [];
     var colCount = cols.length;
+    var withAvg = !!s.dailyAvg;
     var head =
-      '<div class="ar-mx-head" style="--cols:' +
+      '<div class="ar-mx-head' +
+      (withAvg ? ' ar-mx-head--avg' : '') +
+      '" style="--cols:' +
       colCount +
       '">' +
       '<div class="ar-mx-corner"><span>Indicador</span></div>' +
       cols
         .map(function (c, i) {
-          return (
+          var bdays = withAvg && MX_BDAYS[i] ? MX_BDAYS[i] + ' úteis' : '';
+          var monthCore =
             '<div class="ar-mx-month" style="--i:' +
             i +
             '"><span class="ar-mx-month-abbr">' +
             esc(String(c).slice(0, 3).toUpperCase()) +
             '</span><span class="ar-mx-month-name">' +
             esc(c) +
-            '</span></div>'
+            '</span>' +
+            (bdays
+              ? '<span class="ar-mx-month-days">' + esc(bdays) + '</span>'
+              : '') +
+            '</div>';
+          if (!withAvg) return monthCore;
+          return (
+            '<div class="ar-mx-month-group" style="--i:' +
+            i +
+            '">' +
+            monthCore +
+            '<div class="ar-mx-subhead"><span>Total</span><span>Méd/dia</span></div></div>'
           );
         })
         .join('') +
@@ -684,28 +777,26 @@
       .map(function (row, ri) {
         var vals = row.values || [];
         var tones = row.tones || [];
+        var isPct = !!row.isPct;
         var cells = '';
         for (var ci = 0; ci < colCount; ci++) {
           var v = vals[ci] == null ? '' : String(vals[ci]);
-          var empty = !v.trim();
-          var tone = tones[ci] || '';
-          var cls =
-            'ar-mx-cell' +
-            (empty ? ' is-empty' : ' is-filled') +
-            (tone === 'ok' ? ' is-ok' : '') +
-            (tone === 'bad' ? ' is-bad' : '') +
-            (tone === 'warn' ? ' is-warn' : '');
+          var tone = tones[ci] || (isPct ? atrasoTone(v) : '');
+          if (!withAvg) {
+            cells += renderMxCell(v, tone, '');
+            continue;
+          }
+          var avg = isPct ? '' : mxDailyAvg(v, ci);
           cells +=
-            '<div class="' +
-            cls +
-            '" style="--i:' +
-            ci +
-            '">' +
-            (empty ? '<span class="ar-mx-ghost" aria-hidden="true"></span>' : esc(v)) +
+            '<div class="ar-mx-pair">' +
+            renderMxCell(v, tone, 'ar-mx-cell--total') +
+            renderMxCell(avg, '', 'ar-mx-cell--avg') +
             '</div>';
         }
         return (
-          '<div class="ar-mx-row" style="--cols:' +
+          '<div class="ar-mx-row' +
+          (withAvg ? ' ar-mx-row--avg' : '') +
+          '" style="--cols:' +
           colCount +
           ';--r:' +
           ri +
@@ -721,7 +812,9 @@
       })
       .join('');
     var inner =
-      '<div class="ar-mx">' +
+      '<div class="ar-mx' +
+      (withAvg ? ' ar-mx--avg' : '') +
+      '">' +
       head +
       '<div class="ar-mx-body">' +
       body +

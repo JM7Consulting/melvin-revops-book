@@ -14882,6 +14882,11 @@ body.light-mode .ar-deck:-webkit-full-screen {
   gap: 6px;
   align-items: stretch;
 }
+.ar-mx--avg .ar-mx-head,
+.ar-mx--avg .ar-mx-row {
+  grid-template-columns: minmax(140px, 1.15fr) repeat(var(--cols, 6), minmax(0, 1.15fr));
+  gap: 5px;
+}
 .ar-mx-corner {
   display: flex;
   align-items: flex-end;
@@ -14892,6 +14897,14 @@ body.light-mode .ar-deck:-webkit-full-screen {
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: #64748b;
+}
+.ar-mx-month-group {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+  animation: arMxIn 0.45s ease both;
+  animation-delay: calc(0.04s * var(--i, 0));
 }
 .ar-mx-month {
   display: flex;
@@ -14907,6 +14920,12 @@ body.light-mode .ar-deck:-webkit-full-screen {
   animation: arMxIn 0.45s ease both;
   animation-delay: calc(0.04s * var(--i, 0));
 }
+.ar-mx-month-group .ar-mx-month {
+  animation: none;
+  border-radius: 10px 10px 4px 4px;
+  padding: 6px 4px 4px;
+  box-shadow: 0 6px 16px rgba(15, 118, 110, 0.22);
+}
 .ar-mx-month-abbr {
   font-family: Sora, Manrope, sans-serif;
   font-size: clamp(0.72rem, 1.7cqw, 0.95rem);
@@ -14919,6 +14938,32 @@ body.light-mode .ar-deck:-webkit-full-screen {
   font-weight: 600;
   opacity: 0.78;
   letter-spacing: 0.02em;
+}
+.ar-mx-month-days {
+  font-size: clamp(0.45rem, 0.95cqw, 0.58rem);
+  font-weight: 650;
+  opacity: 0.7;
+  letter-spacing: 0.02em;
+}
+.ar-mx-subhead {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3px;
+}
+.ar-mx-subhead span {
+  text-align: center;
+  font-size: clamp(0.48rem, 1cqw, 0.58rem);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #64748b;
+  padding: 2px 0;
+}
+.ar-mx-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3px;
+  min-width: 0;
 }
 .ar-mx-body {
   display: flex;
@@ -14967,6 +15012,17 @@ body.light-mode .ar-deck:-webkit-full-screen {
   font-variant-numeric: tabular-nums;
   letter-spacing: -0.01em;
   transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.ar-mx--avg .ar-mx-cell {
+  font-size: clamp(0.58rem, 1.25cqw, 0.78rem);
+  min-height: clamp(26px, 3.8cqh, 34px);
+  border-radius: 8px;
+}
+.ar-mx-cell--avg.is-filled {
+  background: linear-gradient(180deg, #f0fdfa 0%, #e6fffa 100%);
+  border-color: rgba(20, 184, 166, 0.28);
+  color: #0f766e;
+  font-weight: 750;
 }
 .ar-mx-cell.is-filled {
   background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
@@ -15017,6 +15073,10 @@ body.light-mode .ar-deck:-webkit-full-screen {
   .ar-mx-head,
   .ar-mx-row {
     grid-template-columns: minmax(110px, 1.2fr) repeat(var(--cols, 6), minmax(48px, 1fr));
+  }
+  .ar-mx--avg .ar-mx-head,
+  .ar-mx--avg .ar-mx-row {
+    grid-template-columns: minmax(100px, 1.1fr) repeat(var(--cols, 6), minmax(72px, 1fr));
   }
   .ar-mx-month-name { display: none; }
   .ar-mx-label-text { font-size: 0.62rem; }
