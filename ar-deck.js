@@ -466,33 +466,6 @@
     {
       type: 'viz',
       title: 'PRODUTIVIDADE MENSAL',
-      midKicker: 'ANÁLISE DE AGENDAMENTOS',
-      indicator: 'Mapa de Calor — Dia × Hora da Reunião',
-      person: 'Gabriely Silva',
-      note: 'Horário do agendamento · BRT · volume de reuniões',
-      viz: 'heatmap',
-      heat: 'meet',
-      insights: [
-        'Maior volume: Sexta 19h (3) — fechamento de semana.',
-        'Blocos: Ter 13–14h, Qua/Qui 10h, Sex manhã e tarde.',
-        'Alerta: Segunda e fim de semana zerados — concentrar slots úteis.'
-      ]
-    },
-
-    {
-      type: 'matrix',
-      title: 'PRODUTIVIDADE MENSAL',
-      person: 'Poliana Sampaio',
-      note: AR_PERIOD.label + ' · dados em atualização',
-      dailyAvg: true,
-      columns: MX_MONTHS.slice(),
-      rows: mxProdRows({
-        vendas: { label: 'Vendas geradas' }
-      })
-    },
-    {
-      type: 'viz',
-      title: 'PRODUTIVIDADE MENSAL',
       midKicker: 'ANÁLISE DE VENDAS',
       indicator: 'Evolução de Vendas Mensal (Volume × Faturamento)',
       person: 'Gabriely Silva',
@@ -510,6 +483,32 @@
         'Ago entrega o 2º melhor faturamento (R$ 40k) com 213 vendas — melhor equilíbrio recente.',
         'Alerta: Set com 95 vendas e só R$ 1,7k — ticket médio muito baixo.'
       ]
+    },
+    {
+      type: 'viz',
+      title: 'PRODUTIVIDADE MENSAL',
+      midKicker: 'ANÁLISE DE AGENDAMENTOS',
+      indicator: 'Mapa de Calor — Dia × Hora da Reunião',
+      person: 'Gabriely Silva',
+      note: 'Horário do agendamento · BRT · volume de reuniões',
+      viz: 'heatmap',
+      heat: 'meet',
+      insights: [
+        'Maior volume: Sexta 19h (3) — fechamento de semana.',
+        'Blocos: Ter 13–14h, Qua/Qui 10h, Sex manhã e tarde.',
+        'Alerta: Segunda e fim de semana zerados — concentrar slots úteis.'
+      ]
+    },
+    {
+      type: 'matrix',
+      title: 'PRODUTIVIDADE MENSAL',
+      person: 'Poliana Sampaio',
+      note: AR_PERIOD.label + ' · dados em atualização',
+      dailyAvg: true,
+      columns: MX_MONTHS.slice(),
+      rows: mxProdRows({
+        vendas: { label: 'Vendas geradas' }
+      })
     },
     {
       type: 'viz',
