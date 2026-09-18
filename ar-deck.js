@@ -198,6 +198,7 @@
         label: d.label,
         values: map[d.key] && map[d.key].values ? map[d.key].values.slice() : blanks.slice()
       };
+      if (map[d.key] && map[d.key].label) row.label = map[d.key].label;
       if (d.pctTones) {
         row.tones = row.values.map(atrasoTone);
         row.isPct = true;
@@ -283,6 +284,9 @@
         },
         cemiterio: {
           values: ['', '', '4', '1', '4', '4', '0']
+        },
+        vendas: {
+          label: 'Vendas geradas'
         }
       })
     },
@@ -484,7 +488,9 @@
       note: AR_PERIOD.label + ' · dados em atualização',
       dailyAvg: true,
       columns: MX_MONTHS.slice(),
-      rows: mxProdRows()
+      rows: mxProdRows({
+        vendas: { label: 'Vendas geradas' }
+      })
     },
     {
       type: 'chart',
