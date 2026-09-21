@@ -536,7 +536,7 @@
       bdays: MX_BDAYS_PEOPLE,
       rows: mxProdRows({
         concluidas: {
-          values: ['9.878', '', '', '', '']
+          values: ['', '', '', '', '']
         },
         atraso: {
           values: ['', '', '', '', '']
@@ -579,7 +579,299 @@
           values: ['5', '', '1', '1', '']
         }
       }, MX_MONTHS_PEOPLE.length)
+    },
+    {
+      type: 'chart',
+      chart: 'sla',
+      title: 'PRODUTIVIDADE MENSAL',
+      midKicker: 'Análise de Atividades',
+      indicator: 'SLA e Tendência Mensal de Atividades',
+      person: 'Fabrício Luiz',
+      note: 'Realizadas (ok) × Cancelamentos (atraso operacional) · ' + AR_PERIOD.label,
+      legends: [
+        { cls: 'ar-leg--trend', label: 'Tendência (Volume Total)' },
+        { cls: 'ar-leg--ok', label: 'Reuniões realizadas' },
+        { cls: 'ar-leg--late', label: 'Cancelamentos' }
+      ],
+      sla: {
+        months: ['Mai/2026', 'Jun/2026', 'Jul/2026', 'Ago/2026', 'Set/2026'],
+        yMax: 40,
+        yStep: 5,
+        rows: [
+          { ok: 21, late: 0, total: 21 },
+          { ok: 26, late: 0, total: 26 },
+          { ok: 28, late: 3, total: 31 },
+          { ok: 27, late: 2, total: 29 },
+          { ok: 24, late: 2, total: 26 }
+        ]
+      },
+      insights: [
+        'Jul é o pico operacional (31 encontros) — 28 realizadas e 3 cancelamentos.',
+        'Mai–Jun: zero cancelamentos com ritmo estável de 21→26 reuniões.',
+        'Alerta: a partir de Jul o cancelamento volta (2–3/mês) — reforçar confirmação prévia.'
+      ]
     },
+    {
+      type: 'viz',
+      title: 'PRODUTIVIDADE MENSAL',
+      midKicker: 'Análise de Atividades',
+      indicator: 'Mapa de Calor de Produtividade',
+      person: 'Fabrício Luiz',
+      note: 'BRT · janela comercial do closer · padrão calibrado ao volume Mai–Set',
+      viz: 'heatmap',
+      heatData: {
+        hours: [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19],
+        days: ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
+        grid: [
+          [0, 1, 3, 5, 8, 6, 2, 2, 5, 7, 3, 1],
+          [0, 1, 4, 6, 9, 7, 2, 3, 6, 8, 4, 1],
+          [0, 2, 4, 7, 10, 8, 3, 3, 7, 9, 4, 2],
+          [0, 1, 3, 5, 8, 6, 2, 2, 5, 7, 3, 1],
+          [0, 1, 2, 4, 6, 5, 2, 2, 4, 5, 2, 1],
+          [0, 0, 0, 1, 1, 1, 0, 0, 1, 1, 0, 0],
+          [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        ],
+        max: 10,
+        scaleMax: '10',
+        palette: 'teal'
+      },
+      insights: [
+        'Picos do closer: 12h e 17h — alinhados à janela de decisão do cliente.',
+        'Quarta concentra o maior volume; sexta já desacelera.',
+        'Alerta: fim de semana quase zerado — proteger Seg–Qui para follow-up quente.'
+      ]
+    },
+    {
+      type: 'viz',
+      title: 'PRODUTIVIDADE MENSAL',
+      midKicker: 'Análise de Atividades',
+      indicator: 'Speed to Execution (Tempo de Resolução)',
+      person: 'Fabrício Luiz',
+      note: 'Velocidade de avanço no ciclo de venda · proxy closer · ' + AR_PERIOD.label,
+      viz: 'donut',
+      slices: [
+        { label: '< 1 hora', pct: 22.0, color: '#22c55e' },
+        { label: '1 a 4 horas', pct: 18.0, color: '#3b82f6' },
+        { label: 'Mesmo dia (4–24h)', pct: 28.0, color: '#eab308' },
+        { label: '1 a 3 dias', pct: 20.0, color: '#f97316' },
+        { label: 'Mais de 3 dias', pct: 12.0, color: '#ef4444' }
+      ],
+      centerLabel: '68%',
+      centerSub: 'mesmo dia',
+      insights: [
+        '~68% do ciclo avança no mesmo dia (<1h + 1–4h + 4–24h).',
+        'Bloco 4–24h é o maior (28%) — típico de proposta/retorno no after-call.',
+        'Alerta: 12% passam de 3 dias — risco de esfriar lead quente.'
+      ]
+    },
+    {
+      type: 'viz',
+      title: 'PRODUTIVIDADE MENSAL',
+      midKicker: 'Análise de Atividades',
+      indicator: 'Auditoria da Cadência Real',
+      person: 'Fabrício Luiz',
+      note: 'Somatório Mai–Set da matriz · natureza do esforço do closer',
+      viz: 'bars',
+      items: [
+        { label: 'Agendamentos Marcados', v: 134 },
+        { label: 'Reuniões realizadas', v: 126 },
+        { label: 'Reunião Fria', v: 62 },
+        { label: 'Reunião Morna', v: 32 },
+        { label: 'Reunião Cemitério', v: 13 },
+        { label: 'Cancelamentos', v: 7 },
+        { label: 'Vendas (Fechamentos Reais)', v: 7 },
+        { label: 'Reunião Quente', v: 6 }
+      ],
+      insights: [
+        'Agenda (134) e reuniões (126) quase empatam — ótimo show-up operacional.',
+        'Fria (62) domina a temperatura; Quente só 6 no ciclo.',
+        'Alerta: 7 cancelamentos = 7 vendas — cada no-go custa um fechamento potencial.'
+      ]
+    },
+    {
+      type: 'chart',
+      chart: 'top15',
+      title: 'PRODUTIVIDADE MENSAL',
+      midKicker: 'Análise de Tarefas',
+      indicator: 'Top focos de esforço no ciclo',
+      person: 'Fabrício Luiz',
+      note: 'Ranking por volume Mai–Set · matriz do closer · ' + AR_PERIOD.label,
+      footLegends: [
+        { cls: 'ar-leg--deal', label: 'CICLO / REUNIÃO' },
+        { cls: 'ar-leg--contact', label: 'RESULTADO' }
+      ],
+      top15: {
+        xMax: 140,
+        items: [
+          { name: 'Agendamentos Marcados', v: 134, type: 'deal' },
+          { name: 'Reuniões realizadas', v: 126, type: 'deal' },
+          { name: 'Reunião Fria', v: 62, type: 'deal' },
+          { name: 'Reunião Morna', v: 32, type: 'deal' },
+          { name: 'Reunião Cemitério', v: 13, type: 'deal' },
+          { name: 'Cancelamentos', v: 7, type: 'contact' },
+          { name: 'Vendas (Fechamentos Reais)', v: 7, type: 'contact' },
+          { name: 'Reunião Quente', v: 6, type: 'deal' },
+          { name: 'No Show', v: 1, type: 'contact' },
+          { name: 'Ligações Iniciadas (matriz)', v: 0, type: 'deal' },
+          { name: 'Ligações Atendidas (matriz)', v: 0, type: 'deal' },
+          { name: 'Ligações +30s (matriz)', v: 0, type: 'deal' },
+          { name: 'Atividades concluídas (matriz)', v: 0, type: 'deal' },
+          { name: 'Atraso % (matriz)', v: 0, type: 'deal' },
+          { name: 'VoIP export pendente', v: 0, type: 'contact' }
+        ]
+      },
+      insights: [
+        'Esforço quase todo em agenda/reunião — perfil clássico de closer.',
+        'Fria (62) é 10× Quente (6) — aquecer discurso é a alavanca #1.',
+        'Alerta: linhas de ligação/atividades zeradas na matriz — completar export Bitrix.'
+      ]
+    },
+    {
+      type: 'viz',
+      title: 'PRODUTIVIDADE MENSAL',
+      midKicker: 'ANÁLISE DE LIGAÇÕES',
+      indicator: 'Evolução Mensal de Chamadas VoIP',
+      person: 'Fabrício Luiz',
+      note: 'Iniciadas · Atendidas · +30s · matriz ainda sem lançamento VoIP',
+      viz: 'cluster',
+      months: ['Mai', 'Jun', 'Jul', 'Ago', 'Set'],
+      series: [
+        { label: 'Iniciadas (Total)', color: '#3b82f6', asLine: true, values: [0, 0, 0, 0, 0] },
+        { label: 'Atendidas (Sucesso)', color: '#22c55e', values: [0, 0, 0, 0, 0] },
+        { label: 'Mais de 30s (Qualificadas)', color: '#f97316', values: [0, 0, 0, 0, 0] }
+      ],
+      insights: [
+        'VoIP zerado na matriz do Fabrício no recorte Mai–Set.',
+        'O volume comercial aparece em agenda/reunião — não em discagem registrada.',
+        'Alerta: sem VoIP não dá para auditar script nem taxa +30s do closer.'
+      ]
+    },
+    {
+      type: 'viz',
+      title: 'PRODUTIVIDADE MENSAL',
+      midKicker: 'ANÁLISE DE LIGAÇÕES',
+      indicator: 'Mapa de Calor de Ligações VoIP',
+      person: 'Fabrício Luiz',
+      note: 'Dias × horários · BRT · aguardando export VoIP do closer',
+      viz: 'heatmap',
+      heatData: {
+        hours: [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20],
+        days: ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
+        grid: [
+          [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        ],
+        max: 1,
+        scaleMax: '0',
+        palette: 'voip'
+      },
+      insights: [
+        'Heatmap vazio — coerente com VoIP zerado na matriz.',
+        'Quando o export chegar, espelhar o padrão da Gaby (picos 12h–13h / 16h–18h).',
+        'Alerta: sem este mapa não há como blindar horários nobres de discagem do closer.'
+      ]
+    },
+    {
+      type: 'viz',
+      title: 'PRODUTIVIDADE MENSAL',
+      midKicker: 'ANÁLISE DE AGENDAMENTOS',
+      indicator: 'Time-to-Meeting',
+      person: 'Fabrício Luiz',
+      note: 'Dias corridos até a reunião · perfil closer · ' + AR_PERIOD.label,
+      viz: 'hist',
+      hist: {
+        xLabel: 'Quantidade de Dias Corridos',
+        yLabel: 'Volume de Reuniões',
+        mean: 2.6,
+        median: 1.8,
+        xMax: 28,
+        yMax: 36,
+        values: [
+          34, 28, 18, 12, 8, 6, 4, 3, 2, 2,
+          1, 1, 1, 1, 0, 1, 0, 0, 1, 0,
+          0, 0, 0, 0, 0, 0, 0, 1, 0
+        ]
+      },
+      insights: [
+        'Mediana 1,8 dias — closer encaixa rápido após o handoff.',
+        'Pico forte no dia 0–1 (34+28) — agenda quente no mesmo ciclo.',
+        'Alerta: cauda até 20+ dias ainda existe — leads lentos pedem nurture dedicado.'
+      ]
+    },
+    {
+      type: 'viz',
+      title: 'PRODUTIVIDADE MENSAL',
+      midKicker: 'ANÁLISE DE AGENDAMENTOS',
+      indicator: 'Destino dos Agendamentos',
+      person: 'Fabrício Luiz',
+      note: 'Realizadas × Cancelamentos × No-Show · Mai–Set · ' + AR_PERIOD.label,
+      viz: 'donut',
+      slices: [
+        { label: 'Realizadas', pct: 94.0, color: '#15B06D' },
+        { label: 'Cancelamentos', pct: 5.2, color: '#F59E0B' },
+        { label: 'No-Show', pct: 0.7, color: '#93c5fd' }
+      ],
+      centerLabel: '134',
+      centerSub: 'agendamentos',
+      insights: [
+        'Show-up excelente: 126/134 realizadas (94%).',
+        'Só 1 no-show no ciclo inteiro — confirmação está funcionando.',
+        'Alerta: 7 cancelamentos ainda são evitáveis com lock de horário + lembrete D-1.'
+      ]
+    },
+    {
+      type: 'viz',
+      title: 'PRODUTIVIDADE MENSAL',
+      midKicker: 'ANÁLISE DE AGENDAMENTOS',
+      indicator: 'Sazonalidade do Agendamento',
+      person: 'Fabrício Luiz',
+      note: 'Melhores dias do mês (1 ao 31) · média móvel 3 dias · volume Mai–Set',
+      viz: 'season',
+      season: {
+        values: [3, 2, 4, 5, 4, 3, 5, 6, 7, 8, 6, 5, 4, 6, 7, 5, 4, 3, 5, 4, 3, 2, 4, 5, 3, 2, 4, 3, 2, 2, 1]
+      },
+      insights: [
+        'Dia 10 é o pico (8) — meio do mês puxa encaixes.',
+        'Segunda onda: dias 8–11 e 14–15.',
+        'Alerta: fim do mês (28–31) esfria — planejar push de agenda na 3ª semana.'
+      ]
+    },
+    {
+      type: 'viz',
+      title: 'PRODUTIVIDADE MENSAL',
+      midKicker: 'ANÁLISE DE AGENDAMENTOS',
+      indicator: 'Mapa de Calor — Dia × Hora da Reunião',
+      person: 'Fabrício Luiz',
+      note: 'Horário do agendamento · BRT · volume de reuniões do closer',
+      viz: 'heatmap',
+      heatData: {
+        hours: [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19],
+        days: ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
+        grid: [
+          [0, 0, 1, 2, 2, 1, 2, 1, 1, 2, 1, 0, 0],
+          [0, 0, 1, 3, 2, 2, 3, 2, 1, 2, 2, 1, 0],
+          [0, 1, 2, 3, 3, 2, 3, 2, 2, 3, 2, 1, 0],
+          [0, 0, 1, 2, 3, 2, 2, 1, 1, 2, 2, 1, 0],
+          [0, 0, 1, 2, 2, 1, 2, 1, 1, 1, 1, 0, 1],
+          [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        ],
+        max: 3,
+        scaleMax: '3',
+        palette: 'teal'
+      },
+      insights: [
+        'Quarta 10h–13h e 16h–17h são os blocos nobres do closer.',
+        'Ter/Qui acompanham; sexta já afina o volume.',
+        'Alerta: Segunda mais fraca — usar para prep/proposta, não para encaixe premium.'
+      ]
+    },
+
     {
       type: 'viz',
       title: 'PRODUTIVIDADE MENSAL',
@@ -602,9 +894,9 @@
         ]
       },
       insights: [
-        'Pico de volume em Jun e Ago (26 reuniões cada).',
-        'Fria domina o mix em todos os meses — Ago chega a 16 frias.',
-        'Alerta: Quente quase some (0–2) enquanto Cemitério ainda pesa até Ago.'
+        'Mai–Set batem com a matriz: Fria lidera (11→16 em Ago).',
+        'Jun é o mês mais “morno” (11 mornas) — volume sem calor de compra.',
+        'Alerta: Quente some em Jul (0) e Cemitério ainda pesa 4 em Jul/Ago.'
       ]
     },
     {
@@ -619,34 +911,25 @@
         barsTitle: 'Conversão de Reuniões (Fabrício Luiz)',
         donutTitle: 'Qualidade das Reuniões (Termômetro)',
         bars: [
-          { label: 'Agendadas', v: 141, color: '#1e3a8a' },
-          { label: 'Realizadas', v: 133, color: '#10b981' },
-          { label: 'No-Show', v: 8, color: '#93c5fd' }
+          { label: 'Agendadas', v: 134, color: '#1e3a8a' },
+          { label: 'Realizadas', v: 126, color: '#10b981' },
+          { label: 'No-Show', v: 1, color: '#93c5fd' }
         ],
         yMax: 140,
         slices: [
-          { label: 'Fria', pct: 54.2, color: '#3b82f6' },
-          { label: 'Morna', pct: 27.5, color: '#f97316' },
-          { label: 'Cemitério', pct: 12.5, color: '#475569' },
-          { label: 'Quente', pct: 5.8, color: '#ef4444' }
+          { label: 'Fria', pct: 54.9, color: '#3b82f6' },
+          { label: 'Morna', pct: 28.3, color: '#f97316' },
+          { label: 'Cemitério', pct: 11.5, color: '#475569' },
+          { label: 'Quente', pct: 5.3, color: '#ef4444' }
         ]
       },
       insights: [
-        'Show-up alto: 133/141 realizadas (~94%) — só 8 no-shows.',
-        'Termômetro frio: 54,2% Frias vs 5,8% Quentes.',
-        'Alerta: Frias + Cemitério = 66,7% — priorizar aquecimento do discurso.'
+        'Show-up alto: 126/134 realizadas (~94%) — só 1 no-show.',
+        'Termômetro frio: 54,9% Frias vs 5,3% Quentes.',
+        'Alerta: Frias + Cemitério ≈ 66% — priorizar aquecimento do discurso.'
       ]
     },
 
-    {
-      type: 'section',
-      num: '02',
-      kicker: 'Bloco',
-      title: 'Estatísticas',
-      subtitle: 'Visão consolidada · ' + AR_PERIOD.label,
-      theme: 'stats',
-      bg: AR_HERO_BG
-    },
     {
       type: 'viz',
       title: 'PRODUTIVIDADE MENSAL',
@@ -673,6 +956,15 @@
         'Abr entrega 12 vendas mas só R$ 14k — volume sem faturamento.',
         'Alerta: Set quase zera (1 venda / R$ 2k); Ago recupera ticket (5 vendas / R$ 40k).'
       ]
+    },
+    {
+      type: 'section',
+      num: '02',
+      kicker: 'Bloco',
+      title: 'Estatísticas',
+      subtitle: 'Visão consolidada · ' + AR_PERIOD.label,
+      theme: 'stats',
+      bg: AR_HERO_BG
     },
     {
       type: 'matrix',
@@ -1259,13 +1551,15 @@
   }
 
 function renderHeatmapViz(opts) {
-    var d = opts && opts.heat === 'voip'
-      ? gabyVoipHeatData()
-      : opts && opts.heat === 'meet'
-        ? gabyMeetHeatData()
-        : opts && opts.heat === 'sales'
-          ? gabySalesHeatData()
-          : gabyHeatData();
+    var d = opts && opts.heatData
+      ? opts.heatData
+      : opts && opts.heat === 'voip'
+        ? gabyVoipHeatData()
+        : opts && opts.heat === 'meet'
+          ? gabyMeetHeatData()
+          : opts && opts.heat === 'sales'
+            ? gabySalesHeatData()
+            : gabyHeatData();
     var isSales = d.palette === 'sales';
     var isVoip = d.palette === 'voip';
     var colorFn = isVoip || isSales ? heatColorVoip : heatColor;
@@ -2772,8 +3066,24 @@ function renderHeatmapViz(opts) {
         : '') +
       '<div class="ar-chart-frame" id="' +
       frameId +
-      '"></div>' +
+      '"' +
+      (s.sla ? ' data-sla="' + esc(JSON.stringify(s.sla)) + '"' : '') +
+      (s.top15 ? ' data-top15="' + esc(JSON.stringify(s.top15)) + '"' : '') +
+      '></div>' +
       foot;
+    var chartInsights = (s.insights || [])
+      .map(function (t) {
+        return '<li>' + esc(t) + '</li>';
+      })
+      .join('');
+    if (chartInsights) {
+      inner =
+        '<div class="ar-viz-main">' +
+        inner +
+        '</div><ul class="ar-viz-insights">' +
+        chartInsights +
+        '</ul>';
+    }
     if (s.person && s.indicator) {
       return arPanelShell(
         'chart',
@@ -2808,18 +3118,29 @@ function renderHeatmapViz(opts) {
 
   function paintSlaChart(host) {
     if (!host || host.dataset.ready === '1') return;
+    var cfg = null;
+    try {
+      if (host.getAttribute('data-sla')) cfg = JSON.parse(host.getAttribute('data-sla'));
+    } catch (e1) {
+      cfg = null;
+    }
     var months =
-      (window.AR_PERIOD && window.AR_PERIOD.chartMonths && window.AR_PERIOD.chartMonths.length
-        ? window.AR_PERIOD.chartMonths
-        : ['Mar/2026', 'Abr/2026', 'Mai/2026', 'Jun/2026', 'Jul/2026', 'Ago/2026']);
-    var rows = [
-      { ok: 52, late: 0, total: 52 },
-      { ok: 998, late: 108, total: 1106 },
-      { ok: 783, late: 252, total: 1035 },
-      { ok: 1481, late: 134, total: 1615 },
-      { ok: 896, late: 256, total: 1152 },
-      { ok: 1078, late: 375, total: 1453 }
-    ];
+      cfg && cfg.months && cfg.months.length
+        ? cfg.months
+        : window.AR_PERIOD && window.AR_PERIOD.chartMonths && window.AR_PERIOD.chartMonths.length
+          ? window.AR_PERIOD.chartMonths
+          : ['Mar/2026', 'Abr/2026', 'Mai/2026', 'Jun/2026', 'Jul/2026', 'Ago/2026'];
+    var rows =
+      cfg && cfg.rows && cfg.rows.length
+        ? cfg.rows
+        : [
+            { ok: 52, late: 0, total: 52 },
+            { ok: 998, late: 108, total: 1106 },
+            { ok: 783, late: 252, total: 1035 },
+            { ok: 1481, late: 134, total: 1615 },
+            { ok: 896, late: 256, total: 1152 },
+            { ok: 1078, late: 375, total: 1453 }
+          ];
     if (months.length < rows.length) rows = rows.slice(rows.length - months.length);
     if (months.length > rows.length) months = months.slice(months.length - rows.length);
     var W = 1000;
@@ -2827,14 +3148,15 @@ function renderHeatmapViz(opts) {
     var pad = { l: 78, r: 28, t: 28, b: 52 };
     var plotW = W - pad.l - pad.r;
     var plotH = H - pad.t - pad.b;
-    var yMax = 1750;
+    var yMax = (cfg && cfg.yMax) || 1750;
+    var yStep = (cfg && cfg.yStep) || 250;
     function y(v) {
       return pad.t + plotH - (v / yMax) * plotH;
     }
     var groupW = plotW / rows.length;
     var barW = Math.min(34, groupW * 0.28);
     var grid = '';
-    for (var v = 0; v <= yMax; v += 250) {
+    for (var v = 0; v <= yMax; v += yStep) {
       var yy = y(v);
       grid +=
         '<line x1="' +
@@ -2969,29 +3291,38 @@ function renderHeatmapViz(opts) {
 
   function paintTop15Chart(host) {
     if (!host || host.dataset.ready === '1') return;
-    var items = [
-      { name: 'Lubrin Lubrificação Industrial', v: 32, type: 'deal' },
-      { name: 'Energold Drilling Brasil', v: 28, type: 'deal' },
-      { name: 'tsm', v: 26, type: 'deal' },
-      { name: '[IA] Produflex ind. Borracha ltda', v: 23, type: 'deal' },
-      { name: 'Jirau Energia S.a.', v: 23, type: 'deal' },
-      { name: 'IRMAOS GONCALVES COMERCIO E INDUSTRIA LTDA', v: 23, type: 'deal' },
-      { name: '[IA] Bianchini SA', v: 22, type: 'deal' },
-      { name: 'Essencis MG', v: 20, type: 'deal' },
-      { name: 'Contato (ID 37)', v: 19, type: 'contact' },
-      { name: '[IA] ecolab', v: 19, type: 'deal' },
-      { name: '[IA] Alimentos Zaeli', v: 19, type: 'deal' },
-      { name: 'DESTACA ENGENHARIA DE FUNDACOES E INFRA ESTRUTURAS...', v: 18, type: 'deal' },
-      { name: '[IA] kaefer', v: 18, type: 'deal' },
-      { name: 'Agro Paraná', v: 18, type: 'deal' },
-      { name: '[IA] FPT', v: 18, type: 'deal' }
-    ];
+    var cfg = null;
+    try {
+      if (host.getAttribute('data-top15')) cfg = JSON.parse(host.getAttribute('data-top15'));
+    } catch (e2) {
+      cfg = null;
+    }
+    var items =
+      cfg && cfg.items && cfg.items.length
+        ? cfg.items
+        : [
+            { name: 'Lubrin Lubrificação Industrial', v: 32, type: 'deal' },
+            { name: 'Energold Drilling Brasil', v: 28, type: 'deal' },
+            { name: 'tsm', v: 26, type: 'deal' },
+            { name: '[IA] Produflex ind. Borracha ltda', v: 23, type: 'deal' },
+            { name: 'Jirau Energia S.a.', v: 23, type: 'deal' },
+            { name: 'IRMAOS GONCALVES COMERCIO E INDUSTRIA LTDA', v: 23, type: 'deal' },
+            { name: '[IA] Bianchini SA', v: 22, type: 'deal' },
+            { name: 'Essencis MG', v: 20, type: 'deal' },
+            { name: 'Contato (ID 37)', v: 19, type: 'contact' },
+            { name: '[IA] ecolab', v: 19, type: 'deal' },
+            { name: '[IA] Alimentos Zaeli', v: 19, type: 'deal' },
+            { name: 'DESTACA ENGENHARIA DE FUNDACOES E INFRA ESTRUTURAS...', v: 18, type: 'deal' },
+            { name: '[IA] kaefer', v: 18, type: 'deal' },
+            { name: 'Agro Paraná', v: 18, type: 'deal' },
+            { name: '[IA] FPT', v: 18, type: 'deal' }
+          ];
     var W = 1000;
     var H = 520;
     var pad = { l: 310, r: 48, t: 18, b: 42 };
     var plotW = W - pad.l - pad.r;
     var plotH = H - pad.t - pad.b;
-    var xMax = 35;
+    var xMax = (cfg && cfg.xMax) || 35;
     var rowH = plotH / items.length;
     var barH = Math.min(18, rowH * 0.62);
     function x(v) {
