@@ -34,6 +34,7 @@ Sempre reutilizar este visual ao alterar slides, dados ou novos tipos no deck `#
 - Tipografia display: **Sora**; corpo: **Manrope**
 - Accent Melvin: `#64FCD8` / teal `#0f766e` (light content)
 - Widescreen 16:9 · classes `ar-hero-*`, `ar-panel-*`
+- **Light mode:** escopo em `body.light-mode #ar-atual` — chrome do slide (títulos) branco sobre véu escuro; conteúdo do card (#0f172a) com contraste alto. Não depender do reset global de `h2/h3/table`.
 
 ## Ao editar dados
 

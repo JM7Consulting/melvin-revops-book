@@ -17302,3 +17302,238 @@ body.light-mode .ar-deck-jump-btn {
   color: #0f172a;
   letter-spacing: -0.01em;
 }
+
+/* ===== AR light-mode polish ===== */
+/* Escopo #ar-atual: isola o deck do reset global de h2/h3/table no light mode */
+body.light-mode #ar-atual.ar-page {
+  --ar-accent: #0f766e;
+  --ar-accent-soft: rgba(15, 118, 110, 0.12);
+  --ar-stage-shadow: 0 18px 40px rgba(15, 23, 42, 0.12), 0 0 0 1px rgba(15, 23, 42, 0.08);
+  background:
+    radial-gradient(ellipse 70% 45% at 50% 0%, rgba(20, 184, 166, 0.08), transparent 55%),
+    linear-gradient(180deg, #f8fafc 0%, #eef2f7 100%);
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  box-shadow: 0 10px 28px rgba(15, 23, 42, 0.06);
+}
+
+body.light-mode #ar-atual .ar-deck-kicker { color: #0f766e; }
+body.light-mode #ar-atual .ar-deck-title { color: #0f172a !important; }
+body.light-mode #ar-atual .ar-deck-btn {
+  color: #0f766e;
+  border-color: rgba(15, 118, 110, 0.35);
+  background: rgba(15, 118, 110, 0.08);
+}
+body.light-mode #ar-atual .ar-deck-btn:hover {
+  background: rgba(15, 118, 110, 0.14);
+  border-color: rgba(15, 118, 110, 0.5);
+}
+body.light-mode #ar-atual .ar-deck-nav {
+  border-color: rgba(15, 23, 42, 0.14);
+  background: #ffffff;
+  color: #0f172a;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.06);
+}
+body.light-mode #ar-atual .ar-deck-nav:hover:not(:disabled) {
+  color: #0f766e;
+  border-color: rgba(15, 118, 110, 0.45);
+  background: #ecfeff;
+}
+body.light-mode #ar-atual .ar-deck-counter {
+  color: #0f172a;
+  border-color: rgba(15, 118, 110, 0.35);
+  background: #ffffff;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.05);
+}
+body.light-mode #ar-atual .ar-deck-foot { color: #475569; }
+body.light-mode #ar-atual .ar-deck-jump-btn {
+  background: #ffffff;
+  border-color: rgba(15, 23, 42, 0.14);
+  color: #334155;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+}
+body.light-mode #ar-atual .ar-deck-jump-btn:hover {
+  color: #0f766e;
+  border-color: rgba(15, 118, 110, 0.4);
+  background: #ecfeff;
+}
+body.light-mode #ar-atual .ar-deck-jump-btn.is-active {
+  background: linear-gradient(160deg, #0f766e, #134e4a);
+  border-color: #0f766e;
+  color: #ecfeff;
+  box-shadow: 0 0 0 2px rgba(15, 118, 110, 0.2), 0 4px 12px rgba(15, 118, 110, 0.25);
+}
+
+/* Painel: véu mais fechado para texto branco não lavar no light */
+body.light-mode #ar-atual .ar-panel-bg {
+  filter: blur(18px) saturate(0.82) brightness(0.28);
+}
+body.light-mode #ar-atual .ar-panel-veil {
+  background:
+    linear-gradient(145deg, rgba(3, 8, 14, 0.94) 0%, rgba(6, 14, 22, 0.9) 42%, rgba(7, 18, 26, 0.92) 100%),
+    radial-gradient(ellipse 55% 45% at 82% 18%, rgba(45, 212, 191, 0.14), transparent 58%);
+}
+body.light-mode #ar-atual .ar-hero-bg {
+  filter: blur(10px) saturate(0.85) brightness(0.35);
+}
+body.light-mode #ar-atual .ar-hero-veil {
+  background:
+    linear-gradient(160deg, rgba(4, 10, 16, 0.9) 0%, rgba(7, 16, 26, 0.78) 50%, rgba(8, 20, 28, 0.88) 100%);
+}
+
+/* Chrome do slide (sobre o escuro) */
+body.light-mode #ar-atual .ar-cover-title,
+body.light-mode #ar-atual .ar-obj-title,
+body.light-mode #ar-atual .ar-section-title,
+body.light-mode #ar-atual .ar-panel-title,
+body.light-mode #ar-atual .ar-cta-title,
+body.light-mode #ar-atual .ar-credits-title,
+body.light-mode #ar-atual .ar-credits-name,
+body.light-mode #ar-atual .ar-panel-person,
+body.light-mode #ar-atual .ar-panel-mid-kicker {
+  color: #ffffff !important;
+}
+body.light-mode #ar-atual .ar-panel-indicator,
+body.light-mode #ar-atual .ar-panel-kicker,
+body.light-mode #ar-atual .ar-cover-kicker,
+body.light-mode #ar-atual .ar-section-kicker {
+  color: #5eead4 !important;
+}
+body.light-mode #ar-atual .ar-panel-note,
+body.light-mode #ar-atual .ar-cover-sub,
+body.light-mode #ar-atual .ar-obj-lead,
+body.light-mode #ar-atual .ar-section-sub {
+  color: rgba(248, 250, 252, 0.88) !important;
+}
+body.light-mode #ar-atual .ar-obj-label { color: #f1f5f9 !important; }
+body.light-mode #ar-atual .ar-obj-num { color: #5eead4 !important; }
+body.light-mode #ar-atual .ar-obj-item {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.16);
+}
+body.light-mode #ar-atual .ar-section-num {
+  color: rgba(248, 250, 252, 0.14) !important;
+}
+
+/* Superfície branca de conteúdo */
+body.light-mode #ar-atual .ar-panel-content {
+  background: #ffffff !important;
+  border: 1px solid rgba(15, 23, 42, 0.1);
+  box-shadow: 0 14px 36px rgba(15, 23, 42, 0.14);
+  color: #0f172a;
+}
+body.light-mode #ar-atual .ar-slide-canvas--matrix.ar-panel .ar-panel-content {
+  background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%) !important;
+}
+
+body.light-mode #ar-atual .ar-mx-label {
+  background: #f1f5f9;
+  border-color: rgba(15, 23, 42, 0.1);
+}
+body.light-mode #ar-atual .ar-mx-label-text { color: #0f172a !important; }
+body.light-mode #ar-atual .ar-mx-idx { color: #0f766e !important; }
+body.light-mode #ar-atual .ar-mx-cell.is-filled {
+  background: #ffffff;
+  border-color: rgba(15, 23, 42, 0.14);
+  color: #0f172a !important;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.06);
+}
+body.light-mode #ar-atual .ar-mx-cell--avg.is-filled {
+  background: #f0fdfa;
+  border-color: rgba(15, 118, 110, 0.35);
+  color: #0f766e !important;
+}
+body.light-mode #ar-atual .ar-mx-cell.is-ok { color: #047857 !important; }
+body.light-mode #ar-atual .ar-mx-cell.is-bad { color: #b91c1c !important; }
+body.light-mode #ar-atual .ar-mx-subhead span {
+  color: #475569 !important;
+  font-weight: 750;
+}
+body.light-mode #ar-atual .ar-mx-corner span {
+  color: #334155 !important;
+  font-weight: 800;
+}
+
+body.light-mode #ar-atual .ar-viz-insights { color: #0f172a; }
+body.light-mode #ar-atual .ar-viz-insights li {
+  background: rgba(15, 118, 110, 0.08);
+  border-left-color: #0f766e;
+  color: #0f172a;
+  font-weight: 600;
+}
+body.light-mode #ar-atual .ar-chart-legend,
+body.light-mode #ar-atual .ar-leg,
+body.light-mode #ar-atual .ar-leg-title,
+body.light-mode #ar-atual .ar-svgchart-legend,
+body.light-mode #ar-atual .ar-stackq-legend,
+body.light-mode #ar-atual .ar-stackq-legend li,
+body.light-mode #ar-atual .ar-donut-legend,
+body.light-mode #ar-atual .ar-donut-legend span,
+body.light-mode #ar-atual .ar-bar-label {
+  color: #1e293b !important;
+}
+body.light-mode #ar-atual .ar-stackq-title,
+body.light-mode #ar-atual .ar-dual-title,
+body.light-mode #ar-atual .ar-chart-title,
+body.light-mode #ar-atual .ar-ct-title {
+  color: #0f172a !important;
+}
+body.light-mode #ar-atual .ar-heat-hour {
+  color: #475569 !important;
+  font-weight: 750;
+}
+body.light-mode #ar-atual .ar-heat-label { color: #1e293b !important; }
+body.light-mode #ar-atual .ar-svg-tick,
+body.light-mode #ar-atual .ar-stackq-tick,
+body.light-mode #ar-atual .ar-ct-tick {
+  fill: #475569 !important;
+}
+body.light-mode #ar-atual .ar-svg-axis-title,
+body.light-mode #ar-atual .ar-stackq-axis-title,
+body.light-mode #ar-atual .ar-stackq-month {
+  fill: #334155 !important;
+}
+body.light-mode #ar-atual .ar-stackq-total { fill: #0f172a !important; }
+body.light-mode #ar-atual .ar-donut-legend strong,
+body.light-mode #ar-atual .ar-bar-val {
+  color: #0f172a !important;
+}
+
+body.light-mode #ar-atual .ar-data-table thead th,
+body.light-mode #ar-atual .ar-data-table th {
+  background: linear-gradient(180deg, #0f766e 0%, #0d9488 100%) !important;
+  color: #ecfdf5 !important;
+  border-color: transparent !important;
+}
+body.light-mode #ar-atual .ar-data-table td {
+  background: #ffffff !important;
+  color: #1e293b !important;
+  border-color: rgba(15, 23, 42, 0.08) !important;
+}
+body.light-mode #ar-atual .ar-data-table tr td:first-child,
+body.light-mode #ar-atual .ar-td-ind {
+  color: #0f172a !important;
+  font-weight: 700;
+}
+body.light-mode #ar-atual .ar-td-num { color: #334155 !important; }
+
+body.light-mode #ar-atual .ar-plan-card h4,
+body.light-mode #ar-atual .ar-gap-rail-head h4 {
+  color: #0f172a !important;
+}
+body.light-mode #ar-atual .ar-plan-card p,
+body.light-mode #ar-atual .ar-gap-rail-head p,
+body.light-mode #ar-atual .ar-gap-slot-body {
+  color: #334155 !important;
+}
+body.light-mode #ar-atual .ar-gap-ghost { color: #94a3b8 !important; }
+
+body.light-mode #ar-atual .ar-slide-canvas--sign.ar-hero .ar-sign-name {
+  color: #ffffff !important;
+}
+body.light-mode #ar-atual .ar-slide-canvas--sign.ar-hero .ar-sign-lead,
+body.light-mode #ar-atual .ar-slide-canvas--sign.ar-hero .ar-sign-role,
+body.light-mode #ar-atual .ar-slide-canvas--sign.ar-hero .ar-sign-meta,
+body.light-mode #ar-atual .ar-slide-canvas--sign.ar-hero .ar-sign-kicker {
+  color: rgba(248, 250, 252, 0.9) !important;
+}
+
