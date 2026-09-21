@@ -570,33 +570,6 @@
     {
       type: 'viz',
       title: 'PRODUTIVIDADE MENSAL',
-      midKicker: 'ANÁLISE DE VENDAS',
-      indicator: 'Evolução Mensal: Vendas Reais vs. Faturamento',
-      person: 'Fabrício Luiz',
-      note: 'Closers + CS · volume financeiro real × faturamento · ' + AR_PERIOD.label,
-      viz: 'dual',
-      dual: {
-        chartTitle: 'Evolução Mensal: Vendas Reais vs. Faturamento (2026)',
-        volLabel: 'Vendas Financeiras Reais (Closers + CS)',
-        revLabel: 'Faturamento Realizado (R$)',
-        xLabel: 'Mês de Fechamento',
-        months: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set'],
-        volume: [8, 13, 9, 12, 10, 9, 9, 5, 1],
-        revenue: [8000, 105000, 30000, 14000, 22000, 18000, 16000, 40000, 2000],
-        volMax: 14,
-        revMax: 110000,
-        volTicks: [0, 2, 4, 6, 8, 10, 12, 14],
-        revTicks: [0, 20000, 40000, 60000, 80000, 100000]
-      },
-      insights: [
-        'Fev é o pico absoluto: R$ 105k com 13 vendas — ticket médio muito alto.',
-        'Abr entrega 12 vendas mas só R$ 14k — volume sem faturamento.',
-        'Alerta: Set quase zera (1 venda / R$ 2k); Ago recupera ticket (5 vendas / R$ 40k).'
-      ]
-    },
-    {
-      type: 'viz',
-      title: 'PRODUTIVIDADE MENSAL',
       midKicker: 'ANÁLISE DE REUNIÕES',
       indicator: 'Conversão e Qualidade das Reuniões',
       person: 'Fabrício Luiz',
@@ -629,21 +602,27 @@
       type: 'viz',
       title: 'PRODUTIVIDADE MENSAL',
       midKicker: 'ANÁLISE DE VENDAS',
-      indicator: 'Evolução de Vendas Mensal (Volume × Faturamento)',
+      indicator: 'Evolução Mensal: Vendas Reais vs. Faturamento',
       person: 'Fabrício Luiz',
-      note: 'Volume × faturamento · Fabrício Luiz · ' + AR_PERIOD.label,
+      note: 'Closers + CS · volume financeiro real × faturamento · ' + AR_PERIOD.label,
       viz: 'dual',
       dual: {
+        chartTitle: 'Evolução Mensal: Vendas Reais vs. Faturamento (2026)',
+        volLabel: 'Vendas Financeiras Reais (Closers + CS)',
+        revLabel: 'Faturamento Realizado (R$)',
+        xLabel: 'Mês de Fechamento',
         months: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set'],
-        volume: [8, 13, 10, 48, 683, 173, 147, 213, 95],
-        revenue: [8354.8, 104912.26, 30137.84, 14397, 22062.28, 17653.49, 16082.1, 39814.3, 1720],
-        volMax: 700,
-        revMax: 110000
+        volume: [8, 13, 9, 12, 10, 9, 9, 5, 1],
+        revenue: [8000, 105000, 30000, 14000, 22000, 18000, 16000, 40000, 2000],
+        volMax: 14,
+        revMax: 110000,
+        volTicks: [0, 2, 4, 6, 8, 10, 12, 14],
+        revTicks: [0, 20000, 40000, 60000, 80000, 100000]
       },
       insights: [
-        'Volume explode em Mai (683), mas o maior faturamento é Fev (R$ 105k) com só 13 vendas.',
-        'Ago entrega o 2º melhor faturamento (R$ 40k) com 213 vendas — melhor equilíbrio recente.',
-        'Alerta: Set com 95 vendas e só R$ 1,7k — ticket médio muito baixo.'
+        'Fev é o pico absoluto: R$ 105k com 13 vendas — ticket médio muito alto.',
+        'Abr entrega 12 vendas mas só R$ 14k — volume sem faturamento.',
+        'Alerta: Set quase zera (1 venda / R$ 2k); Ago recupera ticket (5 vendas / R$ 40k).'
       ]
     },
     {
