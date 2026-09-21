@@ -744,7 +744,9 @@
       title: 'Estatísticas',
       subtitle: 'Visão consolidada · ' + AR_PERIOD.label,
       theme: 'stats',
-      bg: AR_HERO_BG    {
+      bg: AR_HERO_BG
+    },
+    {
       type: 'matrix',
       title: 'PRODUTIVIDADE MENSAL',
       badge: 'TOTAL',
@@ -757,7 +759,7 @@
           values: ['1.035', '1.615', '1.152', '1.453', '']
         },
         atraso: {
-          values: ['24,3%']
+          values: ['24,3%', '8,3%', '22,2%', '25,8%', '']
         },
         ligIni: {
           values: ['0', '0', '0', '0', '288']
