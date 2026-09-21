@@ -268,10 +268,10 @@
       bdays: MX_BDAYS_PEOPLE,
       rows: mxProdRows({
         concluidas: {
-          values: ['1.035', '1.615', '1.152', '1.453', '']
+          values: ['1.035', '1.615', '1.152', '1.453', '887']
         },
         atraso: {
-          values: ['24,3%', '8,3%', '22,2%', '25,8%', '']
+          values: ['24,3%', '8,3%', '22,2%', '25,8%', '55,4%']
         },
         ligIni: {
           values: ['0', '0', '0', '0', '288']
@@ -538,6 +538,12 @@
       columns: MX_MONTHS_PEOPLE.slice(),
       bdays: MX_BDAYS_PEOPLE,
       rows: mxProdRows({
+        concluidas: {
+          values: ['', '', '', '', '248']
+        },
+        atraso: {
+          values: ['', '', '', '', '60,5%']
+        },
         vendas: { label: 'Vendas geradas' }
       }, MX_MONTHS_PEOPLE.length)
     },
@@ -551,10 +557,10 @@
       bdays: MX_BDAYS_PEOPLE,
       rows: mxProdRows({
         concluidas: {
-          values: ['', '', '', '', '']
+          values: ['', '', '', '', '248']
         },
         atraso: {
-          values: ['', '', '', '', '']
+          values: ['', '', '', '', '87,9%']
         },
         ligIni: {
           values: ['', '', '', '', '']
@@ -769,10 +775,10 @@
       bdays: MX_BDAYS_TOTAL,
       rows: mxProdRows({
         concluidas: {
-          values: ['1.035', '1.615', '1.152', '1.453', '']
+          values: ['1.035', '1.615', '1.152', '1.453', '1.383']
         },
         atraso: {
-          values: ['24,3%', '8,3%', '22,2%', '25,8%', '']
+          values: ['24,3%', '8,3%', '22,2%', '25,8%', '62,1%']
         },
         ligIni: {
           values: ['0', '0', '0', '0', '288']
