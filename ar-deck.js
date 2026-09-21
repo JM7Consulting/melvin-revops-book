@@ -535,8 +535,47 @@
       columns: MX_MONTHS_PEOPLE.slice(),
       bdays: MX_BDAYS_PEOPLE,
       rows: mxProdRows({
-        vendas: {
+        concluidas: {
           values: ['683', '173', '147', '213', '95']
+        },
+        atraso: {
+          values: ['26%', '25%', '24%', '25%', '19%']
+        },
+        ligIni: {
+          values: ['195', '163', '160', '196', '122']
+        },
+        ligAte: {
+          values: ['270', '273', '275', '273', '206']
+        },
+        lig30: {
+          values: ['160', '160', '167', '160', '169']
+        },
+        agenda: {
+          values: ['488', '252', '368', '213', '153']
+        },
+        reuniao: {
+          values: ['14', '22', '13', '18', '14']
+        },
+        cancel: {
+          values: ['30', '15', '16', '20', '14']
+        },
+        noshow: {
+          values: ['0', '0', '0', '0', '0']
+        },
+        fria: {
+          values: ['12', '15', '16', '17', '14']
+        },
+        morna: {
+          values: ['12', '15', '16', '17', '14']
+        },
+        quente: {
+          values: ['13', '10', '17', '19', '13']
+        },
+        cemiterio: {
+          values: ['13', '10', '15', '13', '10']
+        },
+        vendas: {
+          values: ['7', '8', '5', '6', '8']
         }
       }, MX_MONTHS_PEOPLE.length)
     },
