@@ -815,9 +815,10 @@
     },
     {
       type: 'matrix',
-      title: 'Taxa de Conversão',
+      title: 'FASE / ETAPA',
       badge: 'INBOUND',
       note: 'Distribuição por fase · funil inbound · ' + AR_PERIOD.label,
+      corner: 'FASE / ETAPA',
       columns: MX_MONTHS.slice(),
       rows: mxPhaseRows([
         {
@@ -856,9 +857,10 @@
     },
     {
       type: 'matrix',
-      title: 'Taxa de Conversão',
+      title: 'FASE / ETAPA',
       badge: 'OUTBOUND',
       note: 'Distribuição por fase · funil outbound · ' + AR_PERIOD.label,
+      corner: 'FASE / ETAPA',
       columns: MX_MONTHS.slice(),
       rows: mxPhaseRows([
         {
@@ -873,9 +875,10 @@
     },
     {
       type: 'matrix',
-      title: 'Taxa de Conversão',
+      title: 'FASE / ETAPA',
       badge: 'OPORTUNIDADES',
       note: 'Distribuição por fase · pipeline comercial · ' + AR_PERIOD.label,
+      corner: 'FASE / ETAPA',
       columns: MX_MONTHS.slice(),
       rows: mxPhaseRows([
         {
@@ -1253,7 +1256,9 @@
       '" style="--cols:' +
       colCount +
       '">' +
-      '<div class="ar-mx-corner"><span>Indicador</span></div>' +
+      '<div class="ar-mx-corner"><span>' +
+      esc(s.corner || s.rowHeader || 'Indicador') +
+      '</span></div>' +
       cols
         .map(function (c, i) {
           var bdays = withAvg && bdaysList[i] ? bdaysList[i] + ' úteis' : '';
