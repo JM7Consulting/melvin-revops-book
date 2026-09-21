@@ -2899,11 +2899,6 @@ function renderHeatmapViz(opts) {
         btn.classList.toggle('is-active', on);
         btn.setAttribute('aria-current', on ? 'true' : 'false');
       });
-      if (jumpBtns[index] && jumpBtns[index].scrollIntoView) {
-        try {
-          jumpBtns[index].scrollIntoView({ block: 'nearest', inline: 'center', behavior: 'smooth' });
-        } catch (e) {}
-      }
     }
 
     function syncFsUi() {
