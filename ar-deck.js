@@ -308,7 +308,7 @@
         },
         vendas: {
           label: 'Vendas geradas',
-          values: ['5', '', '1', '1', '']
+          values: ['5', '0', '1', '1', '0']
         }
       }, MX_MONTHS_PEOPLE.length)
     },
