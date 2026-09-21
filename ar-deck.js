@@ -307,7 +307,8 @@
           values: ['4', '1', '4', '4', '0']
         },
         vendas: {
-          label: 'Vendas geradas'
+          label: 'Vendas geradas',
+          values: ['5', '', '1', '1', '']
         }
       }, MX_MONTHS_PEOPLE.length)
     },
