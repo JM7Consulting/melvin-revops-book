@@ -143,6 +143,19 @@
     });
   }
 
+  /** Matriz de % por fase: '—' / vazio vira célula vazia (sem tone de atraso). */
+  function mxPhaseRows(entries) {
+    return (entries || []).map(function (e) {
+      return {
+        label: e.label,
+        values: (e.values || []).map(function (v) {
+          var s = String(v == null ? '' : v).trim();
+          return !s || s === '—' || s === '-' ? '' : s;
+        })
+      };
+    });
+  }
+
   function parsePctValue(raw) {
     var t = String(raw == null ? '' : raw)
       .replace('%', '')
@@ -804,37 +817,104 @@
       type: 'matrix',
       title: 'Taxa de Conversão',
       badge: 'INBOUND',
-      note: 'Funil inbound · ' + AR_PERIOD.label + ' · dados em atualização',
+      note: 'Distribuição por fase · funil inbound · ' + AR_PERIOD.label,
       columns: MX_MONTHS.slice(),
-      rows: mxRows(
-        [
-          'Etapa 1 » Etapa 2',
-          'Etapa 2 » Nutrição',
-          'Nutrição » Reunião Agendada',
-          'Reunião Agendada » Reunião Realizada',
-          'Reunião Realizada » Venda',
-          'Cadastrados » DESCARTADOS'
-        ],
-        MX_MONTHS.length
-      )
+      rows: mxPhaseRows([
+        {
+          label: 'Novo Lead Inbound',
+          values: ['—', '—', '—', '—', '—', '—', '0,9%']
+        },
+        {
+          label: 'Em Qualificação',
+          values: ['—', '—', '—', '—', '—', '—', '0,9%']
+        },
+        {
+          label: 'Tentativas de Agendamento',
+          values: ['—', '—', '1,3%', '3,1%', '1,8%', '2,2%', '7,3%']
+        },
+        {
+          label: 'Reunião Agendada',
+          values: ['—', '—', '—', '—', '—', '1,3%', '4,5%']
+        },
+        {
+          label: 'Proposta / Validação',
+          values: ['—', '—', '—', '—', '—', '—', '1,8%']
+        },
+        {
+          label: 'Aguardando Reunião',
+          values: ['—', '—', '2,0%', '1,6%', '—', '1,8%', '8,2%']
+        },
+        {
+          label: 'Ganho (Reunião Realizada)',
+          values: ['100,0%', '100,0%', '96,7%', '90,1%', '89,5%', '84,9%', '73,6%']
+        },
+        {
+          label: 'Perdido / Desqualificado',
+          values: ['—', '—', '—', '5,2%', '8,8%', '9,8%', '2,7%']
+        }
+      ])
     },
     {
       type: 'matrix',
       title: 'Taxa de Conversão',
       badge: 'OUTBOUND',
-      note: 'Funil outbound · ' + AR_PERIOD.label + ' · dados em atualização',
+      note: 'Distribuição por fase · funil outbound · ' + AR_PERIOD.label,
       columns: MX_MONTHS.slice(),
-      rows: mxRows(
-        [
-          'Etapa 1 » Etapa 2',
-          'Etapa 2 » Nutrição',
-          'Nutrição » Reunião Agendada',
-          'Reunião Agendada » Reunião Realizada',
-          'Reunião Realizada » Venda',
-          'Cadastrados » DESCARTADOS'
-        ],
-        MX_MONTHS.length
-      )
+      rows: mxPhaseRows([
+        {
+          label: 'Em Prospecção Ativa',
+          values: ['—', '—', '0,4%', '—', '—', '—', '—']
+        },
+        {
+          label: 'Ganho (Agendamento Realizado)',
+          values: ['—', '—', '99,6%', '—', '—', '—', '—']
+        }
+      ])
+    },
+    {
+      type: 'matrix',
+      title: 'Taxa de Conversão',
+      badge: 'OPORTUNIDADES',
+      note: 'Distribuição por fase · pipeline comercial · ' + AR_PERIOD.label,
+      columns: MX_MONTHS.slice(),
+      rows: mxPhaseRows([
+        {
+          label: 'Nova Oportunidade',
+          values: ['—', '—', '0,2%', '—', '—', '—', '—']
+        },
+        {
+          label: 'Reunião de Vendas',
+          values: ['—', '—', '2,6%', '50,0%', '—', '—', '—']
+        },
+        {
+          label: 'Diagnóstico / Mapeamento',
+          values: ['—', '—', '3,9%', '—', '—', '—', '—']
+        },
+        {
+          label: 'Proposta Comercial',
+          values: ['—', '—', '0,8%', '—', '—', '100,0%', '—']
+        },
+        {
+          label: 'Em Fechamento',
+          values: ['—', '—', '0,6%', '—', '—', '—', '—']
+        },
+        {
+          label: 'Aguardando Assinatura',
+          values: ['—', '—', '0,3%', '—', '—', '—', '100,0%']
+        },
+        {
+          label: 'Pendente / Em Pausa',
+          values: ['—', '—', '0,2%', '50,0%', '—', '—', '—']
+        },
+        {
+          label: 'Ganho (Venda Realizada / Receita)',
+          values: ['—', '25,0%', '11,9%', '—', '—', '—', '—']
+        },
+        {
+          label: 'Perdido (Sem Fechamento)',
+          values: ['100,0%', '75,0%', '79,7%', '—', '—', '—', '—']
+        }
+      ])
     },
     {
       type: 'section',
