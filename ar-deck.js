@@ -544,6 +544,33 @@
       type: 'viz',
       title: 'PRODUTIVIDADE MENSAL',
       midKicker: 'ANÁLISE DE REUNIÕES',
+      indicator: 'Evolução Mensal da Qualidade das Reuniões',
+      person: 'Fabrício Luiz',
+      note: 'Temperatura do funil · Abr–Set/2026 · ' + AR_PERIOD.label,
+      viz: 'stackQuality',
+      stackQuality: {
+        chartTitle: 'Evolução Mensal da Qualidade das Reuniões (Fabrício Luiz)',
+        yLabel: 'Quantidade de Reuniões',
+        xLabel: 'Mês',
+        yMax: 30,
+        months: ['Abr/2026', 'Mai/2026', 'Jun/2026', 'Jul/2026', 'Ago/2026', 'Set/2026'],
+        series: [
+          { key: 'fria', label: 'Reunião Fria', color: '#3b82f6', values: [3, 11, 13, 12, 16, 10] },
+          { key: 'morna', label: 'Reunião Morna', color: '#f97316', values: [1, 4, 11, 4, 5, 8] },
+          { key: 'quente', label: 'Reunião Quente', color: '#ef4444', values: [1, 2, 1, 0, 1, 2] },
+          { key: 'cemiterio', label: 'Reunião Cemitério', color: '#475569', values: [2, 4, 1, 4, 4, 0] }
+        ]
+      },
+      insights: [
+        'Pico de volume em Jun e Ago (26 reuniões cada).',
+        'Fria domina o mix em todos os meses — Ago chega a 16 frias.',
+        'Alerta: Quente quase some (0–2) enquanto Cemitério ainda pesa até Ago.'
+      ]
+    },
+    {
+      type: 'viz',
+      title: 'PRODUTIVIDADE MENSAL',
+      midKicker: 'ANÁLISE DE REUNIÕES',
       indicator: 'Conversão e Qualidade das Reuniões',
       person: 'Fabrício Luiz',
       note: 'Agendadas · Realizadas · No-Show · Termômetro · ' + AR_PERIOD.label,
@@ -1328,6 +1355,171 @@ function renderHeatmapViz(opts) {
   }
 
   
+  
+  function renderStackQualityViz(cfg) {
+    cfg = cfg || {};
+    var months = cfg.months || [];
+    var series = cfg.series || [];
+    var yMax = cfg.yMax || 25;
+    var W = 920;
+    var H = 340;
+    var pad = { t: 36, r: 24, b: 56, l: 56 };
+    var plotW = W - pad.l - pad.r;
+    var plotH = H - pad.t - pad.b;
+    var n = Math.max(months.length, 1);
+    var gap = plotW / n;
+    var barW = Math.min(52, gap * 0.52);
+
+    function yPos(v) {
+      return pad.t + plotH - (Math.max(0, v) / yMax) * plotH;
+    }
+
+    var legend =
+      '<ul class="ar-stackq-legend">' +
+      '<li class="ar-stackq-legend-title">Temperatura / Qualidade</li>' +
+      series
+        .map(function (ser) {
+          return (
+            '<li><i style="background:' +
+            esc(ser.color) +
+            '"></i><span>' +
+            esc(ser.label) +
+            '</span></li>'
+          );
+        })
+        .join('') +
+      '</ul>';
+
+    var grid = '';
+    for (var t = 0; t <= yMax; t += 5) {
+      var y = yPos(t);
+      grid +=
+        '<line class="ar-stackq-grid" x1="' +
+        pad.l +
+        '" y1="' +
+        y +
+        '" x2="' +
+        (W - pad.r) +
+        '" y2="' +
+        y +
+        '"/>';
+      grid +=
+        '<text class="ar-stackq-tick" x="' +
+        (pad.l - 8) +
+        '" y="' +
+        (y + 4) +
+        '" text-anchor="end">' +
+        t +
+        '</text>';
+    }
+
+    var bars = '';
+    months.forEach(function (m, mi) {
+      var cx = pad.l + gap * mi + gap / 2;
+      var stack = 0;
+      var total = 0;
+      series.forEach(function (ser) {
+        total += (ser.values && ser.values[mi]) || 0;
+      });
+      // draw bottom → top: Cemitério at bottom? Image shows Fria at bottom (blue), then Morna, Quente, Cemitério on top
+      // Looking at image description: Fria blue bottom, Morna orange, Quente red, Cemitério gray top
+      series.forEach(function (ser, si) {
+        var v = (ser.values && ser.values[mi]) || 0;
+        if (v <= 0) return;
+        var y1 = yPos(stack + v);
+        var y0 = yPos(stack);
+        var h = Math.max(1, y0 - y1);
+        bars +=
+          '<rect class="ar-stackq-seg" style="--i:' +
+          mi +
+          ';--si:' +
+          si +
+          '" x="' +
+          (cx - barW / 2) +
+          '" y="' +
+          y1 +
+          '" width="' +
+          barW +
+          '" height="' +
+          h +
+          '" fill="' +
+          esc(ser.color) +
+          '" rx="2"/>';
+        stack += v;
+      });
+      bars +=
+        '<text class="ar-stackq-total" style="--i:' +
+        mi +
+        '" x="' +
+        cx +
+        '" y="' +
+        (yPos(total) - 8) +
+        '" text-anchor="middle">' +
+        total +
+        '</text>';
+      bars +=
+        '<text class="ar-stackq-month" x="' +
+        cx +
+        '" y="' +
+        (H - 14) +
+        '" text-anchor="middle" transform="rotate(-28 ' +
+        cx +
+        ' ' +
+        (H - 14) +
+        ')">' +
+        esc(m) +
+        '</text>';
+    });
+
+    return (
+      '<div class="ar-stackq ar-stackq--live">' +
+      '<p class="ar-stackq-title">' +
+      esc(cfg.chartTitle || 'Evolução Mensal da Qualidade') +
+      '</p>' +
+      legend +
+      '<svg class="ar-stackq-svg" viewBox="0 0 ' +
+      W +
+      ' ' +
+      H +
+      '" role="img" aria-label="Qualidade das reuniões por mês">' +
+      grid +
+      '<line class="ar-stackq-axis" x1="' +
+      pad.l +
+      '" y1="' +
+      (pad.t + plotH) +
+      '" x2="' +
+      (W - pad.r) +
+      '" y2="' +
+      (pad.t + plotH) +
+      '"/>' +
+      '<line class="ar-stackq-axis" x1="' +
+      pad.l +
+      '" y1="' +
+      pad.t +
+      '" x2="' +
+      pad.l +
+      '" y2="' +
+      (pad.t + plotH) +
+      '"/>' +
+      bars +
+      '<text class="ar-stackq-axis-title" x="16" y="' +
+      (pad.t + plotH / 2) +
+      '" text-anchor="middle" transform="rotate(-90 16 ' +
+      (pad.t + plotH / 2) +
+      ')">' +
+      esc(cfg.yLabel || 'Quantidade de Reuniões') +
+      '</text>' +
+      '<text class="ar-stackq-axis-title" x="' +
+      (pad.l + plotW / 2) +
+      '" y="' +
+      (H - 2) +
+      '" text-anchor="middle">' +
+      esc(cfg.xLabel || 'Mês') +
+      '</text>' +
+      '</svg></div>'
+    );
+  }
+
   function renderConvThermoViz(cfg) {
     cfg = cfg || {};
     var bars = cfg.bars || [];
@@ -2295,6 +2487,7 @@ function renderHeatmapViz(opts) {
     else if (s.viz === 'bars') vizHtml = renderBarsViz(s.items);
     else if (s.viz === 'cluster') vizHtml = renderClusterBarsViz(s);
     else if (s.viz === 'dual') vizHtml = renderDualSalesViz(s.dual);
+    else if (s.viz === 'stackQuality') vizHtml = renderStackQualityViz(s.stackQuality);
     else if (s.viz === 'convThermo') vizHtml = renderConvThermoViz(s.convThermo);
     else if (s.viz === 'hist') vizHtml = renderHistViz(s.hist);
     else if (s.viz === 'season') vizHtml = renderSeasonViz(s.season);

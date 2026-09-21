@@ -17161,3 +17161,115 @@ body.light-mode .ar-deck-jump-btn {
     stroke-dashoffset: 0;
   }
 }
+
+
+/* Fabrício stacked meeting quality */
+.ar-stackq {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  gap: 4px;
+}
+.ar-stackq-title {
+  margin: 0;
+  text-align: center;
+  font-family: Sora, Manrope, system-ui, sans-serif;
+  font-size: clamp(0.78rem, 1.5cqw, 0.98rem);
+  font-weight: 750;
+  color: #0f172a;
+  letter-spacing: -0.01em;
+}
+.ar-stackq-legend {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  justify-content: center;
+  align-items: center;
+}
+.ar-stackq-legend-title {
+  width: 100%;
+  text-align: center;
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #64748b;
+}
+.ar-stackq-legend li {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.68rem;
+  font-weight: 650;
+  color: #334155;
+}
+.ar-stackq-legend i {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  display: inline-block;
+}
+.ar-stackq-svg {
+  width: 100%;
+  flex: 1;
+  min-height: 0;
+}
+.ar-stackq-grid {
+  stroke: rgba(15, 23, 42, 0.08);
+  stroke-width: 1;
+}
+.ar-stackq-axis {
+  stroke: #94a3b8;
+  stroke-width: 1.2;
+}
+.ar-stackq-tick {
+  font-size: 11px;
+  fill: #64748b;
+  font-family: Manrope, system-ui, sans-serif;
+}
+.ar-stackq-seg {
+  stroke: #fff;
+  stroke-width: 1;
+  transform-box: fill-box;
+  transform-origin: bottom center;
+}
+.ar-stackq--live .ar-stackq-seg {
+  animation: arStackSegIn 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: calc(var(--i, 0) * 70ms + var(--si, 0) * 35ms);
+}
+@keyframes arStackSegIn {
+  from { transform: scaleY(0); opacity: 0.3; }
+  to { transform: scaleY(1); opacity: 1; }
+}
+.ar-stackq-total {
+  font-size: 13px;
+  font-weight: 800;
+  fill: #0f172a;
+  font-family: Manrope, system-ui, sans-serif;
+}
+.ar-stackq--live .ar-stackq-total {
+  animation: arSlaFade 0.4s ease both;
+  animation-delay: calc(0.4s + var(--i, 0) * 70ms);
+}
+.ar-stackq-month {
+  font-size: 11px;
+  font-weight: 650;
+  fill: #475569;
+  font-family: Manrope, system-ui, sans-serif;
+}
+.ar-stackq-axis-title {
+  font-size: 12px;
+  font-weight: 650;
+  fill: #64748b;
+  font-family: Manrope, system-ui, sans-serif;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ar-stackq--live .ar-stackq-seg,
+  .ar-stackq--live .ar-stackq-total {
+    animation: none !important;
+  }
+}
