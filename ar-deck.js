@@ -300,7 +300,7 @@
       type: 'chart',
       chart: 'sla',
       title: 'PRODUTIVIDADE MENSAL',
-      midKicker: 'Análise de Tarefas',
+      midKicker: 'Análise de Atividades',
       indicator: 'SLA e Tendência Mensal de Atividades',
       person: 'Gabriely Silva',
       note: 'Dashboard RevOps · ' + AR_PERIOD.label,
@@ -321,6 +321,28 @@
         'Picos nobres: 12h e 17h (300+ atividades/hora).',
         'Dias mais intensos: Segunda e Quarta.',
         'Alerta: volume cai na Sexta e entre 14h–15h — evite cold call nos blocos azuis escuros.'
+      ]
+    },
+    {
+      type: 'viz',
+      title: 'PRODUTIVIDADE MENSAL',
+      indicator: 'Speed to Execution (Tempo de Resolução)',
+      person: 'Gabriely Silva',
+      note: 'Velocidade entre criação e conclusão · ' + AR_PERIOD.label,
+      viz: 'donut',
+      slices: [
+        { label: '< 1 hora', pct: 37.5, color: '#22c55e' },
+        { label: '1 a 4 horas', pct: 11.1, color: '#3b82f6' },
+        { label: 'Mesmo dia (4–24h)', pct: 16.2, color: '#eab308' },
+        { label: '1 a 3 dias', pct: 15.0, color: '#f97316' },
+        { label: 'Mais de 3 dias', pct: 20.2, color: '#ef4444' }
+      ],
+      centerLabel: '65%',
+      centerSub: 'mesmo dia',
+      insights: [
+        '~65% das tarefas resolvidas no mesmo dia (<1h + 1–4h + 4–24h).',
+        '37,5% em menos de 1 hora — padrão ouro para a equipe.',
+        'Alerta: 20,2% passam de 3 dias — leads difíceis ou fila administrativa.'
       ]
     },
     {
@@ -359,28 +381,7 @@
         { cls: 'ar-leg--contact', label: 'CONTACT' }
       ]
     },
-    {
-      type: 'viz',
-      title: 'PRODUTIVIDADE MENSAL',
-      indicator: 'Speed to Execution (Tempo de Resolução)',
-      person: 'Gabriely Silva',
-      note: 'Velocidade entre criação e conclusão · ' + AR_PERIOD.label,
-      viz: 'donut',
-      slices: [
-        { label: '< 1 hora', pct: 37.5, color: '#22c55e' },
-        { label: '1 a 4 horas', pct: 11.1, color: '#3b82f6' },
-        { label: 'Mesmo dia (4–24h)', pct: 16.2, color: '#eab308' },
-        { label: '1 a 3 dias', pct: 15.0, color: '#f97316' },
-        { label: 'Mais de 3 dias', pct: 20.2, color: '#ef4444' }
-      ],
-      centerLabel: '65%',
-      centerSub: 'mesmo dia',
-      insights: [
-        '~65% das tarefas resolvidas no mesmo dia (<1h + 1–4h + 4–24h).',
-        '37,5% em menos de 1 hora — padrão ouro para a equipe.',
-        'Alerta: 20,2% passam de 3 dias — leads difíceis ou fila administrativa.'
-      ]
-    },
+
     {
       type: 'viz',
       title: 'PRODUTIVIDADE MENSAL',
@@ -394,6 +395,7 @@
         {
           label: 'Iniciadas (Total)',
           color: '#3b82f6',
+          asLine: true,
           values: [0, 0, 0, 2, 0, 0, 0, 0, 288]
         },
         {
@@ -433,27 +435,6 @@
       type: 'viz',
       title: 'PRODUTIVIDADE MENSAL',
       midKicker: 'ANÁLISE DE AGENDAMENTOS',
-      indicator: 'Destino dos Agendamentos',
-      person: 'Gabriely Silva',
-      note: 'Status atual dos negócios agendados · ' + AR_PERIOD.label,
-      viz: 'donut',
-      slices: [
-        { label: 'Ganho', pct: 11.2, color: '#15B06D' },
-        { label: 'Em Andamento', pct: 42.6, color: '#F04444' },
-        { label: 'Perdido', pct: 46.2, color: '#F59E0B' }
-      ],
-      centerLabel: '197',
-      centerSub: 'agendamentos',
-      insights: [
-        '46,2% dos agendamentos terminam como Perdido.',
-        '42,6% ainda Em Andamento — pipeline vivo relevante.',
-        'Alerta: só 11,2% Ganho — converter o meio do funil é a alavanca.'
-      ]
-    },
-    {
-      type: 'viz',
-      title: 'PRODUTIVIDADE MENSAL',
-      midKicker: 'ANÁLISE DE AGENDAMENTOS',
       indicator: 'Time-to-Meeting',
       person: 'Gabriely Silva',
       note: 'Dias corridos entre criação do lead e a reunião',
@@ -482,6 +463,28 @@
       type: 'viz',
       title: 'PRODUTIVIDADE MENSAL',
       midKicker: 'ANÁLISE DE AGENDAMENTOS',
+      indicator: 'Destino dos Agendamentos',
+      person: 'Gabriely Silva',
+      note: 'Status atual dos negócios agendados · ' + AR_PERIOD.label,
+      viz: 'donut',
+      slices: [
+        { label: 'Ganho', pct: 11.2, color: '#15B06D' },
+        { label: 'Em Andamento', pct: 42.6, color: '#F04444' },
+        { label: 'Perdido', pct: 46.2, color: '#F59E0B' }
+      ],
+      centerLabel: '197',
+      centerSub: 'agendamentos',
+      insights: [
+        '46,2% dos agendamentos terminam como Perdido.',
+        '42,6% ainda Em Andamento — pipeline vivo relevante.',
+        'Alerta: só 11,2% Ganho — converter o meio do funil é a alavanca.'
+      ]
+    },
+
+    {
+      type: 'viz',
+      title: 'PRODUTIVIDADE MENSAL',
+      midKicker: 'ANÁLISE DE AGENDAMENTOS',
       indicator: 'Sazonalidade do Agendamento',
       person: 'Gabriely Silva',
       note: 'Melhores dias do mês (1 ao 31) · média móvel 3 dias',
@@ -495,27 +498,7 @@
         'Alerta: início do mês (dias 2–3/6) quase zerado — planejar push nessas janelas.'
       ]
     },
-    {
-      type: 'viz',
-      title: 'PRODUTIVIDADE MENSAL',
-      midKicker: 'ANÁLISE DE VENDAS',
-      indicator: 'Evolução de Vendas Mensal (Volume × Faturamento)',
-      person: 'Gabriely Silva',
-      note: 'Quantidade de vendas × faturamento realizado · ' + AR_PERIOD.label,
-      viz: 'dual',
-      dual: {
-        months: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set'],
-        volume: [8, 13, 10, 48, 683, 173, 147, 213, 95],
-        revenue: [8354.8, 104912.26, 30137.84, 14397, 22062.28, 17653.49, 16082.1, 39814.3, 1720],
-        volMax: 700,
-        revMax: 110000
-      },
-      insights: [
-        'Volume explode em Mai (683), mas o maior faturamento é Fev (R$ 105k) com só 13 vendas.',
-        'Ago entrega o 2º melhor faturamento (R$ 40k) com 213 vendas — melhor equilíbrio recente.',
-        'Alerta: Set com 95 vendas e só R$ 1,7k — ticket médio muito baixo.'
-      ]
-    },
+
     {
       type: 'viz',
       title: 'PRODUTIVIDADE MENSAL',
@@ -588,6 +571,27 @@
       ]
     },
 
+    {
+      type: 'viz',
+      title: 'PRODUTIVIDADE MENSAL',
+      midKicker: 'ANÁLISE DE VENDAS',
+      indicator: 'Evolução de Vendas Mensal (Volume × Faturamento)',
+      person: 'Fabrício Luiz',
+      note: 'Volume × faturamento · Fabrício Luiz · ' + AR_PERIOD.label,
+      viz: 'dual',
+      dual: {
+        months: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set'],
+        volume: [8, 13, 10, 48, 683, 173, 147, 213, 95],
+        revenue: [8354.8, 104912.26, 30137.84, 14397, 22062.28, 17653.49, 16082.1, 39814.3, 1720],
+        volMax: 700,
+        revMax: 110000
+      },
+      insights: [
+        'Volume explode em Mai (683), mas o maior faturamento é Fev (R$ 105k) com só 13 vendas.',
+        'Ago entrega o 2º melhor faturamento (R$ 40k) com 213 vendas — melhor equilíbrio recente.',
+        'Alerta: Set com 95 vendas e só R$ 1,7k — ticket médio muito baixo.'
+      ]
+    },
     {
       type: 'section',
       num: '02',
@@ -1707,20 +1711,23 @@ function renderHeatmapViz(opts) {
   function renderClusterBarsViz(s) {
     var months = s.months || [];
     var series = s.series || [];
+    var barSeries = series.filter(function (ser) { return !ser.asLine; });
+    var lineSeries = series.filter(function (ser) { return !!ser.asLine; });
     var max = 1;
     series.forEach(function (ser) {
       (ser.values || []).forEach(function (v) {
         if (v > max) max = v;
       });
     });
-    // Nice Y ceiling near 300 for this chart
     var yMax = Math.max(50, Math.ceil(max / 50) * 50);
     var ticks = [];
     for (var t = yMax; t >= 0; t -= yMax / 6) ticks.push(Math.round(t));
     var legend = series
       .map(function (ser) {
         return (
-          '<li><i style="background:' +
+          '<li class="' +
+          (ser.asLine ? 'ar-cluster-leg--line' : '') +
+          '"><i style="background:' +
           esc(ser.color) +
           '"></i><span>' +
           esc(ser.label) +
@@ -1730,7 +1737,7 @@ function renderHeatmapViz(opts) {
       .join('');
     var cols = months
       .map(function (m, mi) {
-        var bars = series
+        var bars = barSeries
           .map(function (ser, si) {
             var v = (ser.values && ser.values[mi]) || 0;
             var h = yMax ? (v / yMax) * 100 : 0;
@@ -1769,6 +1776,73 @@ function renderHeatmapViz(opts) {
         return '<span>' + n + '</span>';
       })
       .join('');
+    var lineSvg = '';
+    if (lineSeries.length && months.length) {
+      var W = Math.max(320, months.length * 72);
+      var H = 220;
+      var pad = { t: 18, r: 12, b: 8, l: 12 };
+      var plotW = W - pad.l - pad.r;
+      var plotH = H - pad.t - pad.b;
+      var gap = plotW / months.length;
+      lineSeries.forEach(function (ser, li) {
+        var pts = [];
+        var dots = '';
+        var labels = '';
+        months.forEach(function (m, mi) {
+          var v = (ser.values && ser.values[mi]) || 0;
+          var cx = pad.l + gap * mi + gap / 2;
+          var cy = pad.t + plotH - (yMax ? (v / yMax) * plotH : 0);
+          pts.push(cx + ',' + cy);
+          dots +=
+            '<circle class="ar-cluster-line-dot" style="--i:' +
+            mi +
+            ';--li:' +
+            li +
+            '" cx="' +
+            cx +
+            '" cy="' +
+            cy +
+            '" r="4.5" fill="' +
+            esc(ser.color) +
+            '" stroke="#fff" stroke-width="1.5"/>';
+          if (v > 0) {
+            labels +=
+              '<text class="ar-cluster-line-val" style="--i:' +
+              mi +
+              '" x="' +
+              cx +
+              '" y="' +
+              (cy - 10) +
+              '" text-anchor="middle">' +
+              v +
+              '</text>';
+          }
+        });
+        var d = pts
+          .map(function (p, i) {
+            return (i === 0 ? 'M' : 'L') + p.replace(',', ' ');
+          })
+          .join(' ');
+        lineSvg +=
+          '<path class="ar-cluster-line" style="--li:' +
+          li +
+          ';stroke:' +
+          esc(ser.color) +
+          '" d="' +
+          d +
+          '" fill="none"/>' +
+          dots +
+          labels;
+      });
+      lineSvg =
+        '<svg class="ar-cluster-line-svg" viewBox="0 0 ' +
+        W +
+        ' ' +
+        H +
+        '" preserveAspectRatio="none" aria-hidden="true">' +
+        lineSvg +
+        '</svg>';
+    }
     return (
       '<div class="ar-cluster ar-cluster--live">' +
       '<ul class="ar-cluster-legend">' +
@@ -1780,7 +1854,9 @@ function renderHeatmapViz(opts) {
       '</div>' +
       '<div class="ar-cluster-plot"><div class="ar-cluster-grid" aria-hidden="true"></div><div class="ar-cluster-months">' +
       cols +
-      '</div></div></div>' +
+      '</div>' +
+      lineSvg +
+      '</div></div>' +
       '<p class="ar-cluster-xlabel">Quantidade de Ligações</p></div>'
     );
   }
@@ -2519,7 +2595,9 @@ function renderHeatmapViz(opts) {
       var hLate = (r.late / yMax) * plotH;
       if (r.ok > 0) {
         bars +=
-          '<rect x="' +
+          '<rect class="ar-sla-bar" style="--i:' +
+          i +
+          '" x="' +
           xOk +
           '" y="' +
           y(r.ok) +
@@ -2529,7 +2607,9 @@ function renderHeatmapViz(opts) {
           hOk +
           '" fill="#22c55e"/>';
         bars +=
-          '<text x="' +
+          '<text class="ar-sla-label" style="--i:' +
+          i +
+          '" x="' +
           (xOk + barW / 2) +
           '" y="' +
           (y(r.ok) - 6) +
@@ -2539,7 +2619,9 @@ function renderHeatmapViz(opts) {
       }
       if (r.late > 0) {
         bars +=
-          '<rect x="' +
+          '<rect class="ar-sla-bar ar-sla-bar--late" style="--i:' +
+          i +
+          '" x="' +
           xLate +
           '" y="' +
           y(r.late) +
@@ -2549,7 +2631,9 @@ function renderHeatmapViz(opts) {
           hLate +
           '" fill="#ef4444"/>';
         bars +=
-          '<text x="' +
+          '<text class="ar-sla-label" style="--i:' +
+          i +
+          '" x="' +
           (xLate + barW / 2) +
           '" y="' +
           (y(r.late) - 6) +
@@ -2582,9 +2666,11 @@ function renderHeatmapViz(opts) {
       })
       .join(' ');
     var dots = linePts
-      .map(function (p) {
+      .map(function (p, di) {
         return (
-          '<circle cx="' +
+          '<circle class="ar-sla-dot" style="--i:' +
+          di +
+          '" cx="' +
           p[0] +
           '" cy="' +
           p[1] +
@@ -2593,7 +2679,7 @@ function renderHeatmapViz(opts) {
       })
       .join('');
     host.innerHTML =
-      '<svg viewBox="0 0 ' +
+      '<svg class="ar-sla-svg ar-sla--live" viewBox="0 0 ' +
       W +
       ' ' +
       H +
@@ -2603,7 +2689,7 @@ function renderHeatmapViz(opts) {
       (pad.t + pad.t + plotH) / 2 +
       ') rotate(-90)" text-anchor="middle" font-size="13" fill="#4b5563" font-family="Manrope,Segoe UI,sans-serif">Volume de Atividades</text>' +
       bars +
-      '<polyline points="' +
+      '<polyline class="ar-sla-line" points="' +
       poly +
       '" fill="none" stroke="#2563eb" stroke-width="2.5"/>' +
       dots +
