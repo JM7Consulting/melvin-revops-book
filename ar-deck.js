@@ -763,7 +763,7 @@
       type: 'matrix',
       title: 'PRODUTIVIDADE MENSAL',
       badge: 'TOTAL',
-      note: 'Soma Gaby + Poliana + Fabrício · Mai–Set · ' + AR_PERIOD.label,
+      note: 'Soma Gaby + Poli + Fabrício · agenda/reuniões/cancel/no-show só Gaby+Poli · Mai–Set · ' + AR_PERIOD.label,
       dailyAvg: true,
       columns: MX_MONTHS_TOTAL.slice(),
       bdays: MX_BDAYS_TOTAL,
@@ -784,16 +784,16 @@
           values: ['0', '0', '0', '0', '6']
         },
         agenda: {
-          values: ['51', '61', '80', '72', '67']
+          values: ['30', '35', '49', '42', '41']
         },
         reuniao: {
-          values: ['51', '61', '74', '66', '63']
+          values: ['30', '35', '46', '39', '39']
         },
         cancel: {
-          values: ['0', '0', '6', '4', '4']
+          values: ['0', '0', '3', '2', '2']
         },
         noshow: {
-          values: ['0', '0', '0', '2', '0']
+          values: ['0', '0', '0', '1', '0']
         },
         fria: {
           values: ['20', '26', '23', '31', '20']
