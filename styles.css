@@ -13928,10 +13928,11 @@ body.light-mode .ma-cad-chip--green {
   --ar-stage-shadow: 0 24px 56px rgba(0, 0, 0, 0.38), 0 0 0 1px rgba(255, 255, 255, 0.06);
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 72px);
-  max-height: calc(100vh - 72px);
-  min-height: 0;
+  min-height: calc(100dvh - 72px);
+  height: calc(100dvh - 72px);
+  max-height: calc(100dvh - 72px);
   overflow: hidden;
+  box-sizing: border-box;
 }
 body.light-mode .ar-page {
   --ar-accent: #0f766e;
@@ -13941,9 +13942,10 @@ body.light-mode .ar-page {
 .ar-deck {
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  flex: 1;
+  gap: 10px;
+  flex: 1 1 auto;
   min-height: 0;
+  height: 100%;
   outline: none;
 }
 .ar-deck:focus-visible {
@@ -14001,11 +14003,12 @@ body.light-mode .ar-deck-btn {
   grid-template-columns: auto minmax(0, 1fr) auto;
   gap: 12px;
   align-items: center;
-  flex: 1;
+  flex: 1 1 auto;
   min-height: 0;
 }
 .ar-deck-nav {
   appearance: none;
+  align-self: center;
   width: 48px;
   height: 48px;
   border-radius: 50%;
@@ -14039,9 +14042,10 @@ body.light-mode .ar-deck-nav:hover:not(:disabled) {
 .ar-deck-viewport {
   position: relative;
   width: 100%;
-  min-height: 0;
-  height: 100%;
-  max-height: 100%;
+  min-width: 0;
+  height: min(72dvh, calc(100dvh - 210px), 860px);
+  min-height: 480px;
+  max-height: min(72dvh, calc(100dvh - 210px), 860px);
   display: grid;
   place-items: center;
   container-type: size;
@@ -14611,7 +14615,8 @@ body.light-mode .ar-deck:-webkit-full-screen {
 }
 .ar-deck:fullscreen .ar-deck-viewport,
 .ar-deck:-webkit-full-screen .ar-deck-viewport {
-  height: 100%;
+  height: min(82dvh, calc(100dvh - 160px));
+  min-height: 520px;
   max-height: none;
 }
 .ar-deck:fullscreen,
@@ -14630,7 +14635,9 @@ body.light-mode .ar-deck:-webkit-full-screen {
 }
 @media (max-width: 900px) {
   .ar-deck-viewport {
-    height: 100%;
+    height: min(62dvh, calc(100dvh - 220px), 640px);
+    min-height: 360px;
+    max-height: none;
   }
 }
 @media (max-width: 720px) {
@@ -14643,8 +14650,9 @@ body.light-mode .ar-deck:-webkit-full-screen {
   .ar-deck-viewport {
     flex: 1 1 100%;
     order: 1;
-    height: 100%;
-    min-height: 0;
+    height: min(52dvh, calc(100dvh - 240px), 480px);
+    min-height: 280px;
+    max-height: none;
   }
   .ar-deck-nav {
     width: 42px;
