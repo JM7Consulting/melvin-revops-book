@@ -599,6 +599,15 @@
     },
 
     {
+      type: 'section',
+      num: '02',
+      kicker: 'Bloco',
+      title: 'Estatísticas',
+      subtitle: 'Visão consolidada · ' + AR_PERIOD.label,
+      theme: 'stats',
+      bg: AR_HERO_BG
+    },
+    {
       type: 'viz',
       title: 'PRODUTIVIDADE MENSAL',
       midKicker: 'ANÁLISE DE VENDAS',
@@ -624,15 +633,6 @@
         'Abr entrega 12 vendas mas só R$ 14k — volume sem faturamento.',
         'Alerta: Set quase zera (1 venda / R$ 2k); Ago recupera ticket (5 vendas / R$ 40k).'
       ]
-    },
-    {
-      type: 'section',
-      num: '02',
-      kicker: 'Bloco',
-      title: 'Estatísticas',
-      subtitle: 'Visão consolidada · ' + AR_PERIOD.label,
-      theme: 'stats',
-      bg: AR_HERO_BG
     },
     {
       type: 'matrix',
