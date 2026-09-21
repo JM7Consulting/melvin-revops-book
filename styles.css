@@ -17283,3 +17283,77 @@ body.light-mode .ar-deck-jump-btn {
   color: #0f172a;
   letter-spacing: -0.01em;
 }
+
+
+.ar-stackq-body {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  gap: clamp(6px, 1cqh, 10px);
+  align-items: stretch;
+}
+.ar-stackq-table-wrap {
+  min-width: 0;
+  overflow: auto;
+  border-radius: 10px;
+  border: 1px solid rgba(15, 23, 42, 0.1);
+  background: #fff;
+  flex-shrink: 0;
+}
+.ar-stackq-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: clamp(0.52rem, 1cqw, 0.7rem);
+  font-family: Manrope, system-ui, sans-serif;
+}
+.ar-stackq-table th,
+.ar-stackq-table td {
+  padding: 4px 5px;
+  text-align: center;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.06);
+  white-space: nowrap;
+}
+.ar-stackq-table thead th {
+  background: #f8fafc;
+  font-weight: 750;
+  color: #334155;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+.ar-stackq-table thead th i {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  margin-right: 4px;
+  vertical-align: middle;
+}
+.ar-stackq-table tbody th,
+.ar-stackq-table tfoot th {
+  text-align: left;
+  font-weight: 700;
+  color: #0f172a;
+  background: #fafafa;
+}
+.ar-stackq-table tbody tr {
+  animation: arSlaFade 0.35s ease both;
+  animation-delay: calc(0.35s + var(--i, 0) * 45ms);
+}
+.ar-stackq-td-total,
+.ar-stackq-table tfoot td,
+.ar-stackq-table tfoot th {
+  font-weight: 800;
+  color: #0f766e;
+  background: rgba(20, 184, 166, 0.08);
+}
+.ar-stackq-table tfoot td,
+.ar-stackq-table tfoot th {
+  border-bottom: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ar-stackq-table tbody tr {
+    animation: none !important;
+  }
+}

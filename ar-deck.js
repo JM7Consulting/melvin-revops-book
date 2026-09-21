@@ -555,11 +555,12 @@
         yMax: 30,
         months: ['Abr/2026', 'Mai/2026', 'Jun/2026', 'Jul/2026', 'Ago/2026', 'Set/2026'],
         series: [
-          { key: 'fria', label: 'Reunião Fria', color: '#3b82f6', values: [3, 11, 13, 12, 16, 10] },
-          { key: 'morna', label: 'Reunião Morna', color: '#f97316', values: [1, 4, 11, 4, 5, 8] },
-          { key: 'quente', label: 'Reunião Quente', color: '#ef4444', values: [1, 2, 1, 0, 1, 2] },
-          { key: 'cemiterio', label: 'Reunião Cemitério', color: '#475569', values: [2, 4, 1, 4, 4, 0] }
-        ]
+          { key: 'fria', label: 'Reunião Fria ❄️', color: '#3b82f6', values: [3, 11, 13, 12, 16, 10] },
+          { key: 'morna', label: 'Reunião Morna ⚠️', color: '#f97316', values: [1, 4, 11, 4, 5, 8] },
+          { key: 'quente', label: 'Reunião Quente 🔥', color: '#ef4444', values: [1, 2, 1, 0, 1, 2] },
+          { key: 'cemiterio', label: 'Reunião Cemitério ☠️', color: '#475569', values: [2, 4, 1, 4, 4, 0] }
+        ],
+        showTable: true
       },
       insights: [
         'Pico de volume em Jun e Ago (26 reuniões cada).',
@@ -1389,7 +1390,7 @@ function renderHeatmapViz(opts) {
     var series = cfg.series || [];
     var yMax = cfg.yMax || 25;
     var W = 920;
-    var H = 340;
+    var H = 250;
     var pad = { t: 36, r: 24, b: 56, l: 56 };
     var plotW = W - pad.l - pad.r;
     var plotH = H - pad.t - pad.b;
@@ -1498,12 +1499,80 @@ function renderHeatmapViz(opts) {
         '</text>';
     });
 
+    var tableHtml = '';
+    if (cfg.showTable !== false) {
+      var colTotals = series.map(function () {
+        return 0;
+      });
+      var grand = 0;
+      var head =
+        '<th>Mês</th>' +
+        series
+          .map(function (ser) {
+            return (
+              '<th><i style="background:' +
+              esc(ser.color) +
+              '"></i>' +
+              esc(ser.label) +
+              '</th>'
+            );
+          })
+          .join('') +
+        '<th>Total Qualificado</th>';
+      var body = months
+        .map(function (m, mi) {
+          var rowTotal = 0;
+          var cells = series
+            .map(function (ser, si) {
+              var v = (ser.values && ser.values[mi]) || 0;
+              rowTotal += v;
+              colTotals[si] += v;
+              return '<td>' + v + '</td>';
+            })
+            .join('');
+          grand += rowTotal;
+          return (
+            '<tr style="--i:' +
+            mi +
+            '"><th scope="row">' +
+            esc(m) +
+            '</th>' +
+            cells +
+            '<td class="ar-stackq-td-total">' +
+            rowTotal +
+            '</td></tr>'
+          );
+        })
+        .join('');
+      var footCells = colTotals
+        .map(function (t) {
+          return '<td>' + t + '</td>';
+        })
+        .join('');
+      tableHtml =
+        '<div class="ar-stackq-table-wrap">' +
+        '<table class="ar-stackq-table">' +
+        '<thead><tr>' +
+        head +
+        '</tr></thead>' +
+        '<tbody>' +
+        body +
+        '</tbody>' +
+        '<tfoot><tr><th scope="row">TOTAL</th>' +
+        footCells +
+        '<td class="ar-stackq-td-total">' +
+        grand +
+        '</td></tr></tfoot>' +
+        '</table></div>';
+    }
+
     return (
       '<div class="ar-stackq ar-stackq--live">' +
       '<p class="ar-stackq-title">' +
       esc(cfg.chartTitle || 'Evolução Mensal da Qualidade') +
       '</p>' +
       legend +
+      '<div class="ar-stackq-body">' +
       '<svg class="ar-stackq-svg" viewBox="0 0 ' +
       W +
       ' ' +
@@ -1543,7 +1612,9 @@ function renderHeatmapViz(opts) {
       '" text-anchor="middle">' +
       esc(cfg.xLabel || 'Mês') +
       '</text>' +
-      '</svg></div>'
+      '</svg>' +
+      tableHtml +
+      '</div></div>'
     );
   }
 
