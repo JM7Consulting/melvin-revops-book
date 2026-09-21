@@ -559,8 +559,7 @@
           { key: 'morna', label: 'Reunião Morna ⚠️', color: '#f97316', values: [1, 4, 11, 4, 5, 8] },
           { key: 'quente', label: 'Reunião Quente 🔥', color: '#ef4444', values: [1, 2, 1, 0, 1, 2] },
           { key: 'cemiterio', label: 'Reunião Cemitério ☠️', color: '#475569', values: [2, 4, 1, 4, 4, 0] }
-        ],
-        showTable: true
+        ]
       },
       insights: [
         'Pico de volume em Jun e Ago (26 reuniões cada).',
@@ -1390,13 +1389,13 @@ function renderHeatmapViz(opts) {
     var series = cfg.series || [];
     var yMax = cfg.yMax || 25;
     var W = 920;
-    var H = 250;
-    var pad = { t: 36, r: 24, b: 56, l: 56 };
+    var H = 360;
+    var pad = { t: 40, r: 24, b: 58, l: 56 };
     var plotW = W - pad.l - pad.r;
     var plotH = H - pad.t - pad.b;
     var n = Math.max(months.length, 1);
     var gap = plotW / n;
-    var barW = Math.min(52, gap * 0.52);
+    var barW = Math.min(64, gap * 0.62);
 
     function yPos(v) {
       return pad.t + plotH - (Math.max(0, v) / yMax) * plotH;
@@ -1449,8 +1448,6 @@ function renderHeatmapViz(opts) {
       series.forEach(function (ser) {
         total += (ser.values && ser.values[mi]) || 0;
       });
-      // draw bottom → top: Cemitério at bottom? Image shows Fria at bottom (blue), then Morna, Quente, Cemitério on top
-      // Looking at image description: Fria blue bottom, Morna orange, Quente red, Cemitério gray top
       series.forEach(function (ser, si) {
         var v = (ser.values && ser.values[mi]) || 0;
         if (v <= 0) return;
@@ -1473,6 +1470,23 @@ function renderHeatmapViz(opts) {
           '" fill="' +
           esc(ser.color) +
           '" rx="2"/>';
+        // valor de cada segmento dentro da barra
+        var labelY = y1 + h / 2 + 4;
+        var labelClass = h >= 14 ? 'ar-stackq-segv' : 'ar-stackq-segv ar-stackq-segv--tiny';
+        bars +=
+          '<text class="' +
+          labelClass +
+          '" style="--i:' +
+          mi +
+          ';--si:' +
+          si +
+          '" x="' +
+          cx +
+          '" y="' +
+          labelY +
+          '" text-anchor="middle">' +
+          v +
+          '</text>';
         stack += v;
       });
       bars +=
@@ -1499,80 +1513,12 @@ function renderHeatmapViz(opts) {
         '</text>';
     });
 
-    var tableHtml = '';
-    if (cfg.showTable !== false) {
-      var colTotals = series.map(function () {
-        return 0;
-      });
-      var grand = 0;
-      var head =
-        '<th>Mês</th>' +
-        series
-          .map(function (ser) {
-            return (
-              '<th><i style="background:' +
-              esc(ser.color) +
-              '"></i>' +
-              esc(ser.label) +
-              '</th>'
-            );
-          })
-          .join('') +
-        '<th>Total Qualificado</th>';
-      var body = months
-        .map(function (m, mi) {
-          var rowTotal = 0;
-          var cells = series
-            .map(function (ser, si) {
-              var v = (ser.values && ser.values[mi]) || 0;
-              rowTotal += v;
-              colTotals[si] += v;
-              return '<td>' + v + '</td>';
-            })
-            .join('');
-          grand += rowTotal;
-          return (
-            '<tr style="--i:' +
-            mi +
-            '"><th scope="row">' +
-            esc(m) +
-            '</th>' +
-            cells +
-            '<td class="ar-stackq-td-total">' +
-            rowTotal +
-            '</td></tr>'
-          );
-        })
-        .join('');
-      var footCells = colTotals
-        .map(function (t) {
-          return '<td>' + t + '</td>';
-        })
-        .join('');
-      tableHtml =
-        '<div class="ar-stackq-table-wrap">' +
-        '<table class="ar-stackq-table">' +
-        '<thead><tr>' +
-        head +
-        '</tr></thead>' +
-        '<tbody>' +
-        body +
-        '</tbody>' +
-        '<tfoot><tr><th scope="row">TOTAL</th>' +
-        footCells +
-        '<td class="ar-stackq-td-total">' +
-        grand +
-        '</td></tr></tfoot>' +
-        '</table></div>';
-    }
-
     return (
       '<div class="ar-stackq ar-stackq--live">' +
       '<p class="ar-stackq-title">' +
       esc(cfg.chartTitle || 'Evolução Mensal da Qualidade') +
       '</p>' +
       legend +
-      '<div class="ar-stackq-body">' +
       '<svg class="ar-stackq-svg" viewBox="0 0 ' +
       W +
       ' ' +
@@ -1612,9 +1558,7 @@ function renderHeatmapViz(opts) {
       '" text-anchor="middle">' +
       esc(cfg.xLabel || 'Mês') +
       '</text>' +
-      '</svg>' +
-      tableHtml +
-      '</div></div>'
+      '</svg></div>'
     );
   }
 
