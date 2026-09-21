@@ -748,20 +748,55 @@
       type: 'matrix',
       title: 'PRODUTIVIDADE MENSAL',
       badge: 'TOTAL',
-      note: 'Equipe · ' + AR_PERIOD.label + ' · dados em atualização',
-      columns: MX_MONTHS.slice(),
-      rows: mxRows(
-        [
-          'Atividades concluídas',
-          'Atividades com atraso (percentual)',
-          'Ligações atendidas',
-          'Agendamentos',
-          'Reuniões realizadas (70%)',
-          'Qualidade das reuniões',
-          'Vendas (Inb+Out+CS) (20%)'
-        ],
-        MX_MONTHS.length
-      )
+      note: AR_PERIOD.label + ' · equipe · valores zerados',
+      dailyAvg: true,
+      columns: MX_MONTHS_PEOPLE.slice(),
+      bdays: MX_BDAYS_PEOPLE,
+      rows: mxProdRows({
+        concluidas: {
+          values: ['0', '0', '0', '0', '0']
+        },
+        atraso: {
+          values: ['0%', '0%', '0%', '0%', '0%']
+        },
+        ligIni: {
+          values: ['0', '0', '0', '0', '0']
+        },
+        ligAte: {
+          values: ['0', '0', '0', '0', '0']
+        },
+        lig30: {
+          values: ['0', '0', '0', '0', '0']
+        },
+        agenda: {
+          values: ['0', '0', '0', '0', '0']
+        },
+        reuniao: {
+          values: ['0', '0', '0', '0', '0']
+        },
+        cancel: {
+          values: ['0', '0', '0', '0', '0']
+        },
+        noshow: {
+          values: ['0', '0', '0', '0', '0']
+        },
+        fria: {
+          values: ['0', '0', '0', '0', '0']
+        },
+        morna: {
+          values: ['0', '0', '0', '0', '0']
+        },
+        quente: {
+          values: ['0', '0', '0', '0', '0']
+        },
+        cemiterio: {
+          values: ['0', '0', '0', '0', '0']
+        },
+        vendas: {
+          label: 'Vendas (Fechamentos Reais)',
+          values: ['0', '0', '0', '0', '0']
+        }
+      }, MX_MONTHS_PEOPLE.length)
     },
     {
       type: 'matrix',
