@@ -129,8 +129,8 @@
   var MX_BDAYS_PEOPLE = MX_MONTH_IDX_PEOPLE.map(function (mi) {
     return countBusinessDays(AR_PERIOD.year, mi);
   });
-  var MX_MONTHS_TOTAL = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro'];
-  var MX_BDAYS_TOTAL = [22, 18, 22, 21, 21, 22, 23, 21, 22];
+  var MX_MONTHS_TOTAL = ['Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro'];
+  var MX_BDAYS_TOTAL = [21, 21, 22, 23, 21, 22];
 
   function mxEmpty(n) {
     var out = [];
@@ -749,53 +749,53 @@
       type: 'matrix',
       title: 'PRODUTIVIDADE MENSAL',
       badge: 'TOTAL',
-      note: 'Equipe · Jan–Set · ' + AR_PERIOD.label,
+      note: 'Equipe · Abr–Set · ' + AR_PERIOD.label,
       dailyAvg: true,
       columns: MX_MONTHS_TOTAL.slice(),
       bdays: MX_BDAYS_TOTAL,
       rows: mxProdRows({
         concluidas: {
-          values: ['', '', '6', '116', '9.878', '', '', '', '']
+          values: ['116', '9.878', '', '', '', '']
         },
         atraso: {
-          values: ['', '', '', '', '', '', '', '', '']
+          values: ['', '', '', '', '', '']
         },
         ligIni: {
-          values: ['', '', '', '', '', '', '', '', '']
+          values: ['', '', '', '', '', '']
         },
         ligAte: {
-          values: ['', '', '', '', '', '', '', '', '']
+          values: ['', '', '', '', '', '']
         },
         lig30: {
-          values: ['', '', '', '', '', '', '', '', '']
+          values: ['', '', '', '', '', '']
         },
         agenda: {
-          values: ['', '', '', '7', '21', '26', '31', '30', '26']
+          values: ['7', '21', '26', '31', '30', '26']
         },
         reuniao: {
-          values: ['', '', '', '7', '21', '26', '28', '27', '24']
+          values: ['7', '21', '26', '28', '27', '24']
         },
         cancel: {
-          values: ['', '', '', '', '', '', '3', '2', '2']
+          values: ['', '', '', '3', '2', '2']
         },
         noshow: {
-          values: ['', '', '', '', '', '', '', '1', '']
+          values: ['', '', '', '', '1', '']
         },
         fria: {
-          values: ['', '', '', '3', '11', '13', '12', '16', '10']
+          values: ['3', '11', '13', '12', '16', '10']
         },
         morna: {
-          values: ['', '', '', '1', '4', '11', '4', '5', '8']
+          values: ['1', '4', '11', '4', '5', '8']
         },
         quente: {
-          values: ['', '', '', '1', '2', '1', '', '1', '2']
+          values: ['1', '2', '1', '', '1', '2']
         },
         cemiterio: {
-          values: ['', '', '', '2', '4', '1', '4', '4', '']
+          values: ['2', '4', '1', '4', '4', '']
         },
         vendas: {
           label: 'Vendas (Contratos Reais)',
-          values: ['8', '13', '9', '11', '5', '', '1', '1', '']
+          values: ['11', '5', '', '1', '1', '']
         }
       }, MX_MONTHS_TOTAL.length)
     },
