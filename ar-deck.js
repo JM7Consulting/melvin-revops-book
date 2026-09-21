@@ -815,107 +815,83 @@
     },
     {
       type: 'matrix',
-      title: 'FASE / ETAPA',
-      badge: 'INBOUND',
-      note: 'Distribuição por fase · funil inbound · ' + AR_PERIOD.label,
-      corner: 'FASE / ETAPA',
+      title: 'FLUXO DE CONVERSÃO (DE ➔ PARA)',
+      badge: 'SDR',
+      note: 'Funil SDR · conversão etapa a etapa · ' + AR_PERIOD.label,
+      corner: 'FLUXO DE CONVERSÃO (DE ➔ PARA)',
       columns: MX_MONTHS.slice(),
       rows: mxPhaseRows([
         {
-          label: 'Novo Lead Inbound',
-          values: ['—', '—', '—', '—', '—', '—', '0,9%']
+          label: '01. De "Novo Lead" ➔ "Em Qualificação"',
+          values: ['100%', '100%', '100%', '100%', '100%', '100%', '99,1%']
         },
         {
-          label: 'Em Qualificação',
-          values: ['—', '—', '—', '—', '—', '—', '0,9%']
+          label: '02. De "Em Qualificação" ➔ "Tentativa de Agendamento"',
+          values: ['100%', '100%', '100%', '100%', '100%', '100%', '98,2%']
         },
         {
-          label: 'Tentativas de Agendamento',
-          values: ['—', '—', '1,3%', '3,1%', '1,8%', '2,2%', '7,3%']
+          label: '03. De "Tentativa de Agendamento" ➔ "Reunião Marcada"',
+          values: ['100%', '100%', '98,7%', '96,9%', '98,2%', '97,8%', '90,9%']
         },
         {
-          label: 'Reunião Agendada',
-          values: ['—', '—', '—', '—', '—', '1,3%', '4,5%']
+          label: '04. De "Reunião Marcada" ➔ "Ganho (Reunião Realizada)"',
+          values: ['100%', '100%', '96,7%', '90,1%', '89,5%', '84,9%', '73,6%']
         },
         {
-          label: 'Proposta / Validação',
-          values: ['—', '—', '—', '—', '—', '—', '1,8%']
-        },
-        {
-          label: 'Aguardando Reunião',
-          values: ['—', '—', '2,0%', '1,6%', '—', '1,8%', '8,2%']
-        },
-        {
-          label: 'Ganho (Reunião Realizada)',
-          values: ['100,0%', '100,0%', '96,7%', '90,1%', '89,5%', '84,9%', '73,6%']
-        },
-        {
-          label: 'Perdido / Desqualificado',
-          values: ['—', '—', '—', '5,2%', '8,8%', '9,8%', '2,7%']
+          label: 'Perda Acumulada no Caminho (% Descarte)',
+          values: ['0%', '0%', '3,3%', '9,9%', '10,5%', '15,1%', '26,4%']
         }
       ])
     },
     {
       type: 'matrix',
-      title: 'FASE / ETAPA',
-      badge: 'OUTBOUND',
-      note: 'Distribuição por fase · funil outbound · ' + AR_PERIOD.label,
-      corner: 'FASE / ETAPA',
+      title: 'FLUXO DE CONVERSÃO (DE ➔ PARA)',
+      badge: 'BDR',
+      note: 'Funil BDR · conversão etapa a etapa · ' + AR_PERIOD.label,
+      corner: 'FLUXO DE CONVERSÃO (DE ➔ PARA)',
       columns: MX_MONTHS.slice(),
       rows: mxPhaseRows([
         {
-          label: 'Em Prospecção Ativa',
-          values: ['—', '—', '0,4%', '—', '—', '—', '—']
+          label: '01. De "Prospecção Ativa" ➔ "Contato Efetivado"',
+          values: ['—', '—', '100%', '—', '—', '—', '—']
         },
         {
-          label: 'Ganho (Agendamento Realizado)',
+          label: '02. De "Contato Efetivado" ➔ "Ganho (Agendamento BDR)"',
           values: ['—', '—', '99,6%', '—', '—', '—', '—']
+        },
+        {
+          label: 'Perda Acumulada no Caminho (% Descarte)',
+          values: ['—', '—', '0,4%', '—', '—', '—', '—']
         }
       ])
     },
     {
       type: 'matrix',
-      title: 'FASE / ETAPA',
-      badge: 'OPORTUNIDADES',
-      note: 'Distribuição por fase · pipeline comercial · ' + AR_PERIOD.label,
-      corner: 'FASE / ETAPA',
+      title: 'FLUXO DE CONVERSÃO (DE ➔ PARA)',
+      badge: 'CLOSER',
+      note: 'Funil Closer · conversão etapa a etapa · ' + AR_PERIOD.label,
+      corner: 'FLUXO DE CONVERSÃO (DE ➔ PARA)',
       columns: MX_MONTHS.slice(),
       rows: mxPhaseRows([
         {
-          label: 'Nova Oportunidade',
-          values: ['—', '—', '0,2%', '—', '—', '—', '—']
+          label: '01. De "Oportunidade Recebida" ➔ "Reunião de Vendas Executada"',
+          values: ['100%', '100%', '99,8%', '100%', '100%', '100%', '100%']
         },
         {
-          label: 'Reunião de Vendas',
-          values: ['—', '—', '2,6%', '50,0%', '—', '—', '—']
+          label: '02. De "Reunião Executada" ➔ "Diagnóstico / Proposta Enviada"',
+          values: ['0%', '100%', '97,2%', '50%', '100%', '100%', '100%']
         },
         {
-          label: 'Diagnóstico / Mapeamento',
-          values: ['—', '—', '3,9%', '—', '—', '—', '—']
+          label: '03. De "Proposta Enviada" ➔ "Em Fechamento / Contrato"',
+          values: ['0%', '100%', '92,5%', '0%', '100%', '100%', '100%']
         },
         {
-          label: 'Proposta Comercial',
-          values: ['—', '—', '0,8%', '—', '—', '100,0%', '—']
+          label: '04. De "Em Fechamento" ➔ "Ganho (Contrato Pago / Receita)"',
+          values: ['0%', '25,0%', '11,9%', '0%', '0%', '0%', '0%']
         },
         {
-          label: 'Em Fechamento',
-          values: ['—', '—', '0,6%', '—', '—', '—', '—']
-        },
-        {
-          label: 'Aguardando Assinatura',
-          values: ['—', '—', '0,3%', '—', '—', '—', '100,0%']
-        },
-        {
-          label: 'Pendente / Em Pausa',
-          values: ['—', '—', '0,2%', '50,0%', '—', '—', '—']
-        },
-        {
-          label: 'Ganho (Venda Realizada / Receita)',
-          values: ['—', '25,0%', '11,9%', '—', '—', '—', '—']
-        },
-        {
-          label: 'Perdido (Sem Fechamento)',
-          values: ['100,0%', '75,0%', '79,7%', '—', '—', '—', '—']
+          label: 'Perda Acumulada no Caminho (% Perdidos)',
+          values: ['100%', '75,0%', '88,1%', '100%', '100%', '100%', '100%']
         }
       ])
     },
