@@ -14997,6 +14997,32 @@ body.light-mode .ar-deck:-webkit-full-screen {
   min-height: 0;
   height: 100%;
 }
+.ar-mx-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+  min-height: 0;
+  height: 100%;
+}
+.ar-mx-stack .ar-mx {
+  height: auto;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+.ar-mx-stack .ar-mx-insights {
+  flex: 0 0 auto;
+}
+.ar-mx--with-insights .ar-mx-body {
+  gap: 4px;
+}
+.ar-mx--with-insights .ar-mx-label-text {
+  font-size: clamp(0.58rem, 1.15cqw, 0.72rem);
+}
+.ar-mx-insights li {
+  padding: 6px 10px 6px 12px;
+  font-size: clamp(0.62rem, 1.2cqw, 0.76rem);
+}
 .ar-mx-head,
 .ar-mx-row {
   display: grid;

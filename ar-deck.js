@@ -896,6 +896,84 @@
       ])
     },
     {
+      type: 'matrix',
+      title: 'PRODUÇÃO × CONVERSÃO',
+      badge: 'SDR',
+      note: 'Gaby (agenda/reuniões) × funil SDR · Mai–Set · ' + AR_PERIOD.label,
+      corner: 'Indicador',
+      columns: MX_MONTHS_PEOPLE.slice(),
+      rows: mxPhaseRows([
+        {
+          label: 'Agendamentos (Gaby)',
+          values: ['30', '35', '49', '42', '41']
+        },
+        {
+          label: 'Reuniões realizadas (Gaby)',
+          values: ['30', '35', '46', '39', '39']
+        },
+        {
+          label: 'Show-up operacional (reunião / agenda)',
+          values: ['100%', '100%', '93,9%', '92,9%', '95,1%']
+        },
+        {
+          label: 'SDR 03 · Tentativa ➔ Reunião Marcada',
+          values: ['98,7%', '96,9%', '98,2%', '97,8%', '90,9%']
+        },
+        {
+          label: 'SDR 04 · Marcada ➔ Ganho (Reunião Realizada)',
+          values: ['96,7%', '90,1%', '89,5%', '84,9%', '73,6%']
+        },
+        {
+          label: 'Perda acumulada SDR (% Descarte)',
+          values: ['3,3%', '9,9%', '10,5%', '15,1%', '26,4%']
+        }
+      ]),
+      insights: [
+        'Volume não é o vilão: Jul–Set a Gaby mantém 39–46 reuniões, mas Marcada→Ganho cai de 96,7% (Mai) para 73,6% (Set).',
+        'Set é o alerta vermelho do ciclo: 41 agendas com perda acumulada de 26,4% (era 3,3% em Mai) — descarte sobe com agenda ainda alta.',
+        'Show-up operacional da Gaby fica entre 93% e 100%: o rombo está depois de marcar, no funil SDR — não no comparecimento dela.'
+      ]
+    },
+    {
+      type: 'matrix',
+      title: 'RECEITA · TICKET · WIN RATE',
+      badge: 'CLOSER',
+      note: 'Vendas/faturamento Closers+CS · win rate do funil CLOSER · Mar–Set · ' + AR_PERIOD.label,
+      corner: 'Indicador',
+      columns: MX_MONTHS.slice(),
+      rows: mxPhaseRows([
+        {
+          label: 'Vendas financeiras (Closers + CS)',
+          values: ['9', '12', '10', '9', '9', '5', '1']
+        },
+        {
+          label: 'Faturamento realizado',
+          values: ['R$ 30k', 'R$ 14k', 'R$ 22k', 'R$ 18k', 'R$ 16k', 'R$ 40k', 'R$ 2k']
+        },
+        {
+          label: 'Ticket médio (fat. / vendas)',
+          values: ['R$ 3,3k', 'R$ 1,2k', 'R$ 2,2k', 'R$ 2,0k', 'R$ 1,8k', 'R$ 8,0k', 'R$ 2,0k']
+        },
+        {
+          label: 'Win rate do funil (100% − perda acumulada)',
+          values: ['0%', '25,0%', '11,9%', '0%', '0%', '0%', '0%']
+        },
+        {
+          label: '04 · Em Fechamento ➔ Ganho (Contrato Pago)',
+          values: ['0%', '25,0%', '11,9%', '0%', '0%', '0%', '0%']
+        },
+        {
+          label: 'Perda acumulada no caminho (% Perdidos)',
+          values: ['100%', '75,0%', '88,1%', '100%', '100%', '100%', '100%']
+        }
+      ]),
+      insights: [
+        'Ago prova que ticket manda: 5 vendas / R$ 40k (ticket R$ 8k) vs Abr com 12 vendas / só R$ 14k (ticket R$ 1,2k).',
+        'Win rate do funil Closer só “respira” em Abr (25%) e Mai (11,9%); Mar e Jun–Set fecham o caminho em 0% de ganho.',
+        'Set é o fundo do poço: 1 venda / R$ 2k e 100% de perda acumulada — volume e conversão de fechamento colapsam juntos.'
+      ]
+    },
+    {
       type: 'section',
       num: '03',
       kicker: 'Bloco',
@@ -1310,11 +1388,25 @@
     var inner =
       '<div class="ar-mx' +
       (withAvg ? ' ar-mx--avg' : '') +
+      (s.insights && s.insights.length ? ' ar-mx--with-insights' : '') +
       '">' +
       head +
       '<div class="ar-mx-body">' +
       body +
       '</div></div>';
+    if (s.insights && s.insights.length) {
+      var mxInsights = s.insights
+        .map(function (t) {
+          return '<li>' + esc(t) + '</li>';
+        })
+        .join('');
+      inner =
+        '<div class="ar-mx-stack">' +
+        inner +
+        '<ul class="ar-viz-insights ar-mx-insights">' +
+        mxInsights +
+        '</ul></div>';
+    }
     return arPanelShell('matrix', s, inner);
   }
 
