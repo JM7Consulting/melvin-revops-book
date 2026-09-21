@@ -570,6 +570,33 @@
     {
       type: 'viz',
       title: 'PRODUTIVIDADE MENSAL',
+      midKicker: 'ANÁLISE DE VENDAS',
+      indicator: 'Evolução Mensal: Vendas Reais vs. Faturamento',
+      person: 'Fabrício Luiz',
+      note: 'Closers + CS · volume financeiro real × faturamento · ' + AR_PERIOD.label,
+      viz: 'dual',
+      dual: {
+        chartTitle: 'Evolução Mensal: Vendas Reais vs. Faturamento (2026)',
+        volLabel: 'Vendas Financeiras Reais (Closers + CS)',
+        revLabel: 'Faturamento Realizado (R$)',
+        xLabel: 'Mês de Fechamento',
+        months: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set'],
+        volume: [8, 13, 9, 12, 10, 9, 9, 5, 1],
+        revenue: [8000, 105000, 30000, 14000, 22000, 18000, 16000, 40000, 2000],
+        volMax: 14,
+        revMax: 110000,
+        volTicks: [0, 2, 4, 6, 8, 10, 12, 14],
+        revTicks: [0, 20000, 40000, 60000, 80000, 100000]
+      },
+      insights: [
+        'Fev é o pico absoluto: R$ 105k com 13 vendas — ticket médio muito alto.',
+        'Abr entrega 12 vendas mas só R$ 14k — volume sem faturamento.',
+        'Alerta: Set quase zera (1 venda / R$ 2k); Ago recupera ticket (5 vendas / R$ 40k).'
+      ]
+    },
+    {
+      type: 'viz',
+      title: 'PRODUTIVIDADE MENSAL',
       midKicker: 'ANÁLISE DE REUNIÕES',
       indicator: 'Conversão e Qualidade das Reuniões',
       person: 'Fabrício Luiz',
@@ -1713,9 +1740,12 @@ function renderHeatmapViz(opts) {
     var revenue = d.revenue || [];
     var volMax = d.volMax || 700;
     var revMax = d.revMax || 110000;
+    var volLabel = d.volLabel || 'Quantidade de Vendas';
+    var revLabel = d.revLabel || 'Faturamento (R$)';
+    var xLabel = d.xLabel || 'Mês de Fechamento';
     var W = 920;
     var H = 340;
-    var pad = { t: 36, r: 56, b: 48, l: 52 };
+    var pad = { t: d.chartTitle ? 48 : 36, r: 56, b: 48, l: 56 };
     var plotW = W - pad.l - pad.r;
     var plotH = H - pad.t - pad.b;
     var n = months.length || 1;
@@ -1729,8 +1759,9 @@ function renderHeatmapViz(opts) {
       return pad.t + plotH - (v / revMax) * plotH;
     }
 
+    var volTicks = d.volTicks || [0, 100, 200, 300, 400, 500, 600, 700];
+    var revTicks = d.revTicks || [0, 20000, 40000, 60000, 80000, 100000];
     var grid = '';
-    var volTicks = [0, 100, 200, 300, 400, 500, 600, 700];
     volTicks.forEach(function (t) {
       var y = yVol(t);
       grid +=
@@ -1752,7 +1783,6 @@ function renderHeatmapViz(opts) {
         t +
         '</text>';
     });
-    var revTicks = [0, 20000, 40000, 60000, 80000, 100000];
     revTicks.forEach(function (t) {
       var y = yRev(t);
       grid +=
@@ -1836,9 +1866,16 @@ function renderHeatmapViz(opts) {
 
     return (
       '<div class="ar-dual ar-dual--live">' +
+      (d.chartTitle
+        ? '<p class="ar-dual-title">' + esc(d.chartTitle) + '</p>'
+        : '') +
       '<ul class="ar-dual-legend">' +
-      '<li><i class="ar-dual-leg--vol"></i><span>Quantidade de Vendas</span></li>' +
-      '<li><i class="ar-dual-leg--rev"></i><span>Faturamento (R$)</span></li>' +
+      '<li><i class="ar-dual-leg--vol"></i><span>' +
+      esc(volLabel) +
+      '</span></li>' +
+      '<li><i class="ar-dual-leg--rev"></i><span>' +
+      esc(revLabel) +
+      '</span></li>' +
       '</ul>' +
       '<svg class="ar-dual-svg" viewBox="0 0 ' +
       W +
@@ -1881,7 +1918,9 @@ function renderHeatmapViz(opts) {
       (pad.t + plotH / 2) +
       '" text-anchor="middle" transform="rotate(-90 14 ' +
       (pad.t + plotH / 2) +
-      ')">Quantidade de Vendas</text>' +
+      ')">' +
+      esc(volLabel) +
+      '</text>' +
       '<text class="ar-dual-axis-title ar-dual-axis-title--r" x="' +
       (W - 12) +
       '" y="' +
@@ -1890,12 +1929,16 @@ function renderHeatmapViz(opts) {
       (W - 12) +
       ' ' +
       (pad.t + plotH / 2) +
-      ')">Faturamento (R$)</text>' +
+      ')">' +
+      esc(revLabel) +
+      '</text>' +
       '<text class="ar-dual-axis-title" x="' +
       (pad.l + plotW / 2) +
       '" y="' +
       (H - 2) +
-      '" text-anchor="middle">Mês de Fechamento</text>' +
+      '" text-anchor="middle">' +
+      esc(xLabel) +
+      '</text>' +
       '</svg></div>'
     );
   }

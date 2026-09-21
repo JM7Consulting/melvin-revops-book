@@ -17273,3 +17273,13 @@ body.light-mode .ar-deck-jump-btn {
     animation: none !important;
   }
 }
+
+.ar-dual-title {
+  margin: 0 0 2px;
+  text-align: center;
+  font-family: Sora, Manrope, system-ui, sans-serif;
+  font-size: clamp(0.78rem, 1.45cqw, 0.95rem);
+  font-weight: 750;
+  color: #0f172a;
+  letter-spacing: -0.01em;
+}
