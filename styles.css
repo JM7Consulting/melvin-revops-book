@@ -2135,6 +2135,15 @@ body.light-mode .dev-eta-label { color: #b45309; }
     background: #34d399;
     box-shadow: 0 0 10px #34d399;
 }
+.waiting-badge--pendente {
+    color: #fecdd3;
+    background: rgba(225, 29, 72, 0.16);
+    border-color: rgba(251, 113, 133, 0.45);
+}
+.waiting-badge--pendente .pulse {
+    background: #fb7185;
+    box-shadow: 0 0 10px #fb7185;
+}
 .dev-eta--done {
     border-color: rgba(52, 211, 153, 0.35);
     background: rgba(52, 211, 153, 0.08);
@@ -6511,6 +6520,66 @@ button.rm-stepper-item:hover > small { color: #fdba74; }
 .rm-focus-card--pendente .rm-tag,
 .rm-tag--pendente { color: #fda4af; background: rgba(251, 113, 133, 0.18); }
 .rm-tag--backlog { color: #fdba74; background: rgba(251, 146, 60, 0.15); }
+
+/* Badge · Pendente (Relatórios Bitrix24 etc.) */
+.rm-badge-pendente {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-left: 8px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-family: Sora, Manrope, sans-serif;
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  line-height: 1.2;
+  color: #fff1f2;
+  background: linear-gradient(135deg, #e11d48 0%, #fb7185 100%);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  box-shadow: 0 0 0 1px rgba(225, 29, 72, 0.35), 0 4px 12px rgba(225, 29, 72, 0.28);
+  vertical-align: middle;
+}
+.rm-focus-card--pendente .rm-tag.rm-tag--pendente,
+.rm-tag.rm-tag--pendente {
+  color: #fff1f2;
+  background: linear-gradient(135deg, #e11d48 0%, #fb7185 100%);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  box-shadow: 0 0 0 1px rgba(225, 29, 72, 0.35), 0 4px 12px rgba(225, 29, 72, 0.28);
+  padding: 4px 11px;
+  letter-spacing: 0.08em;
+}
+.ops-card-title-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.ops-card-title-row strong { margin: 0; }
+.rm-cat-copy .rm-badge-pendente {
+  margin-left: 6px;
+  margin-top: 2px;
+}
+.rm-due-card .rm-badge-pendente {
+  margin-left: 0;
+  margin-bottom: 4px;
+}
+.rm-bar em.rm-badge-pendente,
+.rm-bar .rm-badge-pendente {
+  margin-left: auto;
+  width: auto;
+  height: auto;
+  background: linear-gradient(135deg, #e11d48 0%, #fb7185 100%);
+  color: #fff1f2;
+  font-style: normal;
+  opacity: 1;
+}
+body.light-mode .rm-badge-pendente,
+body.light-mode .rm-tag.rm-tag--pendente {
+  color: #fff;
+}
 
 /* ---- Roadmap cockpit · desk tabs ---- */
 .rm-desk-nav {
