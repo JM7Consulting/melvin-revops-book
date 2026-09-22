@@ -2060,6 +2060,167 @@ body.light-mode .waiting-page {
     border-color: rgba(15, 23, 42, 0.15);
 }
 
+/* Lusha × Apollo.io · quadro só na página da entrega */
+.tool-compare-page {
+    max-width: 920px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: left;
+    align-items: stretch;
+}
+.tool-compare-page .waiting-badge,
+.tool-compare-page > h2 {
+    align-self: center;
+    text-align: center;
+}
+.tool-compare-page > p {
+    max-width: none;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+.tool-compare-page .dev-eta {
+    align-self: center;
+}
+.tool-compare-verdict {
+    margin: 22px 0 8px;
+    padding: 16px 18px;
+    border-radius: 14px;
+    border: 1px solid rgba(20, 184, 166, 0.35);
+    background: rgba(20, 184, 166, 0.08);
+}
+.tool-compare-verdict-kicker {
+    display: block;
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #5eead4;
+    margin-bottom: 6px;
+}
+.tool-compare-verdict strong {
+    display: block;
+    font-family: Sora, Manrope, sans-serif;
+    font-size: 1.05rem;
+    color: var(--text-main);
+    margin-bottom: 8px;
+}
+.tool-compare-verdict p {
+    margin: 0;
+    max-width: none;
+    text-align: left;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+.tool-compare-title {
+    margin: 22px 0 10px;
+    font-family: Sora, Manrope, sans-serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text-main);
+}
+.tool-compare-wrap {
+    overflow-x: auto;
+    border-radius: 14px;
+    border: 1px solid rgba(148, 163, 184, 0.22);
+    background: rgba(2, 8, 16, 0.45);
+}
+.tool-compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 640px;
+    font-size: 0.82rem;
+}
+.tool-compare-table th,
+.tool-compare-table td {
+    padding: 12px 14px;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.14);
+    vertical-align: top;
+    line-height: 1.45;
+    text-align: left;
+}
+.tool-compare-table thead th {
+    background: rgba(15, 23, 42, 0.9);
+    font-family: Sora, Manrope, sans-serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #94a3b8;
+    position: sticky;
+    top: 0;
+}
+.tool-compare-table tbody th[scope="row"] {
+    width: 22%;
+    font-weight: 700;
+    color: #e2e8f0;
+    background: rgba(15, 23, 42, 0.35);
+}
+.tool-compare-table td {
+    width: 39%;
+    color: #cbd5e1;
+}
+.tool-compare-table td.is-win {
+    background: rgba(20, 184, 166, 0.07);
+    color: #e2e8f0;
+}
+.tool-compare-table tbody tr:last-child th,
+.tool-compare-table tbody tr:last-child td {
+    border-bottom: none;
+}
+.tc-pill {
+    display: inline-flex;
+    align-items: center;
+    margin-right: 6px;
+    margin-bottom: 4px;
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-size: 0.62rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+.tc-pill--win {
+    color: #042f2e;
+    background: #5eead4;
+}
+.tool-compare-notes ul {
+    margin: 0;
+    padding-left: 1.15rem;
+    color: var(--text-muted);
+    font-size: 0.88rem;
+    line-height: 1.55;
+}
+.tool-compare-notes li + li { margin-top: 8px; }
+.tool-compare-notes strong { color: #e2e8f0; }
+
+body.light-mode .tool-compare-verdict {
+    background: rgba(13, 148, 136, 0.08);
+    border-color: rgba(13, 148, 136, 0.28);
+}
+body.light-mode .tool-compare-verdict-kicker { color: #0f766e; }
+body.light-mode .tool-compare-verdict strong,
+body.light-mode .tool-compare-title,
+body.light-mode .tool-compare-notes strong { color: #0f172a; }
+body.light-mode .tool-compare-wrap {
+    background: #fff;
+    border-color: rgba(15, 23, 42, 0.12);
+}
+body.light-mode .tool-compare-table thead th {
+    background: #f1f5f9;
+    color: #64748b;
+}
+body.light-mode .tool-compare-table tbody th[scope="row"] {
+    background: #f8fafc;
+    color: #0f172a;
+}
+body.light-mode .tool-compare-table td { color: #334155; }
+body.light-mode .tool-compare-table td.is-win {
+    background: rgba(13, 148, 136, 0.08);
+    color: #0f172a;
+}
+body.light-mode .tool-compare-notes ul { color: #475569; }
+
 body.light-mode .waiting-badge {
     color: #0369a1;
     background: rgba(14, 165, 233, 0.1);

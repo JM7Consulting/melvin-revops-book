@@ -5,10 +5,10 @@ alwaysApply: true
 
 # Roadmap · tarefa em foco
 
-Trabalho atual da lista de tarefas: **Comparação e escolha entre Lucha e Apollo** (`#dev-lucha-apollo`) · vencimento **23/09/2026**.
+Trabalho atual da lista de tarefas: **Comparação e escolha entre Lusha e Apollo.io** (`#dev-lusha-apollo`) · vencimento **23/09/2026**.
 
 **Relatórios Bitrix24** está com tag **Pendente** e aponta para `#ar-atual` (deck AR 2026) — não tratar como “Agora”.
 
-Quando o usuário pedir para **atualizar o roadmap** (Visão, Backlog, Índice, Ops, datas, status, “Agora/Próximo”), tratar **Lucha × Apollo** como o item em foco — não marcar como entregue nem tirar do “Agora” sem pedido explícito.
+Quando o usuário pedir para **atualizar o roadmap** (Visão, Backlog, Índice, Ops, datas, status, “Agora/Próximo”), tratar **Lusha × Apollo.io** como o item em foco — não marcar como entregue nem tirar do “Agora” sem pedido explícito.
 
 Outros itens (ex.: Nutrição Out, AR Bitrix) só mudam de status se o usuário pedir.
