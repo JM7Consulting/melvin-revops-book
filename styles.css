@@ -2082,6 +2082,79 @@ body.light-mode .waiting-page {
 .tool-compare-page .dev-eta {
     align-self: center;
 }
+
+/* Relatório entregue · layout documento (sem fundo WIP) */
+.tool-report {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 8px 4px 24px;
+    text-align: left;
+}
+.tool-report-head {
+    margin-bottom: 22px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.22);
+}
+.tool-report-head-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 14px;
+}
+.tool-report-head-top .waiting-badge {
+    margin-bottom: 0;
+}
+.tool-report-date {
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: #94a3b8;
+}
+.tool-report-kicker {
+    margin: 0 0 6px;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #5eead4;
+    max-width: none !important;
+    text-align: left !important;
+}
+.tool-report-head h2 {
+    margin: 0 0 10px;
+    font-family: Sora, Manrope, sans-serif;
+    font-size: clamp(1.35rem, 2.4vw, 1.85rem);
+    line-height: 1.2;
+    color: var(--text-main);
+    text-align: left;
+}
+.tool-report-lead {
+    margin: 0 0 16px;
+    max-width: 62ch !important;
+    text-align: left !important;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    line-height: 1.55;
+}
+.tool-report-eta {
+    align-items: flex-start;
+    text-align: left;
+    min-width: 0;
+    width: 100%;
+    max-width: 420px;
+}
+.tool-report .waiting-meta {
+    margin-top: 28px;
+    text-align: left;
+}
+body.light-mode .tool-report-kicker { color: #0f766e; }
+body.light-mode .tool-report-date { color: #64748b; }
+body.light-mode .tool-report-head {
+    border-bottom-color: rgba(15, 23, 42, 0.12);
+}
+body.light-mode .tool-report-head h2 { color: #0f172a; }
+
 .tool-compare-verdict {
     margin: 22px 0 8px;
     padding: 16px 18px;
