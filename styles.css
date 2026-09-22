@@ -6492,6 +6492,7 @@ button.rm-stepper-item:hover > small { color: #fdba74; }
 .rm-focus-card--now { border-color: rgba(245, 158, 11, 0.45); background: rgba(245, 158, 11, 0.07); }
 .rm-focus-card--next { border-color: rgba(196, 181, 253, 0.45); background: rgba(196, 181, 253, 0.07); }
 .rm-focus-card--later { border-color: rgba(52, 211, 153, 0.35); background: rgba(52, 211, 153, 0.06); }
+.rm-focus-card--pendente { border-color: rgba(251, 113, 133, 0.45); background: rgba(251, 113, 133, 0.07); }
 
 .rm-tag {
   display: inline-block;
@@ -6507,6 +6508,8 @@ button.rm-stepper-item:hover > small { color: #fdba74; }
 .rm-focus-card--now .rm-tag { color: #fbbf24; background: rgba(245, 158, 11, 0.15); }
 .rm-focus-card--next .rm-tag { color: #c4b5fd; background: rgba(196, 181, 253, 0.15); }
 .rm-focus-card--later .rm-tag { color: #6ee7b7; background: rgba(52, 211, 153, 0.12); }
+.rm-focus-card--pendente .rm-tag,
+.rm-tag--pendente { color: #fda4af; background: rgba(251, 113, 133, 0.18); }
 .rm-tag--backlog { color: #fdba74; background: rgba(251, 146, 60, 0.15); }
 
 /* ---- Roadmap cockpit · desk tabs ---- */
