@@ -2184,6 +2184,18 @@ body.light-mode .waiting-page {
     color: #042f2e;
     background: #5eead4;
 }
+.tc-pill--also {
+    color: #1e3a8a;
+    background: #93c5fd;
+}
+.tool-compare-footnote {
+    margin: 8px 0 0;
+    max-width: none !important;
+    text-align: left !important;
+    font-size: 0.72rem !important;
+    color: #94a3b8 !important;
+    opacity: 0.9;
+}
 .tool-compare-notes ul {
     margin: 0;
     padding-left: 1.15rem;
