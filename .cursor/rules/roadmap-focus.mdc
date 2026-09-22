@@ -5,10 +5,10 @@ alwaysApply: true
 
 # Roadmap · tarefa em foco
 
-Trabalho atual da lista de tarefas: **Comparação e escolha entre Lusha e Apollo.io** (`#dev-lusha-apollo`) · vencimento **23/09/2026**.
+**Comparação Lusha × Apollo.io** (`#dev-lusha-apollo`) está **entregue** (22/09/2026) · decisão: **manter Lusha**.
 
-**Relatórios Bitrix24** está com tag **Pendente** e aponta para `#ar-atual` (deck AR 2026) — não tratar como “Agora”.
+Próximo item acionável do backlog: **Nutrição Out personalizada** (`#dev-nutricao-out`) · prazo **31/10/2026**.
 
-Quando o usuário pedir para **atualizar o roadmap** (Visão, Backlog, Índice, Ops, datas, status, “Agora/Próximo”), tratar **Lusha × Apollo.io** como o item em foco — não marcar como entregue nem tirar do “Agora” sem pedido explícito.
+**Relatórios Bitrix24** continua com tag **Pendente** e aponta para `#ar-atual` — não tratar como “Agora” entregável do Roadmap.
 
-Outros itens (ex.: Nutrição Out, AR Bitrix) só mudam de status se o usuário pedir.
+Quando o usuário pedir para **atualizar o roadmap**, não reabrir Lusha × Apollo.io sem pedido explícito.
