@@ -6,7 +6,7 @@
     <title>REBUILD 7 | MELVIN</title>
     
 	<link rel="icon" type="image/png" href="logo_simples_removebcg.png">
-  <link rel="stylesheet" href="styles.css?v=matriz-174">
+  <link rel="stylesheet" href="styles.css?v=matriz-175">
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sora:wght@600;700;800&family=Carlito:ital,wght@0,400;0,700;1,400&family=Libre+Baskerville:wght@400;700&display=swap" rel="stylesheet">
@@ -382,20 +382,33 @@
             <header class="trn-head">
                 <p class="trn-kicker">Treinamento</p>
                 <h2 class="cadencia-title-line">Treinamentos</h2>
-                <p class="trn-lead">Lives gravadas e materiais de estudo da operação. Cada card junta a gravação e as anotações.</p>
+                <p class="trn-lead">Roleplays gravados e materiais de estudo da operação.</p>
             </header>
-            <div class="trn-list">
-                <article class="trn-card">
-                    <div class="trn-card-top">
-                        <span class="trn-type">Live</span>
-                    </div>
-                    <h3>Roleplay 01 - 23/09/2026</h3>
-                    <p>Gravação da reunião e anotações geradas pela IA.</p>
-                    <div class="trn-links">
-                        <a href="https://drive.google.com/file/d/19ixTJkMPCwd7XEWFROKONKH-7pQVyJ6H/view" target="_blank" rel="noopener noreferrer">Gravação</a>
-                        <a href="https://docs.google.com/document/d/1GuTVIVBia-Wc_Wlj8nFmidzs6P61FaTfJ8CA_71FsnM/edit?tab=t.y778gblye18i" target="_blank" rel="noopener noreferrer">Anotações da IA</a>
-                    </div>
-                </article>
+            <div class="crono-tabs trn-tabs" role="tablist" aria-label="Treinamentos">
+                <button type="button" class="crono-tab is-active" role="tab" aria-selected="true" data-trn-tab="roleplays">Roleplays</button>
+                <button type="button" class="crono-tab" role="tab" aria-selected="false" data-trn-tab="treinamentos">Treinamentos</button>
+            </div>
+            <div class="crono-panel is-active" data-trn-panel="roleplays" role="tabpanel">
+                <div class="trn-list">
+                    <article class="trn-card">
+                        <div class="trn-card-top">
+                            <span class="trn-type">Live</span>
+                        </div>
+                        <h3>Roleplay 01 - 23/09/2026</h3>
+                        <p>Gravação da reunião e anotações geradas pela IA.</p>
+                        <div class="trn-links">
+                            <a href="https://drive.google.com/file/d/19ixTJkMPCwd7XEWFROKONKH-7pQVyJ6H/view" target="_blank" rel="noopener noreferrer">Gravação</a>
+                            <a href="https://docs.google.com/document/d/1GuTVIVBia-Wc_Wlj8nFmidzs6P61FaTfJ8CA_71FsnM/edit?tab=t.y778gblye18i" target="_blank" rel="noopener noreferrer">Anotações da IA</a>
+                        </div>
+                    </article>
+                </div>
+            </div>
+            <div class="crono-panel" data-trn-panel="treinamentos" role="tabpanel" hidden>
+                <div class="waiting-page">
+                    <div class="waiting-badge"><span class="pulse"></span> Em breve</div>
+                    <h2>Treinamentos</h2>
+                    <p>Materiais de estudo entram aqui. Esta aba fica em espera até o primeiro treinamento.</p>
+                </div>
             </div>
         </section>
 
@@ -14353,8 +14366,8 @@ Um abraço!"
         </section>
 
 	</main>
-  <script src="ar-deck.js?v=matriz-174"></script>
-  <script src="app.js?v=matriz-174"></script>
+  <script src="ar-deck.js?v=matriz-175"></script>
+  <script src="app.js?v=matriz-175"></script>
   <script src="hire-matrix.js?v=matriz-66"></script>
   <script src="bonus-pve.js?v=matriz-66"></script>
 	

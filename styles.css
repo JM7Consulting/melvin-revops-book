@@ -2157,6 +2157,8 @@ body.light-mode .tool-report-head {
 body.light-mode .tool-report-head h2 { color: #0f172a; }
 
 .trn-page { max-width: 880px; }
+.trn-tabs { margin-top: 0; }
+.trn-page .waiting-page { margin-top: 8px; min-height: 42vh; }
 .trn-kicker {
     margin: 0 0 6px;
     font-size: 0.72rem;

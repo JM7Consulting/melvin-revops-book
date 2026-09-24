@@ -3315,6 +3315,30 @@ document.querySelectorAll('.obj-kit-page').forEach(initObjKit);
     });
 })();
 
+    (function initTrnTabs() {
+        const root = document.getElementById('treinamentos');
+        if (!root) return;
+        const tabs = root.querySelectorAll('[data-trn-tab]');
+        const panels = root.querySelectorAll('[data-trn-panel]');
+        function activate(id) {
+            if (id !== 'roleplays' && id !== 'treinamentos') id = 'roleplays';
+            tabs.forEach((t) => {
+                const on = t.getAttribute('data-trn-tab') === id;
+                t.classList.toggle('is-active', on);
+                t.setAttribute('aria-selected', on ? 'true' : 'false');
+            });
+            panels.forEach((panel) => {
+                const on = panel.getAttribute('data-trn-panel') === id;
+                panel.classList.toggle('is-active', on);
+                if (on) panel.removeAttribute('hidden');
+                else panel.setAttribute('hidden', '');
+            });
+        }
+        tabs.forEach((tab) => {
+            tab.addEventListener('click', () => activate(tab.getAttribute('data-trn-tab')));
+        });
+    })();
+
     // Cadência M&A · Fluxo / Nutrição / Recuperação tabs
     (function initMaCadTabs() {
         const root = document.getElementById('cadencia-ma');
