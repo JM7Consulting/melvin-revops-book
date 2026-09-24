@@ -278,6 +278,7 @@
         .nav-lane--out { --lane-accent: #a78bfa; }
         .nav-lane--abm { --lane-accent: #fb7185; }
         .nav-lane--close { --lane-accent: #fbbf24; }
+        .nav-lane--train { --lane-accent: #c4b5fd; }
 
         .nav-lane .sidebar-section-title {
             display: flex;
@@ -2154,6 +2155,75 @@ body.light-mode .tool-report-head {
     border-bottom-color: rgba(15, 23, 42, 0.12);
 }
 body.light-mode .tool-report-head h2 { color: #0f172a; }
+
+.trn-page { max-width: 880px; }
+.trn-kicker {
+    margin: 0 0 6px;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #c4b5fd;
+}
+.trn-head h2 { margin: 0 0 8px; }
+.trn-lead {
+    margin: 0 0 22px;
+    max-width: 58ch;
+    color: var(--text-muted);
+    line-height: 1.5;
+}
+.trn-list { display: flex; flex-direction: column; gap: 12px; }
+.trn-card {
+    padding: 16px 18px;
+    border-radius: 14px;
+    border: 1px solid rgba(196, 181, 253, 0.28);
+    background: rgba(15, 23, 42, 0.45);
+}
+.trn-card-top { margin-bottom: 8px; }
+.trn-type {
+    display: inline-flex;
+    padding: 3px 8px;
+    border-radius: 999px;
+    font-size: 0.62rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #1e1b4b;
+    background: #c4b5fd;
+}
+.trn-card h3 {
+    margin: 0 0 6px;
+    font-family: Sora, Manrope, sans-serif;
+    font-size: 1.05rem;
+    color: var(--text-main);
+}
+.trn-card p {
+    margin: 0 0 14px;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    line-height: 1.45;
+}
+.trn-links { display: flex; flex-wrap: wrap; gap: 8px; }
+.trn-links a {
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 12px;
+    border-radius: 999px;
+    text-decoration: none;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #e9d5ff;
+    border: 1px solid rgba(196, 181, 253, 0.4);
+    background: rgba(196, 181, 253, 0.1);
+}
+.trn-links a:hover { background: rgba(196, 181, 253, 0.2); }
+body.light-mode .trn-kicker { color: #6d28d9; }
+body.light-mode .trn-card {
+    background: #fff;
+    border-color: rgba(109, 40, 217, 0.18);
+}
+body.light-mode .trn-card h3 { color: #0f172a; }
+body.light-mode .trn-links a { color: #5b21b6; }
 
 .tool-compare-verdict {
     margin: 22px 0 8px;
