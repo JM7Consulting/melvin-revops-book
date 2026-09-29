@@ -6,7 +6,7 @@
     <title>REBUILD 7 | MELVIN</title>
     
 	<link rel="icon" type="image/png" href="logo_simples_removebcg.png">
-  <link rel="stylesheet" href="styles.css?v=matriz-178">
+  <link rel="stylesheet" href="styles.css?v=matriz-179">
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sora:wght@600;700;800&family=Carlito:ital,wght@0,400;0,700;1,400&family=Libre+Baskerville:wght@400;700&display=swap" rel="stylesheet">
@@ -2022,104 +2022,62 @@
                         <span class="waiting-badge"><span class="pulse"></span> Em andamento</span>
                         <span class="tool-report-date">29/09/2026</span>
                     </div>
-                    <p class="tool-report-kicker">RevOps · Captação cross-sell</p>
+                    <p class="tool-report-kicker">RevOps · Qualificação MBA → Outbound BDR</p>
                     <h2>Perguntas · formulário de captação MBA → Melvin</h2>
-                    <p class="tool-report-lead">Rascunho das perguntas do formulário que captura leads da <strong>Manutenção em Ação</strong> com interesse no software <strong>Melvin</strong>. Objetivo: triagem leve (ICP + intenção) antes do handoff para SDR.</p>
+                    <p class="tool-report-lead">Lead entra pelo formulário da <strong>Manutenção em Ação (MBA)</strong>. Já no ecossistema Melvin, enviamos <strong>4 perguntas fechadas</strong> para decidir se a pessoa + empresa viram lead de <strong>outbound para o BDR</strong>. Extraído do <a href="#filtro-qualificacao-out">Filtro Qualificação Out</a> — só o essencial.</p>
                     <div class="dev-eta tool-report-eta">
                         <span class="dev-eta-label">Entrega estimada</span>
                         <strong>29/09/2026</strong>
-                        <span class="dev-eta-note">Roadmap · Agora · rascunho v1</span>
+                        <span class="dev-eta-note">Roadmap · Agora · rascunho v2</span>
                     </div>
                 </header>
 
                 <div class="tool-compare-verdict">
-                    <span class="tool-compare-verdict-kicker">Princípio</span>
-                    <strong>Curto o suficiente para converter · rico o suficiente para triar</strong>
-                    <p>Máximo ~8–10 campos. Identificação + 4 filtros de fit (empresa, cargo, tamanho da manutenção, controle atual de O.S.) + 1 intenção. Alinhado ao SPN/ICP Melvin e ao cross-sell M&amp;A → SaaS.</p>
+                    <span class="tool-compare-verdict-kicker">Fluxo</span>
+                    <strong>Formulário MBA → perguntas Melvin → SIM/NÃO para fila BDR</strong>
+                    <p>4 fechadas · Gate ICP + Persona + SPN [S] (tamanho do time + controle de O.S.). Budget, ativos e urgência ficam para a conversa viva no <a href="#filtro-qualificacao-out">Filtro Out / SPN</a>.</p>
                 </div>
 
-                <h3 class="tool-compare-title">Bloco A · Identificação <span class="mba-opt">(obrigatório)</span></h3>
+                <h3 class="tool-compare-title">As 4 perguntas <span class="mba-opt">(todas fechadas)</span></h3>
                 <ol class="mba-q-list">
                     <li>
-                        <strong>Nome completo</strong>
-                        <em>Tipo: texto curto</em>
-                        <span>Para personalizar retorno e cadastro no Bitrix.</span>
+                        <strong>Qual o seu papel hoje?</strong>
+                        <em>Fechada · Gate Persona</em>
+                        <span>Gestor / Coordenador de Manutenção · PCM / Planejador · Diretor / Gerente Industrial ou de Planta · Técnico / Supervisor de campo · RH / Treinamento · Outro.<br><b>Fit alto:</b> gestor, PCM, diretor/gerente. <b>Não prioriza BDR:</b> RH / técnico sem acesso a decisor (multithreading ou nutrir).</span>
                     </li>
                     <li>
-                        <strong>E-mail corporativo</strong>
-                        <em>Tipo: e-mail</em>
-                        <span>Preferir @ da empresa. Validação básica (não aceitar só Gmail/Hotmail se possível — ou marcar como alerta).</span>
-                    </li>
-                    <li>
-                        <strong>WhatsApp / telefone</strong>
-                        <em>Tipo: telefone (BR)</em>
-                        <span>Canal principal de retorno SDR (cadência formulário Melvin).</span>
-                    </li>
-                    <li>
-                        <strong>Empresa</strong>
-                        <em>Tipo: texto curto</em>
-                        <span>Razão social ou nome fantasia.</span>
-                    </li>
-                    <li>
-                        <strong>Cargo</strong>
-                        <em>Tipo: lista + “Outro”</em>
-                        <span>Opções sugeridas: Gestor / Coordenador de Manutenção · PCM / Planejador · Diretor / Gerente Industrial · Engenharia de Manutenção · Técnico / Supervisor de campo · RH / Treinamento · Outro.</span>
-                    </li>
-                </ol>
-
-                <h3 class="tool-compare-title">Bloco B · Fit ICP Melvin <span class="mba-opt">(triagem)</span></h3>
-                <ol class="mba-q-list" start="6">
-                    <li>
-                        <strong>Sua empresa é…</strong>
-                        <em>Tipo: escolha única</em>
-                        <span>Indústria / operação industrial · Prestador de serviço de manutenção · Consultoria / formação · Outro. <b>Fit alto:</b> indústria.</span>
+                        <strong>Sua empresa é…?</strong>
+                        <em>Fechada · Gate ICP</em>
+                        <span>Indústria / operação industrial · Prestador de serviço de manutenção · Consultoria / formação · Outro.<br><b>Fit alto:</b> indústria. <b>Fora da fila outbound:</b> prestador, consultoria, outro.</span>
                     </li>
                     <li>
                         <strong>Quantas pessoas atuam na manutenção (planejamento + execução)?</strong>
-                        <em>Tipo: escolha única</em>
-                        <span>1–3 · 4–9 · 10–49 · 50 ou mais · Não sei / não se aplica. <b>Fit alto:</b> 10+ (SPN A) · <b>alerta:</b> 1–3 (micro, risco de descarte).</span>
+                        <em>Fechada · SPN [S]</em>
+                        <span>1–3 · 4–9 · 10–49 · 50 ou mais · Não sei.<br><b>Fit A:</b> 10+ · <b>Fit B:</b> 4–9 · <b>Descarte:</b> 1–3 (micro, sem ROI Melvin).</span>
                     </li>
                     <li>
-                        <strong>Hoje, como controlam O.S. / ativos / histórico de manutenção?</strong>
-                        <em>Tipo: escolha única</em>
-                        <span>Papel / planilha · ERP genérico (SAP, TOTVS…) · Software de manutenção · Ainda não controlamos de forma estruturada · Não sei. <b>Fit alto:</b> papel/planilha ou ERP que o chão de fábrica não usa.</span>
-                    </li>
-                </ol>
-
-                <h3 class="tool-compare-title">Bloco C · Intenção Melvin <span class="mba-opt">(handoff)</span></h3>
-                <ol class="mba-q-list" start="9">
-                    <li>
-                        <strong>O que você busca agora com o Melvin?</strong>
-                        <em>Tipo: escolha única</em>
-                        <span>Conhecer o software (demo / apresentação) · Avaliar substituição do controle atual · Entender se faz sentido para minha planta · Só quero material / conteúdo · Outro.</span>
-                    </li>
-                    <li>
-                        <strong>Em que prazo faz sentido conversar?</strong>
-                        <em>Tipo: escolha única · opcional</em>
-                        <span>Esta semana · Este mês · Trimestre · Só pesquisando. Espelha urgência do SPN [N].</span>
-                    </li>
-                </ol>
-
-                <h3 class="tool-compare-title">Bloco D · Contexto MBA <span class="mba-opt">(opcional · 1 campo)</span></h3>
-                <ol class="mba-q-list" start="11">
-                    <li>
-                        <strong>Como chegou até aqui?</strong>
-                        <em>Tipo: escolha única · opcional</em>
-                        <span>Aluno / comunidade Manutenção em Ação · Live / evento · Indicação · Conteúdo (YouTube / podcast) · Outro. Serve para UTM interno e mensurar o cross-sell M&amp;A → Melvin.</span>
+                        <strong>Hoje, como controlam O.S. / ativos / histórico?</strong>
+                        <em>Fechada · SPN [S]</em>
+                        <span>Papel ou planilha · ERP genérico (SAP, TOTVS…) · Software de manutenção · Ainda não de forma estruturada · Não sei.<br><b>Fit alto:</b> papel/planilha, ERP engessado ou sem controle estruturado. <b>Fit médio:</b> já tem software de manutenção (avaliar dor de usabilidade na conversa).</span>
                     </li>
                 </ol>
 
                 <div class="tool-compare-notes">
-                    <h3 class="tool-compare-title">Regra de handoff (rascunho)</h3>
+                    <h3 class="tool-compare-title">Regra de handoff → BDR</h3>
                     <ul>
-                        <li><strong>Prioridade A (SDR liga rápido):</strong> indústria + 10+ pessoas na manutenção + papel/planilha ou ERP engessado + quer demo / avaliar substituição + prazo ≤ este mês.</li>
-                        <li><strong>Prioridade B (nutrir + toque leve):</strong> fit parcial (time 4–9, prazo trimestre, “só material”).</li>
-                        <li><strong>Fora de fit (não empurrar Closer):</strong> micro (1–3) sem operação industrial · prestador esporádico · só curiosidade sem dor.</li>
-                        <li><strong>Não perguntar no form:</strong> orçamento / budget (fica no SPN ao telefone) · quantidade de ativos (fica no SPN [P]).</li>
+                        <li><strong>Vai pro BDR:</strong> indústria + cargo decisor/influente + time ≥ 10 + (planilha/papel <em>ou</em> ERP engessado <em>ou</em> sem controle).</li>
+                        <li><strong>Talvez (BDR leve / nutrir):</strong> indústria + time 4–9 <em>ou</em> cargo intermediário + já tem CMMS.</li>
+                        <li><strong>Não vai:</strong> prestador / consultoria / outro · time 1–3 · só RH/técnico sem acesso a decisor.</li>
+                        <li><strong>Não perguntar neste form:</strong> orçamento (SPN [N]) · nº de ativos (SPN [P]) · prazo de implementação · red flags declaradas.</li>
                     </ul>
                 </div>
 
-                <p class="waiting-meta"><a href="#agenda-entregas">← Voltar ao Roadmap RevOps</a> · <a href="#filtro-qualificacao-in">SPN / Qualificação</a> · <a href="#ops">Hub Ops</a></p>
+                <div class="tool-compare-notes" style="margin-top:16px;">
+                    <h3 class="tool-compare-title">5ª pergunta (opcional · fora do pacote)</h3>
+                    <p style="margin:0;font-size:0.9rem;color:var(--text-muted);line-height:1.5;">Aberta: <em>“Se pudesse melhorar uma coisa na gestão da manutenção da sua planta no próximo trimestre, qual seria?”</em> — gancho de cadência para o BDR; <strong>não</strong> decide sozinha o SIM/NÃO.</p>
+                </div>
+
+                <p class="waiting-meta"><a href="#agenda-entregas">← Voltar ao Roadmap RevOps</a> · <a href="#filtro-qualificacao-out">Qualificação Out</a> · <a href="#ops">Hub Ops</a></p>
             </article>
         </section>
 
@@ -14495,8 +14453,8 @@ Um abraço!"
         </section>
 
 	</main>
-  <script src="ar-deck.js?v=matriz-178"></script>
-  <script src="app.js?v=matriz-178"></script>
+  <script src="ar-deck.js?v=matriz-179"></script>
+  <script src="app.js?v=matriz-179"></script>
   <script src="hire-matrix.js?v=matriz-66"></script>
   <script src="bonus-pve.js?v=matriz-66"></script>
 	
