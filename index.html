@@ -6,7 +6,7 @@
     <title>REBUILD 7 | MELVIN</title>
     
 	<link rel="icon" type="image/png" href="logo_simples_removebcg.png">
-  <link rel="stylesheet" href="styles.css?v=matriz-177">
+  <link rel="stylesheet" href="styles.css?v=matriz-178">
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sora:wght@600;700;800&family=Carlito:ital,wght@0,400;0,700;1,400&family=Libre+Baskerville:wght@400;700&display=swap" rel="stylesheet">
@@ -2016,17 +2016,111 @@
         </section>
 
         <section id="dev-mba-captacao" class="blueprint-page dev-page" style="padding: 40px; border-radius: 16px;" data-hidden-nav="true">
-            <div class="waiting-page">
-                <div class="waiting-badge"><span class="pulse"></span> Em andamento</div>
-                <h2>📝 Perguntas para formulário de captação MBA → Melvin</h2>
-                <p>Definir as perguntas do formulário de captação que leva leads do MBA para a Melvin. Em desenvolvimento nesta sessão.</p>
-                <div class="dev-eta">
-                    <span class="dev-eta-label">Entrega estimada</span>
-                    <strong>29/09/2026</strong>
-                    <span class="dev-eta-note">Roadmap · Agora</span>
+            <article class="tool-report mba-form-draft">
+                <header class="tool-report-head">
+                    <div class="tool-report-head-top">
+                        <span class="waiting-badge"><span class="pulse"></span> Em andamento</span>
+                        <span class="tool-report-date">29/09/2026</span>
+                    </div>
+                    <p class="tool-report-kicker">RevOps · Captação cross-sell</p>
+                    <h2>Perguntas · formulário de captação MBA → Melvin</h2>
+                    <p class="tool-report-lead">Rascunho das perguntas do formulário que captura leads da <strong>Manutenção em Ação</strong> com interesse no software <strong>Melvin</strong>. Objetivo: triagem leve (ICP + intenção) antes do handoff para SDR.</p>
+                    <div class="dev-eta tool-report-eta">
+                        <span class="dev-eta-label">Entrega estimada</span>
+                        <strong>29/09/2026</strong>
+                        <span class="dev-eta-note">Roadmap · Agora · rascunho v1</span>
+                    </div>
+                </header>
+
+                <div class="tool-compare-verdict">
+                    <span class="tool-compare-verdict-kicker">Princípio</span>
+                    <strong>Curto o suficiente para converter · rico o suficiente para triar</strong>
+                    <p>Máximo ~8–10 campos. Identificação + 4 filtros de fit (empresa, cargo, tamanho da manutenção, controle atual de O.S.) + 1 intenção. Alinhado ao SPN/ICP Melvin e ao cross-sell M&amp;A → SaaS.</p>
                 </div>
-                <p class="waiting-meta"><a href="#agenda-entregas">← Voltar ao Roadmap RevOps</a> · <a href="#ops">Hub Ops</a></p>
-            </div>
+
+                <h3 class="tool-compare-title">Bloco A · Identificação <span class="mba-opt">(obrigatório)</span></h3>
+                <ol class="mba-q-list">
+                    <li>
+                        <strong>Nome completo</strong>
+                        <em>Tipo: texto curto</em>
+                        <span>Para personalizar retorno e cadastro no Bitrix.</span>
+                    </li>
+                    <li>
+                        <strong>E-mail corporativo</strong>
+                        <em>Tipo: e-mail</em>
+                        <span>Preferir @ da empresa. Validação básica (não aceitar só Gmail/Hotmail se possível — ou marcar como alerta).</span>
+                    </li>
+                    <li>
+                        <strong>WhatsApp / telefone</strong>
+                        <em>Tipo: telefone (BR)</em>
+                        <span>Canal principal de retorno SDR (cadência formulário Melvin).</span>
+                    </li>
+                    <li>
+                        <strong>Empresa</strong>
+                        <em>Tipo: texto curto</em>
+                        <span>Razão social ou nome fantasia.</span>
+                    </li>
+                    <li>
+                        <strong>Cargo</strong>
+                        <em>Tipo: lista + “Outro”</em>
+                        <span>Opções sugeridas: Gestor / Coordenador de Manutenção · PCM / Planejador · Diretor / Gerente Industrial · Engenharia de Manutenção · Técnico / Supervisor de campo · RH / Treinamento · Outro.</span>
+                    </li>
+                </ol>
+
+                <h3 class="tool-compare-title">Bloco B · Fit ICP Melvin <span class="mba-opt">(triagem)</span></h3>
+                <ol class="mba-q-list" start="6">
+                    <li>
+                        <strong>Sua empresa é…</strong>
+                        <em>Tipo: escolha única</em>
+                        <span>Indústria / operação industrial · Prestador de serviço de manutenção · Consultoria / formação · Outro. <b>Fit alto:</b> indústria.</span>
+                    </li>
+                    <li>
+                        <strong>Quantas pessoas atuam na manutenção (planejamento + execução)?</strong>
+                        <em>Tipo: escolha única</em>
+                        <span>1–3 · 4–9 · 10–49 · 50 ou mais · Não sei / não se aplica. <b>Fit alto:</b> 10+ (SPN A) · <b>alerta:</b> 1–3 (micro, risco de descarte).</span>
+                    </li>
+                    <li>
+                        <strong>Hoje, como controlam O.S. / ativos / histórico de manutenção?</strong>
+                        <em>Tipo: escolha única</em>
+                        <span>Papel / planilha · ERP genérico (SAP, TOTVS…) · Software de manutenção · Ainda não controlamos de forma estruturada · Não sei. <b>Fit alto:</b> papel/planilha ou ERP que o chão de fábrica não usa.</span>
+                    </li>
+                </ol>
+
+                <h3 class="tool-compare-title">Bloco C · Intenção Melvin <span class="mba-opt">(handoff)</span></h3>
+                <ol class="mba-q-list" start="9">
+                    <li>
+                        <strong>O que você busca agora com o Melvin?</strong>
+                        <em>Tipo: escolha única</em>
+                        <span>Conhecer o software (demo / apresentação) · Avaliar substituição do controle atual · Entender se faz sentido para minha planta · Só quero material / conteúdo · Outro.</span>
+                    </li>
+                    <li>
+                        <strong>Em que prazo faz sentido conversar?</strong>
+                        <em>Tipo: escolha única · opcional</em>
+                        <span>Esta semana · Este mês · Trimestre · Só pesquisando. Espelha urgência do SPN [N].</span>
+                    </li>
+                </ol>
+
+                <h3 class="tool-compare-title">Bloco D · Contexto MBA <span class="mba-opt">(opcional · 1 campo)</span></h3>
+                <ol class="mba-q-list" start="11">
+                    <li>
+                        <strong>Como chegou até aqui?</strong>
+                        <em>Tipo: escolha única · opcional</em>
+                        <span>Aluno / comunidade Manutenção em Ação · Live / evento · Indicação · Conteúdo (YouTube / podcast) · Outro. Serve para UTM interno e mensurar o cross-sell M&amp;A → Melvin.</span>
+                    </li>
+                </ol>
+
+                <div class="tool-compare-notes">
+                    <h3 class="tool-compare-title">Regra de handoff (rascunho)</h3>
+                    <ul>
+                        <li><strong>Prioridade A (SDR liga rápido):</strong> indústria + 10+ pessoas na manutenção + papel/planilha ou ERP engessado + quer demo / avaliar substituição + prazo ≤ este mês.</li>
+                        <li><strong>Prioridade B (nutrir + toque leve):</strong> fit parcial (time 4–9, prazo trimestre, “só material”).</li>
+                        <li><strong>Fora de fit (não empurrar Closer):</strong> micro (1–3) sem operação industrial · prestador esporádico · só curiosidade sem dor.</li>
+                        <li><strong>Não perguntar no form:</strong> orçamento / budget (fica no SPN ao telefone) · quantidade de ativos (fica no SPN [P]).</li>
+                    </ul>
+                </div>
+
+                <p class="waiting-meta"><a href="#agenda-entregas">← Voltar ao Roadmap RevOps</a> · <a href="#filtro-qualificacao-in">SPN / Qualificação</a> · <a href="#ops">Hub Ops</a></p>
+            </article>
         </section>
 
         <section id="dev-nutricao-out" class="blueprint-page dev-page" style="padding: 40px; border-radius: 16px;" data-hidden-nav="true">
@@ -14401,8 +14495,8 @@ Um abraço!"
         </section>
 
 	</main>
-  <script src="ar-deck.js?v=matriz-177"></script>
-  <script src="app.js?v=matriz-177"></script>
+  <script src="ar-deck.js?v=matriz-178"></script>
+  <script src="app.js?v=matriz-178"></script>
   <script src="hire-matrix.js?v=matriz-66"></script>
   <script src="bonus-pve.js?v=matriz-66"></script>
 	
