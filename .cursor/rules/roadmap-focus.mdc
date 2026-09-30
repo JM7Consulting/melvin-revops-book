@@ -5,14 +5,14 @@ alwaysApply: true
 
 # Roadmap · tarefa em foco
 
-**Agora (30/09/2026):** **Perguntas para formulário de captação MBA → Melvin** (`#dev-mba-captacao`) — em desenvolvimento.
+**Formulário MBA → Melvin** (`#dev-mba-captacao`) está **entregue** (30/09/2026) · 4 perguntas fechadas + 1 aberta opcional para handoff BDR.
 
 **Comparação Lusha × Apollo.io** (`#dev-lusha-apollo`) está **entregue** (22/09/2026) · decisão: **manter Lusha**.
 
 **Treinamentos** (`#treinamentos`) entregue em 24/09/2026.
 
-Próximo item acionável do backlog após o MBA: **Nutrição Out personalizada** (`#dev-nutricao-out`) · prazo **31/10/2026**.
+Próximo item acionável do backlog: **Nutrição Out personalizada** (`#dev-nutricao-out`) · prazo **31/10/2026**.
 
 **Relatórios Bitrix24** continua com tag **Pendente** e aponta para `#ar-atual` — não tratar como “Agora” entregável do Roadmap.
 
-Quando o usuário pedir para **atualizar o roadmap**, não reabrir Lusha × Apollo.io sem pedido explícito.
+Quando o usuário pedir para **atualizar o roadmap**, não reabrir Lusha × Apollo.io nem o formulário MBA sem pedido explícito.
