@@ -156,7 +156,8 @@
 
     /* Grupo segue a aba SETEMBRO: meta diária soma as linhas, meta do mês = diária × dias úteis,
        mín/máx = MÉDIA das linhas, limitador no atingido do grupo, pontos só nessa linha.
-       actualFrom 'all' soma os atingidos; um id soma só aquela linha (D8 = sum(D10)). */
+       actualFrom 'all' soma os atingidos das linhas. Atividades soma em dia e em atraso,
+       no mesmo espírito de G8 = G9+G10 e de Ligações = soma das três linhas. */
     function groupRow(id, label, children, elapsed, workdays, scored, actualFrom) {
         const picked = actualFrom && actualFrom !== 'all'
             ? children.filter((x) => x.id === actualFrom)
@@ -206,7 +207,7 @@
         const salesIn = leafRow('salesIn', 'Inbound (10%)', num(a.salesIn, 0), day(metaSales * mix.salesIn), L.salesIn.min, L.salesIn.max, L.salesIn.weight, el, wd, false);
 
         const groups = [
-            groupRow('g-activities', 'Atividades Concluídas', [onTime, late], el, wd, true, 'late'),
+            groupRow('g-activities', 'Atividades Concluídas', [onTime, late], el, wd, true, 'all'),
             groupRow('g-calls', 'Ligações', [callsStarted, callsPicked, callsLong], el, wd, true, 'all'),
             groupRow('g-booked', 'Reuniões Agendadas', [meetingsBooked], el, wd, true, 'all'),
             groupRow('g-held', 'Reuniões Realizadas', [meetingsHeld], el, wd, false, 'all'),
@@ -516,7 +517,7 @@
                 <button type="button" class="pve-btn" data-pve="export">Exportar JSON</button>
                 <label class="pve-btn pve-btn--ghost pve-file">Importar JSON<input type="file" accept="application/json" data-pve="import" hidden></label>
             </div>
-            <p class="pve-foot">Igual à planilha: a pontuação é só do grupo (peso × atingimento com limitador). Mínimo e máximo do grupo são a média das linhas; abaixo dessa média o grupo zera, acima do máximo trava. Atividades concluídas soma só o atraso no atingido — o “em dia” não entra nessa soma. Ligações, qualidade e vendas somam as linhas. Reuniões realizadas calcula e fica fora do total. Campos brancos são editáveis; os demais são fórmula. A régua soma ${esc(fmtPct(model.weightSum))} nos indicadores que pontuam.</p>
+            <p class="pve-foot">A pontuação é só do grupo: peso × atingimento com limitador. Mínimo e máximo do grupo são a média das linhas; abaixo dessa média o grupo zera, acima do máximo trava. O atingido do grupo soma as linhas de baixo (em dia e em atraso, as três ligações, qualidade e vendas). Reuniões realizadas calcula e fica fora do total. Campos brancos são editáveis; os demais são fórmula. A régua soma ${esc(fmtPct(model.weightSum))} nos indicadores que pontuam.</p>
         `;
     }
 
@@ -531,7 +532,7 @@
             : esc(row.label);
         const numIn = (field, value, step) => `<input type="number" min="0" step="${step}" inputmode="decimal" data-pve-leaf="${esc(row.id)}" data-pve-field="${field}" value="${esc(String(value))}">`;
         const actualCell = isGroup
-            ? `<td class="pve-num" title="${row.actualFrom === 'late' ? 'Fórmula: soma só concluídas em atraso' : 'Fórmula: soma das linhas'}">${esc(fmtSmart(row.actual))}</td>`
+            ? `<td class="pve-num" title="Fórmula: soma das linhas de baixo">${esc(fmtSmart(row.actual))}</td>`
             : `<td class="pve-num">${numIn('actual', num(row.actual, 0), 'any')}</td>`;
         const dailyCell = !isGroup && row.dailyEditable
             ? numIn('daily', num(row.dailyMeta, 0), '0.1')
