@@ -5,7 +5,9 @@ alwaysApply: true
 
 # Roadmap · tarefa em foco
 
-**Formulário MBA → Melvin** (`#dev-mba-captacao`) está **entregue** (30/09/2026) · 4 perguntas fechadas + 1 aberta opcional para handoff BDR.
+**Formulário MBA → Melvin** (`#dev-mba-captacao`) está **entregue** (30/09/2026).
+
+**Construção Tabela de Clientes Melvin** (`#clientes-atuais`) está **entregue** (01/10/2026) · base de clientes atuais no menu Comando.
 
 **Comparação Lusha × Apollo.io** (`#dev-lusha-apollo`) está **entregue** (22/09/2026) · decisão: **manter Lusha**.
 

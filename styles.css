@@ -2340,6 +2340,178 @@ body.light-mode .trn-card {
 body.light-mode .trn-card h3 { color: #0f172a; }
 body.light-mode .trn-links a { color: #5b21b6; }
 
+.cli-page { max-width: none; }
+.cli-kicker {
+    margin: 0 0 6px;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--melvin-cyan);
+}
+.cli-head h2 { margin: 0 0 8px; }
+.cli-lead {
+    margin: 0 0 18px;
+    max-width: 62ch;
+    color: var(--text-muted);
+    line-height: 1.5;
+}
+.cli-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+}
+.cli-search {
+    flex: 1 1 280px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 48px;
+    padding: 0 14px;
+    border-radius: 14px;
+    border: 1px solid rgba(100, 252, 216, 0.28);
+    background: rgba(8, 14, 18, 0.72);
+}
+.cli-search-ico {
+    color: var(--melvin-cyan);
+    font-size: 1.15rem;
+    line-height: 1;
+}
+.cli-search input {
+    flex: 1;
+    min-width: 0;
+    border: 0;
+    outline: none;
+    background: transparent;
+    color: var(--text-main);
+    font-size: 0.98rem;
+}
+.cli-search input::placeholder { color: #64748b; }
+.cli-count {
+    margin: 0;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+}
+.cli-table-wrap {
+    max-height: min(72vh, 920px);
+    overflow: auto;
+    border-radius: 16px;
+    border: 1px solid rgba(148, 163, 184, 0.18);
+    background: rgba(9, 13, 16, 0.55);
+}
+.cli-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    min-width: 1180px;
+    font-size: 0.84rem;
+}
+.cli-table th {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    padding: 12px 12px;
+    text-align: left;
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #99f6e4;
+    background: #102028;
+    border-bottom: 1px solid rgba(100, 252, 216, 0.22);
+    white-space: nowrap;
+}
+.cli-table td {
+    padding: 11px 12px;
+    vertical-align: top;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+    color: #dbe4ee;
+    line-height: 1.35;
+}
+.cli-table tbody tr:hover td { background: rgba(100, 252, 216, 0.06); }
+.cli-table td span,
+.cli-table td a { display: block; }
+.cli-table td a { color: #7dd3fc; text-decoration: none; }
+.cli-table td a:hover { text-decoration: underline; }
+.cli-num {
+    width: 52px;
+    font-variant-numeric: tabular-nums;
+    color: #94a3b8 !important;
+    font-weight: 700;
+}
+.cli-name {
+    min-width: 220px;
+    font-weight: 700;
+    color: #fff !important;
+}
+.cli-login { min-width: 180px; color: #cbd5e1; word-break: break-word; }
+.cli-empty-cell { color: #64748b; }
+.cli-prod,
+.cli-icp {
+    display: inline-flex !important;
+    align-items: center;
+    padding: 3px 8px;
+    border-radius: 999px;
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+.cli-prod {
+    color: #a5f3fc;
+    background: rgba(34, 211, 238, 0.1);
+    border: 1px solid rgba(34, 211, 238, 0.28);
+}
+.cli-prod--ambos {
+    color: #fde68a;
+    background: rgba(251, 191, 36, 0.12);
+    border-color: rgba(251, 191, 36, 0.35);
+}
+.cli-icp--sim {
+    color: #6ee7b7;
+    background: rgba(16, 185, 129, 0.12);
+    border: 1px solid rgba(16, 185, 129, 0.35);
+}
+.cli-icp--nao {
+    color: #fda4af;
+    background: rgba(244, 63, 94, 0.1);
+    border: 1px solid rgba(244, 63, 94, 0.32);
+}
+.cli-icp--na,
+.cli-icp--empty {
+    color: #cbd5e1;
+    background: rgba(148, 163, 184, 0.1);
+    border: 1px solid rgba(148, 163, 184, 0.28);
+}
+.cli-empty {
+    margin: 14px 0 0;
+    color: var(--text-muted);
+}
+body.light-mode .cli-kicker { color: #0f766e; }
+body.light-mode .cli-search {
+    background: #fff;
+    border-color: rgba(15, 118, 110, 0.28);
+}
+body.light-mode .cli-search input { color: #0f172a; }
+body.light-mode .cli-table-wrap {
+    background: #fff;
+    border-color: rgba(15, 23, 42, 0.1);
+}
+body.light-mode .cli-table th {
+    color: #0f766e;
+    background: #f0fdfa;
+}
+body.light-mode .cli-table td { color: #1e293b; }
+body.light-mode .cli-name { color: #0f172a !important; }
+body.light-mode .cli-table td a { color: #0369a1; }
+body.light-mode .cli-table tbody tr:hover td { background: rgba(15, 118, 110, 0.06); }
+
 .tool-compare-verdict {
     margin: 22px 0 8px;
     padding: 16px 18px;
