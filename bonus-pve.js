@@ -139,30 +139,40 @@
         return POINT_BANDS[POINT_BANDS.length - 1];
     }
 
-    function leafRow(id, label, actual, monthMeta, min, max, weight, elapsed, workdays) {
-        const dailyPace = elapsed > 0 ? actual / elapsed : 0;
-        const dailyMeta = workdays > 0 ? monthMeta / workdays : 0;
+    function lineScore(actual, monthMeta, min, max) {
         const real = monthMeta > 0 ? actual / monthMeta : 0;
-        const limited = clampAttain(real, min, max);
+        return { real, limited: clampAttain(real, min, max) };
+    }
+
+    function leafRow(id, label, actual, dailyMeta, min, max, weight, elapsed, workdays, dailyEditable) {
+        const monthMeta = num(dailyMeta, 0) * workdays;
+        const score = lineScore(actual, monthMeta, min, max);
         return {
-            id, label, kind: 'leaf', actual, dailyPace, monthMeta, dailyMeta,
-            real, min, max, limited, weight, points: weight * limited * 100
+            id, label, kind: 'leaf', dailyEditable: dailyEditable === true,
+            actual, dailyPace: elapsed > 0 ? actual / elapsed : 0, monthMeta, dailyMeta: num(dailyMeta, 0),
+            real: score.real, min, max, limited: score.limited, weight, points: null
         };
     }
 
-    function groupRow(id, label, children, elapsed, workdays, scored) {
-        const actual = children.reduce((s, x) => s + x.actual, 0);
-        const monthMeta = children.reduce((s, x) => s + x.monthMeta, 0);
+    /* Grupo segue a aba SETEMBRO: meta diária soma as linhas, meta do mês = diária × dias úteis,
+       mín/máx = MÉDIA das linhas, limitador no atingido do grupo, pontos só nessa linha.
+       actualFrom 'all' soma os atingidos; um id soma só aquela linha (D8 = sum(D10)). */
+    function groupRow(id, label, children, elapsed, workdays, scored, actualFrom) {
+        const picked = actualFrom && actualFrom !== 'all'
+            ? children.filter((x) => x.id === actualFrom)
+            : children;
+        const actual = picked.reduce((s, x) => s + x.actual, 0);
+        const dailyMeta = children.reduce((s, x) => s + x.dailyMeta, 0);
+        const monthMeta = dailyMeta * workdays;
         const weight = children.reduce((s, x) => s + x.weight, 0);
-        const points = children.reduce((s, x) => s + x.points, 0);
-        const dailyPace = elapsed > 0 ? actual / elapsed : 0;
-        const dailyMeta = workdays > 0 ? monthMeta / workdays : 0;
-        const real = monthMeta > 0 ? actual / monthMeta : 0;
-        const limited = weight > 0 ? points / (weight * 100) : 0;
+        const min = children.reduce((s, x) => s + x.min, 0) / children.length;
+        const max = children.reduce((s, x) => s + x.max, 0) / children.length;
+        const score = lineScore(actual, monthMeta, min, max);
         return {
-            id, label, kind: 'group', scored: scored !== false, children,
-            actual, dailyPace, monthMeta, dailyMeta, real, min: null, max: null, limited, weight,
-            points
+            id, label, kind: 'group', scored: scored !== false, children, actualFrom: actualFrom || 'all',
+            actual, dailyPace: elapsed > 0 ? actual / elapsed : 0, monthMeta, dailyMeta,
+            real: score.real, min, max, limited: score.limited, weight,
+            points: weight * score.limited * 100
         };
     }
 
@@ -179,28 +189,29 @@
         const metaBooked = num(c.meetingsBooked, 10);
         const metaHeld = metaBooked * num(c.heldRate, 0.7);
         const metaSales = metaHeld * num(c.salesRate, 0.15);
+        const day = (month) => wd > 0 ? month / wd : 0;
 
-        const onTime = leafRow('onTime', 'Concluídas em dia', num(a.onTime, 0), d.onTime * wd, L.onTime.min, L.onTime.max, L.onTime.weight, el, wd);
-        const late = leafRow('late', 'Concluídas em atraso', num(a.late, 0), d.late * wd, L.late.min, L.late.max, L.late.weight, el, wd);
-        const callsStarted = leafRow('callsStarted', 'Iniciadas (100%)', num(a.callsStarted, 0), d.callsStarted * wd, L.callsStarted.min, L.callsStarted.max, L.callsStarted.weight, el, wd);
-        const callsPicked = leafRow('callsPicked', 'Atendidas (25%)', num(a.callsPicked, 0), d.callsPicked * wd, L.callsPicked.min, L.callsPicked.max, L.callsPicked.weight, el, wd);
-        const callsLong = leafRow('callsLong', 'Atendidas — mais de 30 segundos (50%)', num(a.callsLong, 0), d.callsLong * wd, L.callsLong.min, L.callsLong.max, L.callsLong.weight, el, wd);
-        const meetingsBooked = leafRow('meetingsBooked', 'Agendadas', num(a.meetingsBooked, 0), metaBooked, L.meetingsBooked.min, L.meetingsBooked.max, L.meetingsBooked.weight, el, wd);
-        const meetingsHeld = leafRow('meetingsHeld', 'Realizadas', num(a.meetingsHeld, 0), metaHeld, L.meetingsHeld.min, L.meetingsHeld.max, L.meetingsHeld.weight, el, wd);
-        const qualityHot = leafRow('qualityHot', 'Quente (50%)', num(a.qualityHot, 0), metaBooked * mix.qualityHot, L.qualityHot.min, L.qualityHot.max, L.qualityHot.weight, el, wd);
-        const qualityWarm = leafRow('qualityWarm', 'Morna (30%)', num(a.qualityWarm, 0), metaBooked * mix.qualityWarm, L.qualityWarm.min, L.qualityWarm.max, L.qualityWarm.weight, el, wd);
-        const qualityCold = leafRow('qualityCold', 'Fria (20%)', num(a.qualityCold, 0), metaBooked * mix.qualityCold, L.qualityCold.min, L.qualityCold.max, L.qualityCold.weight, el, wd);
-        const salesBdr = leafRow('salesBdr', 'BDR (Outbound puro) (60%)', num(a.salesBdr, 0), metaSales * mix.salesBdr, L.salesBdr.min, L.salesBdr.max, L.salesBdr.weight, el, wd);
-        const salesCs = leafRow('salesCs', 'CS (30%)', num(a.salesCs, 0), metaSales * mix.salesCs, L.salesCs.min, L.salesCs.max, L.salesCs.weight, el, wd);
-        const salesIn = leafRow('salesIn', 'Inbound (10%)', num(a.salesIn, 0), metaSales * mix.salesIn, L.salesIn.min, L.salesIn.max, L.salesIn.weight, el, wd);
+        const onTime = leafRow('onTime', 'Concluídas em dia', num(a.onTime, 0), d.onTime, L.onTime.min, L.onTime.max, L.onTime.weight, el, wd, true);
+        const late = leafRow('late', 'Concluídas em atraso', num(a.late, 0), d.late, L.late.min, L.late.max, L.late.weight, el, wd, true);
+        const callsStarted = leafRow('callsStarted', 'Iniciadas (100%)', num(a.callsStarted, 0), d.callsStarted, L.callsStarted.min, L.callsStarted.max, L.callsStarted.weight, el, wd, true);
+        const callsPicked = leafRow('callsPicked', 'Atendidas (25%)', num(a.callsPicked, 0), d.callsPicked, L.callsPicked.min, L.callsPicked.max, L.callsPicked.weight, el, wd, true);
+        const callsLong = leafRow('callsLong', 'Atendidas — mais de 30 segundos (50%)', num(a.callsLong, 0), d.callsLong, L.callsLong.min, L.callsLong.max, L.callsLong.weight, el, wd, true);
+        const meetingsBooked = leafRow('meetingsBooked', 'Agendadas', num(a.meetingsBooked, 0), day(metaBooked), L.meetingsBooked.min, L.meetingsBooked.max, L.meetingsBooked.weight, el, wd, false);
+        const meetingsHeld = leafRow('meetingsHeld', 'Realizadas', num(a.meetingsHeld, 0), day(metaHeld), L.meetingsHeld.min, L.meetingsHeld.max, L.meetingsHeld.weight, el, wd, false);
+        const qualityHot = leafRow('qualityHot', 'Quente (50%)', num(a.qualityHot, 0), day(metaBooked * mix.qualityHot), L.qualityHot.min, L.qualityHot.max, L.qualityHot.weight, el, wd, false);
+        const qualityWarm = leafRow('qualityWarm', 'Morna (30%)', num(a.qualityWarm, 0), day(metaBooked * mix.qualityWarm), L.qualityWarm.min, L.qualityWarm.max, L.qualityWarm.weight, el, wd, false);
+        const qualityCold = leafRow('qualityCold', 'Fria (20%)', num(a.qualityCold, 0), day(metaBooked * mix.qualityCold), L.qualityCold.min, L.qualityCold.max, L.qualityCold.weight, el, wd, false);
+        const salesBdr = leafRow('salesBdr', 'BDR (Outbound puro) (60%)', num(a.salesBdr, 0), day(metaSales * mix.salesBdr), L.salesBdr.min, L.salesBdr.max, L.salesBdr.weight, el, wd, false);
+        const salesCs = leafRow('salesCs', 'CS (30%)', num(a.salesCs, 0), day(metaSales * mix.salesCs), L.salesCs.min, L.salesCs.max, L.salesCs.weight, el, wd, false);
+        const salesIn = leafRow('salesIn', 'Inbound (10%)', num(a.salesIn, 0), day(metaSales * mix.salesIn), L.salesIn.min, L.salesIn.max, L.salesIn.weight, el, wd, false);
 
         const groups = [
-            groupRow('g-activities', 'Atividades Concluídas', [onTime, late], el, wd, true),
-            groupRow('g-calls', 'Ligações', [callsStarted, callsPicked, callsLong], el, wd, true),
-            groupRow('g-booked', 'Reuniões Agendadas', [meetingsBooked], el, wd, true),
-            groupRow('g-held', 'Reuniões Realizadas', [meetingsHeld], el, wd, false),
-            groupRow('g-quality', 'Qualidade Reuniões', [qualityHot, qualityWarm, qualityCold], el, wd, true),
-            groupRow('g-sales', 'Vendas', [salesBdr, salesCs, salesIn], el, wd, true)
+            groupRow('g-activities', 'Atividades Concluídas', [onTime, late], el, wd, true, 'late'),
+            groupRow('g-calls', 'Ligações', [callsStarted, callsPicked, callsLong], el, wd, true, 'all'),
+            groupRow('g-booked', 'Reuniões Agendadas', [meetingsBooked], el, wd, true, 'all'),
+            groupRow('g-held', 'Reuniões Realizadas', [meetingsHeld], el, wd, false, 'all'),
+            groupRow('g-quality', 'Qualidade Reuniões', [qualityHot, qualityWarm, qualityCold], el, wd, true, 'all'),
+            groupRow('g-sales', 'Vendas', [salesBdr, salesCs, salesIn], el, wd, true, 'all')
         ];
 
         const rawTotal = groups.filter((g) => g.scored).reduce((s, g) => s + g.points, 0);
@@ -314,6 +325,15 @@
 
     function fmtInt(n) {
         return String(Math.round(num(n, 0)));
+    }
+    function round1(n) {
+        return Math.round(num(n, 0) * 10) / 10;
+    }
+    function fmtSmart(n) {
+        const v = num(n, 0);
+        if (Math.abs(v) >= 10) return fmtInt(v);
+        if (Math.abs(v) >= 1) return fmt1(v);
+        return fmtN(v, 2);
     }
     function fmt1(n) {
         return num(n, 0).toLocaleString('pt-BR', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
@@ -485,7 +505,7 @@
                     <ul>
                         <li><span>Reuniões agendadas</span><b>${esc(fmtN(model.control.meetingsBooked, 1))}</b></li>
                         <li><span>Reuniões realizadas (${esc(fmtPct(model.control.heldRate))})</span><b>${esc(fmtN(model.control.meetingsHeld, 1))}</b></li>
-                        <li><span>Vendas (${esc(fmtPct(model.control.salesRate))} das realizadas)</span><b>${esc(fmtN(model.control.sales, 1))}</b></li>
+                        <li><span>Vendas (${esc(fmtPct(model.control.salesRate))} das realizadas)</span><b>${esc(fmtN(model.control.sales, 2))}</b></li>
                     </ul>
                     <p class="pve-note">Reuniões realizadas entram no acompanhamento e não na pontuação de 100% — igual à planilha.</p>
                 </article>
@@ -496,7 +516,7 @@
                 <button type="button" class="pve-btn" data-pve="export">Exportar JSON</button>
                 <label class="pve-btn pve-btn--ghost pve-file">Importar JSON<input type="file" accept="application/json" data-pve="import" hidden></label>
             </div>
-            <p class="pve-foot">Cada linha pontua sozinha: peso × atingimento com limitador. Abaixo do mínimo a linha zera; acima do máximo trava no teto. O grupo soma essas linhas — não aplica um piso novo em cima da média. Reuniões realizadas acompanham o funil e ficam fora do bônus. A régua soma ${esc(fmtPct(model.weightSum))} nos indicadores que pontuam.</p>
+            <p class="pve-foot">Igual à planilha: a pontuação é só do grupo (peso × atingimento com limitador). Mínimo e máximo do grupo são a média das linhas; abaixo dessa média o grupo zera, acima do máximo trava. Atividades concluídas soma só o atraso no atingido — o “em dia” não entra nessa soma. Ligações, qualidade e vendas somam as linhas. Reuniões realizadas calcula e fica fora do total. Campos brancos são editáveis; os demais são fórmula. A régua soma ${esc(fmtPct(model.weightSum))} nos indicadores que pontuam.</p>
         `;
     }
 
@@ -509,22 +529,29 @@
         const label = isGroup
             ? `<strong>${esc(row.label)}</strong>${excluded ? ' <em>fora da pontuação</em>' : ''}`
             : esc(row.label);
+        const numIn = (field, value, step) => `<input type="number" min="0" step="${step}" inputmode="decimal" data-pve-leaf="${esc(row.id)}" data-pve-field="${field}" value="${esc(String(value))}">`;
         const actualCell = isGroup
-            ? `<td class="pve-num">${esc(fmtInt(row.actual))}</td>`
-            : `<td class="pve-num"><input type="number" min="0" step="any" inputmode="decimal" data-pve-actual="${esc(row.id)}" value="${esc(String(num(row.actual, 0)))}"></td>`;
-        const dash = '<span class="cli-empty-cell">—</span>';
+            ? `<td class="pve-num" title="${row.actualFrom === 'late' ? 'Fórmula: soma só concluídas em atraso' : 'Fórmula: soma das linhas'}">${esc(fmtSmart(row.actual))}</td>`
+            : `<td class="pve-num">${numIn('actual', num(row.actual, 0), 'any')}</td>`;
+        const dailyCell = !isGroup && row.dailyEditable
+            ? numIn('daily', num(row.dailyMeta, 0), '0.1')
+            : esc(fmt1(row.dailyMeta));
+        const minCell = isGroup ? esc(fmtPct(row.min, 1)) : numIn('min', round1(row.min * 100), '0.1');
+        const maxCell = isGroup ? esc(fmtPct(row.max, 1)) : numIn('max', round1(row.max * 100), '0.1');
+        const weightCell = isGroup ? esc(fmtPct(row.weight, 1)) : numIn('weight', round1(row.weight * 100), '0.1');
+        const points = isGroup ? esc(fmt1(row.points)) : '<span class="cli-empty-cell">—</span>';
         return `<tr class="${cls}">
             <td class="pve-ind">${label}</td>
             ${actualCell}
             <td class="pve-num">${esc(fmt1(row.dailyPace))}</td>
-            <td class="pve-num">${esc(row.monthMeta >= 10 ? fmtInt(row.monthMeta) : fmtN(row.monthMeta, row.monthMeta < 1 ? 2 : 1))}</td>
-            <td class="pve-num">${esc(fmt1(row.dailyMeta))}</td>
+            <td class="pve-num">${esc(fmtSmart(row.monthMeta))}</td>
+            <td class="pve-num">${dailyCell}</td>
             <td class="pve-num">${esc(fmtPct(row.real, 1))}</td>
-            <td class="pve-num">${row.min == null ? dash : esc(fmtPct(row.min))}</td>
-            <td class="pve-num">${row.max == null ? dash : esc(fmtPct(row.max))}</td>
+            <td class="pve-num">${minCell}</td>
+            <td class="pve-num">${maxCell}</td>
             <td class="pve-num">${esc(fmtPct(row.limited, 1))}</td>
-            <td class="pve-num">${esc(fmtPct(row.weight))}</td>
-            <td class="pve-num pve-pts">${esc(fmt1(row.points))}</td>
+            <td class="pve-num">${weightCell}</td>
+            <td class="pve-num pve-pts">${points}</td>
         </tr>`;
     }
 
@@ -650,15 +677,24 @@
                 render(root);
                 return;
             }
-            if (t.matches('[data-pve-actual]')) {
-                const rec = ensureMonth(state, state.activeMonth);
-                rec.actuals[t.getAttribute('data-pve-actual')] = Math.max(0, num(t.value, 0));
-                rec.updatedAt = new Date().toISOString();
+            if (t.matches('[data-pve-leaf]')) {
+                const id = t.getAttribute('data-pve-leaf');
+                const field = t.getAttribute('data-pve-field');
+                const value = Math.max(0, num(t.value, 0));
+                if (field === 'actual') {
+                    const rec = ensureMonth(state, state.activeMonth);
+                    rec.actuals[id] = value;
+                    rec.updatedAt = new Date().toISOString();
+                } else if (field === 'daily') {
+                    if (state.regra.daily[id] == null) return;
+                    state.regra.daily[id] = value;
+                } else if (state.regra.leaf[id]) {
+                    state.regra.leaf[id][field] = value / 100;
+                }
                 saveState(state);
-                const keep = t;
                 const start = t.selectionStart;
                 render(root);
-                const again = root.querySelector(`[data-pve-actual="${keep.getAttribute('data-pve-actual')}"]`);
+                const again = root.querySelector(`[data-pve-leaf="${id}"][data-pve-field="${field}"]`);
                 if (again) {
                     again.focus();
                     try { again.setSelectionRange(start, start); } catch (err) {}
