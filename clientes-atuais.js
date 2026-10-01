@@ -211,11 +211,141 @@
             .trim();
     }
 
+    function key(value) {
+        return norm(value).replace(/[^a-z0-9]+/g, "");
+    }
+
+    function clientKey(name) {
+        var k = key(name);
+        if (k === "tamco") return key("TAMCO LUBRIFICANTES (GRUPO MOOVE)");
+        return k;
+    }
+
     function parts(value) {
         return String(value || "")
             .split(/\s*\/\s*/)
             .map(function (part) { return part.trim(); })
             .filter(Boolean);
+    }
+
+    function cleanField(value) {
+        var text = String(value || "").replace(/\s+/g, " ").trim().replace(/\.0$/, "");
+        if (!text || text === "..." || text === "…" || text === "-") return "";
+        return text;
+    }
+
+    function splitPerson(name) {
+        var text = String(name || "").trim();
+        var wrapped = text.match(/^(.*?)\s*\(([^)]+)\)\s*$/);
+        if (wrapped) return { name: wrapped[1].trim(), role: wrapped[2].trim() };
+        return { name: text, role: "" };
+    }
+
+    function peopleFromRow(row) {
+        var names = parts(row[3]);
+        var emails = parts(row[4]);
+        var phones = parts(row[5]);
+        var count = Math.max(names.length, emails.length, phones.length);
+        var people = [];
+        for (var i = 0; i < count; i++) {
+            var parsed = splitPerson(names[i] || "");
+            var email = cleanField(emails[i] || "");
+            var phone = cleanField(phones[i] || "");
+            if (!parsed.name && !email && phone && people.length && people[people.length - 1].name) {
+                var prev = people[people.length - 1];
+                prev.phone = prev.phone ? prev.phone + " / " + phone : phone;
+                continue;
+            }
+            if (!parsed.name && !email && !phone) continue;
+            people.push({ name: parsed.name, role: parsed.role, email: email, phone: phone });
+        }
+        return people;
+    }
+
+    function groupContatos(list) {
+        var map = {};
+        (list || []).forEach(function (row) {
+            var id = clientKey(row[0]);
+            if (!map[id]) map[id] = [];
+            var person = {
+                name: cleanField(row[1]),
+                role: cleanField(row[2]),
+                email: cleanField(row[3]),
+                phone: cleanField(row[4])
+            };
+            var bucket = map[id];
+            if (!person.name && !person.email && person.phone && bucket.length && bucket[bucket.length - 1].name) {
+                var prev = bucket[bucket.length - 1];
+                prev.phone = prev.phone ? prev.phone + " / " + person.phone : person.phone;
+                return;
+            }
+            if (!person.name && !person.email && !person.phone) return;
+            bucket.push(person);
+        });
+        return map;
+    }
+
+    var contactMap = groupContatos(window.MELVIN_CONTATOS);
+
+    function sameEmail(a, b) {
+        return a && b && a.toLowerCase() === b.toLowerCase();
+    }
+
+    function takeOld(oldPeople, used, predicate) {
+        for (var i = 0; i < oldPeople.length; i++) {
+            if (used[i]) continue;
+            if (predicate(oldPeople[i])) {
+                used[i] = true;
+                return oldPeople[i];
+            }
+        }
+        return null;
+    }
+
+    function fillBlank(person, old) {
+        if (!old) return;
+        if (!person.email) person.email = old.email;
+        if (!person.phone) person.phone = old.phone;
+        if (!person.name) person.name = old.name;
+        if (!person.role) person.role = old.role;
+    }
+
+    function mergePeople(fresh, oldPeople) {
+        var used = {};
+        var result = fresh.map(function (person) {
+            return { name: person.name, role: person.role, email: person.email, phone: person.phone };
+        });
+        result.forEach(function (person) {
+            var old = takeOld(oldPeople, used, function (candidate) {
+                return person.name && candidate.name && key(person.name) === key(candidate.name) && sameEmail(person.email, candidate.email);
+            });
+            fillBlank(person, old);
+        });
+        result.forEach(function (person) {
+            if (!person.email) return;
+            fillBlank(person, takeOld(oldPeople, used, function (candidate) {
+                return sameEmail(person.email, candidate.email);
+            }));
+        });
+        result.forEach(function (person) {
+            if (!person.name) return;
+            fillBlank(person, takeOld(oldPeople, used, function (candidate) {
+                return candidate.name && key(person.name) === key(candidate.name);
+            }));
+        });
+        oldPeople.forEach(function (person, index) {
+            if (used[index]) return;
+            if (!person.name && !person.email && !person.phone) return;
+            result.push(person);
+        });
+        return result;
+    }
+
+    function contactsFor(row) {
+        var fresh = contactMap[clientKey(row[2])] || [];
+        var previous = peopleFromRow(row);
+        if (!fresh.length) return previous;
+        return mergePeople(fresh, previous);
     }
 
     function esc(value) {
@@ -226,18 +356,32 @@
             .replace(/"/g, "&quot;");
     }
 
-    function stack(value, kind) {
-        var list = parts(value);
-        if (!list.length) return '<span class="cli-empty-cell">—</span>';
-        return list.map(function (item) {
-            if (kind === "mail" && item.indexOf("@") !== -1 && item.indexOf(" ") === -1) {
-                return '<a href="mailto:' + esc(item) + '">' + esc(item) + "</a>";
+    function mailLink(item) {
+        if (item.indexOf("@") !== -1 && item.indexOf(" ") === -1) {
+            return '<a href="mailto:' + esc(item) + '">' + esc(item) + "</a>";
+        }
+        return "<span>" + esc(item) + "</span>";
+    }
+
+    function phoneLink(item) {
+        var digits = item.replace(/[^\d+]/g, "");
+        if (digits.length >= 8) return '<a href="tel:' + esc(digits) + '">' + esc(item) + "</a>";
+        return "<span>" + esc(item) + "</span>";
+    }
+
+    function personCell(people, field) {
+        if (!people.length) return '<div class="cli-person"><span class="cli-empty-cell">—</span></div>';
+        return people.map(function (person) {
+            if (field === "who") {
+                if (!person.name && !person.role) return '<div class="cli-person"><span class="cli-empty-cell">—</span></div>';
+                var role = person.role ? '<span class="cli-role">' + esc(person.role) + "</span>" : "";
+                return '<div class="cli-person"><span class="cli-person-name">' + esc(person.name || "—") + "</span>" + role + "</div>";
             }
-            if (kind === "tel") {
-                var digits = item.replace(/[^\d+]/g, "");
-                if (digits.length >= 8) return '<a href="tel:' + esc(digits) + '">' + esc(item) + "</a>";
-            }
-            return "<span>" + esc(item) + "</span>";
+            var raw = field === "mail" ? person.email : person.phone;
+            var bits = parts(raw);
+            if (!bits.length) return '<div class="cli-person"><span class="cli-empty-cell">—</span></div>';
+            var html = bits.map(field === "mail" ? mailLink : phoneLink).join("");
+            return '<div class="cli-person">' + html + "</div>";
         }).join("");
     }
 
@@ -256,18 +400,20 @@
         var q = norm(query);
         var html = "";
         var shown = 0;
-        ROWS.forEach(function (row, index) {
-            if (q && norm(row[2]).indexOf(q) === -1) return;
+        ROWS.forEach(function (row) {
+            var people = contactsFor(row);
+            var hay = [row[2]].concat(people.map(function (person) {
+                return person.name + " " + person.role + " " + person.email;
+            })).join(" ");
+            if (q && norm(hay).indexOf(q) === -1) return;
             shown += 1;
             var produto = row[1] === "AMBOS" ? "cli-prod cli-prod--ambos" : "cli-prod";
             html += "<tr>" +
-                '<td class="cli-num">' + (index + 1) + "</td>" +
-                '<td class="cli-login">' + stack(row[0]) + "</td>" +
-                '<td><span class="' + produto + '">' + esc(row[1]) + "</span></td>" +
                 '<td class="cli-name">' + esc(row[2]) + "</td>" +
-                "<td>" + stack(row[3]) + "</td>" +
-                "<td>" + stack(row[4], "mail") + "</td>" +
-                "<td>" + stack(row[5], "tel") + "</td>" +
+                '<td><span class="' + produto + '">' + esc(row[1]) + "</span></td>" +
+                "<td>" + personCell(people, "who") + "</td>" +
+                "<td>" + personCell(people, "mail") + "</td>" +
+                "<td>" + personCell(people, "tel") + "</td>" +
                 '<td><span class="' + icpClass(row[6]) + '">' + esc(row[6] || "—") + "</span></td>" +
                 "</tr>";
         });

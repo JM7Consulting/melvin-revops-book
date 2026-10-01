@@ -2408,7 +2408,7 @@ body.light-mode .trn-links a { color: #5b21b6; }
     width: 100%;
     border-collapse: separate;
     border-spacing: 0;
-    min-width: 1180px;
+    min-width: 980px;
     font-size: 0.84rem;
 }
 .cli-table th {
@@ -2445,11 +2445,25 @@ body.light-mode .trn-links a { color: #5b21b6; }
     font-weight: 700;
 }
 .cli-name {
-    min-width: 220px;
+    min-width: 240px;
     font-weight: 700;
     color: #fff !important;
 }
-.cli-login { min-width: 180px; color: #cbd5e1; word-break: break-word; }
+.cli-person {
+    padding: 7px 0;
+    border-top: 1px solid rgba(148, 163, 184, 0.16);
+    min-height: 1.45em;
+}
+.cli-person:first-child { border-top: 0; padding-top: 0; }
+.cli-person-name { display: inline !important; font-weight: 650; }
+.cli-role {
+    display: inline !important;
+    margin-left: 6px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: #94a3b8;
+}
 .cli-empty-cell { color: #64748b; }
 .cli-prod,
 .cli-icp {
@@ -2509,6 +2523,8 @@ body.light-mode .cli-table th {
 }
 body.light-mode .cli-table td { color: #1e293b; }
 body.light-mode .cli-name { color: #0f172a !important; }
+body.light-mode .cli-person { border-top-color: rgba(15, 23, 42, 0.08); }
+body.light-mode .cli-role { color: #64748b; }
 body.light-mode .cli-table td a { color: #0369a1; }
 body.light-mode .cli-table tbody tr:hover td { background: rgba(15, 118, 110, 0.06); }
 .cli-table--churn { min-width: 1480px; }
