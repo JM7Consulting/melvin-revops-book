@@ -1,0 +1,21 @@
+---
+description: Capas das páginas do RevOps Book seguem o hero padrão, com data de atualização
+alwaysApply: true
+---
+
+# Capas de página
+
+Toda página nova do Book (`main > section`) usa a capa `fq-hero`, igual às demais. Não criar cabeçalho solto (kicker + `h2`).
+
+Estrutura:
+
+- `div.fq-hero` com uma variante já existente (`fq-hero--cs`, `--diag`, `--out`, `--close`, `--abm`, `--gim`, ou a verde padrão)
+- kicker `.fq-kicker`
+- título `.cadencia-title-line.fq-hero-title`
+- texto `.cadencia-subtitle` (`padding-left:0`)
+- data `.fq-updated`: `Atualizado em <strong>DD/MM/AAAA</strong>`
+- badge `.fq-badge-stack` com orbe (`.fq-badge-orb`) e `.fq-badge-cap`
+
+Ao mudar o conteúdo da página, atualize a data da capa no mesmo commit. Formato `DD/MM/AAAA`.
+
+Na dúvida sobre kicker, cor da faixa ou texto do badge, perguntar antes de publicar.

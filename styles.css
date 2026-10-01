@@ -9388,6 +9388,14 @@ body.light-mode .fb-notes {
 }
 .fq-hero--out .fq-kicker { color: #c4b5fd; }
 .fq-hero-title { font-size: 1.55rem !important; margin-bottom: 8px; line-height: 1.25; }
+.fq-updated {
+  margin: 14px 0 0;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  color: var(--text-muted);
+}
+.fq-updated strong { color: #e2e8f0; font-weight: 800; }
 .fq-stepper {
   display: flex;
   align-items: center;
@@ -9630,8 +9638,8 @@ body.light-mode .fb-notes {
   .fq-hero-title { font-size: 1.3rem !important; }
 }
 
-body.light-mode .fq-hero {
-  background:
+body.light-mode .fq-updated strong { color: #0f172a; }
+body.light-mode .fq-hero {  background:
     radial-gradient(900px 280px at 0% 0%, rgba(16, 185, 129, 0.12), transparent 55%),
     linear-gradient(135deg, #f0fdf9, #ecfeff);
   border-color: rgba(16, 185, 129, 0.25);
