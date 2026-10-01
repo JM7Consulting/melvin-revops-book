@@ -2511,6 +2511,15 @@ body.light-mode .cli-table td { color: #1e293b; }
 body.light-mode .cli-name { color: #0f172a !important; }
 body.light-mode .cli-table td a { color: #0369a1; }
 body.light-mode .cli-table tbody tr:hover td { background: rgba(15, 118, 110, 0.06); }
+.cli-table--churn { min-width: 1480px; }
+.cli-note {
+    margin: 0;
+    max-width: 360px;
+    white-space: normal;
+    line-height: 1.45;
+    color: #dbe4ee;
+}
+body.light-mode .cli-note { color: #334155; }
 
 .tool-compare-verdict {
     margin: 22px 0 8px;

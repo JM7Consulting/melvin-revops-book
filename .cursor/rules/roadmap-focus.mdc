@@ -7,7 +7,7 @@ alwaysApply: true
 
 **Formulário MBA → Melvin** (`#dev-mba-captacao`) está **entregue** (30/09/2026).
 
-**Construção Tabela de Clientes Melvin** (`#clientes-atuais`) está **entregue** (01/10/2026) · base de clientes atuais no menu Comando.
+**Construção Tabela de Clientes Melvin** está **entregue** (01/10/2026) · `#clientes-atuais` e `#lista-churn`, no menu Comando · Clientes.
 
 **Comparação Lusha × Apollo.io** (`#dev-lusha-apollo`) está **entregue** (22/09/2026) · decisão: **manter Lusha**.
 

@@ -6,7 +6,7 @@
     <title>REBUILD 7 | MELVIN</title>
     
 	<link rel="icon" type="image/png" href="logo_simples_removebcg.png">
-  <link rel="stylesheet" href="styles.css?v=matriz-185">
+  <link rel="stylesheet" href="styles.css?v=matriz-186">
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sora:wght@600;700;800&family=Carlito:ital,wght@0,400;0,700;1,400&family=Libre+Baskerville:wght@400;700&display=swap" rel="stylesheet">
@@ -90,11 +90,12 @@
 
                 <div class="menu-group">
                     <div class="menu-trigger">
-                        <div class="menu-trigger-left"><span class="nav-ico">🏢</span><span class="text">Clientes Atuais</span></div>
+                        <div class="menu-trigger-left"><span class="nav-ico">🏢</span><span class="text">Clientes</span></div>
                         <span class="arrow">▼</span>
                     </div>
                     <div class="submenu">
                         <a href="#clientes-atuais"><span style="display:flex; gap:10px;"><span>📋</span> Clientes Atuais</span><span class="dot dot-active"></span></a>
+                        <a href="#lista-churn"><span style="display:flex; gap:10px;"><span>📉</span> Lista de Churn</span><span class="dot dot-active"></span></a>
                     </div>
                 </div>
                 </div>
@@ -466,6 +467,39 @@
             <p class="cli-empty" id="cliEmpty" hidden>Nenhum cliente com esse nome.</p>
         </section>
 
+        <section id="lista-churn" class="blueprint-page cli-page" style="padding: 28px 22px 36px; border-radius: 16px;">
+            <header class="cli-head">
+                <p class="cli-kicker">Comando · Clientes</p>
+                <h2 class="cadencia-title-line">Lista de Churn</h2>
+                <p class="cli-lead">Conta, contato, uso recente e motivo do churn. A busca olha o nome do cliente, o contato, as observações e o motivo.</p>
+            </header>
+            <div class="cli-toolbar">
+                <label class="cli-search" for="churnSearch">
+                    <span class="cli-search-ico" aria-hidden="true">⌕</span>
+                    <input type="search" id="churnSearch" placeholder="Buscar cliente, contato ou motivo…" autocomplete="off" spellcheck="false">
+                </label>
+                <p class="cli-count" id="churnCount" aria-live="polite"></p>
+            </div>
+            <div class="cli-table-wrap">
+                <table class="cli-table cli-table--churn">
+                    <thead>
+                        <tr>
+                            <th scope="col">Nº</th>
+                            <th scope="col">Cliente</th>
+                            <th scope="col">Pessoa de contato</th>
+                            <th scope="col">Login</th>
+                            <th scope="col">WhatsApp</th>
+                            <th scope="col">Cliente ICP?</th>
+                            <th scope="col">Observações</th>
+                            <th scope="col">Churn</th>
+                        </tr>
+                    </thead>
+                    <tbody id="churnBody"></tbody>
+                </table>
+            </div>
+            <p class="cli-empty" id="churnEmpty" hidden>Nenhum cliente encontrado.</p>
+        </section>
+
         <!-- AR · Análise de resultado -->
         <section id="ar-atual" class="blueprint-page ar-page" style="padding: 20px 18px 16px; border-radius: 16px;">
             <div class="ar-deck" id="arDeck" tabindex="0" aria-label="Apresentação AR 2026">
@@ -567,7 +601,7 @@
                         <a class="ops-card ops-card--done" href="#clientes-atuais">
                             <span class="ops-card-ico">🏢</span>
                             <strong>Tabela de Clientes Melvin</strong>
-                            <small>Finalizado · 01/10 · base de clientes atuais</small>
+                            <small>Finalizado · 01/10 · atuais e lista de churn</small>
                         </a>
                         <a class="ops-card ops-card--done" href="#dev-mba-captacao">
                             <span class="ops-card-ico">📝</span>
@@ -2995,7 +3029,7 @@ Obrigado — e sucesso aí na planta."
 					<a href="#dev-lusha-apollo" class="rm-stepper-item rm-stepper-item--done" title="Lusha × Apollo.io · 22/09 · decisão: Lusha"><span></span><small>Lusha</small></a>
 					<a href="#treinamentos" class="rm-stepper-item rm-stepper-item--done" title="Treinamentos · 24/09 · lives e materiais"><span></span><small>Treino</small></a>
 					<a href="#dev-mba-captacao" class="rm-stepper-item rm-stepper-item--done" title="Formulário MBA → Melvin · 30/09 · entregue"><span></span><small>MBA</small></a>
-					<a href="#clientes-atuais" class="rm-stepper-item rm-stepper-item--done" title="Tabela de Clientes Melvin · 01/10 · entregue"><span></span><small>Clientes</small></a>
+					<a href="#clientes-atuais" class="rm-stepper-item rm-stepper-item--done" title="Tabela de Clientes Melvin · 01/10 · atuais e churn"><span></span><small>Clientes</small></a>
 					<a href="#ar-atual" class="rm-stepper-item rm-stepper-item--backlog" title="Relatórios Bitrix · pendente · AR 2026"><span></span><small>Relatórios</small></a>
 					<button type="button" class="rm-stepper-item rm-stepper-item--backlog" data-rm-desk-goto="backlog" title="Backlog · Nutrição Out"><span></span><small>Backlog</small></button>
 				</nav>
@@ -3017,8 +3051,8 @@ Obrigado — e sucesso aí na planta."
 				<article class="rm-focus-card rm-focus-card--later">
 					<span class="rm-tag">Entregue</span>
 					<strong>Construção Tabela de Clientes Melvin</strong>
-					<p>01/10 · base de clientes atuais no Book</p>
-					<div class="rm-focus-links"><a href="#clientes-atuais">Abrir entrega</a></div>
+					<p>01/10 · clientes atuais e lista de churn</p>
+					<div class="rm-focus-links"><a href="#clientes-atuais">Clientes atuais</a> · <a href="#lista-churn">Lista de churn</a></div>
 				</article>
 			</div>
 
@@ -14502,9 +14536,10 @@ Um abraço!"
         </section>
 
 	</main>
-  <script src="ar-deck.js?v=matriz-185"></script>
-  <script src="app.js?v=matriz-185"></script>
-  <script src="clientes-atuais.js?v=matriz-185"></script>
+  <script src="ar-deck.js?v=matriz-186"></script>
+  <script src="app.js?v=matriz-186"></script>
+  <script src="clientes-atuais.js?v=matriz-186"></script>
+  <script src="lista-churn.js?v=matriz-186"></script>
   <script src="hire-matrix.js?v=matriz-66"></script>
   <script src="bonus-pve.js?v=matriz-66"></script>
 	
