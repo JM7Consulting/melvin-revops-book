@@ -154,16 +154,15 @@
         const actual = children.reduce((s, x) => s + x.actual, 0);
         const monthMeta = children.reduce((s, x) => s + x.monthMeta, 0);
         const weight = children.reduce((s, x) => s + x.weight, 0);
-        const min = children.reduce((s, x) => s + x.min, 0) / children.length;
-        const max = children.reduce((s, x) => s + x.max, 0) / children.length;
+        const points = children.reduce((s, x) => s + x.points, 0);
         const dailyPace = elapsed > 0 ? actual / elapsed : 0;
         const dailyMeta = workdays > 0 ? monthMeta / workdays : 0;
         const real = monthMeta > 0 ? actual / monthMeta : 0;
-        const limited = clampAttain(real, min, max);
+        const limited = weight > 0 ? points / (weight * 100) : 0;
         return {
             id, label, kind: 'group', scored: scored !== false, children,
-            actual, dailyPace, monthMeta, dailyMeta, real, min, max, limited, weight,
-            points: weight * limited * 100
+            actual, dailyPace, monthMeta, dailyMeta, real, min: null, max: null, limited, weight,
+            points
         };
     }
 
@@ -314,7 +313,7 @@
     }
 
     function fmtInt(n) {
-        return Math.round(num(n, 0)).toLocaleString('pt-BR');
+        return String(Math.round(num(n, 0)));
     }
     function fmt1(n) {
         return num(n, 0).toLocaleString('pt-BR', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
@@ -322,8 +321,12 @@
     function fmtN(n, digits) {
         return num(n, 0).toLocaleString('pt-BR', { minimumFractionDigits: digits, maximumFractionDigits: digits });
     }
-    function fmtPct(n) {
-        return Math.round(num(n, 0) * 100) + '%';
+    function fmtPct(n, digits) {
+        const d = digits == null ? 0 : digits;
+        return (num(n, 0) * 100).toLocaleString('pt-BR', {
+            minimumFractionDigits: d,
+            maximumFractionDigits: d
+        }) + '%';
     }
     function fmtBRL(n) {
         return num(n, 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
@@ -493,7 +496,7 @@
                 <button type="button" class="pve-btn" data-pve="export">Exportar JSON</button>
                 <label class="pve-btn pve-btn--ghost pve-file">Importar JSON<input type="file" accept="application/json" data-pve="import" hidden></label>
             </div>
-            <p class="pve-foot">O único número que você lança é o atingido do mês, na linha de cada indicador. O grupo soma as linhas de baixo — inclusive atividades em dia e em atraso. Reuniões realizadas acompanham o funil e ficam fora do bônus. A régua de outubro soma ${esc(fmtPct(model.weightSum))} nos indicadores que pontuam. Tudo fica neste navegador até o Bitrix alimentar.</p>
+            <p class="pve-foot">Cada linha pontua sozinha: peso × atingimento com limitador. Abaixo do mínimo a linha zera; acima do máximo trava no teto. O grupo soma essas linhas — não aplica um piso novo em cima da média. Reuniões realizadas acompanham o funil e ficam fora do bônus. A régua soma ${esc(fmtPct(model.weightSum))} nos indicadores que pontuam.</p>
         `;
     }
 
@@ -509,19 +512,19 @@
         const actualCell = isGroup
             ? `<td class="pve-num">${esc(fmtInt(row.actual))}</td>`
             : `<td class="pve-num"><input type="number" min="0" step="any" inputmode="decimal" data-pve-actual="${esc(row.id)}" value="${esc(String(num(row.actual, 0)))}"></td>`;
-        const points = isGroup ? fmt1(row.points) : '';
+        const dash = '<span class="cli-empty-cell">—</span>';
         return `<tr class="${cls}">
             <td class="pve-ind">${label}</td>
             ${actualCell}
             <td class="pve-num">${esc(fmt1(row.dailyPace))}</td>
             <td class="pve-num">${esc(row.monthMeta >= 10 ? fmtInt(row.monthMeta) : fmtN(row.monthMeta, row.monthMeta < 1 ? 2 : 1))}</td>
             <td class="pve-num">${esc(fmt1(row.dailyMeta))}</td>
-            <td class="pve-num">${esc(fmtPct(row.real))}</td>
-            <td class="pve-num">${esc(fmtPct(row.min))}</td>
-            <td class="pve-num">${esc(fmtPct(row.max))}</td>
-            <td class="pve-num">${esc(fmtPct(row.limited))}</td>
+            <td class="pve-num">${esc(fmtPct(row.real, 1))}</td>
+            <td class="pve-num">${row.min == null ? dash : esc(fmtPct(row.min))}</td>
+            <td class="pve-num">${row.max == null ? dash : esc(fmtPct(row.max))}</td>
+            <td class="pve-num">${esc(fmtPct(row.limited, 1))}</td>
             <td class="pve-num">${esc(fmtPct(row.weight))}</td>
-            <td class="pve-num pve-pts">${esc(points)}</td>
+            <td class="pve-num pve-pts">${esc(fmt1(row.points))}</td>
         </tr>`;
     }
 
