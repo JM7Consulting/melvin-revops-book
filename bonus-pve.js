@@ -20,7 +20,7 @@
     ]);
 
     const ACTUAL_KEYS = [
-        'discovery', 'activities', 'callsStarted', 'callsAnswered',
+        'onTime', 'late', 'callsStarted', 'callsPicked', 'callsLong',
         'meetingsBooked', 'meetingsHeld', 'qualityHot', 'qualityWarm', 'qualityCold',
         'salesBdr', 'salesCs', 'salesIn'
     ];
@@ -35,7 +35,7 @@
 
     function defaultRegra() {
         return {
-            daily: { discovery: 5, activities: 50, callsStarted: 12, callsAnswered: 3 },
+            daily: { onTime: 50, late: 20, callsStarted: 32, callsPicked: 8, callsLong: 4 },
             control: { meetingsBooked: 10, heldRate: 0.7, salesRate: 0.15 },
             mix: {
                 qualityHot: 0.5, qualityWarm: 0.3, qualityCold: 0.2,
@@ -43,10 +43,11 @@
             },
             gates: { minPoints: 88, maxPoints: 147 },
             leaf: {
-                discovery: { min: 0.7, max: 1.4, weight: 0.04 },
-                activities: { min: 0.8, max: 1.5, weight: 0.25 },
+                onTime: { min: 0.8, max: 1.5, weight: 0.15 },
+                late: { min: 0.9, max: 1.3, weight: 0.1 },
                 callsStarted: { min: 0.8, max: 1.5, weight: 0.2 },
-                callsAnswered: { min: 0.7, max: 1.4, weight: 0.15 },
+                callsPicked: { min: 0.8, max: 1.5, weight: 0.2 },
+                callsLong: { min: 0.7, max: 1.4, weight: 0.15 },
                 meetingsBooked: { min: 0.8, max: 1.5, weight: 0.1 },
                 meetingsHeld: { min: 0.8, max: 1.5, weight: 0.05 },
                 qualityHot: { min: 0.8, max: 1.5, weight: 0.1 },
@@ -62,6 +63,17 @@
     function blankActuals() {
         const o = {};
         ACTUAL_KEYS.forEach((k) => { o[k] = 0; });
+        return o;
+    }
+
+    function normalizeActuals(raw) {
+        const src = raw || {};
+        const o = blankActuals();
+        ACTUAL_KEYS.forEach((k) => {
+            if (src[k] != null) o[k] = num(src[k], 0);
+        });
+        if (src.onTime == null && src.activities != null) o.onTime = num(src.activities, 0);
+        if (src.callsLong == null && src.callsAnswered != null) o.callsLong = num(src.callsAnswered, 0);
         return o;
     }
 
@@ -169,10 +181,11 @@
         const metaHeld = metaBooked * num(c.heldRate, 0.7);
         const metaSales = metaHeld * num(c.salesRate, 0.15);
 
-        const discovery = leafRow('discovery', 'Descoberta decisor (nome, cargo)', num(a.discovery, 0), d.discovery * wd, L.discovery.min, L.discovery.max, L.discovery.weight, el, wd);
-        const activities = leafRow('activities', 'Concluídas', num(a.activities, 0), d.activities * wd, L.activities.min, L.activities.max, L.activities.weight, el, wd);
-        const callsStarted = leafRow('callsStarted', 'Iniciadas', num(a.callsStarted, 0), d.callsStarted * wd, L.callsStarted.min, L.callsStarted.max, L.callsStarted.weight, el, wd);
-        const callsAnswered = leafRow('callsAnswered', 'Atendidas — mais de 30 segundos', num(a.callsAnswered, 0), d.callsAnswered * wd, L.callsAnswered.min, L.callsAnswered.max, L.callsAnswered.weight, el, wd);
+        const onTime = leafRow('onTime', 'Concluídas em dia', num(a.onTime, 0), d.onTime * wd, L.onTime.min, L.onTime.max, L.onTime.weight, el, wd);
+        const late = leafRow('late', 'Concluídas em atraso', num(a.late, 0), d.late * wd, L.late.min, L.late.max, L.late.weight, el, wd);
+        const callsStarted = leafRow('callsStarted', 'Iniciadas (100%)', num(a.callsStarted, 0), d.callsStarted * wd, L.callsStarted.min, L.callsStarted.max, L.callsStarted.weight, el, wd);
+        const callsPicked = leafRow('callsPicked', 'Atendidas (25%)', num(a.callsPicked, 0), d.callsPicked * wd, L.callsPicked.min, L.callsPicked.max, L.callsPicked.weight, el, wd);
+        const callsLong = leafRow('callsLong', 'Atendidas — mais de 30 segundos (50%)', num(a.callsLong, 0), d.callsLong * wd, L.callsLong.min, L.callsLong.max, L.callsLong.weight, el, wd);
         const meetingsBooked = leafRow('meetingsBooked', 'Agendadas', num(a.meetingsBooked, 0), metaBooked, L.meetingsBooked.min, L.meetingsBooked.max, L.meetingsBooked.weight, el, wd);
         const meetingsHeld = leafRow('meetingsHeld', 'Realizadas', num(a.meetingsHeld, 0), metaHeld, L.meetingsHeld.min, L.meetingsHeld.max, L.meetingsHeld.weight, el, wd);
         const qualityHot = leafRow('qualityHot', 'Quente (50%)', num(a.qualityHot, 0), metaBooked * mix.qualityHot, L.qualityHot.min, L.qualityHot.max, L.qualityHot.weight, el, wd);
@@ -183,9 +196,8 @@
         const salesIn = leafRow('salesIn', 'Inbound (10%)', num(a.salesIn, 0), metaSales * mix.salesIn, L.salesIn.min, L.salesIn.max, L.salesIn.weight, el, wd);
 
         const groups = [
-            groupRow('g-discovery', 'Enriquecimento de Leads', [discovery], el, wd, true),
-            groupRow('g-activities', 'Atividades Concluídas', [activities], el, wd, true),
-            groupRow('g-calls', 'Ligações', [callsStarted, callsAnswered], el, wd, true),
+            groupRow('g-activities', 'Atividades Concluídas', [onTime, late], el, wd, true),
+            groupRow('g-calls', 'Ligações', [callsStarted, callsPicked, callsLong], el, wd, true),
             groupRow('g-booked', 'Reuniões Agendadas', [meetingsBooked], el, wd, true),
             groupRow('g-held', 'Reuniões Realizadas', [meetingsHeld], el, wd, false),
             groupRow('g-quality', 'Qualidade Reuniões', [qualityHot, qualityWarm, qualityCold], el, wd, true),
@@ -249,7 +261,7 @@
                     if (!parseMonthKey(k)) return;
                     const m = saved.months[k] || {};
                     next.months[k] = {
-                        actuals: Object.assign(blankActuals(), m.actuals || {}),
+                        actuals: normalizeActuals(m.actuals),
                         elapsedOverride: m.elapsedOverride == null ? null : num(m.elapsedOverride, null),
                         workdaysOverride: m.workdaysOverride == null ? null : num(m.workdaysOverride, null),
                         updatedAt: m.updatedAt || null
@@ -267,7 +279,7 @@
 
     function mergeRegra(saved) {
         const d = defaultRegra();
-        if (!saved || typeof saved !== 'object') return d;
+        if (!saved || typeof saved !== 'object' || !saved.daily || saved.daily.onTime == null) return d;
         if (saved.daily) Object.assign(d.daily, saved.daily);
         if (saved.control) Object.assign(d.control, saved.control);
         if (saved.mix) Object.assign(d.mix, saved.mix);
@@ -422,7 +434,16 @@
             const kids = g.children.map((c) => rowHtml(c, false, !g.scored)).join('');
             return groupHtml + kids;
         }).join('');
+        const cards = model.groups.map((g) => {
+            const fill = Math.max(0, Math.min(100, num(g.real, 0) * 100));
+            return `<article class="pve-gcard ${g.scored ? '' : 'is-aside'} heat-${heat(g.real)}">
+                <header><span>${esc(g.label)}</span><b>${g.scored ? esc(fmt1(g.points)) : 'fora'}</b></header>
+                <div class="pve-bar" aria-hidden="true"><i style="width:${fill}%"></i></div>
+                <small>${esc(fmtPct(g.real))} da meta · peso ${esc(fmtPct(g.weight))}${g.scored ? '' : ' · não pontua'}</small>
+            </article>`;
+        }).join('');
         return `
+            <div class="pve-board">${cards}</div>
             <div class="pve-sheet-wrap">
                 <table class="pve-sheet">
                     <thead>
@@ -472,7 +493,7 @@
                 <button type="button" class="pve-btn" data-pve="export">Exportar JSON</button>
                 <label class="pve-btn pve-btn--ghost pve-file">Importar JSON<input type="file" accept="application/json" data-pve="import" hidden></label>
             </div>
-            <p class="pve-foot">Números ficam neste navegador (mês a mês). Bitrix ainda não alimenta a planilha — lance o realizado à mão. Fórmulas iguais à aba SETEMBRO + Valor do Ponto.</p>
+            <p class="pve-foot">O único número que você lança é o atingido do mês, na linha de cada indicador. O grupo soma as linhas de baixo — inclusive atividades em dia e em atraso. Reuniões realizadas acompanham o funil e ficam fora do bônus. A régua de outubro soma ${esc(fmtPct(model.weightSum))} nos indicadores que pontuam. Tudo fica neste navegador até o Bitrix alimentar.</p>
         `;
     }
 
@@ -543,10 +564,11 @@
                 <div class="pve-regua-grid">
                     <article>
                         <h3>Metas diárias</h3>
-                        <label>Enriquecimento / dia <input type="number" min="0" step="0.1" data-pve-regra="daily.discovery" value="${d.discovery}"></label>
-                        <label>Atividades / dia <input type="number" min="0" step="0.1" data-pve-regra="daily.activities" value="${d.activities}"></label>
+                        <label>Concluídas em dia / dia <input type="number" min="0" step="0.1" data-pve-regra="daily.onTime" value="${d.onTime}"></label>
+                        <label>Concluídas em atraso / dia <input type="number" min="0" step="0.1" data-pve-regra="daily.late" value="${d.late}"></label>
                         <label>Ligações iniciadas / dia <input type="number" min="0" step="0.1" data-pve-regra="daily.callsStarted" value="${d.callsStarted}"></label>
-                        <label>Ligações &gt;30s / dia <input type="number" min="0" step="0.1" data-pve-regra="daily.callsAnswered" value="${d.callsAnswered}"></label>
+                        <label>Atendidas (25%) / dia <input type="number" min="0" step="0.1" data-pve-regra="daily.callsPicked" value="${d.callsPicked}"></label>
+                        <label>Atendidas &gt;30s / dia <input type="number" min="0" step="0.1" data-pve-regra="daily.callsLong" value="${d.callsLong}"></label>
                     </article>
                     <article>
                         <h3>Controle de funil</h3>
