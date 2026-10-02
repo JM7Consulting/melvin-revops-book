@@ -192,23 +192,38 @@
         return POINT_BANDS[POINT_BANDS.length - 1];
     }
 
-    function scoreLine(def, cfg, actual) {
-        const meta = num(cfg.meta, 0);
+    function lineUnit(def, cfg) {
+        if (cfg && (cfg.unit === 'n' || cfg.unit === 'pct' || cfg.unit === 'brl')) return cfg.unit;
+        if (def && (def.unit === 'pct' || def.unit === 'brl')) return def.unit;
+        return 'n';
+    }
+
+    function monthTarget(typed, unit, workdays) {
+        const meta = num(typed, 0);
+        if (unit === 'pct') return meta;
+        const wd = num(workdays, 0);
+        if (!(wd > 0)) return 0;
+        return meta * wd;
+    }
+
+    function scoreLine(def, cfg, actual, workdays) {
         const min = num(cfg.min, 0);
         const max = num(cfg.max, 0);
         const weight = num(cfg.weight, 0);
         const sense = cfg.sense === 'down' || cfg.sense === 'up' ? cfg.sense : (def.sense === 'down' ? 'down' : 'up');
-        const unit = cfg.unit === 'n' || cfg.unit === 'pct' || cfg.unit === 'brl' ? cfg.unit : (def.unit === 'pct' || def.unit === 'brl' ? def.unit : 'n');
+        const unit = lineUnit(def, cfg);
+        const metaDay = num(cfg.meta, 0);
+        const meta = monthTarget(metaDay, unit, workdays);
         const real = attainRatio(actual, meta, sense);
         const limited = clampAttain(real, min, max);
         const points = (weight / 100) * limited * 100;
-        return { id: def.id, actual, meta, min, max, weight, sense, unit, real, limited, points, ready: meta > 0 };
+        return { id: def.id, actual, meta, metaDay, min, max, weight, sense, unit, real, limited, points, ready: meta > 0 };
     }
 
     function compute(actuals, lines, elapsed, workdays) {
         const a = Object.assign(blankActuals(), actuals || {});
         const cfg = lines || defaultLines();
-        const rows = LINE_DEFS.map((def) => scoreLine(def, cfg[def.id] || blankCfg(), num(a[def.id], 0)));
+        const rows = LINE_DEFS.map((def) => scoreLine(def, cfg[def.id] || blankCfg(def), num(a[def.id], 0), workdays));
         const rawTotal = rows.reduce((s, row) => s + row.points, 0);
         const total = Math.round(rawTotal);
         const band = bandFor(total);
@@ -220,8 +235,7 @@
             const paced = {};
             LINE_DEFS.forEach((def) => {
                 const value = num(a[def.id], 0);
-                const rowCfg = cfg[def.id] || blankCfg(def);
-                const unit = rowCfg.unit === 'pct' || rowCfg.unit === 'brl' || rowCfg.unit === 'n' ? rowCfg.unit : def.unit;
+                const unit = lineUnit(def, cfg[def.id]);
                 paced[def.id] = unit === 'pct' ? value : value / el * wd;
             });
             const proj = compute(paced, cfg, wd, wd);
@@ -408,9 +422,9 @@
         render(document.getElementById('pveRoot'));
     }
 
-    function inputNum(lineId, field, value, step) {
+    function inputNum(lineId, field, value, placeholder) {
         const shown = value === 0 && (field === 'meta' || field === 'weight' || field === 'actual') ? '' : String(value);
-        const ph = field === 'meta' ? 'meta' : (field === 'weight' ? 'peso' : '0');
+        const ph = placeholder || (field === 'meta' ? 'meta' : (field === 'weight' ? 'peso' : '0'));
         return `<input type="text" inputmode="decimal" autocomplete="off" spellcheck="false" placeholder="${ph}" data-pve-line="${esc(lineId)}" data-pve-field="${field}" value="${esc(shown)}">`;
     }
 
@@ -436,27 +450,27 @@
         return '';
     }
 
-    function entryHtml(lineId, field, value, unit) {
+    function entryHtml(lineId, field, value, unit, placeholder) {
         const mark = unitMark(unit);
         const cls = mark ? 'pve-entry pve-entry--mark' : 'pve-entry';
-        return `<span class="${cls}">${inputNum(lineId, field, value, 'any')}${mark ? `<span class="pve-unit">${mark}</span>` : ''}</span>`;
+        return `<span class="${cls}">${inputNum(lineId, field, value, placeholder)}${mark ? `<span class="pve-unit">${mark}</span>` : ''}</span>`;
     }
 
     function rowHtml(def, row, elapsed, workdays) {
         const realShown = row.ready ? esc(fmtPct(row.real, 1)) : '<span class="cli-empty-cell">sem meta</span>';
         const limCell = row.ready ? esc(fmtPct(row.limited, 1)) : '—';
-        const dayHit = dailyOf(row.actual, elapsed);
-        const dayMeta = dailyOf(row.meta, workdays);
         const note = def.note ? `<small class="pve-tag">${esc(def.note)}</small>` : '';
         const sense = row.sense === 'down' ? 'down' : 'up';
         const unit = row.unit === 'pct' || row.unit === 'brl' ? row.unit : 'n';
+        const dayHit = dailyOf(row.actual, elapsed);
+        const monthMeta = unit === 'pct' || !(row.meta > 0) ? '—' : fmtValue(unit, row.meta);
         const rate = unit === 'pct';
         const hitCells = rate
             ? `<td class="pve-num pve-col-hit pve-span" colspan="2">${entryHtml(def.id, 'actual', row.actual, unit)}</td>`
-            : `<td class="pve-num pve-col-hit">${entryHtml(def.id, 'actual', row.actual, unit)}</td><td class="pve-num pve-col-hit" data-pve-cell="day-actual">${dayHit == null ? '—' : esc(fmtValue(unit, dayHit))}</td>`;
+            : `<td class="pve-num pve-col-hit">${entryHtml(def.id, 'actual', row.actual, unit)}</td><td class="pve-num pve-col-hit pve-calc" data-pve-cell="day-actual" title="Média = mês ÷ dias úteis decorridos">${dayHit == null ? '—' : esc(fmtValue(unit, dayHit))}</td>`;
         const metaCells = rate
             ? `<td class="pve-num pve-col-meta pve-span" colspan="2">${entryHtml(def.id, 'meta', row.meta, unit)}</td>`
-            : `<td class="pve-num pve-col-meta">${entryHtml(def.id, 'meta', row.meta, unit)}</td><td class="pve-num pve-col-meta" data-pve-cell="day-meta">${dayMeta == null ? '—' : esc(fmtValue(unit, dayMeta))}</td>`;
+            : `<td class="pve-num pve-col-meta pve-calc" data-pve-cell="month-meta" title="Mês = média do dia × dias úteis">${esc(monthMeta)}</td><td class="pve-num pve-col-meta">${entryHtml(def.id, 'meta', row.metaDay, unit, 'dia')}</td>`;
         return `<tr class="is-leaf heat-${heat(row.real)}" data-pve-row="${esc(def.id)}">
             <td class="pve-ind">
                 <span class="pve-ind-name"><strong>${esc(def.label)}</strong>${note}</span>
@@ -473,10 +487,10 @@
             ${hitCells}
             ${metaCells}
             <td class="pve-num" data-pve-cell="real">${realShown}</td>
-            <td class="pve-num">${inputNum(def.id, 'min', row.min, '0.1')}</td>
-            <td class="pve-num">${inputNum(def.id, 'max', row.max, '0.1')}</td>
+            <td class="pve-num">${inputNum(def.id, 'min', row.min)}</td>
+            <td class="pve-num">${inputNum(def.id, 'max', row.max)}</td>
             <td class="pve-num" data-pve-cell="limited">${limCell}</td>
-            <td class="pve-num">${inputNum(def.id, 'weight', row.weight, '0.1')}</td>
+            <td class="pve-num">${inputNum(def.id, 'weight', row.weight)}</td>
             <td class="pve-num pve-pts" data-pve-cell="points">${esc(fmt1(row.points))}</td>
         </tr>`;
     }
@@ -528,7 +542,7 @@
                     </tbody>
                 </table>
             </div>
-            <p class="pve-foot">O formato fica sob o nome do indicador: Número, Percentual ou Reais. Em percentual, o mês ocupa as colunas de média: não existe média por dia. Maior melhor: atingimento real = atingido ÷ meta. Menor melhor: atingimento real = meta ÷ atingido. Exemplo de atraso: 10% atingido com meta de 40% vale 400% e trava no máximo. Atingido zero, quando menor é melhor, também trava no máximo. A pontuação só começa no mínimo. Pontos da linha = peso × atingimento com limitador. Nas demais linhas, a média do atingido usa os dias úteis já decorridos e a média da meta usa os dias úteis do mês. O peso das linhas precisa fechar 100%.</p>`;
+            <p class="pve-foot">O formato fica sob o nome do indicador: Número, Percentual ou Reais. Em percentual, o mês ocupa as colunas de média: não existe média por dia. Nas outras linhas, o atingido é preenchido no mês e a média do dia sai sozinha (mês ÷ dias úteis decorridos). A meta é preenchida na média do dia e o mês sai sozinho (média × dias úteis do mês). Maior melhor: atingimento real = atingido do mês ÷ meta do mês. Menor melhor: atingimento real = meta do mês ÷ atingido do mês. Exemplo de atraso: 10% atingido com meta de 40% vale 400% e trava no máximo. Atingido zero, quando menor é melhor, também trava no máximo. A pontuação só começa no mínimo. Pontos da linha = peso × atingimento com limitador. O peso das linhas precisa fechar 100%.</p>`;
     }
 
     function renderBands(model) {
@@ -589,16 +603,15 @@
             if (!tr) return;
             tr.className = 'is-leaf heat-' + heat(row.real);
             const dayHit = dailyOf(row.actual, model.elapsed);
-            const dayMeta = dailyOf(row.meta, model.workdays);
             const dayHitEl = tr.querySelector('[data-pve-cell="day-actual"]');
-            const dayMetaEl = tr.querySelector('[data-pve-cell="day-meta"]');
+            const monthMetaEl = tr.querySelector('[data-pve-cell="month-meta"]');
             const realEl = tr.querySelector('[data-pve-cell="real"]');
             const limEl = tr.querySelector('[data-pve-cell="limited"]');
             const ptsEl = tr.querySelector('[data-pve-cell="points"]');
             const senseEl = tr.querySelector('[data-pve-field="sense"]');
             if (senseEl) senseEl.classList.toggle('pve-sense--down', row.sense === 'down');
             if (dayHitEl) dayHitEl.textContent = dayHit == null ? '—' : fmtValue(row.unit, dayHit);
-            if (dayMetaEl) dayMetaEl.textContent = dayMeta == null ? '—' : fmtValue(row.unit, dayMeta);
+            if (monthMetaEl) monthMetaEl.textContent = row.meta > 0 ? fmtValue(row.unit, row.meta) : '—';
             if (realEl) {
                 realEl.textContent = '';
                 if (row.ready) realEl.textContent = fmtPct(row.real, 1);

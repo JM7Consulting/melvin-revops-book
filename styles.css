@@ -14239,6 +14239,7 @@ body.light-mode .mx-shell .mx-step.is-fail,
   font-weight: 800;
   font-size: 0.68rem;
 }
+.pve-calc { font-weight: 800; color: var(--text-main); }
 .pve-span { text-align: center !important; }
 .pve-span .pve-entry { max-width: 108px; }
 .pve-sense {
