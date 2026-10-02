@@ -397,7 +397,7 @@
     function inputNum(lineId, field, value, step) {
         const shown = value === 0 && (field === 'meta' || field === 'weight' || field === 'actual') ? '' : String(value);
         const ph = field === 'meta' ? 'meta' : (field === 'weight' ? 'peso' : '0');
-        return `<input type="number" min="0" step="${step}" inputmode="decimal" placeholder="${ph}" data-pve-line="${esc(lineId)}" data-pve-field="${field}" value="${esc(shown)}">`;
+        return `<input type="text" inputmode="decimal" autocomplete="off" spellcheck="false" placeholder="${ph}" data-pve-line="${esc(lineId)}" data-pve-field="${field}" value="${esc(shown)}">`;
     }
 
     function dailyOf(total, days) {
@@ -423,18 +423,18 @@
         const dayHit = dailyOf(row.actual, elapsed);
         const dayMeta = dailyOf(row.meta, workdays);
         const note = def.note ? `<small class="pve-tag">${esc(def.note)}</small>` : '';
-        return `<tr class="is-leaf heat-${heat(row.real)}">
+        return `<tr class="is-leaf heat-${heat(row.real)}" data-pve-row="${esc(def.id)}">
             <td class="pve-ind"><strong>${esc(def.label)}</strong>${note}</td>
             <td class="pve-num pve-col-hit">${inputNum(def.id, 'actual', row.actual, step)}</td>
-            <td class="pve-num pve-col-hit">${dayHit == null ? '—' : esc(fmtValue(def.unit, dayHit))}</td>
+            <td class="pve-num pve-col-hit" data-pve-cell="day-actual">${dayHit == null ? '—' : esc(fmtValue(def.unit, dayHit))}</td>
             <td class="pve-num pve-col-meta">${inputNum(def.id, 'meta', row.meta, step)}</td>
-            <td class="pve-num pve-col-meta">${dayMeta == null ? '—' : esc(fmtValue(def.unit, dayMeta))}</td>
-            <td class="pve-num">${realShown}</td>
+            <td class="pve-num pve-col-meta" data-pve-cell="day-meta">${dayMeta == null ? '—' : esc(fmtValue(def.unit, dayMeta))}</td>
+            <td class="pve-num" data-pve-cell="real">${realShown}</td>
             <td class="pve-num">${inputNum(def.id, 'min', row.min, '0.1')}</td>
             <td class="pve-num">${inputNum(def.id, 'max', row.max, '0.1')}</td>
-            <td class="pve-num">${limCell}</td>
+            <td class="pve-num" data-pve-cell="limited">${limCell}</td>
             <td class="pve-num">${inputNum(def.id, 'weight', row.weight, '0.1')}</td>
-            <td class="pve-num pve-pts">${esc(fmt1(row.points))}</td>
+            <td class="pve-num pve-pts" data-pve-cell="points">${esc(fmt1(row.points))}</td>
         </tr>`;
     }
 
@@ -442,7 +442,7 @@
         const rows = LINE_DEFS.map((def, i) => rowHtml(def, model.rows[i], model.elapsed, model.workdays)).join('');
         const peso = weightStatus(model.weightSum);
         return `
-            <p class="pve-weight ${peso.cls}">${esc(peso.text)}</p>
+            <p class="pve-weight ${peso.cls}" data-pve-weight-msg>${esc(peso.text)}</p>
             <div class="pve-sheet-wrap">
                 <table class="pve-sheet">
                     <thead>
@@ -471,8 +471,8 @@
                             <td class="pve-col-hit"></td><td class="pve-col-hit"></td>
                             <td class="pve-col-meta"></td><td class="pve-col-meta"></td>
                             <td></td><td></td><td></td><td></td>
-                            <td class="pve-num ${peso.cls}">${esc(fmt1(model.weightSum))}%</td>
-                            <td class="pve-num pve-pts">${esc(String(model.total))}</td>
+                            <td class="pve-num ${peso.cls}" data-pve-total-weight>${esc(fmt1(model.weightSum))}%</td>
+                            <td class="pve-num pve-pts" data-pve-total-points>${esc(String(model.total))}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -518,6 +518,80 @@
         return `<div class="pve-hist"><table class="pve-sheet"><thead><tr><th>Mês</th><th>Pontos</th><th>Bônus</th><th>Faixa</th><th>Dias</th></tr></thead><tbody>${rows}</tbody></table></div>`;
     }
 
+    function parseLoose(raw) {
+        const s = String(raw == null ? '' : raw).trim().replace(/\s/g, '').replace(',', '.');
+        if (s === '' || s === '.') return 0;
+        const n = Number(s);
+        return Number.isFinite(n) ? Math.max(0, n) : 0;
+    }
+
+    function paintDerived(host) {
+        if (!host || !state || tab !== 'planilha') return;
+        const today = new Date();
+        const ctx = monthContext(today);
+        const model = compute(ctx.rec.actuals, state.lines, ctx.elapsed, ctx.workdays);
+        const pace = ctx.workdays > 0 ? ctx.elapsed / ctx.workdays : 0;
+        const peso = weightStatus(model.weightSum);
+        LINE_DEFS.forEach((def, i) => {
+            const row = model.rows[i];
+            const tr = host.querySelector(`tr[data-pve-row="${def.id}"]`);
+            if (!tr) return;
+            tr.className = 'is-leaf heat-' + heat(row.real);
+            const dayHit = dailyOf(row.actual, model.elapsed);
+            const dayMeta = dailyOf(row.meta, model.workdays);
+            const dayHitEl = tr.querySelector('[data-pve-cell="day-actual"]');
+            const dayMetaEl = tr.querySelector('[data-pve-cell="day-meta"]');
+            const realEl = tr.querySelector('[data-pve-cell="real"]');
+            const limEl = tr.querySelector('[data-pve-cell="limited"]');
+            const ptsEl = tr.querySelector('[data-pve-cell="points"]');
+            if (dayHitEl) dayHitEl.textContent = dayHit == null ? '—' : fmtValue(def.unit, dayHit);
+            if (dayMetaEl) dayMetaEl.textContent = dayMeta == null ? '—' : fmtValue(def.unit, dayMeta);
+            if (realEl) {
+                realEl.textContent = '';
+                if (row.ready) realEl.textContent = fmtPct(row.real, 1);
+                else realEl.innerHTML = '<span class="cli-empty-cell">sem meta</span>';
+            }
+            if (limEl) limEl.textContent = row.ready ? fmtPct(row.limited, 1) : '—';
+            if (ptsEl) ptsEl.textContent = fmt1(row.points);
+        });
+        const weightEl = host.querySelector('[data-pve-total-weight]');
+        if (weightEl) {
+            weightEl.textContent = fmt1(model.weightSum) + '%';
+            weightEl.className = 'pve-num ' + peso.cls;
+        }
+        const totalEl = host.querySelector('[data-pve-total-points]');
+        if (totalEl) totalEl.textContent = String(model.total);
+        const msg = host.querySelector('[data-pve-weight-msg]');
+        if (msg) {
+            msg.textContent = peso.text;
+            msg.className = 'pve-weight ' + peso.cls;
+        }
+        const setKpi = (name, text) => {
+            const el = host.querySelector(`[data-pve-kpi="${name}"]`);
+            if (el) el.textContent = text;
+        };
+        setKpi('points', String(model.total));
+        setKpi('points-sub', 'soma ' + fmt1(model.rawTotal) + ' · peso ' + fmt1(model.weightSum) + '%');
+        setKpi('bonus', fmtBRL(model.bonus));
+        setKpi('bonus-sub', fmtBRL(model.band.value) + ' / ponto · ' + model.band.label);
+        setKpi('pace', fmtPct(pace, 0));
+        setKpi('pace-sub', ctx.elapsed + ' de ' + ctx.workdays + ' dias úteis');
+        const projCard = host.querySelector('[data-pve-kpi-card="proj"]');
+        if (projCard) projCard.classList.toggle('is-muted', !model.projected);
+        setKpi('proj', model.projected ? String(model.projected.total) : '—');
+        setKpi('proj-sub', model.projected ? fmtBRL(model.projected.bonus) + ' se o volume se manter' : 'Percentuais não são projetados');
+        const bar = host.querySelector('.pve-sync');
+        if (bar) bar.classList.toggle('is-dirty', dirty);
+        const status = host.querySelector('.pve-sync-status');
+        if (status) status.textContent = syncStatus;
+    }
+
+    function noteLocalEdit(host) {
+        stamp();
+        syncStatus = 'Alteração neste navegador. Salve para todos verem.';
+        paintDerived(host);
+    }
+
     function render(host) {
         if (!host || !state) return;
         const today = new Date();
@@ -544,14 +618,14 @@
                     <strong>${esc(monthLabel(state.activeMonth))}</strong>
                     <button type="button" class="pve-ico" data-pve="next-month" aria-label="Próximo mês">›</button>
                 </div>
-                <label class="pve-field pve-field--n"><span>Dias úteis</span><input type="number" min="1" max="31" step="1" data-pve="workdays" value="${ctx.workdays}"></label>
-                <label class="pve-field pve-field--n"><span>Dias decorridos</span><input type="number" min="0" max="31" step="1" data-pve="elapsed" value="${ctx.elapsed}"></label>
+                <label class="pve-field pve-field--n"><span>Dias úteis</span><input type="text" inputmode="numeric" autocomplete="off" data-pve="workdays" value="${ctx.workdays}"></label>
+                <label class="pve-field pve-field--n"><span>Dias decorridos</span><input type="text" inputmode="numeric" autocomplete="off" data-pve="elapsed" value="${ctx.elapsed}"></label>
             </div>
             <div class="pve-kpis">
-                <article class="pve-kpi"><span>Pontuação</span><strong>${model.total}</strong><small>soma ${esc(fmt1(model.rawTotal))} · peso ${esc(fmt1(model.weightSum))}%</small></article>
-                <article class="pve-kpi"><span>Bônus estimado</span><strong>${esc(fmtBRL(model.bonus))}</strong><small>${esc(fmtBRL(model.band.value))} / ponto · ${esc(model.band.label)}</small></article>
-                <article class="pve-kpi"><span>Ritmo do mês</span><strong>${esc(fmtPct(pace, 0))}</strong><small>${ctx.elapsed} de ${ctx.workdays} dias úteis</small></article>
-                <article class="pve-kpi ${model.projected ? '' : 'is-muted'}"><span>Projeção</span><strong>${model.projected ? model.projected.total : '—'}</strong><small>${model.projected ? esc(fmtBRL(model.projected.bonus)) + ' se o volume se manter' : 'Percentuais não são projetados'}</small></article>
+                <article class="pve-kpi"><span>Pontuação</span><strong data-pve-kpi="points">${model.total}</strong><small data-pve-kpi="points-sub">soma ${esc(fmt1(model.rawTotal))} · peso ${esc(fmt1(model.weightSum))}%</small></article>
+                <article class="pve-kpi"><span>Bônus estimado</span><strong data-pve-kpi="bonus">${esc(fmtBRL(model.bonus))}</strong><small data-pve-kpi="bonus-sub">${esc(fmtBRL(model.band.value))} / ponto · ${esc(model.band.label)}</small></article>
+                <article class="pve-kpi"><span>Ritmo do mês</span><strong data-pve-kpi="pace">${esc(fmtPct(pace, 0))}</strong><small data-pve-kpi="pace-sub">${ctx.elapsed} de ${ctx.workdays} dias úteis</small></article>
+                <article class="pve-kpi ${model.projected ? '' : 'is-muted'}" data-pve-kpi-card="proj"><span>Projeção</span><strong data-pve-kpi="proj">${model.projected ? model.projected.total : '—'}</strong><small data-pve-kpi="proj-sub">${model.projected ? esc(fmtBRL(model.projected.bonus)) + ' se o volume se manter' : 'Percentuais não são projetados'}</small></article>
             </div>
             <div class="pve-tabs" role="tablist">
                 <button type="button" class="pve-tab ${tab === 'planilha' ? 'is-active' : ''}" data-pve-tab="planilha">Planilha</button>
@@ -573,33 +647,23 @@
             const t = e.target;
             if (t.matches('[data-pve="person"]')) {
                 state.person = t.value;
-                stamp();
-                syncStatus = 'Alteração neste navegador. Salve para todos verem.';
+                noteLocalEdit(host);
                 return;
             }
             if (t.matches('[data-pve="workdays"]') || t.matches('[data-pve="elapsed"]')) {
                 const rec = ensureMonth(state.activeMonth);
                 const field = t.getAttribute('data-pve') === 'workdays' ? 'workdaysOverride' : 'elapsedOverride';
-                rec[field] = t.value === '' ? null : Math.max(0, num(t.value, 0));
-                stamp();
-                render(host);
+                rec[field] = t.value === '' ? null : Math.max(0, parseLoose(t.value));
+                noteLocalEdit(host);
                 return;
             }
             if (t.matches('[data-pve-line]')) {
                 const id = t.getAttribute('data-pve-line');
                 const field = t.getAttribute('data-pve-field');
-                const value = Math.max(0, num(t.value, 0));
+                const value = parseLoose(t.value);
                 if (field === 'actual') ensureMonth(state.activeMonth).actuals[id] = value;
                 else if (state.lines[id]) state.lines[id][field] = value;
-                stamp();
-                const start = t.selectionStart;
-                syncStatus = 'Alteração neste navegador. Salve para todos verem.';
-                render(host);
-                const again = host.querySelector(`[data-pve-line="${id}"][data-pve-field="${field}"]`);
-                if (again) {
-                    again.focus();
-                    try { again.setSelectionRange(start, start); } catch (err) {}
-                }
+                noteLocalEdit(host);
             }
         });
         host.addEventListener('click', (e) => {
