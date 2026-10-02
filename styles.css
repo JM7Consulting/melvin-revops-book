@@ -14182,6 +14182,23 @@ body.light-mode .mx-shell .mx-step.is-fail,
 }
 .pve-sheet .is-leaf td { color: var(--text-muted); }
 .pve-sheet .is-leaf .pve-ind { padding-left: 12px; }
+.pve-sheet--score tbody tr.is-leaf:hover td:not(.pve-col-hit):not(.pve-col-meta),
+.pve-sheet--score tbody tr.is-leaf:focus-within td:not(.pve-col-hit):not(.pve-col-meta) {
+  background: rgba(100, 252, 216, 0.1);
+  color: var(--text-main);
+}
+.pve-sheet--score tbody tr.is-leaf:hover .pve-col-hit,
+.pve-sheet--score tbody tr.is-leaf:focus-within .pve-col-hit {
+  background: rgba(234, 88, 12, 0.3);
+}
+.pve-sheet--score tbody tr.is-leaf:hover .pve-col-meta,
+.pve-sheet--score tbody tr.is-leaf:focus-within .pve-col-meta {
+  background: rgba(37, 99, 235, 0.3);
+}
+.pve-sheet--score tbody tr.is-leaf:hover td:first-child,
+.pve-sheet--score tbody tr.is-leaf:focus-within td:first-child {
+  box-shadow: inset 3px 0 0 #22d3ee;
+}
 .pve-sheet .is-excluded td { opacity: 0.72; }
 .pve-sheet .is-excluded em {
   font-style: normal;
@@ -14517,6 +14534,15 @@ body.light-mode .pve-sheet thead .pve-h-hit { background: #ea580c; color: #fff7e
 body.light-mode .pve-sheet thead .pve-h-meta { background: #2563eb; color: #eff6ff; }
 body.light-mode .pve-col-hit { background: #ffedd5; color: #9a3412; }
 body.light-mode .pve-col-meta { background: #dbeafe; color: #1e3a8a; }
+body.light-mode .pve-sheet--score tbody tr.is-leaf:hover td:not(.pve-col-hit):not(.pve-col-meta),
+body.light-mode .pve-sheet--score tbody tr.is-leaf:focus-within td:not(.pve-col-hit):not(.pve-col-meta) {
+  background: #ecfeff;
+  color: #0f172a;
+}
+body.light-mode .pve-sheet--score tbody tr.is-leaf:hover .pve-col-hit,
+body.light-mode .pve-sheet--score tbody tr.is-leaf:focus-within .pve-col-hit { background: #fed7aa; }
+body.light-mode .pve-sheet--score tbody tr.is-leaf:hover .pve-col-meta,
+body.light-mode .pve-sheet--score tbody tr.is-leaf:focus-within .pve-col-meta { background: #bfdbfe; }
 body.light-mode .pve-col-hit input { background: #fff7ed; color: #9a3412; border-color: #fdba74; }
 body.light-mode .pve-col-meta input { background: #eff6ff; color: #1e3a8a; border-color: #93c5fd; }
 body.light-mode .pve-sense,
