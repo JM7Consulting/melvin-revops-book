@@ -2,8 +2,16 @@
   "rev": 2,
   "person": "",
   "activeMonth": "2026-10",
-  "updatedAt": "2026-10-02T18:10:40.494Z",
+  "updatedAt": "2026-10-02T18:52:36.830Z",
   "lines": {
+    "lud": {
+      "meta": 0,
+      "min": 80,
+      "max": 150,
+      "weight": 0,
+      "sense": "up",
+      "unit": "n"
+    },
     "actTotal": {
       "meta": 0,
       "min": 80,
@@ -52,6 +60,14 @@
       "sense": "up",
       "unit": "n"
     },
+    "meetingsHeld": {
+      "meta": 0,
+      "min": 80,
+      "max": 150,
+      "weight": 0,
+      "sense": "up",
+      "unit": "n"
+    },
     "meetQuality": {
       "meta": 0,
       "min": 80,
@@ -60,14 +76,6 @@
       "sense": "up",
       "unit": "pct"
     },
-    "revenueNew": {
-      "meta": 0,
-      "min": 80,
-      "max": 150,
-      "weight": 0,
-      "sense": "up",
-      "unit": "brl"
-    },
     "salesTotal": {
       "meta": 0,
       "min": 80,
@@ -75,35 +83,47 @@
       "weight": 0,
       "sense": "up",
       "unit": "n"
+    },
+    "revenueNew": {
+      "meta": 0,
+      "min": 80,
+      "max": 150,
+      "weight": 0,
+      "sense": "up",
+      "unit": "brl"
     }
   },
   "months": {
     "2026-10": {
       "actuals": {
+        "lud": 0,
         "actTotal": 0,
         "actLatePct": 0,
         "callsStarted": 0,
         "callsPicked": 0,
         "callsLong": 0,
         "meetingsBooked": 0,
+        "meetingsHeld": 0,
         "meetQuality": 0,
-        "revenueNew": 0,
-        "salesTotal": 0
+        "salesTotal": 0,
+        "revenueNew": 0
       },
       "elapsedOverride": null,
       "workdaysOverride": 21
     },
     "2026-11": {
       "actuals": {
+        "lud": 0,
         "actTotal": 0,
         "actLatePct": 0,
         "callsStarted": 0,
         "callsPicked": 0,
         "callsLong": 0,
         "meetingsBooked": 0,
+        "meetingsHeld": 0,
         "meetQuality": 0,
-        "revenueNew": 0,
-        "salesTotal": 0
+        "salesTotal": 0,
+        "revenueNew": 0
       },
       "elapsedOverride": null,
       "workdaysOverride": null
