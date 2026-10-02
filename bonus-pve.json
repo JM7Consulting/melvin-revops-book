@@ -1,0 +1,100 @@
+{
+  "rev": 2,
+  "person": "",
+  "activeMonth": "2026-10",
+  "updatedAt": "2026-10-02T15:00:00.000Z",
+  "lines": {
+    "actTotal": {
+      "meta": 0,
+      "min": 80,
+      "max": 150,
+      "weight": 0
+    },
+    "actLatePct": {
+      "meta": 0,
+      "min": 80,
+      "max": 150,
+      "weight": 0
+    },
+    "callsStarted": {
+      "meta": 0,
+      "min": 80,
+      "max": 150,
+      "weight": 0
+    },
+    "callsPicked": {
+      "meta": 0,
+      "min": 80,
+      "max": 150,
+      "weight": 0
+    },
+    "callsLong": {
+      "meta": 0,
+      "min": 80,
+      "max": 150,
+      "weight": 0
+    },
+    "meetingsBooked": {
+      "meta": 0,
+      "min": 80,
+      "max": 150,
+      "weight": 0
+    },
+    "meetHot": {
+      "meta": 0,
+      "min": 80,
+      "max": 150,
+      "weight": 0
+    },
+    "meetWarm": {
+      "meta": 0,
+      "min": 80,
+      "max": 150,
+      "weight": 0
+    },
+    "meetCold": {
+      "meta": 0,
+      "min": 80,
+      "max": 150,
+      "weight": 0
+    },
+    "meetGrave": {
+      "meta": 0,
+      "min": 80,
+      "max": 150,
+      "weight": 0
+    },
+    "revenueNew": {
+      "meta": 0,
+      "min": 80,
+      "max": 150,
+      "weight": 0
+    },
+    "salesTotal": {
+      "meta": 0,
+      "min": 80,
+      "max": 150,
+      "weight": 0
+    }
+  },
+  "months": {
+    "2026-10": {
+      "actuals": {
+        "actTotal": 0,
+        "actLatePct": 0,
+        "callsStarted": 0,
+        "callsPicked": 0,
+        "callsLong": 0,
+        "meetingsBooked": 0,
+        "meetHot": 0,
+        "meetWarm": 0,
+        "meetCold": 0,
+        "meetGrave": 0,
+        "revenueNew": 0,
+        "salesTotal": 0
+      },
+      "elapsedOverride": null,
+      "workdaysOverride": null
+    }
+  }
+}

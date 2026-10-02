@@ -14249,6 +14249,58 @@ body.light-mode .mx-shell .mx-step.is-fail,
   color: #fbbf24;
   border: 1px solid rgba(251, 191, 36, 0.35);
 }
+.pve-sync {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  margin: 16px 0 0;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  background: rgba(8, 12, 18, 0.35);
+}
+.pve-sync.is-dirty { border-color: rgba(251, 191, 36, 0.45); }
+.pve-sync-status { flex: 1 1 220px; font-size: 0.82rem; color: var(--text-muted); }
+.pve-sync-box {
+  margin-top: 8px;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px dashed rgba(148, 163, 184, 0.28);
+}
+.pve-sync-box p { margin: 0 0 8px; font-size: 0.82rem; color: var(--text-muted); }
+.pve-sync-box input {
+  width: min(420px, 100%);
+  margin: 0 8px 8px 0;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(148, 163, 184, 0.28);
+  background: rgba(15, 23, 42, 0.65);
+  color: var(--text-main);
+}
+.pve-tag {
+  display: inline-block;
+  margin-left: 8px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: #fbbf24;
+}
+.pve-sheet tr.is-total td {
+  font-weight: 800;
+  color: var(--text-main);
+  border-top: 1px solid rgba(148, 163, 184, 0.28);
+  background: rgba(100, 252, 216, 0.06);
+}
+.pve-link {
+  border: 0;
+  background: transparent;
+  color: var(--melvin-cyan);
+  font: 700 0.85rem Manrope, sans-serif;
+  cursor: pointer;
+  padding: 0;
+}
 .pve-file { display: inline-flex; align-items: center; }
 .pve-regua-grid {
   display: grid;

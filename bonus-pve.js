@@ -1,4 +1,4 @@
-/* Bonificação PVE · Melvin — réplica da planilha (aba SETEMBRO + Valor do Ponto) */
+/* Bonificação PVE · cada indicador pontua sozinho. A régua publicada fica em bonus-pve.json. */
 (function (root, factory) {
     const api = factory();
     if (typeof module !== 'undefined' && module.exports) module.exports = api;
@@ -8,10 +8,15 @@
         else api.mount();
     }
 })(typeof window !== 'undefined' ? window : globalThis, function () {
-    const KEY = 'melvinBonusPve.v1';
-    const MONTHS_PT = ['JANEIRO', 'FEVEREIRO', 'MARÇO', 'ABRIL', 'MAIO', 'JUNHO', 'JULHO', 'AGOSTO', 'SETEMBRO', 'OUTUBRO', 'NOVEMBRO', 'DEZEMBRO'];
+    const KEY = 'melvinBonusPve.v2';
+    const TOKEN_KEY = 'melvinHireGithubToken';
+    const GH_OWNER = 'JM7Consulting';
+    const GH_REPO = 'melvin-revops-book';
+    const GH_BRANCH = 'main';
+    const GH_FILE = 'bonus-pve.json';
+    const REMOTE_URL = 'https://raw.githubusercontent.com/' + GH_OWNER + '/' + GH_REPO + '/' + GH_BRANCH + '/' + GH_FILE;
 
-    /* Feriados nacionais usados no calendário de dias úteis (2026–2027). */
+    const MONTHS_PT = ['JANEIRO', 'FEVEREIRO', 'MARÇO', 'ABRIL', 'MAIO', 'JUNHO', 'JULHO', 'AGOSTO', 'SETEMBRO', 'OUTUBRO', 'NOVEMBRO', 'DEZEMBRO'];
     const BR_HOLIDAYS = new Set([
         '2026-01-01', '2026-02-16', '2026-02-17', '2026-04-03', '2026-04-21', '2026-05-01', '2026-06-04',
         '2026-09-07', '2026-10-12', '2026-11-02', '2026-11-15', '2026-11-20', '2026-12-25',
@@ -19,10 +24,19 @@
         '2027-09-07', '2027-10-12', '2027-11-02', '2027-11-15', '2027-11-20', '2027-12-25'
     ]);
 
-    const ACTUAL_KEYS = [
-        'onTime', 'late', 'callsStarted', 'callsPicked', 'callsLong',
-        'meetingsBooked', 'meetingsHeld', 'qualityHot', 'qualityWarm', 'qualityCold',
-        'salesBdr', 'salesCs', 'salesIn'
+    const LINE_DEFS = [
+        { id: 'actTotal', label: 'Atividades concluídas', note: 'Total', unit: 'n' },
+        { id: 'actLatePct', label: 'Atividades concluídas com atraso', note: 'Em % · quanto menor, melhor', unit: 'pct', lowerBetter: true },
+        { id: 'callsStarted', label: 'Ligações iniciadas', note: '', unit: 'n' },
+        { id: 'callsPicked', label: 'Ligações atendidas', note: '', unit: 'n' },
+        { id: 'callsLong', label: 'Ligações atendidas (+30s)', note: '', unit: 'n' },
+        { id: 'meetingsBooked', label: 'Reuniões agendadas', note: 'Total', unit: 'n' },
+        { id: 'meetHot', label: 'Reuniões realizadas — quente', note: '', unit: 'n' },
+        { id: 'meetWarm', label: 'Reuniões realizadas — morna', note: '', unit: 'n' },
+        { id: 'meetCold', label: 'Reuniões realizadas — fria', note: '', unit: 'n' },
+        { id: 'meetGrave', label: 'Reuniões realizadas — cemitério', note: '', unit: 'n' },
+        { id: 'revenueNew', label: 'Faturamento', note: 'Novo', unit: 'brl' },
+        { id: 'salesTotal', label: 'Vendas', note: 'Total', unit: 'n' }
     ];
 
     const POINT_BANDS = [
@@ -33,71 +47,40 @@
         { from: 131, to: 150, value: 8, label: 'Desafiador' }
     ];
 
-    function defaultRegra() {
-        return {
-            daily: { onTime: 50, late: 20, callsStarted: 32, callsPicked: 8, callsLong: 4 },
-            control: { meetingsBooked: 10, heldRate: 0.7, salesRate: 0.15 },
-            mix: {
-                qualityHot: 0.5, qualityWarm: 0.3, qualityCold: 0.2,
-                salesBdr: 0.6, salesCs: 0.3, salesIn: 0.1
-            },
-            gates: { minPoints: 88, maxPoints: 147 },
-            leaf: {
-                onTime: { min: 0.8, max: 1.5, weight: 0.15 },
-                late: { min: 0.9, max: 1.3, weight: 0.1 },
-                callsStarted: { min: 0.8, max: 1.5, weight: 0.2 },
-                callsPicked: { min: 0.8, max: 1.5, weight: 0.2 },
-                callsLong: { min: 0.7, max: 1.4, weight: 0.15 },
-                meetingsBooked: { min: 0.8, max: 1.5, weight: 0.1 },
-                meetingsHeld: { min: 0.8, max: 1.5, weight: 0.05 },
-                qualityHot: { min: 0.8, max: 1.5, weight: 0.1 },
-                qualityWarm: { min: 0.8, max: 1.5, weight: 0.05 },
-                qualityCold: { min: 0.9, max: 1.5, weight: 0.05 },
-                salesBdr: { min: 0.7, max: 1.4, weight: 0.02 },
-                salesCs: { min: 0.8, max: 1.5, weight: 0.02 },
-                salesIn: { min: 0.7, max: 1.4, weight: 0.02 }
-            }
-        };
+    function num(v, fallback) {
+        const n = Number(v);
+        return Number.isFinite(n) ? n : fallback;
     }
-
+    function blankCfg() {
+        return { meta: 0, min: 80, max: 150, weight: 0 };
+    }
     function blankActuals() {
         const o = {};
-        ACTUAL_KEYS.forEach((k) => { o[k] = 0; });
+        LINE_DEFS.forEach((line) => { o[line.id] = 0; });
         return o;
     }
-
-    function normalizeActuals(raw) {
-        const src = raw || {};
-        const o = blankActuals();
-        ACTUAL_KEYS.forEach((k) => {
-            if (src[k] != null) o[k] = num(src[k], 0);
-        });
-        if (src.onTime == null && src.activities != null) o.onTime = num(src.activities, 0);
-        if (src.callsLong == null && src.callsAnswered != null) o.callsLong = num(src.callsAnswered, 0);
+    function defaultLines() {
+        const o = {};
+        LINE_DEFS.forEach((line) => { o[line.id] = blankCfg(); });
         return o;
     }
-
     function monthKeyFromDate(d) {
         return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0');
     }
-
     function parseMonthKey(key) {
         const m = String(key || '').match(/^(\d{4})-(\d{2})$/);
         if (!m) return null;
         return { year: Number(m[1]), month: Number(m[2]) };
     }
-
     function isoDay(d) {
         const p = (n) => String(n).padStart(2, '0');
         return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate());
     }
-
     function isBusinessDay(d) {
         const wd = d.getDay();
         if (wd === 0 || wd === 6) return false;
         return !BR_HOLIDAYS.has(isoDay(d));
     }
-
     function countWorkdays(year, month) {
         const last = new Date(year, month, 0).getDate();
         let n = 0;
@@ -106,7 +89,6 @@
         }
         return n;
     }
-
     function countElapsed(year, month, today) {
         const y = today.getFullYear();
         const m = today.getMonth() + 1;
@@ -118,14 +100,81 @@
         }
         return n;
     }
-
-    function num(v, fallback) {
-        const n = Number(v);
-        return Number.isFinite(n) ? n : fallback;
+    function monthLabel(key) {
+        const p = parseMonthKey(key);
+        if (!p) return key;
+        return MONTHS_PT[p.month - 1] + ' ' + p.year;
+    }
+    function shiftMonth(key, delta) {
+        const p = parseMonthKey(key);
+        return monthKeyFromDate(new Date(p.year, p.month - 1 + delta, 1));
     }
 
-    function clampAttain(real, min, max) {
-        if (!Number.isFinite(real) || real < min) return 0;
+    function defaultState() {
+        const key = monthKeyFromDate(new Date());
+        return {
+            rev: 2,
+            person: '',
+            activeMonth: key,
+            updatedAt: null,
+            lines: defaultLines(),
+            months: {
+                [key]: { actuals: blankActuals(), elapsedOverride: null, workdaysOverride: null }
+            }
+        };
+    }
+
+    function normalizeState(raw) {
+        const base = defaultState();
+        if (!raw || raw.rev !== 2) return base;
+        base.person = raw.person ? String(raw.person) : '';
+        base.updatedAt = raw.updatedAt || null;
+        if (raw.activeMonth && parseMonthKey(raw.activeMonth)) base.activeMonth = raw.activeMonth;
+        LINE_DEFS.forEach((line) => {
+            const src = raw.lines && raw.lines[line.id] ? raw.lines[line.id] : {};
+            base.lines[line.id] = {
+                meta: Math.max(0, num(src.meta, 0)),
+                min: Math.max(0, num(src.min, 80)),
+                max: Math.max(0, num(src.max, 150)),
+                weight: Math.max(0, num(src.weight, 0))
+            };
+        });
+        base.months = {};
+        const months = raw.months && typeof raw.months === 'object' ? raw.months : {};
+        Object.keys(months).forEach((k) => {
+            if (!parseMonthKey(k)) return;
+            const m = months[k] || {};
+            const actuals = blankActuals();
+            LINE_DEFS.forEach((line) => {
+                if (m.actuals && m.actuals[line.id] != null) actuals[line.id] = Math.max(0, num(m.actuals[line.id], 0));
+            });
+            base.months[k] = {
+                actuals,
+                elapsedOverride: m.elapsedOverride == null ? null : num(m.elapsedOverride, null),
+                workdaysOverride: m.workdaysOverride == null ? null : num(m.workdaysOverride, null)
+            };
+        });
+        if (!base.months[base.activeMonth]) {
+            base.months[base.activeMonth] = { actuals: blankActuals(), elapsedOverride: null, workdaysOverride: null };
+        }
+        return base;
+    }
+
+    function attainRatio(actual, meta, lowerBetter) {
+        if (!(meta > 0)) return null;
+        if (lowerBetter) {
+            if (actual <= 0) return Infinity;
+            return meta / actual;
+        }
+        return actual / meta;
+    }
+
+    function clampAttain(real, minPct, maxPct) {
+        if (real == null) return 0;
+        const min = minPct / 100;
+        const max = maxPct / 100;
+        if (!Number.isFinite(real)) return max;
+        if (real < min) return 0;
         if (real > max) return max;
         return real;
     }
@@ -133,674 +182,474 @@
     function bandFor(points) {
         const p = Math.max(0, Math.round(num(points, 0)));
         for (let i = 0; i < POINT_BANDS.length; i++) {
-            const b = POINT_BANDS[i];
-            if (p >= b.from && p <= b.to) return b;
+            if (p >= POINT_BANDS[i].from && p <= POINT_BANDS[i].to) return POINT_BANDS[i];
         }
         return POINT_BANDS[POINT_BANDS.length - 1];
     }
 
-    function lineScore(actual, monthMeta, min, max) {
-        const real = monthMeta > 0 ? actual / monthMeta : 0;
-        return { real, limited: clampAttain(real, min, max) };
+    function scoreLine(def, cfg, actual) {
+        const meta = num(cfg.meta, 0);
+        const min = num(cfg.min, 0);
+        const max = num(cfg.max, 0);
+        const weight = num(cfg.weight, 0);
+        const real = attainRatio(actual, meta, !!def.lowerBetter);
+        const limited = clampAttain(real, min, max);
+        const points = (weight / 100) * limited * 100;
+        return { id: def.id, actual, meta, min, max, weight, real, limited, points, ready: meta > 0 };
     }
 
-    function leafRow(id, label, actual, dailyMeta, min, max, weight, elapsed, workdays, dailyEditable) {
-        const monthMeta = num(dailyMeta, 0) * workdays;
-        const score = lineScore(actual, monthMeta, min, max);
-        return {
-            id, label, kind: 'leaf', dailyEditable: dailyEditable === true,
-            actual, dailyPace: elapsed > 0 ? actual / elapsed : 0, monthMeta, dailyMeta: num(dailyMeta, 0),
-            real: score.real, min, max, limited: score.limited, weight, points: null
-        };
-    }
-
-    /* Grupo segue a aba SETEMBRO: meta diária soma as linhas, meta do mês = diária × dias úteis,
-       mín/máx = MÉDIA das linhas, limitador no atingido do grupo, pontos só nessa linha.
-       actualFrom 'all' soma os atingidos das linhas. Atividades soma em dia e em atraso,
-       no mesmo espírito de G8 = G9+G10 e de Ligações = soma das três linhas. */
-    function groupRow(id, label, children, elapsed, workdays, scored, actualFrom) {
-        const picked = actualFrom && actualFrom !== 'all'
-            ? children.filter((x) => x.id === actualFrom)
-            : children;
-        const actual = picked.reduce((s, x) => s + x.actual, 0);
-        const dailyMeta = children.reduce((s, x) => s + x.dailyMeta, 0);
-        const monthMeta = dailyMeta * workdays;
-        const weight = children.reduce((s, x) => s + x.weight, 0);
-        const min = children.reduce((s, x) => s + x.min, 0) / children.length;
-        const max = children.reduce((s, x) => s + x.max, 0) / children.length;
-        const score = lineScore(actual, monthMeta, min, max);
-        return {
-            id, label, kind: 'group', scored: scored !== false, children, actualFrom: actualFrom || 'all',
-            actual, dailyPace: elapsed > 0 ? actual / elapsed : 0, monthMeta, dailyMeta,
-            real: score.real, min, max, limited: score.limited, weight,
-            points: weight * score.limited * 100
-        };
-    }
-
-    function compute(actuals, regra, elapsed, workdays) {
+    function compute(actuals, lines, elapsed, workdays) {
         const a = Object.assign(blankActuals(), actuals || {});
-        const r = regra || defaultRegra();
-        const wd = Math.max(0, num(workdays, 0));
-        const el = Math.max(0, num(elapsed, 0));
-        const d = r.daily;
-        const c = r.control;
-        const mix = r.mix;
-        const L = r.leaf;
-
-        const metaBooked = num(c.meetingsBooked, 10);
-        const metaHeld = metaBooked * num(c.heldRate, 0.7);
-        const metaSales = metaHeld * num(c.salesRate, 0.15);
-        const day = (month) => wd > 0 ? month / wd : 0;
-
-        const onTime = leafRow('onTime', 'Concluídas em dia', num(a.onTime, 0), d.onTime, L.onTime.min, L.onTime.max, L.onTime.weight, el, wd, true);
-        const late = leafRow('late', 'Concluídas em atraso', num(a.late, 0), d.late, L.late.min, L.late.max, L.late.weight, el, wd, true);
-        const callsStarted = leafRow('callsStarted', 'Iniciadas (100%)', num(a.callsStarted, 0), d.callsStarted, L.callsStarted.min, L.callsStarted.max, L.callsStarted.weight, el, wd, true);
-        const callsPicked = leafRow('callsPicked', 'Atendidas (25%)', num(a.callsPicked, 0), d.callsPicked, L.callsPicked.min, L.callsPicked.max, L.callsPicked.weight, el, wd, true);
-        const callsLong = leafRow('callsLong', 'Atendidas — mais de 30 segundos (50%)', num(a.callsLong, 0), d.callsLong, L.callsLong.min, L.callsLong.max, L.callsLong.weight, el, wd, true);
-        const meetingsBooked = leafRow('meetingsBooked', 'Agendadas', num(a.meetingsBooked, 0), day(metaBooked), L.meetingsBooked.min, L.meetingsBooked.max, L.meetingsBooked.weight, el, wd, false);
-        const meetingsHeld = leafRow('meetingsHeld', 'Realizadas', num(a.meetingsHeld, 0), day(metaHeld), L.meetingsHeld.min, L.meetingsHeld.max, L.meetingsHeld.weight, el, wd, false);
-        const qualityHot = leafRow('qualityHot', 'Quente (50%)', num(a.qualityHot, 0), day(metaBooked * mix.qualityHot), L.qualityHot.min, L.qualityHot.max, L.qualityHot.weight, el, wd, false);
-        const qualityWarm = leafRow('qualityWarm', 'Morna (30%)', num(a.qualityWarm, 0), day(metaBooked * mix.qualityWarm), L.qualityWarm.min, L.qualityWarm.max, L.qualityWarm.weight, el, wd, false);
-        const qualityCold = leafRow('qualityCold', 'Fria (20%)', num(a.qualityCold, 0), day(metaBooked * mix.qualityCold), L.qualityCold.min, L.qualityCold.max, L.qualityCold.weight, el, wd, false);
-        const salesBdr = leafRow('salesBdr', 'BDR (Outbound puro) (60%)', num(a.salesBdr, 0), day(metaSales * mix.salesBdr), L.salesBdr.min, L.salesBdr.max, L.salesBdr.weight, el, wd, false);
-        const salesCs = leafRow('salesCs', 'CS (30%)', num(a.salesCs, 0), day(metaSales * mix.salesCs), L.salesCs.min, L.salesCs.max, L.salesCs.weight, el, wd, false);
-        const salesIn = leafRow('salesIn', 'Inbound (10%)', num(a.salesIn, 0), day(metaSales * mix.salesIn), L.salesIn.min, L.salesIn.max, L.salesIn.weight, el, wd, false);
-
-        const groups = [
-            groupRow('g-activities', 'Atividades Concluídas', [onTime, late], el, wd, true, 'all'),
-            groupRow('g-calls', 'Ligações', [callsStarted, callsPicked, callsLong], el, wd, true, 'all'),
-            groupRow('g-booked', 'Reuniões Agendadas', [meetingsBooked], el, wd, true, 'all'),
-            groupRow('g-held', 'Reuniões Realizadas', [meetingsHeld], el, wd, false, 'all'),
-            groupRow('g-quality', 'Qualidade Reuniões', [qualityHot, qualityWarm, qualityCold], el, wd, true, 'all'),
-            groupRow('g-sales', 'Vendas', [salesBdr, salesCs, salesIn], el, wd, true, 'all')
-        ];
-
-        const rawTotal = groups.filter((g) => g.scored).reduce((s, g) => s + g.points, 0);
+        const cfg = lines || defaultLines();
+        const rows = LINE_DEFS.map((def) => scoreLine(def, cfg[def.id] || blankCfg(), num(a[def.id], 0)));
+        const rawTotal = rows.reduce((s, row) => s + row.points, 0);
         const total = Math.round(rawTotal);
         const band = bandFor(total);
-        const bonus = total * band.value;
-        const weightSum = groups.filter((g) => g.scored).reduce((s, g) => s + g.weight, 0);
-
+        const weightSum = rows.reduce((s, row) => s + row.weight, 0);
         let projected = null;
+        const el = Math.max(0, num(elapsed, 0));
+        const wd = Math.max(0, num(workdays, 0));
         if (el > 0 && el < wd) {
             const paced = {};
-            ACTUAL_KEYS.forEach((k) => { paced[k] = num(a[k], 0) / el * wd; });
-            const proj = compute(paced, r, wd, wd);
-            projected = { total: proj.total, bonus: proj.bonus, band: proj.band };
-        }
-
-        return {
-            elapsed: el, workdays: wd, groups, total, rawTotal, band, bonus, weightSum,
-            gates: r.gates, projected, control: {
-                meetingsBooked: metaBooked,
-                meetingsHeld: metaHeld,
-                sales: metaSales,
-                heldRate: c.heldRate,
-                salesRate: c.salesRate
-            }
-        };
-    }
-
-    function defaultState() {
-        const now = new Date();
-        const key = monthKeyFromDate(now);
-        return {
-            rev: 1,
-            person: 'Poliana',
-            activeMonth: key,
-            regra: defaultRegra(),
-            months: {
-                [key]: { actuals: blankActuals(), elapsedOverride: null, workdaysOverride: null, updatedAt: null }
-            }
-        };
-    }
-
-    function loadState() {
-        const base = defaultState();
-        try {
-            const raw = localStorage.getItem(KEY);
-            if (!raw) return base;
-            const saved = JSON.parse(raw);
-            if (!saved || typeof saved !== 'object') return base;
-            const next = defaultState();
-            if (saved.person) next.person = String(saved.person);
-            if (saved.activeMonth && parseMonthKey(saved.activeMonth)) next.activeMonth = saved.activeMonth;
-            if (saved.regra) next.regra = mergeRegra(saved.regra);
-            next.months = {};
-            if (saved.months && typeof saved.months === 'object') {
-                Object.keys(saved.months).forEach((k) => {
-                    if (!parseMonthKey(k)) return;
-                    const m = saved.months[k] || {};
-                    next.months[k] = {
-                        actuals: normalizeActuals(m.actuals),
-                        elapsedOverride: m.elapsedOverride == null ? null : num(m.elapsedOverride, null),
-                        workdaysOverride: m.workdaysOverride == null ? null : num(m.workdaysOverride, null),
-                        updatedAt: m.updatedAt || null
-                    };
-                });
-            }
-            if (!next.months[next.activeMonth]) {
-                next.months[next.activeMonth] = { actuals: blankActuals(), elapsedOverride: null, workdaysOverride: null, updatedAt: null };
-            }
-            return next;
-        } catch (e) {
-            return base;
-        }
-    }
-
-    function mergeRegra(saved) {
-        const d = defaultRegra();
-        if (!saved || typeof saved !== 'object' || !saved.daily || saved.daily.onTime == null) return d;
-        if (saved.daily) Object.assign(d.daily, saved.daily);
-        if (saved.control) Object.assign(d.control, saved.control);
-        if (saved.mix) Object.assign(d.mix, saved.mix);
-        if (saved.gates) Object.assign(d.gates, saved.gates);
-        if (saved.leaf) {
-            Object.keys(d.leaf).forEach((k) => {
-                if (saved.leaf[k]) Object.assign(d.leaf[k], saved.leaf[k]);
+            LINE_DEFS.forEach((def) => {
+                const value = num(a[def.id], 0);
+                paced[def.id] = def.unit === 'pct' ? value : value / el * wd;
             });
+            const proj = compute(paced, cfg, wd, wd);
+            projected = { total: proj.total, bonus: proj.total * proj.band.value, band: proj.band };
         }
-        return d;
+        return {
+            rows, total, rawTotal, band, bonus: total * band.value, weightSum,
+            elapsed: el, workdays: wd, projected
+        };
     }
 
-    function saveState(state) {
-        try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {}
-    }
-
-    function ensureMonth(state, key) {
-        if (!state.months[key]) {
-            state.months[key] = { actuals: blankActuals(), elapsedOverride: null, workdaysOverride: null, updatedAt: null };
-        }
-        return state.months[key];
-    }
-
-    function monthContext(state, today) {
-        const parsed = parseMonthKey(state.activeMonth) || parseMonthKey(monthKeyFromDate(today));
-        const autoWd = countWorkdays(parsed.year, parsed.month);
-        const autoEl = countElapsed(parsed.year, parsed.month, today);
-        const rec = ensureMonth(state, state.activeMonth);
-        const workdays = rec.workdaysOverride == null ? autoWd : num(rec.workdaysOverride, autoWd);
-        const elapsed = rec.elapsedOverride == null ? autoEl : num(rec.elapsedOverride, autoEl);
-        return { parsed, autoWd, autoEl, rec, workdays, elapsed };
-    }
-
-    function fmtInt(n) {
-        return String(Math.round(num(n, 0)));
-    }
-    function round1(n) {
-        return Math.round(num(n, 0) * 10) / 10;
-    }
-    function fmtSmart(n) {
-        const v = num(n, 0);
-        if (Math.abs(v) >= 10) return fmtInt(v);
-        if (Math.abs(v) >= 1) return fmt1(v);
-        return fmtN(v, 2);
-    }
     function fmt1(n) {
         return num(n, 0).toLocaleString('pt-BR', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
     }
     function fmtN(n, digits) {
         return num(n, 0).toLocaleString('pt-BR', { minimumFractionDigits: digits, maximumFractionDigits: digits });
     }
-    function fmtPct(n, digits) {
-        const d = digits == null ? 0 : digits;
-        return (num(n, 0) * 100).toLocaleString('pt-BR', {
-            minimumFractionDigits: d,
-            maximumFractionDigits: d
-        }) + '%';
+    function fmtPct(ratio, digits) {
+        if (ratio == null || !Number.isFinite(ratio)) return '—';
+        const d = digits == null ? 1 : digits;
+        return (ratio * 100).toLocaleString('pt-BR', { minimumFractionDigits: d, maximumFractionDigits: d }) + '%';
     }
     function fmtBRL(n) {
         return num(n, 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    }
+    function fmtValue(unit, n) {
+        if (unit === 'brl') return fmtBRL(n);
+        if (unit === 'pct') return fmt1(n) + '%';
+        return fmt1(n);
     }
     function esc(s) {
         return String(s == null ? '' : s)
             .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
     }
-    function monthLabel(key) {
-        const p = parseMonthKey(key);
-        if (!p) return key;
-        return MONTHS_PT[p.month - 1] + ' ' + p.year;
-    }
-
-    let state = null;
-    let tab = 'planilha';
-
     function heat(real) {
-        if (real <= 0) return 'zero';
+        if (real == null || !Number.isFinite(real) || real <= 0) return 'zero';
         if (real < 0.8) return 'low';
         if (real < 1) return 'mid';
         if (real < 1.2) return 'ok';
         return 'high';
     }
 
-    function shiftMonth(key, delta) {
-        const p = parseMonthKey(key);
-        const d = new Date(p.year, p.month - 1 + delta, 1);
-        return monthKeyFromDate(d);
+    let state = null;
+    let tab = 'planilha';
+    let dirty = false;
+    let remoteSha = null;
+    let syncStatus = 'Carregando a régua publicada…';
+    let syncBusy = false;
+    let showToken = false;
+
+    function loadLocal() {
+        try {
+            const raw = localStorage.getItem(KEY);
+            if (!raw) return defaultState();
+            return normalizeState(JSON.parse(raw));
+        } catch (e) {
+            return defaultState();
+        }
+    }
+    function saveLocal() {
+        try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {}
+    }
+    function ensureMonth(key) {
+        if (!state.months[key]) {
+            state.months[key] = { actuals: blankActuals(), elapsedOverride: null, workdaysOverride: null };
+        }
+        return state.months[key];
+    }
+    function monthContext(today) {
+        const parsed = parseMonthKey(state.activeMonth) || parseMonthKey(monthKeyFromDate(today));
+        const autoWd = countWorkdays(parsed.year, parsed.month);
+        const autoEl = countElapsed(parsed.year, parsed.month, today);
+        const rec = ensureMonth(state.activeMonth);
+        return {
+            rec,
+            workdays: rec.workdaysOverride == null ? autoWd : num(rec.workdaysOverride, autoWd),
+            elapsed: rec.elapsedOverride == null ? autoEl : num(rec.elapsedOverride, autoEl)
+        };
+    }
+    function stamp() {
+        state.updatedAt = new Date().toISOString();
+        dirty = true;
+        saveLocal();
     }
 
-    function render(root) {
-        if (!root || !state) return;
-        const today = new Date();
-        const ctx = monthContext(state, today);
-        const model = compute(ctx.rec.actuals, state.regra, ctx.elapsed, ctx.workdays);
-        const updated = ctx.rec.updatedAt ? new Date(ctx.rec.updatedAt) : today;
-        const pace = ctx.workdays > 0 ? ctx.elapsed / ctx.workdays : 0;
-        const gateOk = model.total >= state.regra.gates.minPoints;
-
-        root.innerHTML = `
-            <div class="pve-toolbar">
-                <label class="pve-field">
-                    <span>BDR</span>
-                    <input type="text" data-pve="person" value="${esc(state.person)}" maxlength="40" autocomplete="off">
-                </label>
-                <div class="pve-month">
-                    <button type="button" class="pve-ico" data-pve="prev-month" aria-label="Mês anterior">‹</button>
-                    <strong>${esc(monthLabel(state.activeMonth))}</strong>
-                    <button type="button" class="pve-ico" data-pve="next-month" aria-label="Próximo mês">›</button>
-                </div>
-                <label class="pve-field pve-field--n">
-                    <span>Dias úteis</span>
-                    <input type="number" min="1" max="31" step="1" data-pve="workdays" value="${ctx.workdays}">
-                    <em>${ctx.rec.workdaysOverride == null ? 'auto' : 'manual'}</em>
-                </label>
-                <label class="pve-field pve-field--n">
-                    <span>Dias decorridos</span>
-                    <input type="number" min="0" max="31" step="1" data-pve="elapsed" value="${ctx.elapsed}">
-                    <em>${ctx.rec.elapsedOverride == null ? 'auto' : 'manual'}</em>
-                </label>
-                <p class="pve-stamp">Atualizado ${esc(updated.toLocaleDateString('pt-BR'))} ${esc(updated.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }))}</p>
-            </div>
-
-            <div class="pve-kpis">
-                <article class="pve-kpi">
-                    <span>Pontuação</span>
-                    <strong data-heat="${heat(model.total / 100)}">${esc(fmtInt(model.total))}</strong>
-                    <small>mín. ${esc(String(state.regra.gates.minPoints))} · máx. ${esc(String(state.regra.gates.maxPoints))}</small>
-                </article>
-                <article class="pve-kpi">
-                    <span>Bônus estimado</span>
-                    <strong>${esc(fmtBRL(model.bonus))}</strong>
-                    <small>${esc(fmtBRL(model.band.value))} / ponto · ${esc(model.band.label)}</small>
-                </article>
-                <article class="pve-kpi">
-                    <span>Ritmo do mês</span>
-                    <strong>${esc(fmtPct(pace))}</strong>
-                    <small>${esc(String(ctx.elapsed))} de ${esc(String(ctx.workdays))} dias úteis</small>
-                </article>
-                <article class="pve-kpi ${model.projected ? '' : 'is-muted'}">
-                    <span>Projeção no ritmo atual</span>
-                    <strong>${model.projected ? esc(fmtInt(model.projected.total)) : '—'}</strong>
-                    <small>${model.projected ? esc(fmtBRL(model.projected.bonus)) + ' se o ritmo se manter' : 'Fim do mês ou ainda sem dias decorridos'}</small>
-                </article>
-            </div>
-            <p class="pve-gate ${gateOk ? 'is-ok' : 'is-wait'}">${gateOk
-                ? 'Acima da pontuação mínima da régua (' + state.regra.gates.minPoints + ').'
-                : 'Abaixo da pontuação mínima da régua (' + state.regra.gates.minPoints + '). O bônus ainda segue a faixa do ponto — a mínima é só referência da planilha.'}</p>
-
-            <div class="pve-tabs" role="tablist">
-                <button type="button" class="pve-tab ${tab === 'planilha' ? 'is-active' : ''}" data-pve-tab="planilha">Planilha</button>
-                <button type="button" class="pve-tab ${tab === 'ponto' ? 'is-active' : ''}" data-pve-tab="ponto">Valor do ponto</button>
-                <button type="button" class="pve-tab ${tab === 'regua' ? 'is-active' : ''}" data-pve-tab="regua">Régua</button>
-                <button type="button" class="pve-tab ${tab === 'historico' ? 'is-active' : ''}" data-pve-tab="historico">Histórico</button>
-            </div>
-
-            ${tab === 'planilha' ? renderSheet(model, ctx) : ''}
-            ${tab === 'ponto' ? renderBands(model) : ''}
-            ${tab === 'regua' ? renderRegra(state.regra, model) : ''}
-            ${tab === 'historico' ? renderHistory(state, today) : ''}
-        `;
+    function sanitizeToken(value) {
+        return String(value || '').replace(/^\s*Bearer\s+/i, '').replace(/["'`]/g, '').trim();
+    }
+    function getToken() {
+        try { return sanitizeToken(localStorage.getItem(TOKEN_KEY) || ''); } catch (e) { return ''; }
+    }
+    function setToken(value) {
+        const t = sanitizeToken(value);
+        try {
+            if (t) localStorage.setItem(TOKEN_KEY, t);
+            else localStorage.removeItem(TOKEN_KEY);
+        } catch (e) {}
+    }
+    function utf8ToB64(str) {
+        const bytes = new TextEncoder().encode(str);
+        let bin = '';
+        bytes.forEach((b) => { bin += String.fromCharCode(b); });
+        return btoa(bin);
+    }
+    function b64ToUtf8(b64) {
+        const bin = atob(String(b64 || '').replace(/\s/g, ''));
+        const bytes = new Uint8Array(bin.length);
+        for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+        return new TextDecoder().decode(bytes);
+    }
+    function ghHeaders(token) {
+        const h = { Accept: 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28' };
+        if (token) h.Authorization = 'Bearer ' + token;
+        return h;
     }
 
-    function renderSheet(model, ctx) {
-        const rows = model.groups.map((g) => {
-            const groupHtml = rowHtml(g, true, !g.scored);
-            const kids = g.children.map((c) => rowHtml(c, false, !g.scored)).join('');
-            return groupHtml + kids;
-        }).join('');
-        const cards = model.groups.map((g) => {
-            const fill = Math.max(0, Math.min(100, num(g.real, 0) * 100));
-            return `<article class="pve-gcard ${g.scored ? '' : 'is-aside'} heat-${heat(g.real)}">
-                <header><span>${esc(g.label)}</span><b>${g.scored ? esc(fmt1(g.points)) : 'fora'}</b></header>
-                <div class="pve-bar" aria-hidden="true"><i style="width:${fill}%"></i></div>
-                <small>${esc(fmtPct(g.real))} da meta · peso ${esc(fmtPct(g.weight))}${g.scored ? '' : ' · não pontua'}</small>
-            </article>`;
-        }).join('');
+    async function pullRemote() {
+        const res = await fetch(REMOTE_URL + '?t=' + Date.now(), { cache: 'no-store' });
+        if (!res.ok) return null;
+        return normalizeState(await res.json());
+    }
+
+    async function publish() {
+        const token = getToken();
+        if (!token) {
+            showToken = true;
+            syncStatus = 'Para o time ver, cole o token do GitHub (o mesmo da matriz de contratação) e salve de novo.';
+            render(document.getElementById('pveRoot'));
+            return;
+        }
+        syncBusy = true;
+        syncStatus = 'Publicando no Book…';
+        render(document.getElementById('pveRoot'));
+        try {
+            const url = 'https://api.github.com/repos/' + GH_OWNER + '/' + GH_REPO + '/contents/' + GH_FILE;
+            const got = await fetch(url + '?ref=' + GH_BRANCH, { headers: ghHeaders(token) });
+            const meta = await got.json().catch(() => ({}));
+            if (got.ok) remoteSha = meta.sha;
+            else if (got.status !== 404) throw new Error(meta.message || ('GitHub ' + got.status));
+            state.updatedAt = new Date().toISOString();
+            const body = {
+                message: 'Atualiza a planilha de bonificação PVE',
+                content: utf8ToB64(JSON.stringify(state, null, 2) + '\n'),
+                branch: GH_BRANCH
+            };
+            if (remoteSha) body.sha = remoteSha;
+            const put = await fetch(url, {
+                method: 'PUT',
+                headers: Object.assign(ghHeaders(token), { 'Content-Type': 'application/json' }),
+                body: JSON.stringify(body)
+            });
+            const data = await put.json().catch(() => ({}));
+            if (!put.ok) throw new Error(data.message || ('GitHub ' + put.status));
+            remoteSha = data.content && data.content.sha ? data.content.sha : remoteSha;
+            dirty = false;
+            saveLocal();
+            syncStatus = 'Publicado. Quem abrir a página vê estes números.';
+        } catch (err) {
+            syncStatus = 'Não publicou: ' + (err && err.message ? err.message : 'erro') + '. Se o arquivo mudou, clique em Atualizar.';
+        }
+        syncBusy = false;
+        render(document.getElementById('pveRoot'));
+    }
+
+    async function refreshFromBook() {
+        syncBusy = true;
+        syncStatus = 'Atualizando…';
+        render(document.getElementById('pveRoot'));
+        try {
+            const remote = await pullRemote();
+            if (!remote) {
+                syncStatus = 'Ainda não há régua publicada. Salve para o time quando terminar de configurar.';
+            } else {
+                state = remote;
+                dirty = false;
+                saveLocal();
+                syncStatus = 'Régua do Book carregada' + (state.updatedAt ? ' · ' + new Date(state.updatedAt).toLocaleString('pt-BR') : '') + '.';
+            }
+        } catch (err) {
+            syncStatus = 'Não deu para atualizar agora.';
+        }
+        syncBusy = false;
+        render(document.getElementById('pveRoot'));
+    }
+
+    function inputNum(lineId, field, value, step) {
+        const shown = value === 0 && (field === 'meta' || field === 'weight' || field === 'actual') ? '' : String(value);
+        const ph = field === 'meta' ? 'meta' : (field === 'weight' ? 'peso' : '0');
+        return `<input type="number" min="0" step="${step}" inputmode="decimal" placeholder="${ph}" data-pve-line="${esc(lineId)}" data-pve-field="${field}" value="${esc(shown)}">`;
+    }
+
+    function rowHtml(def, row) {
+        const realShown = !row.ready
+            ? '<span class="cli-empty-cell">sem meta</span>'
+            : !Number.isFinite(row.real)
+                ? esc(fmtPct(row.max / 100, 1))
+                : esc(fmtPct(row.real, 1));
+        const limCell = row.ready ? esc(fmtPct(row.limited, 1)) : '—';
+        const note = def.note ? `<small class="pve-tag">${esc(def.note)}</small>` : '';
+        return `<tr class="is-leaf heat-${heat(row.real)}">
+            <td class="pve-ind"><strong>${esc(def.label)}</strong>${note}</td>
+            <td class="pve-num">${inputNum(def.id, 'actual', row.actual, def.unit === 'brl' ? '0.01' : 'any')}</td>
+            <td class="pve-num">${inputNum(def.id, 'meta', row.meta, def.unit === 'brl' ? '0.01' : 'any')}</td>
+            <td class="pve-num">${realShown}</td>
+            <td class="pve-num">${inputNum(def.id, 'min', row.min, '0.1')}</td>
+            <td class="pve-num">${inputNum(def.id, 'max', row.max, '0.1')}</td>
+            <td class="pve-num">${limCell}</td>
+            <td class="pve-num">${inputNum(def.id, 'weight', row.weight, '0.1')}</td>
+            <td class="pve-num pve-pts">${esc(fmt1(row.points))}</td>
+        </tr>`;
+    }
+
+    function renderSheet(model) {
+        const rows = LINE_DEFS.map((def, i) => rowHtml(def, model.rows[i])).join('');
         return `
-            <div class="pve-board">${cards}</div>
             <div class="pve-sheet-wrap">
                 <table class="pve-sheet">
                     <thead>
                         <tr>
-                            <th class="pve-th-ind">Indicadores</th>
-                            <th colspan="2">Atingido</th>
-                            <th colspan="2">Metas</th>
-                            <th rowspan="2">Ating. real</th>
-                            <th colspan="2">Limitadores</th>
-                            <th rowspan="2">Ating. com limitador</th>
-                            <th rowspan="2">Peso</th>
-                            <th rowspan="2">Pontuação ponderada</th>
-                        </tr>
-                        <tr>
-                            <th></th>
-                            <th>Mês</th>
-                            <th>Diária</th>
-                            <th>Mês</th>
-                            <th>Diária</th>
-                            <th>Mín</th>
-                            <th>Máx</th>
+                            <th class="pve-th-ind">Indicador</th>
+                            <th>Atingido</th>
+                            <th>Meta</th>
+                            <th>Ating. real</th>
+                            <th>Mín %</th>
+                            <th>Máx %</th>
+                            <th>Com limitador</th>
+                            <th>Peso %</th>
+                            <th>Pontos</th>
                         </tr>
                     </thead>
-                    <tbody>${rows}</tbody>
+                    <tbody>
+                        ${rows}
+                        <tr class="is-total">
+                            <td class="pve-ind">Total</td>
+                            <td></td><td></td><td></td><td></td><td></td><td></td>
+                            <td class="pve-num">${esc(fmt1(model.weightSum))}%</td>
+                            <td class="pve-num pve-pts">${esc(String(model.total))}</td>
+                        </tr>
+                    </tbody>
                 </table>
             </div>
-            <div class="pve-side">
-                <article>
-                    <h3>Ponderações</h3>
-                    <ul>${model.groups.filter((g) => g.scored).map((g) => `<li><span>${esc(g.label)}</span><b>${esc(fmtPct(g.weight))}</b></li>`).join('')}
-                        <li class="pve-total"><span>Total</span><b>${esc(fmtPct(model.weightSum))}</b></li>
-                    </ul>
-                </article>
-                <article>
-                    <h3>Controle</h3>
-                    <ul>
-                        <li><span>Reuniões agendadas</span><b>${esc(fmtN(model.control.meetingsBooked, 1))}</b></li>
-                        <li><span>Reuniões realizadas (${esc(fmtPct(model.control.heldRate))})</span><b>${esc(fmtN(model.control.meetingsHeld, 1))}</b></li>
-                        <li><span>Vendas (${esc(fmtPct(model.control.salesRate))} das realizadas)</span><b>${esc(fmtN(model.control.sales, 2))}</b></li>
-                    </ul>
-                    <p class="pve-note">Reuniões realizadas entram no acompanhamento e não na pontuação de 100% — igual à planilha.</p>
-                </article>
-            </div>
-            <div class="pve-actions">
-                <button type="button" class="pve-btn pve-btn--ghost" data-pve="reset-days">Voltar dias úteis/decorridos para automático</button>
-                <button type="button" class="pve-btn pve-btn--warn" data-pve="reset-month">Zerar atingidos deste mês</button>
-                <button type="button" class="pve-btn" data-pve="export">Exportar JSON</button>
-                <label class="pve-btn pve-btn--ghost pve-file">Importar JSON<input type="file" accept="application/json" data-pve="import" hidden></label>
-            </div>
-            <p class="pve-foot">A pontuação é só do grupo: peso × atingimento com limitador. Mínimo e máximo do grupo são a média das linhas; abaixo dessa média o grupo zera, acima do máximo trava. O atingido do grupo soma as linhas de baixo (em dia e em atraso, as três ligações, qualidade e vendas). Reuniões realizadas calcula e fica fora do total. Campos brancos são editáveis; os demais são fórmula. A régua soma ${esc(fmtPct(model.weightSum))} nos indicadores que pontuam.</p>
-        `;
-    }
-
-    function rowHtml(row, isGroup, excluded) {
-        const cls = [
-            isGroup ? 'is-group' : 'is-leaf',
-            excluded ? 'is-excluded' : '',
-            'heat-' + heat(row.real)
-        ].filter(Boolean).join(' ');
-        const label = isGroup
-            ? `<strong>${esc(row.label)}</strong>${excluded ? ' <em>fora da pontuação</em>' : ''}`
-            : esc(row.label);
-        const numIn = (field, value, step) => `<input type="number" min="0" step="${step}" inputmode="decimal" data-pve-leaf="${esc(row.id)}" data-pve-field="${field}" value="${esc(String(value))}">`;
-        const actualCell = isGroup
-            ? `<td class="pve-num" title="Fórmula: soma das linhas de baixo">${esc(fmtSmart(row.actual))}</td>`
-            : `<td class="pve-num">${numIn('actual', num(row.actual, 0), 'any')}</td>`;
-        const dailyCell = !isGroup && row.dailyEditable
-            ? numIn('daily', num(row.dailyMeta, 0), '0.1')
-            : esc(fmt1(row.dailyMeta));
-        const minCell = isGroup ? esc(fmtPct(row.min, 1)) : numIn('min', round1(row.min * 100), '0.1');
-        const maxCell = isGroup ? esc(fmtPct(row.max, 1)) : numIn('max', round1(row.max * 100), '0.1');
-        const weightCell = isGroup ? esc(fmtPct(row.weight, 1)) : numIn('weight', round1(row.weight * 100), '0.1');
-        const points = isGroup ? esc(fmt1(row.points)) : '<span class="cli-empty-cell">—</span>';
-        return `<tr class="${cls}">
-            <td class="pve-ind">${label}</td>
-            ${actualCell}
-            <td class="pve-num">${esc(fmt1(row.dailyPace))}</td>
-            <td class="pve-num">${esc(fmtSmart(row.monthMeta))}</td>
-            <td class="pve-num">${dailyCell}</td>
-            <td class="pve-num">${esc(fmtPct(row.real, 1))}</td>
-            <td class="pve-num">${minCell}</td>
-            <td class="pve-num">${maxCell}</td>
-            <td class="pve-num">${esc(fmtPct(row.limited, 1))}</td>
-            <td class="pve-num">${weightCell}</td>
-            <td class="pve-num pve-pts">${points}</td>
-        </tr>`;
+            <p class="pve-foot">Cada linha pontua sozinha: peso × atingimento com limitador. Abaixo do mínimo a linha zera; acima do máximo trava no teto. Atraso em % inverte a conta (meta ÷ lançado): quanto menor o atraso, maior o atingimento. Sem meta, a linha não pontua. O total arredonda a soma e cai na faixa do ponto.</p>`;
     }
 
     function renderBands(model) {
         return `
             <div class="pve-bands">
                 <table class="pve-sheet pve-sheet--bands">
-                    <thead>
-                        <tr>
-                            <th>Faixa de pontuação</th>
-                            <th>Valor do ponto</th>
-                            <th>Bônus de</th>
-                            <th>Bônus até</th>
-                            <th>Dificuldade</th>
-                        </tr>
-                    </thead>
+                    <thead><tr><th>Faixa de pontuação</th><th>Valor do ponto</th><th>Bônus de</th><th>Bônus até</th><th>Dificuldade</th></tr></thead>
                     <tbody>
-                        ${POINT_BANDS.map((b) => {
-                            const on = model.band.from === b.from;
-                            return `<tr class="${on ? 'is-on' : ''}">
-                                <td>${esc(String(b.from))} até ${esc(String(b.to))}</td>
-                                <td>${esc(fmtBRL(b.value))}</td>
-                                <td>${esc(fmtBRL(b.from * b.value))}</td>
-                                <td>${esc(fmtBRL(b.to * b.value))}</td>
-                                <td>${esc(b.label)}</td>
-                            </tr>`;
-                        }).join('')}
+                        ${POINT_BANDS.map((b) => `<tr class="${model.band.from === b.from ? 'is-on' : ''}">
+                            <td>${b.from} até ${b.to}</td>
+                            <td>${esc(fmtBRL(b.value))}</td>
+                            <td>${esc(fmtBRL(b.from * b.value))}</td>
+                            <td>${esc(fmtBRL(b.to * b.value))}</td>
+                            <td>${esc(b.label)}</td>
+                        </tr>`).join('')}
                     </tbody>
                 </table>
-                <p class="pve-note">Bônus = pontuação arredondada × valor do ponto da faixa. Com 0 pontos a faixa é “Nenhuma”.</p>
+                <p class="pve-note">Bônus = pontuação arredondada × valor do ponto da faixa.</p>
             </div>`;
     }
 
-    function renderRegra(regra, model) {
-        const d = regra.daily;
-        const c = regra.control;
-        return `
-            <div class="pve-regua">
-                <p class="pve-note">A régua não zera com o mês — só os atingidos. Metas mensais = diária × dias úteis, salvo reuniões/vendas (controle).</p>
-                <div class="pve-regua-grid">
-                    <article>
-                        <h3>Metas diárias</h3>
-                        <label>Concluídas em dia / dia <input type="number" min="0" step="0.1" data-pve-regra="daily.onTime" value="${d.onTime}"></label>
-                        <label>Concluídas em atraso / dia <input type="number" min="0" step="0.1" data-pve-regra="daily.late" value="${d.late}"></label>
-                        <label>Ligações iniciadas / dia <input type="number" min="0" step="0.1" data-pve-regra="daily.callsStarted" value="${d.callsStarted}"></label>
-                        <label>Atendidas (25%) / dia <input type="number" min="0" step="0.1" data-pve-regra="daily.callsPicked" value="${d.callsPicked}"></label>
-                        <label>Atendidas &gt;30s / dia <input type="number" min="0" step="0.1" data-pve-regra="daily.callsLong" value="${d.callsLong}"></label>
-                    </article>
-                    <article>
-                        <h3>Controle de funil</h3>
-                        <label>Reuniões agendadas / mês <input type="number" min="0" step="0.1" data-pve-regra="control.meetingsBooked" value="${c.meetingsBooked}"></label>
-                        <label>Realizadas (% das agendadas) <input type="number" min="0" max="1" step="0.01" data-pve-regra="control.heldRate" value="${c.heldRate}"></label>
-                        <label>Vendas (% das realizadas) <input type="number" min="0" max="1" step="0.01" data-pve-regra="control.salesRate" value="${c.salesRate}"></label>
-                    </article>
-                    <article>
-                        <h3>Referência da planilha</h3>
-                        <p>Peso total pontuável: <b>${esc(fmtPct(model.weightSum))}</b></p>
-                        <p>Pont. mín. <b>${esc(String(regra.gates.minPoints))}</b> · Pont. máx. <b>${esc(String(regra.gates.maxPoints))}</b></p>
-                        <button type="button" class="pve-btn pve-btn--ghost" data-pve="reset-regua">Restaurar régua original</button>
-                    </article>
-                </div>
-            </div>`;
-    }
-
-    function renderHistory(st, today) {
-        const keys = Object.keys(st.months).sort().reverse();
-        if (!keys.length) return '<p class="pve-note">Nenhum mês lançado ainda.</p>';
+    function renderHistory(today) {
+        const keys = Object.keys(state.months).sort().reverse();
         const rows = keys.map((k) => {
-            const rec = st.months[k];
+            const rec = state.months[k];
             const p = parseMonthKey(k);
             const wd = rec.workdaysOverride == null ? countWorkdays(p.year, p.month) : rec.workdaysOverride;
             const el = rec.elapsedOverride == null ? countElapsed(p.year, p.month, today) : rec.elapsedOverride;
-            const m = compute(rec.actuals, st.regra, el, wd);
-            const current = k === st.activeMonth;
-            return `<tr class="${current ? 'is-on' : ''}">
+            const m = compute(rec.actuals, state.lines, el, wd);
+            return `<tr class="${k === state.activeMonth ? 'is-on' : ''}">
                 <td><button type="button" class="pve-link" data-pve-open="${esc(k)}">${esc(monthLabel(k))}</button></td>
-                <td>${esc(fmtInt(m.total))}</td>
+                <td>${m.total}</td>
                 <td>${esc(fmtBRL(m.bonus))}</td>
                 <td>${esc(m.band.label)}</td>
-                <td>${esc(String(el))}/${esc(String(wd))}</td>
+                <td>${el}/${wd}</td>
             </tr>`;
         }).join('');
-        return `
-            <div class="pve-hist">
-                <table class="pve-sheet">
-                    <thead><tr><th>Mês</th><th>Pontos</th><th>Bônus</th><th>Faixa</th><th>Dias</th></tr></thead>
-                    <tbody>${rows}</tbody>
-                </table>
-                <p class="pve-note">Trocar o mês na barra de cima abre uma folha zerada. O histórico deste navegador permanece.</p>
+        return `<div class="pve-hist"><table class="pve-sheet"><thead><tr><th>Mês</th><th>Pontos</th><th>Bônus</th><th>Faixa</th><th>Dias</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+    }
+
+    function render(host) {
+        if (!host || !state) return;
+        const today = new Date();
+        const ctx = monthContext(today);
+        const model = compute(ctx.rec.actuals, state.lines, ctx.elapsed, ctx.workdays);
+        const pace = ctx.workdays > 0 ? ctx.elapsed / ctx.workdays : 0;
+        const tokenBox = showToken ? `<div class="pve-sync-box">
+            <p>O token fica só neste navegador. Use o mesmo da matriz de contratação, com permissão de escrita no Book.</p>
+            <input type="password" data-pve-token placeholder="ghp_… ou github_pat_…" autocomplete="off">
+            <button type="button" class="pve-btn" data-pve="save-token">Guardar token</button>
+        </div>` : '';
+        host.innerHTML = `
+            <div class="pve-sync ${dirty ? 'is-dirty' : ''}">
+                <span class="pve-sync-status">${esc(syncStatus)}</span>
+                <button type="button" class="pve-btn" data-pve="publish" ${syncBusy ? 'disabled' : ''}>Salvar para todos</button>
+                <button type="button" class="pve-btn pve-btn--ghost" data-pve="refresh" ${syncBusy ? 'disabled' : ''}>Atualizar</button>
+                <button type="button" class="pve-btn pve-btn--ghost" data-pve="token">${showToken ? 'Fechar' : 'Token'}</button>
+            </div>
+            ${tokenBox}
+            <div class="pve-toolbar">
+                <label class="pve-field"><span>BDR</span><input type="text" data-pve="person" value="${esc(state.person)}" maxlength="40" autocomplete="off"></label>
+                <div class="pve-month">
+                    <button type="button" class="pve-ico" data-pve="prev-month" aria-label="Mês anterior">‹</button>
+                    <strong>${esc(monthLabel(state.activeMonth))}</strong>
+                    <button type="button" class="pve-ico" data-pve="next-month" aria-label="Próximo mês">›</button>
+                </div>
+                <label class="pve-field pve-field--n"><span>Dias úteis</span><input type="number" min="1" max="31" step="1" data-pve="workdays" value="${ctx.workdays}"></label>
+                <label class="pve-field pve-field--n"><span>Dias decorridos</span><input type="number" min="0" max="31" step="1" data-pve="elapsed" value="${ctx.elapsed}"></label>
+            </div>
+            <div class="pve-kpis">
+                <article class="pve-kpi"><span>Pontuação</span><strong>${model.total}</strong><small>soma ${esc(fmt1(model.rawTotal))} · peso ${esc(fmt1(model.weightSum))}%</small></article>
+                <article class="pve-kpi"><span>Bônus estimado</span><strong>${esc(fmtBRL(model.bonus))}</strong><small>${esc(fmtBRL(model.band.value))} / ponto · ${esc(model.band.label)}</small></article>
+                <article class="pve-kpi"><span>Ritmo do mês</span><strong>${esc(fmtPct(pace, 0))}</strong><small>${ctx.elapsed} de ${ctx.workdays} dias úteis</small></article>
+                <article class="pve-kpi ${model.projected ? '' : 'is-muted'}"><span>Projeção</span><strong>${model.projected ? model.projected.total : '—'}</strong><small>${model.projected ? esc(fmtBRL(model.projected.bonus)) + ' se o volume se manter' : 'Percentuais não são projetados'}</small></article>
+            </div>
+            <div class="pve-tabs" role="tablist">
+                <button type="button" class="pve-tab ${tab === 'planilha' ? 'is-active' : ''}" data-pve-tab="planilha">Planilha</button>
+                <button type="button" class="pve-tab ${tab === 'ponto' ? 'is-active' : ''}" data-pve-tab="ponto">Valor do ponto</button>
+                <button type="button" class="pve-tab ${tab === 'historico' ? 'is-active' : ''}" data-pve-tab="historico">Histórico</button>
+            </div>
+            ${tab === 'planilha' ? renderSheet(model) : ''}
+            ${tab === 'ponto' ? renderBands(model) : ''}
+            ${tab === 'historico' ? renderHistory(today) : ''}
+            <div class="pve-actions">
+                <button type="button" class="pve-btn pve-btn--warn" data-pve="reset-month">Zerar atingidos deste mês</button>
             </div>`;
     }
 
-    function setRegraPath(path, value) {
-        const parts = path.split('.');
-        let cur = state.regra;
-        for (let i = 0; i < parts.length - 1; i++) cur = cur[parts[i]];
-        cur[parts[parts.length - 1]] = num(value, 0);
-    }
-
-    function bind(root) {
-        if (!root || root.dataset.pveBound === '1') return;
-        root.dataset.pveBound = '1';
-        root.addEventListener('input', (e) => {
+    function bind(host) {
+        if (!host || host.dataset.pveBound === '1') return;
+        host.dataset.pveBound = '1';
+        host.addEventListener('input', (e) => {
             const t = e.target;
             if (t.matches('[data-pve="person"]')) {
                 state.person = t.value;
-                saveState(state);
+                stamp();
+                syncStatus = 'Alteração neste navegador. Salve para todos verem.';
                 return;
             }
-            if (t.matches('[data-pve="workdays"]')) {
-                const rec = ensureMonth(state, state.activeMonth);
-                rec.workdaysOverride = t.value === '' ? null : Math.max(1, num(t.value, 21));
-                rec.updatedAt = new Date().toISOString();
-                saveState(state);
-                render(root);
+            if (t.matches('[data-pve="workdays"]') || t.matches('[data-pve="elapsed"]')) {
+                const rec = ensureMonth(state.activeMonth);
+                const field = t.getAttribute('data-pve') === 'workdays' ? 'workdaysOverride' : 'elapsedOverride';
+                rec[field] = t.value === '' ? null : Math.max(0, num(t.value, 0));
+                stamp();
+                render(host);
                 return;
             }
-            if (t.matches('[data-pve="elapsed"]')) {
-                const rec = ensureMonth(state, state.activeMonth);
-                rec.elapsedOverride = t.value === '' ? null : Math.max(0, num(t.value, 0));
-                rec.updatedAt = new Date().toISOString();
-                saveState(state);
-                render(root);
-                return;
-            }
-            if (t.matches('[data-pve-leaf]')) {
-                const id = t.getAttribute('data-pve-leaf');
+            if (t.matches('[data-pve-line]')) {
+                const id = t.getAttribute('data-pve-line');
                 const field = t.getAttribute('data-pve-field');
                 const value = Math.max(0, num(t.value, 0));
-                if (field === 'actual') {
-                    const rec = ensureMonth(state, state.activeMonth);
-                    rec.actuals[id] = value;
-                    rec.updatedAt = new Date().toISOString();
-                } else if (field === 'daily') {
-                    if (state.regra.daily[id] == null) return;
-                    state.regra.daily[id] = value;
-                } else if (state.regra.leaf[id]) {
-                    state.regra.leaf[id][field] = value / 100;
-                }
-                saveState(state);
+                if (field === 'actual') ensureMonth(state.activeMonth).actuals[id] = value;
+                else if (state.lines[id]) state.lines[id][field] = value;
+                stamp();
                 const start = t.selectionStart;
-                render(root);
-                const again = root.querySelector(`[data-pve-leaf="${id}"][data-pve-field="${field}"]`);
-                if (again) {
-                    again.focus();
-                    try { again.setSelectionRange(start, start); } catch (err) {}
-                }
-                return;
-            }
-            if (t.matches('[data-pve-regra]')) {
-                const path = t.getAttribute('data-pve-regra');
-                const start = t.selectionStart;
-                setRegraPath(path, t.value);
-                saveState(state);
-                render(root);
-                const again = root.querySelector(`[data-pve-regra="${path}"]`);
+                syncStatus = 'Alteração neste navegador. Salve para todos verem.';
+                render(host);
+                const again = host.querySelector(`[data-pve-line="${id}"][data-pve-field="${field}"]`);
                 if (again) {
                     again.focus();
                     try { again.setSelectionRange(start, start); } catch (err) {}
                 }
             }
         });
-        root.addEventListener('click', (e) => {
+        host.addEventListener('click', (e) => {
             const btn = e.target.closest('[data-pve], [data-pve-tab], [data-pve-open]');
-            if (!btn) return;
+            if (!btn || btn.disabled) return;
             if (btn.hasAttribute('data-pve-tab')) {
                 tab = btn.getAttribute('data-pve-tab');
-                render(root);
+                render(host);
                 return;
             }
             if (btn.hasAttribute('data-pve-open')) {
                 state.activeMonth = btn.getAttribute('data-pve-open');
-                ensureMonth(state, state.activeMonth);
+                ensureMonth(state.activeMonth);
                 tab = 'planilha';
-                saveState(state);
-                render(root);
+                stamp();
+                render(host);
                 return;
             }
             const act = btn.getAttribute('data-pve');
             if (act === 'prev-month' || act === 'next-month') {
                 state.activeMonth = shiftMonth(state.activeMonth, act === 'next-month' ? 1 : -1);
-                ensureMonth(state, state.activeMonth);
-                saveState(state);
-                render(root);
-            } else if (act === 'reset-days') {
-                const rec = ensureMonth(state, state.activeMonth);
-                rec.elapsedOverride = null;
-                rec.workdaysOverride = null;
-                rec.updatedAt = new Date().toISOString();
-                saveState(state);
-                render(root);
+                ensureMonth(state.activeMonth);
+                stamp();
+                render(host);
             } else if (act === 'reset-month') {
-                if (!confirm('Zerar os atingidos de ' + monthLabel(state.activeMonth) + '? A régua permanece.')) return;
-                const rec = ensureMonth(state, state.activeMonth);
-                rec.actuals = blankActuals();
-                rec.updatedAt = new Date().toISOString();
-                saveState(state);
-                render(root);
-            } else if (act === 'reset-regua') {
-                if (!confirm('Restaurar a régua original da planilha Melvin?')) return;
-                state.regra = defaultRegra();
-                saveState(state);
-                render(root);
-            } else if (act === 'export') {
-                const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
-                const a = document.createElement('a');
-                a.href = URL.createObjectURL(blob);
-                a.download = 'bonificacao-pve-melvin-' + state.activeMonth + '.json';
-                a.click();
-                URL.revokeObjectURL(a.href);
+                if (!confirm('Zerar os atingidos de ' + monthLabel(state.activeMonth) + '? Metas e pesos permanecem.')) return;
+                ensureMonth(state.activeMonth).actuals = blankActuals();
+                stamp();
+                syncStatus = 'Atingidos zerados neste navegador. Salve para todos verem.';
+                render(host);
+            } else if (act === 'publish') publish();
+            else if (act === 'refresh') refreshFromBook();
+            else if (act === 'token') {
+                showToken = !showToken;
+                render(host);
+            } else if (act === 'save-token') {
+                const input = host.querySelector('[data-pve-token]');
+                setToken(input ? input.value : '');
+                showToken = false;
+                syncStatus = getToken() ? 'Token guardado neste navegador. Pode salvar para todos.' : 'Token removido.';
+                render(host);
             }
-        });
-        root.addEventListener('change', (e) => {
-            const t = e.target;
-            if (!t.matches('[data-pve="import"]') || !t.files || !t.files[0]) return;
-            const file = t.files[0];
-            const reader = new FileReader();
-            reader.onload = () => {
-                try {
-                    const parsed = JSON.parse(reader.result);
-                    if (!parsed || !parsed.months) throw new Error('arquivo inválido');
-                    localStorage.setItem(KEY, JSON.stringify(parsed));
-                    state = loadState();
-                    tab = 'planilha';
-                    render(root);
-                } catch (err) {
-                    alert('Não deu para importar esse JSON.');
-                }
-            };
-            reader.readAsText(file);
-            t.value = '';
         });
     }
 
     function mount() {
-        const root = document.getElementById('pveRoot');
-        if (!root) return;
-        state = loadState();
-        bind(root);
-        render(root);
+        const host = document.getElementById('pveRoot');
+        if (!host) return;
+        state = loadLocal();
+        bind(host);
+        render(host);
+        pullRemote().then((remote) => {
+            if (!remote) {
+                syncStatus = 'Ainda não há régua publicada. Configure as metas e salve para todos.';
+                render(host);
+                return;
+            }
+            const remoteAt = remote.updatedAt || '';
+            const localAt = state.updatedAt || '';
+            if (!dirty || remoteAt >= localAt) {
+                state = remote;
+                dirty = false;
+                saveLocal();
+                syncStatus = 'Régua compartilhada' + (remote.updatedAt ? ' · ' + new Date(remote.updatedAt).toLocaleString('pt-BR') : '') + '.';
+            } else {
+                syncStatus = 'Você tem alterações locais mais novas que o Book. Salve para todos, ou atualize para descartar.';
+            }
+            render(host);
+        }).catch(() => {
+            syncStatus = 'Sem conexão com a régua publicada. Os números deste navegador continuam aqui.';
+            render(host);
+        });
     }
 
-    return {
-        mount,
-        compute,
-        countWorkdays,
-        countElapsed,
-        defaultRegra,
-        POINT_BANDS
-    };
+    return { mount, compute, countWorkdays, countElapsed, LINE_DEFS, POINT_BANDS, defaultState };
 });
