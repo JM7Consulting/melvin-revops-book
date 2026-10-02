@@ -474,7 +474,7 @@
             : `<td class="pve-num pve-col-meta pve-calc" data-pve-cell="month-meta" title="Mês = média do dia × dias úteis">${esc(monthMeta)}</td><td class="pve-num pve-col-meta">${entryHtml(def.id, 'meta', row.metaDay, unit, 'dia')}</td>`;
         return `<tr class="is-leaf heat-${heat(row.real)}" data-pve-row="${esc(def.id)}">
             <td class="pve-ind">
-                <span class="pve-ind-name"><strong title="${esc(def.tip || '')}">${esc(def.label)}</strong>${note}</span>
+                <span class="pve-ind-name"><strong>${esc(def.label)}</strong>${note}<button type="button" class="pve-info" data-pve-tip="${esc(def.tip || '')}" aria-label="Sobre ${esc(def.label)}"><span aria-hidden="true">i</span></button></span>
                 <select class="pve-format" data-pve-line="${esc(def.id)}" data-pve-field="unit" aria-label="Formato de ${esc(def.label)}">
                     <option value="n"${unit === 'n' ? ' selected' : ''}>Número</option>
                     <option value="pct"${unit === 'pct' ? ' selected' : ''}>Percentual</option>
@@ -660,7 +660,58 @@
         else paintDerived(host);
     }
 
+    let tipBtn = null;
+    let tipPinned = false;
+
+    function tipEl() {
+        let tip = document.getElementById('pveTip');
+        if (!tip) {
+            tip = document.createElement('div');
+            tip.id = 'pveTip';
+            tip.className = 'pve-tip';
+            tip.setAttribute('role', 'tooltip');
+            tip.hidden = true;
+            document.body.appendChild(tip);
+        }
+        return tip;
+    }
+
+    function hideTip() {
+        tipBtn = null;
+        tipPinned = false;
+        const tip = document.getElementById('pveTip');
+        if (tip) tip.hidden = true;
+    }
+
+    function placeTip(btn) {
+        const tip = tipEl();
+        tip.textContent = btn.getAttribute('data-pve-tip') || '';
+        tip.hidden = false;
+        tip.style.width = Math.min(300, window.innerWidth - 24) + 'px';
+        const box = btn.getBoundingClientRect();
+        const h = tip.offsetHeight;
+        const w = tip.offsetWidth;
+        let left = box.right + 10;
+        let top = box.top + (box.height - h) / 2;
+        if (left + w > window.innerWidth - 12) left = box.left - w - 10;
+        if (left < 12) {
+            left = Math.min(Math.max(12, box.left), window.innerWidth - w - 12);
+            top = box.bottom + 8;
+        }
+        if (top < 8) top = 8;
+        if (top + h > window.innerHeight - 8) top = Math.max(8, window.innerHeight - h - 8);
+        tip.style.left = Math.round(left) + 'px';
+        tip.style.top = Math.round(top) + 'px';
+    }
+
+    function showTip(btn, pin) {
+        tipBtn = btn;
+        tipPinned = !!pin;
+        placeTip(btn);
+    }
+
     function render(host) {
+        hideTip();
         if (!host || !state) return;
         const today = new Date();
         const ctx = monthContext(today);
@@ -711,6 +762,38 @@
     function bind(host) {
         if (!host || host.dataset.pveBound === '1') return;
         host.dataset.pveBound = '1';
+        host.addEventListener('mouseover', (e) => {
+            const info = e.target.closest('.pve-info');
+            if (!info || tipPinned) return;
+            showTip(info, false);
+        });
+        host.addEventListener('mouseout', (e) => {
+            const info = e.target.closest('.pve-info');
+            if (!info || tipPinned || tipBtn !== info) return;
+            hideTip();
+        });
+        host.addEventListener('focusin', (e) => {
+            const info = e.target.closest('.pve-info');
+            if (info) showTip(info, false);
+        });
+        host.addEventListener('focusout', (e) => {
+            const info = e.target.closest('.pve-info');
+            if (info && !tipPinned && tipBtn === info) hideTip();
+        });
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') hideTip();
+        });
+        document.addEventListener('click', (e) => {
+            if (!tipPinned) return;
+            if (e.target.closest && e.target.closest('.pve-info')) return;
+            hideTip();
+        });
+        window.addEventListener('scroll', () => {
+            if (tipBtn) placeTip(tipBtn);
+        }, true);
+        window.addEventListener('resize', () => {
+            if (tipBtn) placeTip(tipBtn);
+        });
         host.addEventListener('input', (e) => {
             const t = e.target;
             if (t.matches('[data-pve="person"]')) {
@@ -746,6 +829,14 @@
             }
         });
         host.addEventListener('click', (e) => {
+            const info = e.target.closest('.pve-info');
+            if (info) {
+                e.preventDefault();
+                if (tipPinned && tipBtn === info) hideTip();
+                else showTip(info, true);
+                return;
+            }
+            if (tipPinned) hideTip();
             const btn = e.target.closest('[data-pve], [data-pve-tab], [data-pve-open]');
             if (!btn || btn.disabled) return;
             if (btn.hasAttribute('data-pve-tab')) {

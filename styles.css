@@ -14209,16 +14209,63 @@ body.light-mode .mx-shell .mx-step.is-fail,
   border-radius: 6px;
   padding: 4px 6px;
 }
-.pve-ind-name { display: flex; align-items: baseline; flex-wrap: wrap; gap: 6px; }
+.pve-ind-name {
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: nowrap;
+  gap: 8px;
+}
 .pve-ind-name strong {
+  min-width: 0;
   font-size: 1.05rem;
   font-weight: 800;
   line-height: 1.25;
   color: var(--text-main);
-  cursor: help;
-  text-decoration: underline dotted rgba(148, 163, 184, 0.75);
-  text-underline-offset: 3px;
 }
+.pve-info {
+  flex: 0 0 auto;
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+  padding: 0;
+  border-radius: 50%;
+  border: 1px solid rgba(148, 163, 184, 0.55);
+  background: rgba(15, 23, 42, 0.45);
+  color: #e2e8f0;
+  cursor: help;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.pve-info span {
+  font-family: Georgia, "Times New Roman", serif;
+  font-style: italic;
+  font-weight: 700;
+  font-size: 0.78rem;
+  line-height: 1;
+  transform: translateY(-0.5px);
+}
+.pve-info:hover,
+.pve-info:focus-visible {
+  border-color: var(--melvin-cyan);
+  color: #67e8f9;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.2);
+}
+.pve-tip {
+  position: fixed;
+  z-index: 80;
+  box-sizing: border-box;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: #0b1220;
+  color: #f8fafc;
+  border: 1px solid rgba(148, 163, 184, 0.32);
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.38);
+  font: 600 0.8rem/1.45 Manrope, sans-serif;
+  pointer-events: none;
+}
+.pve-tip[hidden] { display: none !important; }
 .pve-format {
   display: block;
   width: 100%;
@@ -14460,6 +14507,15 @@ body.light-mode .pve-col-hit input { background: #fff7ed; color: #9a3412; border
 body.light-mode .pve-col-meta input { background: #eff6ff; color: #1e3a8a; border-color: #93c5fd; }
 body.light-mode .pve-sense,
 body.light-mode .pve-format { background: #fff; color: #0f172a; border-color: #cbd5e1; }
+body.light-mode .pve-info { background: #fff; color: #334155; border-color: #94a3b8; }
+body.light-mode .pve-info:hover,
+body.light-mode .pve-info:focus-visible { color: #0e7490; border-color: #0891b2; }
+body.light-mode .pve-tip {
+  background: #fff;
+  color: #0f172a;
+  border-color: #cbd5e1;
+  box-shadow: 0 14px 32px rgba(15, 23, 42, 0.14);
+}
 body.light-mode .pve-sense--down { background: #fffbeb; color: #92400e; border-color: #f59e0b; }
 body.light-mode .pve-sheet .is-group td { background: #ecfeff; }
 body.light-mode .pve-sheet .is-on td { background: #d1fae5; }
