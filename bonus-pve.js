@@ -121,6 +121,7 @@
             activeMonth: key,
             updatedAt: null,
             lines: defaultLines(),
+            pointValues: POINT_BANDS.map((b) => b.value),
             months: {
                 [key]: { actuals: blankActuals(), elapsedOverride: null, workdaysOverride: null }
             }
@@ -164,7 +165,20 @@
         if (!base.months[base.activeMonth]) {
             base.months[base.activeMonth] = { actuals: blankActuals(), elapsedOverride: null, workdaysOverride: null };
         }
+        base.pointValues = readPointValues(raw.pointValues);
         return base;
+    }
+
+    function readPointValues(raw) {
+        return POINT_BANDS.map((b, i) => {
+            if (raw && raw[i] != null && raw[i] !== '') return Math.max(0, num(raw[i], b.value));
+            return b.value;
+        });
+    }
+
+    function activeBands(values) {
+        const list = readPointValues(values);
+        return POINT_BANDS.map((b, i) => ({ from: b.from, to: b.to, label: b.label, value: list[i] }));
     }
 
     function attainRatio(actual, meta, sense) {
@@ -186,12 +200,13 @@
         return real;
     }
 
-    function bandFor(points) {
+    function bandFor(points, values) {
+        const bands = activeBands(values);
         const p = Math.max(0, Math.round(num(points, 0)));
-        for (let i = 0; i < POINT_BANDS.length; i++) {
-            if (p >= POINT_BANDS[i].from && p <= POINT_BANDS[i].to) return POINT_BANDS[i];
+        for (let i = 0; i < bands.length; i++) {
+            if (p >= bands[i].from && p <= bands[i].to) return bands[i];
         }
-        return POINT_BANDS[POINT_BANDS.length - 1];
+        return bands[bands.length - 1];
     }
 
     function lineUnit(def, cfg) {
@@ -222,13 +237,14 @@
         return { id: def.id, actual, meta, metaDay, min, max, weight, sense, unit, real, limited, points, ready: meta > 0 };
     }
 
-    function compute(actuals, lines, elapsed, workdays) {
+    function compute(actuals, lines, elapsed, workdays, pointValues) {
         const a = Object.assign(blankActuals(), actuals || {});
         const cfg = lines || defaultLines();
+        const bands = activeBands(pointValues);
         const rows = LINE_DEFS.map((def) => scoreLine(def, cfg[def.id] || blankCfg(def), num(a[def.id], 0), workdays));
         const rawTotal = rows.reduce((s, row) => s + row.points, 0);
         const total = Math.round(rawTotal);
-        const band = bandFor(total);
+        const band = bandFor(total, bands.map((b) => b.value));
         const weightSum = rows.reduce((s, row) => s + row.weight, 0);
         let projected = null;
         const el = Math.max(0, num(elapsed, 0));
@@ -240,11 +256,11 @@
                 const unit = lineUnit(def, cfg[def.id]);
                 paced[def.id] = unit === 'pct' ? value : value / el * wd;
             });
-            const proj = compute(paced, cfg, wd, wd);
+            const proj = compute(paced, cfg, wd, wd, bands.map((b) => b.value));
             projected = { total: proj.total, bonus: proj.total * proj.band.value, band: proj.band };
         }
         return {
-            rows, total, rawTotal, band, bonus: total * band.value, weightSum,
+            rows, total, rawTotal, band, bands, bonus: total * band.value, weightSum,
             elapsed: el, workdays: wd, projected
         };
     }
@@ -560,22 +576,31 @@
             <p class="pve-foot">O formato fica sob o nome do indicador: Número, Percentual ou Reais. Em percentual, o mês ocupa as colunas de média: não existe média por dia. Nas outras linhas, o atingido é preenchido no mês e a média do dia sai sozinha (mês ÷ dias úteis decorridos). A meta é preenchida na média do dia e o mês sai sozinho (média × dias úteis do mês). Maior melhor: atingimento real = atingido do mês ÷ meta do mês. Menor melhor: atingimento real = meta do mês ÷ atingido do mês. Exemplo de atraso: 10% atingido com meta de 40% vale 400% e trava no máximo. Atingido zero, quando menor é melhor, também trava no máximo. A pontuação só começa no mínimo. Pontos da linha = peso × atingimento com limitador. O peso das linhas precisa fechar 100%.</p>`;
     }
 
+    function pointValueCell(index, value, canEdit) {
+        if (!canEdit) return esc(fmtBRL(value));
+        return `<span class="pve-entry pve-entry--mark"><input type="text" inputmode="decimal" autocomplete="off" spellcheck="false" data-pve-point="${index}" value="${esc(String(value))}" aria-label="Valor do ponto"><span class="pve-unit">R$</span></span>`;
+    }
+
     function renderBands(model) {
+        const canEdit = !!getToken();
+        const bands = model.bands || activeBands(state && state.pointValues);
         return `
             <div class="pve-bands">
                 <table class="pve-sheet pve-sheet--bands">
                     <thead><tr><th>Faixa de pontuação</th><th>Valor do ponto</th><th>Bônus de</th><th>Bônus até</th><th>Dificuldade</th></tr></thead>
                     <tbody>
-                        ${POINT_BANDS.map((b) => `<tr class="${model.band.from === b.from ? 'is-on' : ''}">
+                        ${bands.map((b, i) => `<tr class="${model.band.from === b.from ? 'is-on' : ''}" data-pve-band="${i}">
                             <td>${b.from} até ${b.to}</td>
-                                <td>${esc(fmtBRL(b.value))}</td>
-                                <td>${esc(fmtBRL(b.from * b.value))}</td>
-                                <td>${esc(fmtBRL(b.to * b.value))}</td>
-                                <td>${esc(b.label)}</td>
+                            <td class="pve-num">${pointValueCell(i, b.value, canEdit)}</td>
+                            <td data-pve-band-from="${i}">${esc(fmtBRL(b.from * b.value))}</td>
+                            <td data-pve-band-to="${i}">${esc(fmtBRL(b.to * b.value))}</td>
+                            <td>${esc(b.label)}</td>
                         </tr>`).join('')}
                     </tbody>
                 </table>
-                <p class="pve-note">Bônus = pontuação arredondada × valor do ponto da faixa.</p>
+                <p class="pve-note">${canEdit
+                    ? 'Bônus de = início da faixa × valor do ponto. Bônus até = fim da faixa × valor do ponto. Altere o valor e clique em Salvar para todos.'
+                    : 'Bônus de e bônus até são calculados a partir do valor do ponto. Esse valor só é alterado por quem publica a planilha.'}</p>
             </div>`;
     }
 
@@ -586,7 +611,7 @@
             const p = parseMonthKey(k);
             const wd = rec.workdaysOverride == null ? countWorkdays(p.year, p.month) : rec.workdaysOverride;
             const el = rec.elapsedOverride == null ? countElapsed(p.year, p.month, today) : rec.elapsedOverride;
-            const m = compute(rec.actuals, state.lines, el, wd);
+            const m = compute(rec.actuals, state.lines, el, wd, state.pointValues);
             return `<tr class="${k === state.activeMonth ? 'is-on' : ''}">
                 <td><button type="button" class="pve-link" data-pve-open="${esc(k)}">${esc(monthLabel(k))}</button></td>
                 <td>${m.total}</td>
@@ -606,12 +631,26 @@
     }
 
     function paintDerived(host) {
-        if (!host || !state || tab !== 'planilha') return;
+        if (!host || !state || (tab !== 'planilha' && tab !== 'ponto')) return;
         const today = new Date();
         const ctx = monthContext(today);
-        const model = compute(ctx.rec.actuals, state.lines, ctx.elapsed, ctx.workdays);
+        const model = compute(ctx.rec.actuals, state.lines, ctx.elapsed, ctx.workdays, state.pointValues);
         const pace = ctx.workdays > 0 ? ctx.elapsed / ctx.workdays : 0;
         const peso = weightStatus(model.weightSum);
+        if (tab === 'ponto' && model.bands) {
+            model.bands.forEach((b, i) => {
+                const tr = host.querySelector(`tr[data-pve-band="${i}"]`);
+                if (tr) tr.classList.toggle('is-on', model.band.from === b.from);
+                const fromEl = host.querySelector(`[data-pve-band-from="${i}"]`);
+                const toEl = host.querySelector(`[data-pve-band-to="${i}"]`);
+                if (fromEl) fromEl.textContent = fmtBRL(b.from * b.value);
+                if (toEl) toEl.textContent = fmtBRL(b.to * b.value);
+            });
+        }
+        if (tab !== 'planilha') {
+            paintChrome(host, model, ctx, pace, peso);
+            return;
+        }
         LINE_DEFS.forEach((def, i) => {
             const row = model.rows[i];
             const tr = host.querySelector(`tr[data-pve-row="${def.id}"]`);
@@ -635,6 +674,10 @@
             if (limEl) limEl.textContent = row.ready ? fmtPct(row.limited, 1) : '—';
             if (ptsEl) ptsEl.textContent = fmt1(row.points);
         });
+        paintChrome(host, model, ctx, pace, peso);
+    }
+
+    function paintChrome(host, model, ctx, pace, peso) {
         const weightEl = host.querySelector('[data-pve-total-weight]');
         if (weightEl) {
             weightEl.textContent = fmt1(model.weightSum) + '%';
@@ -741,7 +784,7 @@
         if (!host || !state) return;
         const today = new Date();
         const ctx = monthContext(today);
-        const model = compute(ctx.rec.actuals, state.lines, ctx.elapsed, ctx.workdays);
+        const model = compute(ctx.rec.actuals, state.lines, ctx.elapsed, ctx.workdays, state.pointValues);
         const pace = ctx.workdays > 0 ? ctx.elapsed / ctx.workdays : 0;
         const tokenBox = showToken ? `<div class="pve-sync-box">
             <p>O token fica só neste navegador. Use o mesmo da matriz de contratação, com permissão de escrita no Book.</p>
@@ -833,6 +876,14 @@
                 const rec = ensureMonth(state.activeMonth);
                 const field = t.getAttribute('data-pve') === 'workdays' ? 'workdaysOverride' : 'elapsedOverride';
                 rec[field] = t.value === '' ? null : Math.max(0, parseLoose(t.value));
+                noteLocalEdit(host);
+                return;
+            }
+            if (t.matches('[data-pve-point]')) {
+                if (!getToken()) return;
+                const index = Number(t.getAttribute('data-pve-point'));
+                if (!state.pointValues) state.pointValues = readPointValues(null);
+                if (index >= 0 && index < state.pointValues.length) state.pointValues[index] = parseLoose(t.value);
                 noteLocalEdit(host);
                 return;
             }

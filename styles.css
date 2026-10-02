@@ -14511,6 +14511,8 @@ body.light-mode .mx-shell .mx-step.is-fail,
   padding: 0;
 }
 .pve-sheet--bands { min-width: 0; }
+.pve-sheet--bands td { text-align: center; }
+.pve-sheet--bands .pve-entry { max-width: 112px; }
 @media (max-width: 980px) {
   .pve-kpis, .pve-board, .pve-side, .pve-regua-grid { grid-template-columns: 1fr; }
   .pve-stamp { margin-left: 0; }
