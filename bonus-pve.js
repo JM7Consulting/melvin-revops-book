@@ -436,9 +436,10 @@
         return '';
     }
 
-    function valueCell(lineId, field, value, unit, colClass) {
+    function entryHtml(lineId, field, value, unit) {
         const mark = unitMark(unit);
-        return `<td class="pve-num ${colClass}"><span class="pve-entry">${inputNum(lineId, field, value, 'any')}${mark ? `<span class="pve-unit">${mark}</span>` : ''}</span></td>`;
+        const cls = mark ? 'pve-entry pve-entry--mark' : 'pve-entry';
+        return `<span class="${cls}">${inputNum(lineId, field, value, 'any')}${mark ? `<span class="pve-unit">${mark}</span>` : ''}</span>`;
     }
 
     function rowHtml(def, row, elapsed, workdays) {
@@ -451,21 +452,23 @@
         const unit = row.unit === 'pct' || row.unit === 'brl' ? row.unit : 'n';
         const rate = unit === 'pct';
         const hitCells = rate
-            ? `<td class="pve-num pve-col-hit pve-span" colspan="2"><span class="pve-entry">${inputNum(def.id, 'actual', row.actual, 'any')}<span class="pve-unit">%</span></span></td>`
-            : `${valueCell(def.id, 'actual', row.actual, unit, 'pve-col-hit')}<td class="pve-num pve-col-hit" data-pve-cell="day-actual">${dayHit == null ? '—' : esc(fmtValue(unit, dayHit))}</td>`;
+            ? `<td class="pve-num pve-col-hit pve-span" colspan="2">${entryHtml(def.id, 'actual', row.actual, unit)}</td>`
+            : `<td class="pve-num pve-col-hit">${entryHtml(def.id, 'actual', row.actual, unit)}</td><td class="pve-num pve-col-hit" data-pve-cell="day-actual">${dayHit == null ? '—' : esc(fmtValue(unit, dayHit))}</td>`;
         const metaCells = rate
-            ? `<td class="pve-num pve-col-meta pve-span" colspan="2"><span class="pve-entry">${inputNum(def.id, 'meta', row.meta, 'any')}<span class="pve-unit">%</span></span></td>`
-            : `${valueCell(def.id, 'meta', row.meta, unit, 'pve-col-meta')}<td class="pve-num pve-col-meta" data-pve-cell="day-meta">${dayMeta == null ? '—' : esc(fmtValue(unit, dayMeta))}</td>`;
+            ? `<td class="pve-num pve-col-meta pve-span" colspan="2">${entryHtml(def.id, 'meta', row.meta, unit)}</td>`
+            : `<td class="pve-num pve-col-meta">${entryHtml(def.id, 'meta', row.meta, unit)}</td><td class="pve-num pve-col-meta" data-pve-cell="day-meta">${dayMeta == null ? '—' : esc(fmtValue(unit, dayMeta))}</td>`;
         return `<tr class="is-leaf heat-${heat(row.real)}" data-pve-row="${esc(def.id)}">
-            <td class="pve-ind"><strong>${esc(def.label)}</strong>${note}</td>
+            <td class="pve-ind">
+                <span class="pve-ind-name"><strong>${esc(def.label)}</strong>${note}</span>
+                <select class="pve-format" data-pve-line="${esc(def.id)}" data-pve-field="unit" aria-label="Formato de ${esc(def.label)}">
+                    <option value="n"${unit === 'n' ? ' selected' : ''}>Número</option>
+                    <option value="pct"${unit === 'pct' ? ' selected' : ''}>Percentual</option>
+                    <option value="brl"${unit === 'brl' ? ' selected' : ''}>Reais</option>
+                </select>
+            </td>
             <td class="pve-sense-cell"><select class="pve-sense${sense === 'down' ? ' pve-sense--down' : ''}" data-pve-line="${esc(def.id)}" data-pve-field="sense" aria-label="Sentido da meta de ${esc(def.label)}">
                 <option value="up"${sense === 'up' ? ' selected' : ''}>Maior melhor</option>
                 <option value="down"${sense === 'down' ? ' selected' : ''}>Menor melhor</option>
-            </select></td>
-            <td class="pve-sense-cell"><select class="pve-format" data-pve-line="${esc(def.id)}" data-pve-field="unit" aria-label="Formato de ${esc(def.label)}">
-                <option value="n"${unit === 'n' ? ' selected' : ''}>Número</option>
-                <option value="pct"${unit === 'pct' ? ' selected' : ''}>Percentual</option>
-                <option value="brl"${unit === 'brl' ? ' selected' : ''}>Reais</option>
             </select></td>
             ${hitCells}
             ${metaCells}
@@ -484,12 +487,17 @@
         return `
             <p class="pve-weight ${peso.cls}" data-pve-weight-msg>${esc(peso.text)}</p>
             <div class="pve-sheet-wrap">
-                <table class="pve-sheet">
+                <table class="pve-sheet pve-sheet--score">
+                    <colgroup>
+                        <col class="pve-c-ind"><col class="pve-c-sense">
+                        <col class="pve-c-num"><col class="pve-c-day">
+                        <col class="pve-c-num"><col class="pve-c-day">
+                        <col class="pve-c-real"><col class="pve-c-min"><col class="pve-c-max"><col class="pve-c-lim"><col class="pve-c-peso"><col class="pve-c-pts">
+                    </colgroup>
                     <thead>
                         <tr>
                             <th class="pve-th-ind" rowspan="2">Indicador</th>
                             <th rowspan="2">Sentido</th>
-                            <th rowspan="2">Formato</th>
                             <th class="pve-h-hit" colspan="2">Atingido</th>
                             <th class="pve-h-meta" colspan="2">Meta</th>
                             <th rowspan="2">Ating. real</th>
@@ -511,7 +519,6 @@
                         <tr class="is-total">
                             <td class="pve-ind">Total</td>
                             <td></td>
-                            <td></td>
                             <td class="pve-col-hit"></td><td class="pve-col-hit"></td>
                             <td class="pve-col-meta"></td><td class="pve-col-meta"></td>
                             <td></td><td></td><td></td><td></td>
@@ -521,7 +528,7 @@
                     </tbody>
                 </table>
             </div>
-            <p class="pve-foot">Formato Número, Percentual ou Reais vale para a linha inteira. Em percentual, o mês ocupa as colunas de média: não existe média por dia. Maior melhor: atingimento real = atingido ÷ meta. Menor melhor: atingimento real = meta ÷ atingido. Exemplo de atraso: 10% atingido com meta de 40% vale 400% e trava no máximo. Atingido zero, quando menor é melhor, também trava no máximo. A pontuação só começa no mínimo. Pontos da linha = peso × atingimento com limitador. Nas demais linhas, a média do atingido usa os dias úteis já decorridos e a média da meta usa os dias úteis do mês. O peso das linhas precisa fechar 100%.</p>`;
+            <p class="pve-foot">O formato fica sob o nome do indicador: Número, Percentual ou Reais. Em percentual, o mês ocupa as colunas de média: não existe média por dia. Maior melhor: atingimento real = atingido ÷ meta. Menor melhor: atingimento real = meta ÷ atingido. Exemplo de atraso: 10% atingido com meta de 40% vale 400% e trava no máximo. Atingido zero, quando menor é melhor, também trava no máximo. A pontuação só começa no mínimo. Pontos da linha = peso × atingimento com limitador. Nas demais linhas, a média do atingido usa os dias úteis já decorridos e a média da meta usa os dias úteis do mês. O peso das linhas precisa fechar 100%.</p>`;
     }
 
     function renderBands(model) {
