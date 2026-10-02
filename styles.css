@@ -280,15 +280,43 @@
         .nav-lane--close { --lane-accent: #fbbf24; }
         .nav-lane--train { --lane-accent: #c4b5fd; }
 
+        .nav-lane:not(.is-open) {
+            gap: 0;
+            padding-bottom: 6px;
+        }
+        .nav-lane:not(.is-open) > .menu-group,
+        .nav-lane:not(.is-open) > .menu-standalone {
+            display: none;
+        }
+        aside.collapsed .nav-lane > .menu-group,
+        aside.collapsed .nav-lane > .menu-standalone {
+            display: flex;
+        }
         .nav-lane .sidebar-section-title {
             display: flex;
             align-items: center;
             gap: 8px;
-            margin: 0 0 4px !important;
-            padding: 4px 8px 8px 10px;
+            width: 100%;
+            margin: 0 !important;
+            padding: 4px 8px 4px 10px;
+            border: 0;
+            background: transparent;
+            font: inherit;
+            letter-spacing: inherit;
+            text-transform: inherit;
+            text-align: left;
+            cursor: pointer;
             opacity: 1;
             color: color-mix(in srgb, var(--lane-accent) 75%, #fff);
         }
+        .nav-lane.is-open .sidebar-section-title { margin-bottom: 4px !important; }
+        .nav-lane-toggle:hover { filter: brightness(1.08); }
+        .nav-lane-caret {
+            margin-left: auto;
+            font-size: 0.62rem;
+            opacity: 0.75;
+        }
+        .nav-lane.is-open .nav-lane-caret { color: var(--lane-accent); opacity: 1; }
         .nav-lane-chip {
             display: inline-grid;
             place-items: center;

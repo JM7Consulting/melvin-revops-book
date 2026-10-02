@@ -12,6 +12,21 @@ document.addEventListener('DOMContentLoaded', () => {
         if (mainContent) mainContent.classList.toggle('expanded');
     }
 
+    function setLaneOpen(lane, open) {
+        if (!lane) return;
+        lane.classList.toggle('is-open', open);
+        const toggle = lane.querySelector('.nav-lane-toggle');
+        if (toggle) toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+        const caret = lane.querySelector('.nav-lane-caret');
+        if (caret) caret.textContent = open ? '▲' : '▼';
+    }
+    document.querySelectorAll('.nav-lane-toggle').forEach((btn) => {
+        btn.addEventListener('click', () => {
+            const lane = btn.closest('.nav-lane');
+            setLaneOpen(lane, !lane.classList.contains('is-open'));
+        });
+    });
+
     if (menuToggleFull) menuToggleFull.addEventListener('click', toggleMenu);
     if (menuToggleMini) menuToggleMini.addEventListener('click', toggleMenu);
 
@@ -110,6 +125,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
             lane.classList.toggle('is-dimmed', laneHits === 0);
+            if (laneHits > 0) setLaneOpen(lane, true);
         });
         if (navSearchEmpty) navSearchEmpty.hidden = hits > 0;
     }
@@ -1587,6 +1603,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function expandMenuForHash(hash) {
         const activeMenuLink = document.querySelector(`.nav-container a[href="${hash}"]`);
         if (!activeMenuLink) return;
+        setLaneOpen(activeMenuLink.closest('.nav-lane'), true);
         const group = activeMenuLink.closest('.menu-group');
         if (!group) return;
         group.classList.add('active');

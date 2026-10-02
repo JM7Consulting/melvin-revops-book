@@ -6,7 +6,7 @@
     <title>REBUILD 7 | MELVIN</title>
     
 	<link rel="icon" type="image/png" href="logo_simples_removebcg.png">
-  <link rel="stylesheet" href="styles.css?v=matriz-194">
+  <link rel="stylesheet" href="styles.css?v=matriz-195">
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sora:wght@600;700;800&family=Carlito:ital,wght@0,400;0,700;1,400&family=Libre+Baskerville:wght@400;700&display=swap" rel="stylesheet">
@@ -56,7 +56,7 @@
 
                 <!-- AR · Análise de resultado (topo do menu) -->
                 <div class="nav-lane nav-lane--ar">
-                <div class="sidebar-section-title"><span class="nav-lane-chip">AR</span> Análise de resultado</div>
+                <button type="button" class="sidebar-section-title nav-lane-toggle" aria-expanded="false"><span class="nav-lane-chip">AR</span> Análise de resultado<span class="nav-lane-caret" aria-hidden="true">▼</span></button>
 
                 <div class="menu-group">
                     <div class="menu-trigger">
@@ -69,9 +69,23 @@
                 </div>
                 </div>
 
+                <!-- TREINAMENTO · antes do 01 -->
+                <div class="nav-lane nav-lane--train">
+                <button type="button" class="sidebar-section-title nav-lane-toggle" aria-expanded="false"><span class="nav-lane-chip">TR</span> Treinamento<span class="nav-lane-caret" aria-hidden="true">▼</span></button>
+                <div class="menu-group">
+                    <div class="menu-trigger">
+                        <div class="menu-trigger-left"><span class="nav-ico">🎓</span><span class="text">Treinamentos</span></div>
+                        <span class="arrow">▼</span>
+                    </div>
+                    <div class="submenu">
+                        <a href="#treinamentos"><span style="display:flex; gap:10px;"><span>🎥</span> Roleplays e Treinamentos</span><span class="dot dot-active"></span></a>
+                    </div>
+                </div>
+                </div>
+
                 <!-- COMANDO -->
                 <div class="nav-lane nav-lane--cmd">
-                <div class="sidebar-section-title"><span class="nav-lane-chip">01</span> Comando</div>
+                <button type="button" class="sidebar-section-title nav-lane-toggle" aria-expanded="false"><span class="nav-lane-chip">01</span> Comando<span class="nav-lane-caret" aria-hidden="true">▼</span></button>
 
                 <!-- Roadmap RevOps: só no menu INTERNO (RevOps Jailson) -->
 
@@ -100,23 +114,9 @@
                 </div>
                 </div>
 
-                <!-- TREINAMENTO -->
-                <div class="nav-lane nav-lane--train">
-                <div class="sidebar-section-title"><span class="nav-lane-chip">TR</span> Treinamento</div>
-                <div class="menu-group">
-                    <div class="menu-trigger">
-                        <div class="menu-trigger-left"><span class="nav-ico">🎓</span><span class="text">Treinamentos</span></div>
-                        <span class="arrow">▼</span>
-                    </div>
-                    <div class="submenu">
-                        <a href="#treinamentos"><span style="display:flex; gap:10px;"><span>🎥</span> Roleplays e Treinamentos</span><span class="dot dot-active"></span></a>
-                    </div>
-                </div>
-                </div>
-
                 <!-- ESTRATÉGIA -->
                 <div class="nav-lane nav-lane--strategy">
-                <div class="sidebar-section-title"><span class="nav-lane-chip">02</span> Estratégia</div>
+                <button type="button" class="sidebar-section-title nav-lane-toggle" aria-expanded="false"><span class="nav-lane-chip">02</span> Estratégia<span class="nav-lane-caret" aria-hidden="true">▼</span></button>
 
                 <div class="menu-group">
                     <div class="menu-trigger">
@@ -153,7 +153,7 @@
 
                 <!-- MARKETING -->
                 <div class="nav-lane nav-lane--mkt">
-                <div class="sidebar-section-title"><span class="nav-lane-chip">03</span> Marketing</div>
+                <button type="button" class="sidebar-section-title nav-lane-toggle" aria-expanded="false"><span class="nav-lane-chip">03</span> Marketing<span class="nav-lane-caret" aria-hidden="true">▼</span></button>
 
                 <div class="menu-group">
                     <div class="menu-trigger">
@@ -169,7 +169,7 @@
 
                 <!-- ESTEIRA INBOUND -->
                 <div class="nav-lane nav-lane--in">
-                <div class="sidebar-section-title"><span class="nav-lane-chip">04</span> Esteira Inbound</div>
+                <button type="button" class="sidebar-section-title nav-lane-toggle" aria-expanded="false"><span class="nav-lane-chip">04</span> Esteira Inbound<span class="nav-lane-caret" aria-hidden="true">▼</span></button>
 
                 <div class="menu-group">
                     <div class="menu-trigger">
@@ -205,7 +205,7 @@
 
                 <!-- ESTEIRA OUTBOUND -->
                 <div class="nav-lane nav-lane--out">
-                <div class="sidebar-section-title"><span class="nav-lane-chip">05</span> Esteira Outbound</div>
+                <button type="button" class="sidebar-section-title nav-lane-toggle" aria-expanded="false"><span class="nav-lane-chip">05</span> Esteira Outbound<span class="nav-lane-caret" aria-hidden="true">▼</span></button>
 
                 <div class="menu-group">
                     <div class="menu-trigger">
@@ -245,7 +245,7 @@
 
                 <!-- ABM -->
                 <div class="nav-lane nav-lane--abm">
-                <div class="sidebar-section-title"><span class="nav-lane-chip">06</span> ABM</div>
+                <button type="button" class="sidebar-section-title nav-lane-toggle" aria-expanded="false"><span class="nav-lane-chip">06</span> ABM<span class="nav-lane-caret" aria-hidden="true">▼</span></button>
 
                 <div class="menu-group">
                     <div class="menu-trigger">
@@ -262,7 +262,7 @@
 
                 <!-- FECHAMENTO -->
                 <div class="nav-lane nav-lane--close">
-                <div class="sidebar-section-title"><span class="nav-lane-chip">07</span> Fechamento</div>
+                <button type="button" class="sidebar-section-title nav-lane-toggle" aria-expanded="false"><span class="nav-lane-chip">07</span> Fechamento<span class="nav-lane-caret" aria-hidden="true">▼</span></button>
 
                 <div class="menu-group">
                     <div class="menu-trigger">
@@ -293,7 +293,7 @@
 
                 <!-- OPS · só aparece após 5× no © do rodapé -->
                 <div class="nav-lane nav-lane--ops" id="opsNavLane" hidden>
-                <div class="sidebar-section-title"><span class="nav-lane-chip">OPS</span> Interno</div>
+                <button type="button" class="sidebar-section-title nav-lane-toggle" aria-expanded="false"><span class="nav-lane-chip">OPS</span> Interno<span class="nav-lane-caret" aria-hidden="true">▼</span></button>
                 <div class="menu-group active">
                     <div class="menu-trigger">
                         <div class="menu-trigger-left"><span class="nav-ico">🔒</span><span class="text">RevOps Jailson</span></div>
@@ -14575,13 +14575,13 @@ Um abraço!"
         </section>
 
 	</main>
-  <script src="ar-deck.js?v=matriz-194"></script>
-  <script src="app.js?v=matriz-194"></script>
-  <script src="contatos-clientes.js?v=matriz-194"></script>
-  <script src="clientes-atuais.js?v=matriz-194"></script>
-  <script src="lista-churn.js?v=matriz-194"></script>
+  <script src="ar-deck.js?v=matriz-195"></script>
+  <script src="app.js?v=matriz-195"></script>
+  <script src="contatos-clientes.js?v=matriz-195"></script>
+  <script src="clientes-atuais.js?v=matriz-195"></script>
+  <script src="lista-churn.js?v=matriz-195"></script>
   <script src="hire-matrix.js?v=matriz-66"></script>
-  <script src="bonus-pve.js?v=matriz-194"></script>
+  <script src="bonus-pve.js?v=matriz-195"></script>
 	
 </body>
 </html>
