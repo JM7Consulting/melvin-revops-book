@@ -2,91 +2,79 @@
   "rev": 2,
   "person": "",
   "activeMonth": "2026-10",
-  "updatedAt": "2026-10-02T18:01:17.399Z",
+  "updatedAt": "2026-10-02T18:10:40.494Z",
   "lines": {
     "actTotal": {
       "meta": 0,
       "min": 80,
       "max": 150,
       "weight": 0,
-      "sense": "up"
+      "sense": "up",
+      "unit": "n"
     },
     "actLatePct": {
       "meta": 0,
       "min": 80,
       "max": 150,
       "weight": 0,
-      "sense": "down"
+      "sense": "down",
+      "unit": "pct"
     },
     "callsStarted": {
       "meta": 0,
       "min": 80,
       "max": 150,
       "weight": 0,
-      "sense": "up"
+      "sense": "up",
+      "unit": "n"
     },
     "callsPicked": {
       "meta": 0,
       "min": 80,
       "max": 150,
       "weight": 0,
-      "sense": "up"
+      "sense": "up",
+      "unit": "n"
     },
     "callsLong": {
       "meta": 0,
       "min": 80,
       "max": 150,
       "weight": 0,
-      "sense": "up"
+      "sense": "up",
+      "unit": "n"
     },
     "meetingsBooked": {
       "meta": 0,
       "min": 80,
       "max": 150,
       "weight": 0,
-      "sense": "up"
+      "sense": "up",
+      "unit": "n"
     },
-    "meetHot": {
+    "meetQuality": {
       "meta": 0,
       "min": 80,
       "max": 150,
       "weight": 0,
-      "sense": "up"
-    },
-    "meetWarm": {
-      "meta": 0,
-      "min": 80,
-      "max": 150,
-      "weight": 0,
-      "sense": "up"
-    },
-    "meetCold": {
-      "meta": 0,
-      "min": 80,
-      "max": 150,
-      "weight": 0,
-      "sense": "up"
-    },
-    "meetGrave": {
-      "meta": 0,
-      "min": 80,
-      "max": 150,
-      "weight": 0,
-      "sense": "up"
+      "sense": "up",
+      "unit": "pct"
     },
     "revenueNew": {
       "meta": 0,
       "min": 80,
       "max": 150,
       "weight": 0,
-      "sense": "up"
+      "sense": "up",
+      "unit": "brl"
     },
     "salesTotal": {
       "meta": 0,
       "min": 80,
       "max": 150,
       "weight": 0,
-      "sense": "up"
+      "sense": "up",
+      "unit": "n"
     }
   },
   "months": {
@@ -98,10 +86,22 @@
         "callsPicked": 0,
         "callsLong": 0,
         "meetingsBooked": 0,
-        "meetHot": 0,
-        "meetWarm": 0,
-        "meetCold": 0,
-        "meetGrave": 0,
+        "meetQuality": 0,
+        "revenueNew": 0,
+        "salesTotal": 0
+      },
+      "elapsedOverride": null,
+      "workdaysOverride": 21
+    },
+    "2026-11": {
+      "actuals": {
+        "actTotal": 0,
+        "actLatePct": 0,
+        "callsStarted": 0,
+        "callsPicked": 0,
+        "callsLong": 0,
+        "meetingsBooked": 0,
+        "meetQuality": 0,
         "revenueNew": 0,
         "salesTotal": 0
       },
