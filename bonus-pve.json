@@ -2,7 +2,7 @@
   "rev": 2,
   "person": "POLIANA",
   "activeMonth": "2026-10",
-  "updatedAt": "2026-10-02T19:35:19.442Z",
+  "updatedAt": "2026-10-02T19:46:52.447Z",
   "lines": {
     "lud": {
       "meta": 30,
@@ -106,9 +106,9 @@
         "lud": 100,
         "actTotal": 1500,
         "actLatePct": 25,
-        "callsStarted": 0,
-        "callsPicked": 0,
-        "callsLong": 0,
+        "callsStarted": 250,
+        "callsPicked": 35,
+        "callsLong": 10,
         "meetingsBooked": 0,
         "meetingsHeld": 0,
         "meetQuality": 0,
