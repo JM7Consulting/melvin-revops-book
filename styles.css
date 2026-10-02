@@ -14145,7 +14145,7 @@ body.light-mode .mx-shell .mx-step.is-fail,
   width: 100%;
   border-collapse: collapse;
   font-size: 0.82rem;
-  min-width: 980px;
+  min-width: 1180px;
 }
 .pve-sheet th, .pve-sheet td {
   border: 1px solid rgba(148, 163, 184, 0.14);
@@ -14192,7 +14192,33 @@ body.light-mode .mx-shell .mx-step.is-fail,
   padding: 4px 6px;
 }
 .pve-pts { color: var(--melvin-cyan); font-weight: 800; }
-.pve-sheet .heat-low .pve-num { color: #f87171; }
+.pve-sheet thead .pve-h-hit { background: #c2410c; color: #fff7ed; }
+.pve-sheet thead .pve-h-meta { background: #1d4ed8; color: #eff6ff; }
+.pve-col-hit { background: rgba(234, 88, 12, 0.16); color: #ffedd5; }
+.pve-col-meta { background: rgba(37, 99, 235, 0.16); color: #dbeafe; }
+.pve-col-hit input {
+  border-color: rgba(251, 146, 60, 0.7);
+  background: rgba(67, 20, 7, 0.72);
+}
+.pve-col-meta input {
+  border-color: rgba(147, 197, 253, 0.7);
+  background: rgba(15, 23, 42, 0.72);
+}
+.pve-weight {
+  margin: 0 0 12px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-size: 0.86rem;
+  font-weight: 800;
+}
+.pve-weight.is-under,
+.pve-num.is-under { color: #fbbf24; background: rgba(251, 191, 36, 0.12); }
+.pve-weight.is-over,
+.pve-num.is-over { color: #fca5a5; background: rgba(239, 68, 68, 0.16); }
+.pve-weight.is-ok,
+.pve-num.is-ok { color: #6ee7b7; background: rgba(16, 185, 129, 0.12); }
+.pve-num.is-under, .pve-num.is-over, .pve-num.is-ok { border-radius: 0; }
+.pve-sheet .heat-low .pve-num:not(.pve-col-hit):not(.pve-col-meta) { color: #f87171; }
 .pve-sheet .heat-ok .pve-pts, .pve-sheet .heat-high .pve-pts { color: #34d399; }
 .pve-side {
   display: grid;
@@ -14351,6 +14377,12 @@ body.light-mode .pve-regua input {
   color: #0f172a;
 }
 body.light-mode .pve-sheet thead th { background: #e2e8f0; color: #334155; }
+body.light-mode .pve-sheet thead .pve-h-hit { background: #ea580c; color: #fff7ed; }
+body.light-mode .pve-sheet thead .pve-h-meta { background: #2563eb; color: #eff6ff; }
+body.light-mode .pve-col-hit { background: #ffedd5; color: #9a3412; }
+body.light-mode .pve-col-meta { background: #dbeafe; color: #1e3a8a; }
+body.light-mode .pve-col-hit input { background: #fff7ed; color: #9a3412; border-color: #fdba74; }
+body.light-mode .pve-col-meta input { background: #eff6ff; color: #1e3a8a; border-color: #93c5fd; }
 body.light-mode .pve-sheet .is-group td { background: #ecfeff; }
 body.light-mode .pve-sheet .is-on td { background: #d1fae5; }
 

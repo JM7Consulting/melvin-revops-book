@@ -26,7 +26,7 @@
 
     const LINE_DEFS = [
         { id: 'actTotal', label: 'Atividades concluídas', note: 'Total', unit: 'n' },
-        { id: 'actLatePct', label: 'Atividades concluídas com atraso', note: 'Em % · quanto menor, melhor', unit: 'pct', lowerBetter: true },
+        { id: 'actLatePct', label: 'Atividades concluídas com atraso', note: 'Em %', unit: 'pct' },
         { id: 'callsStarted', label: 'Ligações iniciadas', note: '', unit: 'n' },
         { id: 'callsPicked', label: 'Ligações atendidas', note: '', unit: 'n' },
         { id: 'callsLong', label: 'Ligações atendidas (+30s)', note: '', unit: 'n' },
@@ -160,12 +160,8 @@
         return base;
     }
 
-    function attainRatio(actual, meta, lowerBetter) {
+    function attainRatio(actual, meta) {
         if (!(meta > 0)) return null;
-        if (lowerBetter) {
-            if (actual <= 0) return Infinity;
-            return meta / actual;
-        }
         return actual / meta;
     }
 
@@ -192,7 +188,7 @@
         const min = num(cfg.min, 0);
         const max = num(cfg.max, 0);
         const weight = num(cfg.weight, 0);
-        const real = attainRatio(actual, meta, !!def.lowerBetter);
+        const real = attainRatio(actual, meta);
         const limited = clampAttain(real, min, max);
         const points = (weight / 100) * limited * 100;
         return { id: def.id, actual, meta, min, max, weight, real, limited, points, ready: meta > 0 };
@@ -404,18 +400,35 @@
         return `<input type="number" min="0" step="${step}" inputmode="decimal" placeholder="${ph}" data-pve-line="${esc(lineId)}" data-pve-field="${field}" value="${esc(shown)}">`;
     }
 
-    function rowHtml(def, row) {
-        const realShown = !row.ready
-            ? '<span class="cli-empty-cell">sem meta</span>'
-            : !Number.isFinite(row.real)
-                ? esc(fmtPct(row.max / 100, 1))
-                : esc(fmtPct(row.real, 1));
+    function dailyOf(total, days) {
+        if (!(days > 0)) return null;
+        return num(total, 0) / days;
+    }
+
+    function weightStatus(sum) {
+        const rounded = Math.round(num(sum, 0) * 10) / 10;
+        if (Math.abs(rounded - 100) < 0.05) {
+            return { cls: 'is-ok', text: 'Peso total em 100%.' };
+        }
+        if (rounded > 100) {
+            return { cls: 'is-over', text: 'Peso total em ' + fmt1(rounded) + '%. Não pode passar de 100%.' };
+        }
+        return { cls: 'is-under', text: 'Peso total em ' + fmt1(rounded) + '%. Falta ' + fmt1(100 - rounded) + '% para fechar 100%.' };
+    }
+
+    function rowHtml(def, row, elapsed, workdays) {
+        const step = def.unit === 'brl' ? '0.01' : 'any';
+        const realShown = row.ready ? esc(fmtPct(row.real, 1)) : '<span class="cli-empty-cell">sem meta</span>';
         const limCell = row.ready ? esc(fmtPct(row.limited, 1)) : '—';
+        const dayHit = dailyOf(row.actual, elapsed);
+        const dayMeta = dailyOf(row.meta, workdays);
         const note = def.note ? `<small class="pve-tag">${esc(def.note)}</small>` : '';
         return `<tr class="is-leaf heat-${heat(row.real)}">
             <td class="pve-ind"><strong>${esc(def.label)}</strong>${note}</td>
-            <td class="pve-num">${inputNum(def.id, 'actual', row.actual, def.unit === 'brl' ? '0.01' : 'any')}</td>
-            <td class="pve-num">${inputNum(def.id, 'meta', row.meta, def.unit === 'brl' ? '0.01' : 'any')}</td>
+            <td class="pve-num pve-col-hit">${inputNum(def.id, 'actual', row.actual, step)}</td>
+            <td class="pve-num pve-col-hit">${dayHit == null ? '—' : esc(fmtValue(def.unit, dayHit))}</td>
+            <td class="pve-num pve-col-meta">${inputNum(def.id, 'meta', row.meta, step)}</td>
+            <td class="pve-num pve-col-meta">${dayMeta == null ? '—' : esc(fmtValue(def.unit, dayMeta))}</td>
             <td class="pve-num">${realShown}</td>
             <td class="pve-num">${inputNum(def.id, 'min', row.min, '0.1')}</td>
             <td class="pve-num">${inputNum(def.id, 'max', row.max, '0.1')}</td>
@@ -426,35 +439,45 @@
     }
 
     function renderSheet(model) {
-        const rows = LINE_DEFS.map((def, i) => rowHtml(def, model.rows[i])).join('');
+        const rows = LINE_DEFS.map((def, i) => rowHtml(def, model.rows[i], model.elapsed, model.workdays)).join('');
+        const peso = weightStatus(model.weightSum);
         return `
+            <p class="pve-weight ${peso.cls}">${esc(peso.text)}</p>
             <div class="pve-sheet-wrap">
                 <table class="pve-sheet">
                     <thead>
                         <tr>
-                            <th class="pve-th-ind">Indicador</th>
-                            <th>Atingido</th>
-                            <th>Meta</th>
-                            <th>Ating. real</th>
-                            <th>Mín %</th>
-                            <th>Máx %</th>
-                            <th>Com limitador</th>
-                            <th>Peso %</th>
-                            <th>Pontos</th>
+                            <th class="pve-th-ind" rowspan="2">Indicador</th>
+                            <th class="pve-h-hit" colspan="2">Atingido</th>
+                            <th class="pve-h-meta" colspan="2">Meta</th>
+                            <th rowspan="2">Ating. real</th>
+                            <th rowspan="2">Mín %</th>
+                            <th rowspan="2">Máx %</th>
+                            <th rowspan="2">Com limitador</th>
+                            <th rowspan="2">Peso %</th>
+                            <th rowspan="2">Pontos</th>
+                        </tr>
+                        <tr>
+                            <th class="pve-h-hit">Mês</th>
+                            <th class="pve-h-hit">Média/dia</th>
+                            <th class="pve-h-meta">Mês</th>
+                            <th class="pve-h-meta">Média/dia</th>
                         </tr>
                     </thead>
                     <tbody>
                         ${rows}
                         <tr class="is-total">
                             <td class="pve-ind">Total</td>
-                            <td></td><td></td><td></td><td></td><td></td><td></td>
-                            <td class="pve-num">${esc(fmt1(model.weightSum))}%</td>
+                            <td class="pve-col-hit"></td><td class="pve-col-hit"></td>
+                            <td class="pve-col-meta"></td><td class="pve-col-meta"></td>
+                            <td></td><td></td><td></td><td></td>
+                            <td class="pve-num ${peso.cls}">${esc(fmt1(model.weightSum))}%</td>
                             <td class="pve-num pve-pts">${esc(String(model.total))}</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
-            <p class="pve-foot">Cada linha pontua sozinha: peso × atingimento com limitador. Abaixo do mínimo a linha zera; acima do máximo trava no teto. Atraso em % inverte a conta (meta ÷ lançado): quanto menor o atraso, maior o atingimento. Sem meta, a linha não pontua. O total arredonda a soma e cai na faixa do ponto.</p>`;
+            <p class="pve-foot">Atingimento real = atingido do mês ÷ meta do mês. A pontuação só começa quando esse percentual chega no mínimo; acima do máximo, trava no teto. Pontos da linha = peso × atingimento com limitador. A média do atingido usa os dias úteis já decorridos; a média da meta usa os dias úteis do mês. O peso das linhas precisa fechar 100%.</p>`;
     }
 
     function renderBands(model) {
