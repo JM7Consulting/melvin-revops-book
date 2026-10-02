@@ -31,6 +31,7 @@
         { id: 'callsPicked', label: 'Ligações atendidas', note: '', unit: 'n' },
         { id: 'callsLong', label: 'Ligações atendidas (+30s)', note: '', unit: 'n' },
         { id: 'meetingsBooked', label: 'Reuniões agendadas', note: 'Total', unit: 'n' },
+        { id: 'meetingsHeld', label: 'Reuniões Realizadas', note: '', unit: 'n' },
         { id: 'meetQuality', label: 'Qualidade de Reuniões', note: '', unit: 'pct' },
         { id: 'salesTotal', label: 'Vendas', note: 'Total', unit: 'n' },
         { id: 'revenueNew', label: 'Faturamento', note: '', unit: 'brl' }
