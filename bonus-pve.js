@@ -287,6 +287,7 @@
     let remoteSha = null;
     let syncStatus = 'Carregando a régua publicada…';
     let syncBusy = false;
+    let publishState = 'idle';
     let showToken = false;
 
     function loadLocal() {
@@ -321,7 +322,15 @@
     function stamp() {
         state.updatedAt = new Date().toISOString();
         dirty = true;
+        publishState = 'idle';
         saveLocal();
+    }
+
+    function saveButtonState() {
+        if (syncBusy) return { label: 'SALVANDO…', cls: 'is-saving' };
+        if (!dirty && publishState === 'saved') return { label: 'SALVO', cls: 'is-saved' };
+        if (publishState === 'error') return { label: 'SALVAR PARA TODOS', cls: 'is-error' };
+        return { label: 'SALVAR PARA TODOS', cls: '' };
     }
 
     function sanitizeToken(value) {
@@ -365,7 +374,8 @@
         const token = getToken();
         if (!token) {
             showToken = true;
-            syncStatus = 'Para o time ver, cole o token do GitHub (o mesmo da matriz de contratação) e salve de novo.';
+            publishState = 'error';
+            syncStatus = 'Não salvou. Cole o token do GitHub e clique em Salvar para todos de novo.';
             render(document.getElementById('pveRoot'));
             return;
         }
@@ -394,10 +404,12 @@
             if (!put.ok) throw new Error(data.message || ('GitHub ' + put.status));
             remoteSha = data.content && data.content.sha ? data.content.sha : remoteSha;
             dirty = false;
+            publishState = 'saved';
             saveLocal();
-            syncStatus = 'Publicado. Quem abrir a página vê estes números.';
+            syncStatus = 'Salvo. Quem abrir a página vê estes números.';
         } catch (err) {
-            syncStatus = 'Não publicou: ' + (err && err.message ? err.message : 'erro') + '. Se o arquivo mudou, clique em Atualizar.';
+            publishState = 'error';
+            syncStatus = 'Não salvou. ' + (err && err.message ? err.message : 'Erro ao publicar.') + ' Se o arquivo mudou, clique em Atualizar e tente de novo.';
         }
         syncBusy = false;
         render(document.getElementById('pveRoot'));
@@ -414,8 +426,9 @@
             } else {
                 state = remote;
                 dirty = false;
+                publishState = 'saved';
                 saveLocal();
-                syncStatus = 'Régua do Book carregada' + (state.updatedAt ? ' · ' + new Date(state.updatedAt).toLocaleString('pt-BR') : '') + '.';
+                syncStatus = 'Planilha do Book carregada' + (state.updatedAt ? ' · ' + new Date(state.updatedAt).toLocaleString('pt-BR') : '') + '.';
             }
         } catch (err) {
             syncStatus = 'Não deu para atualizar agora.';
@@ -649,9 +662,21 @@
         setKpi('proj', model.projected ? String(model.projected.total) : '—');
         setKpi('proj-sub', model.projected ? fmtBRL(model.projected.bonus) + ' se o volume se manter' : 'Percentuais não são projetados');
         const bar = host.querySelector('.pve-sync');
-        if (bar) bar.classList.toggle('is-dirty', dirty);
+        if (bar) {
+            bar.classList.toggle('is-dirty', dirty);
+            bar.classList.toggle('is-ok', !dirty && publishState === 'saved');
+            bar.classList.toggle('is-err', publishState === 'error');
+        }
         const status = host.querySelector('.pve-sync-status');
         if (status) status.textContent = syncStatus;
+        const saveBtn = host.querySelector('[data-pve="publish"]');
+        if (saveBtn) {
+            const ui = saveButtonState();
+            saveBtn.textContent = ui.label;
+            saveBtn.classList.toggle('is-saved', ui.cls === 'is-saved');
+            saveBtn.classList.toggle('is-error', ui.cls === 'is-error');
+            saveBtn.classList.toggle('is-saving', ui.cls === 'is-saving');
+        }
     }
 
     function noteLocalEdit(host, rebuild) {
@@ -723,10 +748,12 @@
             <input type="password" data-pve-token placeholder="ghp_… ou github_pat_…" autocomplete="off">
             <button type="button" class="pve-btn" data-pve="save-token">Guardar token</button>
         </div>` : '';
+        const saveUi = saveButtonState();
+        const syncCls = ['pve-sync', dirty ? 'is-dirty' : '', !dirty && publishState === 'saved' ? 'is-ok' : '', publishState === 'error' ? 'is-err' : ''].filter(Boolean).join(' ');
         host.innerHTML = `
-            <div class="pve-sync ${dirty ? 'is-dirty' : ''}">
-                <span class="pve-sync-status">${esc(syncStatus)}</span>
-                <button type="button" class="pve-btn" data-pve="publish" ${syncBusy ? 'disabled' : ''}>Salvar para todos</button>
+            <div class="${syncCls}">
+                <span class="pve-sync-status" role="status">${esc(syncStatus)}</span>
+                <button type="button" class="pve-btn ${saveUi.cls}" data-pve="publish" ${syncBusy ? 'disabled' : ''}>${saveUi.label}</button>
                 <button type="button" class="pve-btn pve-btn--ghost" data-pve="refresh" ${syncBusy ? 'disabled' : ''}>Atualizar</button>
                 <button type="button" class="pve-btn pve-btn--ghost" data-pve="token">${showToken ? 'Fechar' : 'Token'}</button>
             </div>
@@ -898,8 +925,10 @@
                 state = remote;
                 dirty = false;
                 saveLocal();
-                syncStatus = 'Régua compartilhada' + (remote.updatedAt ? ' · ' + new Date(remote.updatedAt).toLocaleString('pt-BR') : '') + '.';
+                publishState = 'saved';
+                syncStatus = 'Planilha compartilhada' + (remote.updatedAt ? ' · ' + new Date(remote.updatedAt).toLocaleString('pt-BR') : '') + '.';
             } else {
+                publishState = 'idle';
                 syncStatus = 'Você tem alterações locais mais novas que o Book. Salve para todos, ou atualize para descartar.';
             }
             render(host);
