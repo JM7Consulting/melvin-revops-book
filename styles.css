@@ -14145,7 +14145,7 @@ body.light-mode .mx-shell .mx-step.is-fail,
   width: 100%;
   border-collapse: collapse;
   font-size: 0.82rem;
-  min-width: 1180px;
+  min-width: 1320px;
 }
 .pve-sheet th, .pve-sheet td {
   border: 1px solid rgba(148, 163, 184, 0.14);
@@ -14190,6 +14190,21 @@ body.light-mode .mx-shell .mx-step.is-fail,
   border: 1px solid rgba(34, 211, 238, 0.35);
   border-radius: 6px;
   padding: 4px 6px;
+}
+.pve-sense-cell { text-align: left !important; }
+.pve-sense {
+  width: 138px;
+  font: 700 0.74rem Manrope, sans-serif;
+  color: var(--text-main);
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(148, 163, 184, 0.45);
+  border-radius: 6px;
+  padding: 4px 6px;
+}
+.pve-sense--down {
+  color: #fde68a;
+  border-color: rgba(251, 191, 36, 0.8);
+  background: rgba(120, 53, 15, 0.45);
 }
 .pve-pts { color: var(--melvin-cyan); font-weight: 800; }
 .pve-sheet thead .pve-h-hit { background: #c2410c; color: #fff7ed; }
@@ -14383,6 +14398,8 @@ body.light-mode .pve-col-hit { background: #ffedd5; color: #9a3412; }
 body.light-mode .pve-col-meta { background: #dbeafe; color: #1e3a8a; }
 body.light-mode .pve-col-hit input { background: #fff7ed; color: #9a3412; border-color: #fdba74; }
 body.light-mode .pve-col-meta input { background: #eff6ff; color: #1e3a8a; border-color: #93c5fd; }
+body.light-mode .pve-sense { background: #fff; color: #0f172a; }
+body.light-mode .pve-sense--down { background: #fffbeb; color: #92400e; border-color: #f59e0b; }
 body.light-mode .pve-sheet .is-group td { background: #ecfeff; }
 body.light-mode .pve-sheet .is-on td { background: #d1fae5; }
 

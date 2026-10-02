@@ -26,7 +26,7 @@
 
     const LINE_DEFS = [
         { id: 'actTotal', label: 'Atividades concluídas', note: 'Total', unit: 'n' },
-        { id: 'actLatePct', label: 'Atividades concluídas com atraso', note: 'Em %', unit: 'pct' },
+        { id: 'actLatePct', label: 'Atividades concluídas com atraso', note: 'Em %', unit: 'pct', sense: 'down' },
         { id: 'callsStarted', label: 'Ligações iniciadas', note: '', unit: 'n' },
         { id: 'callsPicked', label: 'Ligações atendidas', note: '', unit: 'n' },
         { id: 'callsLong', label: 'Ligações atendidas (+30s)', note: '', unit: 'n' },
@@ -51,8 +51,8 @@
         const n = Number(v);
         return Number.isFinite(n) ? n : fallback;
     }
-    function blankCfg() {
-        return { meta: 0, min: 80, max: 150, weight: 0 };
+    function blankCfg(def) {
+        return { meta: 0, min: 80, max: 150, weight: 0, sense: def && def.sense === 'down' ? 'down' : 'up' };
     }
     function blankActuals() {
         const o = {};
@@ -61,7 +61,7 @@
     }
     function defaultLines() {
         const o = {};
-        LINE_DEFS.forEach((line) => { o[line.id] = blankCfg(); });
+        LINE_DEFS.forEach((line) => { o[line.id] = blankCfg(line); });
         return o;
     }
     function monthKeyFromDate(d) {
@@ -132,11 +132,13 @@
         if (raw.activeMonth && parseMonthKey(raw.activeMonth)) base.activeMonth = raw.activeMonth;
         LINE_DEFS.forEach((line) => {
             const src = raw.lines && raw.lines[line.id] ? raw.lines[line.id] : {};
+            const fallbackSense = line.sense === 'down' ? 'down' : 'up';
             base.lines[line.id] = {
                 meta: Math.max(0, num(src.meta, 0)),
                 min: Math.max(0, num(src.min, 80)),
                 max: Math.max(0, num(src.max, 150)),
-                weight: Math.max(0, num(src.weight, 0))
+                weight: Math.max(0, num(src.weight, 0)),
+                sense: src.sense === 'down' || src.sense === 'up' ? src.sense : fallbackSense
             };
         });
         base.months = {};
@@ -160,8 +162,12 @@
         return base;
     }
 
-    function attainRatio(actual, meta) {
+    function attainRatio(actual, meta, sense) {
         if (!(meta > 0)) return null;
+        if (sense === 'down') {
+            if (!(actual > 0)) return Infinity;
+            return meta / actual;
+        }
         return actual / meta;
     }
 
@@ -188,10 +194,11 @@
         const min = num(cfg.min, 0);
         const max = num(cfg.max, 0);
         const weight = num(cfg.weight, 0);
-        const real = attainRatio(actual, meta);
+        const sense = cfg.sense === 'down' || cfg.sense === 'up' ? cfg.sense : (def.sense === 'down' ? 'down' : 'up');
+        const real = attainRatio(actual, meta, sense);
         const limited = clampAttain(real, min, max);
         const points = (weight / 100) * limited * 100;
-        return { id: def.id, actual, meta, min, max, weight, real, limited, points, ready: meta > 0 };
+        return { id: def.id, actual, meta, min, max, weight, sense, real, limited, points, ready: meta > 0 };
     }
 
     function compute(actuals, lines, elapsed, workdays) {
@@ -244,7 +251,8 @@
             .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
     }
     function heat(real) {
-        if (real == null || !Number.isFinite(real) || real <= 0) return 'zero';
+        if (real == null || real <= 0) return 'zero';
+        if (!Number.isFinite(real)) return 'high';
         if (real < 0.8) return 'low';
         if (real < 1) return 'mid';
         if (real < 1.2) return 'ok';
@@ -423,8 +431,13 @@
         const dayHit = dailyOf(row.actual, elapsed);
         const dayMeta = dailyOf(row.meta, workdays);
         const note = def.note ? `<small class="pve-tag">${esc(def.note)}</small>` : '';
+        const sense = row.sense === 'down' ? 'down' : 'up';
         return `<tr class="is-leaf heat-${heat(row.real)}" data-pve-row="${esc(def.id)}">
             <td class="pve-ind"><strong>${esc(def.label)}</strong>${note}</td>
+            <td class="pve-sense-cell"><select class="pve-sense${sense === 'down' ? ' pve-sense--down' : ''}" data-pve-line="${esc(def.id)}" data-pve-field="sense" aria-label="Sentido da meta de ${esc(def.label)}">
+                <option value="up"${sense === 'up' ? ' selected' : ''}>Maior melhor</option>
+                <option value="down"${sense === 'down' ? ' selected' : ''}>Menor melhor</option>
+            </select></td>
             <td class="pve-num pve-col-hit">${inputNum(def.id, 'actual', row.actual, step)}</td>
             <td class="pve-num pve-col-hit" data-pve-cell="day-actual">${dayHit == null ? '—' : esc(fmtValue(def.unit, dayHit))}</td>
             <td class="pve-num pve-col-meta">${inputNum(def.id, 'meta', row.meta, step)}</td>
@@ -448,6 +461,7 @@
                     <thead>
                         <tr>
                             <th class="pve-th-ind" rowspan="2">Indicador</th>
+                            <th rowspan="2">Sentido</th>
                             <th class="pve-h-hit" colspan="2">Atingido</th>
                             <th class="pve-h-meta" colspan="2">Meta</th>
                             <th rowspan="2">Ating. real</th>
@@ -468,6 +482,7 @@
                         ${rows}
                         <tr class="is-total">
                             <td class="pve-ind">Total</td>
+                            <td></td>
                             <td class="pve-col-hit"></td><td class="pve-col-hit"></td>
                             <td class="pve-col-meta"></td><td class="pve-col-meta"></td>
                             <td></td><td></td><td></td><td></td>
@@ -477,7 +492,7 @@
                     </tbody>
                 </table>
             </div>
-            <p class="pve-foot">Atingimento real = atingido do mês ÷ meta do mês. A pontuação só começa quando esse percentual chega no mínimo; acima do máximo, trava no teto. Pontos da linha = peso × atingimento com limitador. A média do atingido usa os dias úteis já decorridos; a média da meta usa os dias úteis do mês. O peso das linhas precisa fechar 100%.</p>`;
+            <p class="pve-foot">Maior melhor: atingimento real = atingido ÷ meta. Menor melhor: atingimento real = meta ÷ atingido. Exemplo de atraso: 10% atingido com meta de 40% vale 400% e trava no máximo. Atingido zero, quando menor é melhor, também trava no máximo. A pontuação só começa no mínimo. Pontos da linha = peso × atingimento com limitador. A média do atingido usa os dias úteis já decorridos; a média da meta usa os dias úteis do mês. O peso das linhas precisa fechar 100%.</p>`;
     }
 
     function renderBands(model) {
@@ -544,6 +559,8 @@
             const realEl = tr.querySelector('[data-pve-cell="real"]');
             const limEl = tr.querySelector('[data-pve-cell="limited"]');
             const ptsEl = tr.querySelector('[data-pve-cell="points"]');
+            const senseEl = tr.querySelector('[data-pve-field="sense"]');
+            if (senseEl) senseEl.classList.toggle('pve-sense--down', row.sense === 'down');
             if (dayHitEl) dayHitEl.textContent = dayHit == null ? '—' : fmtValue(def.unit, dayHit);
             if (dayMetaEl) dayMetaEl.textContent = dayMeta == null ? '—' : fmtValue(def.unit, dayMeta);
             if (realEl) {
@@ -660,6 +677,11 @@
             if (t.matches('[data-pve-line]')) {
                 const id = t.getAttribute('data-pve-line');
                 const field = t.getAttribute('data-pve-field');
+                if (field === 'sense') {
+                    if (state.lines[id]) state.lines[id].sense = t.value === 'down' ? 'down' : 'up';
+                    noteLocalEdit(host);
+                    return;
+                }
                 const value = parseLoose(t.value);
                 if (field === 'actual') ensureMonth(state.activeMonth).actuals[id] = value;
                 else if (state.lines[id]) state.lines[id][field] = value;
