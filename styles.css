@@ -14145,7 +14145,7 @@ body.light-mode .mx-shell .mx-step.is-fail,
   width: 100%;
   border-collapse: collapse;
   font-size: 0.82rem;
-  min-width: 1320px;
+  min-width: 1480px;
 }
 .pve-sheet th, .pve-sheet td {
   border: 1px solid rgba(148, 163, 184, 0.14);
@@ -14192,7 +14192,11 @@ body.light-mode .mx-shell .mx-step.is-fail,
   padding: 4px 6px;
 }
 .pve-sense-cell { text-align: left !important; }
-.pve-sense {
+.pve-entry { display: inline-flex; align-items: center; justify-content: flex-end; gap: 4px; }
+.pve-unit { font-style: normal; font-weight: 800; font-size: 0.72rem; opacity: 0.9; }
+.pve-span { text-align: center !important; }
+.pve-span .pve-entry { justify-content: center; }
+.pve-sense, .pve-format {
   width: 138px;
   font: 700 0.74rem Manrope, sans-serif;
   color: var(--text-main);
@@ -14398,7 +14402,8 @@ body.light-mode .pve-col-hit { background: #ffedd5; color: #9a3412; }
 body.light-mode .pve-col-meta { background: #dbeafe; color: #1e3a8a; }
 body.light-mode .pve-col-hit input { background: #fff7ed; color: #9a3412; border-color: #fdba74; }
 body.light-mode .pve-col-meta input { background: #eff6ff; color: #1e3a8a; border-color: #93c5fd; }
-body.light-mode .pve-sense { background: #fff; color: #0f172a; }
+body.light-mode .pve-sense,
+body.light-mode .pve-format { background: #fff; color: #0f172a; }
 body.light-mode .pve-sense--down { background: #fffbeb; color: #92400e; border-color: #f59e0b; }
 body.light-mode .pve-sheet .is-group td { background: #ecfeff; }
 body.light-mode .pve-sheet .is-on td { background: #d1fae5; }
