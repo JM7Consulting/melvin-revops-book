@@ -23,6 +23,12 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.nav-lane-toggle').forEach((btn) => {
         btn.addEventListener('click', () => {
             const lane = btn.closest('.nav-lane');
+            if (sidebar && sidebar.classList.contains('collapsed')) {
+                sidebar.classList.remove('collapsed');
+                if (mainContent) mainContent.classList.remove('expanded');
+                setLaneOpen(lane, true);
+                return;
+            }
             setLaneOpen(lane, !lane.classList.contains('is-open'));
         });
     });

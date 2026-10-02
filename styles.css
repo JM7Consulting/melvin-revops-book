@@ -290,7 +290,7 @@
         }
         aside.collapsed .nav-lane > .menu-group,
         aside.collapsed .nav-lane > .menu-standalone {
-            display: flex;
+            display: none !important;
         }
         .nav-lane .sidebar-section-title {
             display: flex;
@@ -516,10 +516,16 @@
             padding: 12px 0;
         }
         aside.collapsed .nav-lane {
-            padding: 4px;
+            padding: 3px 0;
+            align-items: center;
             background: transparent;
             border: 0;
             box-shadow: none;
+        }
+        aside.collapsed .nav-lane--ops {
+            margin-top: 6px;
+            padding-top: 6px;
+            border-top: 0;
         }
         aside.collapsed .nav-lane::before { display: none; }
         aside.collapsed .nav-ico { width: 36px; height: 36px; }
@@ -535,7 +541,25 @@
             opacity: 0.75;
         }
         
-        aside.collapsed .sidebar-section-title { display: none !important; }
+        aside.collapsed .sidebar-section-title {
+            display: flex !important;
+            justify-content: center;
+            padding: 2px 0;
+            font-size: 0;
+            line-height: 0;
+            gap: 0;
+        }
+        aside.collapsed .nav-lane-caret { display: none !important; }
+        aside.collapsed .nav-lane-chip {
+            font-size: 0.68rem;
+            line-height: 1;
+            min-width: 36px;
+            height: 28px;
+            border-radius: 8px;
+        }
+        aside.collapsed .nav-lane.is-open .nav-lane-chip {
+            box-shadow: 0 0 0 2px color-mix(in srgb, var(--lane-accent) 55%, transparent);
+        }
 
         /* Standalone (Cronograma) ? pe?a em relevo */
         .menu-standalone {
