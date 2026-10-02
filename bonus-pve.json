@@ -2,85 +2,85 @@
   "rev": 2,
   "person": "",
   "activeMonth": "2026-10",
-  "updatedAt": "2026-10-02T19:02:35.011Z",
+  "updatedAt": "2026-10-02T19:07:15.385Z",
   "lines": {
     "lud": {
-      "meta": 0,
+      "meta": 30,
       "min": 80,
       "max": 150,
-      "weight": 0,
+      "weight": 15,
       "sense": "up",
       "unit": "n"
     },
     "actTotal": {
-      "meta": 0,
+      "meta": 45,
       "min": 80,
       "max": 150,
-      "weight": 0,
+      "weight": 15,
       "sense": "up",
       "unit": "n"
     },
     "actLatePct": {
-      "meta": 0,
+      "meta": 40,
       "min": 80,
       "max": 150,
-      "weight": 0,
+      "weight": 10,
       "sense": "down",
       "unit": "pct"
     },
     "callsStarted": {
-      "meta": 0,
+      "meta": 16,
       "min": 80,
       "max": 150,
-      "weight": 0,
+      "weight": 5,
       "sense": "up",
       "unit": "n"
     },
     "callsPicked": {
-      "meta": 0,
+      "meta": 5,
       "min": 80,
       "max": 150,
-      "weight": 0,
+      "weight": 5,
       "sense": "up",
       "unit": "n"
     },
     "callsLong": {
-      "meta": 0,
+      "meta": 3,
       "min": 80,
       "max": 150,
-      "weight": 0,
+      "weight": 5,
       "sense": "up",
       "unit": "n"
     },
     "meetingsBooked": {
-      "meta": 0,
+      "meta": 0.2,
       "min": 80,
       "max": 150,
-      "weight": 0,
+      "weight": 15,
       "sense": "up",
       "unit": "n"
     },
     "meetingsHeld": {
-      "meta": 0,
+      "meta": 70,
       "min": 80,
       "max": 150,
-      "weight": 0,
+      "weight": 15,
       "sense": "up",
-      "unit": "n"
+      "unit": "pct"
     },
     "meetQuality": {
-      "meta": 0,
+      "meta": 70,
       "min": 80,
       "max": 150,
-      "weight": 0,
+      "weight": 10,
       "sense": "up",
       "unit": "pct"
     },
     "salesTotal": {
-      "meta": 0,
+      "meta": 1,
       "min": 80,
       "max": 150,
-      "weight": 0,
+      "weight": 5,
       "sense": "up",
       "unit": "n"
     },
