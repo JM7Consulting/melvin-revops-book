@@ -25,6 +25,7 @@
     ]);
 
     const LINE_DEFS = [
+        { id: 'lud', label: 'LUD', note: '', unit: 'n', tip: 'Quantidade de leads únicos diários que se teve interação em média por dia no período.' },
         { id: 'actTotal', label: 'Atividades concluídas', note: '', unit: 'n', tip: 'Número total de atividades concluídas no período.' },
         { id: 'actLatePct', label: 'Atividades concluídas com atraso', note: '', unit: 'pct', sense: 'down', tip: 'Percentual de atividades que foram concluídas após a data e hora planejadas.' },
         { id: 'callsStarted', label: 'Ligações iniciadas', note: '', unit: 'n', tip: 'Ligações que foram iniciadas mas não foram atendidas.' },
