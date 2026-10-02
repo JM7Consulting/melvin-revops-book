@@ -32,8 +32,8 @@
         { id: 'callsLong', label: 'Ligações atendidas (+30s)', note: '', unit: 'n' },
         { id: 'meetingsBooked', label: 'Reuniões agendadas', note: 'Total', unit: 'n' },
         { id: 'meetQuality', label: 'Qualidade de Reuniões', note: '', unit: 'pct' },
-        { id: 'revenueNew', label: 'Faturamento', note: 'Novo', unit: 'brl' },
-        { id: 'salesTotal', label: 'Vendas', note: 'Total', unit: 'n' }
+        { id: 'salesTotal', label: 'Vendas', note: 'Total', unit: 'n' },
+        { id: 'revenueNew', label: 'Faturamento', note: '', unit: 'brl' }
     ];
 
     const POINT_BANDS = [
