@@ -14210,6 +14210,15 @@ body.light-mode .mx-shell .mx-step.is-fail,
   padding: 4px 6px;
 }
 .pve-ind-name { display: flex; align-items: baseline; flex-wrap: wrap; gap: 6px; }
+.pve-ind-name strong {
+  font-size: 1.05rem;
+  font-weight: 800;
+  line-height: 1.25;
+  color: var(--text-main);
+  cursor: help;
+  text-decoration: underline dotted rgba(148, 163, 184, 0.75);
+  text-underline-offset: 3px;
+}
 .pve-format {
   display: block;
   width: 100%;

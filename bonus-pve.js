@@ -25,16 +25,16 @@
     ]);
 
     const LINE_DEFS = [
-        { id: 'actTotal', label: 'Atividades concluídas', note: 'Total', unit: 'n' },
-        { id: 'actLatePct', label: 'Atividades concluídas com atraso', note: '', unit: 'pct', sense: 'down' },
-        { id: 'callsStarted', label: 'Ligações iniciadas', note: '', unit: 'n' },
-        { id: 'callsPicked', label: 'Ligações atendidas', note: '', unit: 'n' },
-        { id: 'callsLong', label: 'Ligações atendidas (+30s)', note: '', unit: 'n' },
-        { id: 'meetingsBooked', label: 'Reuniões agendadas', note: 'Total', unit: 'n' },
-        { id: 'meetingsHeld', label: 'Reuniões Realizadas', note: '', unit: 'n' },
-        { id: 'meetQuality', label: 'Qualidade de Reuniões', note: '', unit: 'pct' },
-        { id: 'salesTotal', label: 'Vendas', note: 'Total', unit: 'n' },
-        { id: 'revenueNew', label: 'Faturamento', note: '', unit: 'brl' }
+        { id: 'actTotal', label: 'Atividades concluídas', note: '', unit: 'n', tip: 'Número total de atividades concluídas no período.' },
+        { id: 'actLatePct', label: 'Atividades concluídas com atraso', note: '', unit: 'pct', sense: 'down', tip: 'Percentual de atividades que foram concluídas após a data e hora planejadas.' },
+        { id: 'callsStarted', label: 'Ligações iniciadas', note: '', unit: 'n', tip: 'Ligações que foram iniciadas mas não foram atendidas.' },
+        { id: 'callsPicked', label: 'Ligações atendidas', note: '', unit: 'n', tip: 'Ligações que foram iniciadas e atendidas, mas não houve conversa.' },
+        { id: 'callsLong', label: 'Ligações atendidas (+30s)', note: '', unit: 'n', tip: 'Ligações que foram iniciadas, atendidas e que possivelmente houve conversa.' },
+        { id: 'meetingsBooked', label: 'Reuniões agendadas', note: '', unit: 'n', tip: 'Número de reuniões agendadas no período.' },
+        { id: 'meetingsHeld', label: 'Reuniões Realizadas', note: '', unit: 'n', tip: 'Número de reuniões realizadas no período. Não são obrigatoriamente as mesmas agendadas, pode haver número do mês anterior somado.' },
+        { id: 'meetQuality', label: 'Qualidade de Reuniões', note: '', unit: 'pct', tip: 'Quantidade em percentual das reuniões realizadas que tiveram classificação Quente ou Morna.' },
+        { id: 'salesTotal', label: 'Vendas', note: '', unit: 'n', tip: 'Total de vendas no período advindas de leads encaminhados pelo presales ao closer. Não são obrigatoriamente os mesmos leads com reuniões realizadas, pode haver número do mês anterior somado.' },
+        { id: 'revenueNew', label: 'Faturamento', note: '', unit: 'brl', tip: 'Total de MRR somado advindos das vendas. Não são obrigatoriamente os mesmos leads com reuniões realizadas, pode haver número do mês anterior somado.' }
     ];
 
     const POINT_BANDS = [
@@ -474,7 +474,7 @@
             : `<td class="pve-num pve-col-meta pve-calc" data-pve-cell="month-meta" title="Mês = média do dia × dias úteis">${esc(monthMeta)}</td><td class="pve-num pve-col-meta">${entryHtml(def.id, 'meta', row.metaDay, unit, 'dia')}</td>`;
         return `<tr class="is-leaf heat-${heat(row.real)}" data-pve-row="${esc(def.id)}">
             <td class="pve-ind">
-                <span class="pve-ind-name"><strong>${esc(def.label)}</strong>${note}</span>
+                <span class="pve-ind-name"><strong title="${esc(def.tip || '')}">${esc(def.label)}</strong>${note}</span>
                 <select class="pve-format" data-pve-line="${esc(def.id)}" data-pve-field="unit" aria-label="Formato de ${esc(def.label)}">
                     <option value="n"${unit === 'n' ? ' selected' : ''}>Número</option>
                     <option value="pct"${unit === 'pct' ? ' selected' : ''}>Percentual</option>
@@ -554,10 +554,10 @@
                     <tbody>
                         ${POINT_BANDS.map((b) => `<tr class="${model.band.from === b.from ? 'is-on' : ''}">
                             <td>${b.from} até ${b.to}</td>
-                            <td>${esc(fmtBRL(b.value))}</td>
-                            <td>${esc(fmtBRL(b.from * b.value))}</td>
-                            <td>${esc(fmtBRL(b.to * b.value))}</td>
-                            <td>${esc(b.label)}</td>
+                                <td>${esc(fmtBRL(b.value))}</td>
+                                <td>${esc(fmtBRL(b.from * b.value))}</td>
+                                <td>${esc(fmtBRL(b.to * b.value))}</td>
+                                <td>${esc(b.label)}</td>
                         </tr>`).join('')}
                     </tbody>
                 </table>
@@ -731,13 +731,13 @@
                 if (field === 'sense') {
                     if (state.lines[id]) state.lines[id].sense = t.value === 'down' ? 'down' : 'up';
                     noteLocalEdit(host);
-                    return;
+                return;
                 }
                 if (field === 'unit') {
                     const unit = t.value === 'pct' || t.value === 'brl' ? t.value : 'n';
                     if (state.lines[id]) state.lines[id].unit = unit;
                     noteLocalEdit(host, true);
-                    return;
+                return;
                 }
                 const value = parseLoose(t.value);
                 if (field === 'actual') ensureMonth(state.activeMonth).actuals[id] = value;
