@@ -381,9 +381,34 @@
     }
 
     async function pullRemote() {
-        const res = await fetch(REMOTE_URL + '?t=' + Date.now(), { cache: 'no-store' });
-        if (!res.ok) return null;
-        return normalizeState(await res.json());
+        const url = 'https://api.github.com/repos/' + GH_OWNER + '/' + GH_REPO + '/contents/' + GH_FILE + '?ref=' + GH_BRANCH;
+        try {
+            const res = await fetch(url, { headers: ghHeaders(getToken()), cache: 'no-store' });
+            if (res.ok) {
+                const meta = await res.json();
+                if (meta && meta.sha) remoteSha = meta.sha;
+                if (meta && meta.content) return normalizeState(JSON.parse(b64ToUtf8(meta.content)));
+            }
+        } catch (e) {}
+        const raw = await fetch(REMOTE_URL + '?t=' + Date.now(), { cache: 'no-store' });
+        if (!raw.ok) return null;
+        return normalizeState(await raw.json());
+    }
+
+    function adoptRemote(remote) {
+        const remoteAt = remote.updatedAt || '';
+        const localAt = state && state.updatedAt ? state.updatedAt : '';
+        if (!localAt || remoteAt >= localAt) {
+            state = remote;
+            dirty = false;
+            publishState = 'saved';
+            saveLocal();
+            syncStatus = 'Planilha compartilhada' + (remote.updatedAt ? ' · ' + new Date(remote.updatedAt).toLocaleString('pt-BR') : '') + '.';
+            return;
+        }
+        dirty = true;
+        publishState = 'idle';
+        syncStatus = 'O GitHub ainda devolveu a versão anterior. Seus números continuam neste navegador. Salve para todos de novo.';
     }
 
     async function publish() {
@@ -440,11 +465,7 @@
             if (!remote) {
                 syncStatus = 'Ainda não há régua publicada. Salve para o time quando terminar de configurar.';
             } else {
-                state = remote;
-                dirty = false;
-                publishState = 'saved';
-                saveLocal();
-                syncStatus = 'Planilha do Book carregada' + (state.updatedAt ? ' · ' + new Date(state.updatedAt).toLocaleString('pt-BR') : '') + '.';
+                adoptRemote(remote);
             }
         } catch (err) {
             syncStatus = 'Não deu para atualizar agora.';
@@ -970,18 +991,7 @@
                 render(host);
                 return;
             }
-            const remoteAt = remote.updatedAt || '';
-            const localAt = state.updatedAt || '';
-            if (!dirty || remoteAt >= localAt) {
-                state = remote;
-                dirty = false;
-                saveLocal();
-                publishState = 'saved';
-                syncStatus = 'Planilha compartilhada' + (remote.updatedAt ? ' · ' + new Date(remote.updatedAt).toLocaleString('pt-BR') : '') + '.';
-            } else {
-                publishState = 'idle';
-                syncStatus = 'Você tem alterações locais mais novas que o Book. Salve para todos, ou atualize para descartar.';
-            }
+            adoptRemote(remote);
             render(host);
         }).catch(() => {
             syncStatus = 'Sem conexão com a régua publicada. Os números deste navegador continuam aqui.';
